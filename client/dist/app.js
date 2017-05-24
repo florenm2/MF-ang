@@ -856,11 +856,17 @@ angular.module('services.accountResource', ['security.service']).factory('accoun
     return $q.reject(msg.join(' '));
   };
   // public api
+ 
   var resource = {};
-   resource.getProductList = function() {
+  resource.getProductList = function() {
     return $http.get('/api/getProducts').then(processResponse, processError);
   };
-
+  resource.addHomePageView = function() {
+    return $http.post('/api/addHomePageView').then(processResponse, processError);
+  };
+  resource.addCartView = function() {
+    return $http.post('/api/addCartView/').then(processResponse, processError);
+  };
   resource.sendMessage = function(data){
     return $http.post(baseUrl + '/sendMessage', data).then(processResponse, processError);
   };
@@ -870,7 +876,6 @@ angular.module('services.accountResource', ['security.service']).factory('accoun
   resource.setAccountDetails = function(data){
     return $http.put(baseUrl + '/account/settings', data).then(processResponse, processError);
   };
-
   resource.getOnePurchaseHistory = function(){
       return $http.get(baseUrl + '/account/getOnePurchaseHistory').then(processResponse, processError);
   };
@@ -881,7 +886,6 @@ angular.module('services.accountResource', ['security.service']).factory('accoun
   resource.newPurchase = function(data){
     return $http.post(baseUrl + '/account/purchaseHistory', data).then(processResponse, processError);
   };
-  
   resource.newAddress = function(data){
     return $http.post(baseUrl + '/account/address', data).then(processResponse, processError);
   };
@@ -1221,6 +1225,13 @@ angular.module('services.adminResource', []).factory('adminResource', ['$http', 
     var url = adminCategoriesUrl + '/' + _id;
     return $http.delete(url).then(processResponse, processError);
   };
+
+  // ----- views api -----
+  resource.getRecentViewCount = function() {
+    var url = baseUrl + '/getRecentViewCount';
+    return $http.get(url).then(processResponse, processError);
+  };
+
   return resource;
 }]);
 
@@ -3017,6 +3028,26 @@ angular.module('admin.activity').config(['$routeProvider', function($routeProvid
             });
           return promise;
         }],
+        viewCount: ['$q', '$location', '$log', 'securityAuthorization', 'adminResource', function($q, $location, $log, securityAuthorization, adminResource){
+          //get app stats only for admin-user, otherwise redirect to /account
+          var redirectUrl;
+          var promise = securityAuthorization.requireAdminUser()
+            .then(function(){
+              //handles url with query(search) parameter
+              return adminResource.getRecentViewCount();
+            }, function(reason){
+              //rejected either user is un-authorized or un-authenticated
+              redirectUrl = reason === 'unauthorized-client'? '/account': '/login';
+              return $q.reject();
+            })
+            .catch(function(){
+              redirectUrl = redirectUrl || '/account';
+              $location.search({});
+              $location.path(redirectUrl);
+              return $q.reject();
+            });
+          return promise;
+        }],
         tally: ['$q', '$location', '$log', 'securityAuthorization', 'adminResource', function($q, $location, $log, securityAuthorization, adminResource){
           //get app stats only for admin-user, otherwise redirect to /account
           var redirectUrl;
@@ -3060,8 +3091,8 @@ angular.module('admin.activity').config(['$routeProvider', function($routeProvid
       }
     })
 }]);
-angular.module('admin.activity').controller('ActivityCtrl', ['$scope', '$log', 'stats', 'phList', 'adminResource', 'tally',
-  function($scope, $log, stats, phData, adminResource, tally){
+angular.module('admin.activity').controller('ActivityCtrl', ['$scope', '$log', 'stats', 'phList', 'adminResource', 'tally', 'securityAuthorization', '$q', 'viewCount',
+  function($scope, $log, stats, phData, adminResource, tally, securityAuthorization, $q, viewCount){
 
     $scope.tab = 1;
 
@@ -3073,18 +3104,21 @@ angular.module('admin.activity').controller('ActivityCtrl', ['$scope', '$log', '
       return $scope.tab === tabNum;
     }
 
-    var deserializeData = function(phData, tally){
+
+    var deserializeData = function(phData, tally, viewCount){
       $scope.items = phData.items;
       $scope.pages = phData.pages;
       $scope.filters = phData.filters;
       $scope.phList = phData.data;
+      //$scope.viewRecent = viewCount;
 
+      //console.log($scope.viewRecent);
       $scope.tally = tally.data;
 
+      //viewData($scope.viewRecent);
       dataToVariables(tally);
     };
     
-
     var yearInfo = function(tallyYear){
 
           $scope.tallyYear = [];
@@ -3111,9 +3145,6 @@ angular.module('admin.activity').controller('ActivityCtrl', ['$scope', '$log', '
           }
 
         monthInfo($scope.graphData);
-
-          // console.log($scope.tallyYear);
-          // console.log($scope.totalYear);
           
         };
     var monthInfo = function(tallyMonth){
@@ -3140,18 +3171,10 @@ angular.module('admin.activity').controller('ActivityCtrl', ['$scope', '$log', '
         if($scope.tallyMonth[mo] > 0){
           $scope.avgMonthSaleSize[mo] = ($scope.totalMonth[mo]/$scope.tallyMonth[mo]);
         }
-
       }
-
-
-       //console.log($scope.tallyMonth);
-       //console.log($scope.totalMonth);
-
       thirtyDayInfo($scope.graphData);
 
     };
-
-    
 
     var thirtyDayInfo = function(tallyDay){
 
@@ -3185,17 +3208,27 @@ angular.module('admin.activity').controller('ActivityCtrl', ['$scope', '$log', '
           $scope.tallyDay[n]++;
           $scope.totalDay[n]+=tallyDay[d].total;
         }
-
       }
-
-      //console.log($scope.tallyDay);
-      //console.log($scope.totalDay);
-
     };
 
 
+    var viewData = function(viewCount){
+        // $scope.viewDataDates = []; 
+        // $scope.viewCounts = []; 
+
+        // for(var v in $scope.viewCount){
+        //   $scope.viewDataDates.push($scope.viewCount[v].date);
+        //   $scope.viewCounts.push($scope.viewCount[v].homePageViews);
+        // }
+
+        // console.log($scope.viewDataDates);
+
+        // console.log($scope.viewCounts);
+
+      };
+
+
     var dataToVariables = function(tally){
-      console.log(tally);
       var graphData = []; 
 
       for(var tal in tally){
@@ -3214,8 +3247,8 @@ angular.module('admin.activity').controller('ActivityCtrl', ['$scope', '$log', '
 
     };
 
-    //console.log($scope.phData);
-    deserializeData(phData, tally);
+
+    deserializeData(phData, tally, viewCount);
 
 
 //GRAPH INFORMATION
@@ -3228,7 +3261,7 @@ $scope.labels = ["January", "February", "March", "April", "May", "June", "July",
     65, 59, 80, 81, 56, 55, 40
     ];
     $scope.onClick = function (points, evt) {
-      console.log(points, evt);
+      //console.log(points, evt);
     };
     
     $scope.options = {
@@ -3244,7 +3277,7 @@ $scope.labels = ["January", "February", "March", "April", "May", "June", "July",
       }
     };
 
-    $scope.optionsDayTotal = {
+    $scope.optionsSalesDayTotal = {
       scales: {
         yAxes: [
         {
@@ -3253,6 +3286,23 @@ $scope.labels = ["January", "February", "March", "April", "May", "June", "July",
           scaleLabel: {
             display: true,
             labelString: 'Total Sales'
+          },
+          display: true,
+          position: 'left'
+        }
+        ]
+      }
+    };
+
+    $scope.optionsViewsDayTotal = {
+      scales: {
+        yAxes: [
+        {
+          id: 'y-axis-1',
+          type: 'linear',
+          scaleLabel: {
+            display: true,
+            labelString: 'Total Views'
           },
           display: true,
           position: 'left'
@@ -3355,7 +3405,6 @@ $scope.labels = ["January", "February", "March", "April", "May", "June", "July",
       $scope.tallyMonth,
       $scope.avgMonthSaleSize
     ];
-    //console.log($scope.sizeQuantityData);
 
     $scope.datasetOverride = [{ yAxisID: 'y-axis-1' }, { yAxisID: 'y-axis-2' }];
     $scope.sizeQuantityOptions = {
@@ -3394,6 +3443,12 @@ $scope.labels = ["January", "February", "March", "April", "May", "June", "July",
         ]
       }
     }
+
+    // $scope.homePageViewData = [
+    //   $scope.thirtyDayInfo,
+    //   $scope.viewRecent.homePageViewData
+    // ];
+
 
 
   }]);
@@ -5473,18 +5528,18 @@ angular.module('app', [
   'base',
   'signup',
   'login',
-  'account',
   'admin',
   'services.i18nNotifications',
   'services.httpRequestTracker',
   'services.products',
+  'services.accountResource',
   'security',
   'templates.app',
   'templates.common',
   'pricing',
   'hl.sticky',
   'ui.bootstrap',
-  'ngAnalytics'
+  'ngMaterial'
   ]);
 
 angular.module('app').config(['$httpProvider', 'XSRF_COOKIE_NAME', function($httpProvider, XSRF_COOKIE_NAME){
@@ -5519,25 +5574,30 @@ angular.module('app').config(['$routeProvider', '$locationProvider', function ($
     templateUrl: '404.tpl.html',
     title: 'Page Not Found'
   });
+
 }]);
 
-angular.module('app').run(['$location', '$window', '$rootScope', 'security', 'ngAnalyticsService', function($location, $window, $rootScope, security, ngAnalyticsService) {
+angular.module('app').run(['$location', '$window', '$rootScope', 'security', 'accountResource', function($location, $window, $rootScope, security, accountResource) {
   // Get the current user when the application starts
   // (in case they are still logged in from a previous session)
   security.requestCurrentUser();
 
-  ngAnalyticsService.setClientId('45835906318-12kumlot5j29eo6ut94hohvbh88riea5.apps.googleusercontent.com');
-
+  $rootScope.$on('$routeChangeStart', function(e, toState) {
+      if($location.url() == '/'){
+        accountResource.addHomePageView();
+      }
+      if($location.url() == '/pricing/checkout'){
+        accountResource.addCartView();
+      }
+    });
 
   // add a listener to $routeChangeSuccess
   $rootScope.$on('$routeChangeSuccess', function (event, current, previous) {
-    $window.scrollTo(0,0);
     $rootScope.title = current.$$route && current.$$route.title? current.$$route.title: 'SafeConnect Solar';
   });
 }]);
 
-angular.module('app').controller('AppCtrl', ['$scope', 'i18nNotifications', 'localizedMessages',  'ngAnalyticsService', function($scope, i18nNotifications, localizedMessages, ngAnalyticsService) {
-
+angular.module('app').controller('AppCtrl', ['$scope', 'i18nNotifications', 'localizedMessages', function($scope, i18nNotifications, localizedMessages) {
 
   $scope.notifications = i18nNotifications;
 
@@ -5695,28 +5755,6 @@ angular.module('app').controller('OwlCtrl', ['$scope',
 
 
 
-
-// var cartApp = angular.module('CartSession', []).
-//   config(['$routeProvider', function($routeProvider) {
-//   $routeProvider.
-//     when('/pricing', { 
-//       templateUrl: 'pricing/information/pricing.tpl.html',
-//       controller: storeController }).
-//     when('/pricing/checkoutInformation', {
-//       templateUrl: 'pricing/checkout',
-//       controller: storeController }).
-//     when('/pricing/checkoutPayment', { 
-//       templateUrl: 'partials/shoppingCart.htm',
-//       controller: storeController }).
-//     otherwise({
-//       redirectTo: '/store' });
-// }]);
-
-
-
-
-
-
 angular.module('base',['ngRoute', 'security', 'services.utility', 'services.accountResource', 'services.adminResource', 'ui.bootstrap', 'ngMap']);
 angular.module('base').controller('HeaderCtrl', ['$scope', '$location', 'security', 'accountResource',
   function ($scope, $location, security, restResource) {
@@ -5728,6 +5766,26 @@ angular.module('base').controller('HeaderCtrl', ['$scope', '$location', 'securit
         $scope.name = data;
       });
       console.log(name);
+    };
+    $scope.isAdmin = function(){
+      if($location.path().indexOf('/admin') === -1){
+        return false;
+      }else{
+        return security.isAdmin();
+      }
+    };
+    $scope.logout = function(){
+      return security.logout();
+    };
+    $scope.isActive = function(viewLocation){
+      return $location.path() === viewLocation;
+    };
+  }
+]);
+angular.module('base').controller('SidebarCtrl', ['$scope', '$location', 'security', 'accountResource',
+  function ($scope, $location, security, restResource) {
+    $scope.isAuthenticated = function(){
+      return security.isAuthenticated();
     };
     $scope.isAdmin = function(){
       if($location.path().indexOf('/admin') === -1){
@@ -8824,7 +8882,7 @@ angular.module("admin/activity/activity.tpl.html", []).run(["$templateCache", fu
   $templateCache.put("admin/activity/activity.tpl.html",
     "<div id=\"page-wrapper\">\n" +
     "    <div ng-show=\"isSet(1)\">\n" +
-    "       <div class=\"row\">\n" +
+    "     <div class=\"row\">\n" +
     "        <div class=\"col-lg-12\">\n" +
     "            <h1>Activity this Month</h1>\n" +
     "            <br>\n" +
@@ -8847,16 +8905,28 @@ angular.module("admin/activity/activity.tpl.html", []).run(["$templateCache", fu
     "                </div>\n" +
     "                <div class=\"panel-body\">\n" +
     "                    <canvas id=\"line\" class=\"chart chart-line\" chart-data=\"totalDay\"\n" +
-    "                    chart-labels=\"labelDay\" chart-options=\"optionsDayTotal\"\n" +
+    "                    chart-labels=\"labelDay\" chart-options=\"optionsSalesDayTotal\"\n" +
     "                    chart-click=\"onClick\">\n" +
     "                </canvas>\n" +
+    "            </div>\n" +
     "        </div>\n" +
+    "\n" +
+    "        <br>\n" +
+    "        <br>\n" +
+    "\n" +
+    "        <br>\n" +
+    "\n" +
+    "\n" +
+    "<!-- <div class=\"panel panel-default\">\n" +
+    "        <div class=\"panel-heading\">\n" +
+    "            Home Page Views\n" +
+    "        </div>\n" +
+    "        <div class=\"panel-body\">\n" +
+    "            <canvas id=\"line\" class=\"chart chart-line\" chart-options=\"viewsOptions\" chart-legend=\"true\" chart-data=\"homePageViewData\" chart-click=\"onClick\">\n" +
+    "        </canvas>\n" +
+    "        format dates then include chart-labels=\"viewDataDates\" \n" +
     "    </div>\n" +
-    "\n" +
-    "    <br>\n" +
-    "<br>\n" +
-    "\n" +
-    "<br>\n" +
+    "</div>  -->\n" +
     "\n" +
     "\n" +
     "<div class=\"panel panel-default\">\n" +
@@ -8920,45 +8990,39 @@ angular.module("admin/activity/activity.tpl.html", []).run(["$templateCache", fu
     "            <br>\n" +
     "            <div class=\"panel-body\">\n" +
     "                <canvas id=\"line\" class=\"chart chart-bar\" chart-type=\"bar\" chart-options=\"optionsMonthTotal\" chart-data=\"totalMonth\" chart-labels=\"labels\" chart-legend=\"true\" chart-click=\"onClick\">\n" +
-    "            </canvas>\n" +
+    "                </canvas>\n" +
+    "            </div>\n" +
+    "        </div>\n" +
+    "        <br>\n" +
+    "        <br>\n" +
+    "        <div class=\"panel panel-default\">\n" +
+    "            <div class=\"panel-heading\">\n" +
+    "                <i class=\"fa fa-bar-chart-o fa-fw\"></i> Shopping Cart Views\n" +
+    "            </div>\n" +
+    "            <div class=\"panel-body\">\n" +
+    "                <div class=\"row\">\n" +
+    "                    <div\n" +
+    "                    area-chart\n" +
+    "                    area-data='[\n" +
+    "                    { y: \"2006\", a: 100, b: 90 },\n" +
+    "                    { y: \"2007\", a: 75,  b: 65 },\n" +
+    "                    { y: \"2008\", a: 50,  b: 40 },\n" +
+    "                    { y: \"2009\", a: 75,  b: 65 },\n" +
+    "                    { y: \"2010\", a: 50,  b: 40 },\n" +
+    "                    { y: \"2011\", a: 75,  b: 65 },\n" +
+    "                    { y: \"2012\", a: 100, b: 90 }\n" +
+    "                    ]'\n" +
+    "                    area-xkey='y'\n" +
+    "                    area-ykeys='[\"a\", \"b\"]'\n" +
+    "                    area-labels='[\"Year\", \"Month\"]'\n" +
+    "                    line-colors='[\"#89b4f9\", \"#6d90c7\"]'>\n" +
+    "                </div>\n" +
+    "            </div>\n" +
     "        </div>\n" +
     "    </div>\n" +
-    "    \n" +
-    "\n" +
-    "    <br>\n" +
-    "\n" +
-    "\n" +
-    "<br>\n" +
-    "<div class=\"panel panel-default\">\n" +
-    "    <div class=\"panel-heading\">\n" +
-    "        <i class=\"fa fa-bar-chart-o fa-fw\"></i> Shopping Cart Views\n" +
-    "    </div>\n" +
-    "    <div class=\"panel-body\">\n" +
-    "        <div class=\"row\">\n" +
-    "            <div\n" +
-    "            area-chart\n" +
-    "            area-data='[\n" +
-    "            { y: \"2006\", a: 100, b: 90 },\n" +
-    "            { y: \"2007\", a: 75,  b: 65 },\n" +
-    "            { y: \"2008\", a: 50,  b: 40 },\n" +
-    "            { y: \"2009\", a: 75,  b: 65 },\n" +
-    "            { y: \"2010\", a: 50,  b: 40 },\n" +
-    "            { y: \"2011\", a: 75,  b: 65 },\n" +
-    "            { y: \"2012\", a: 100, b: 90 }\n" +
-    "            ]'\n" +
-    "            area-xkey='y'\n" +
-    "            area-ykeys='[\"a\", \"b\"]'\n" +
-    "            area-labels='[\"Year\", \"Month\"]'\n" +
-    "            line-colors='[\"#89b4f9\", \"#6d90c7\"]'>\n" +
-    "        </div>\n" +
-    "    </div>\n" +
     "</div>\n" +
     "</div>\n" +
     "</div>\n" +
-    "</div>\n" +
-    "</div>\n" +
-    "\n" +
-    "\n" +
     "</div>");
 }]);
 
@@ -10783,10 +10847,7 @@ angular.module("footer.tpl.html", []).run(["$templateCache", function($templateC
     "						<a href=\"/\" class=\"logo footer-logo\">\n" +
     "							<img alt=\"Porto Website Template\" class=\"img-responsive\" src=\"img/sc_logo.png\">\n" +
     "						</a>\n" +
-    "	                    \n" +
     "					</div>\n" +
-    "					\n" +
-    "					\n" +
     "				</div>\n" +
     "			</div>\n" +
     "		</div>\n" +
@@ -10798,7 +10859,7 @@ angular.module("header.tpl.html", []).run(["$templateCache", function($templateC
   $templateCache.put("header.tpl.html",
     "<div ng-controller=\"HeaderCtrl\">\n" +
     "    <header hl-sticky=\"\">\n" +
-    "    <div id=\"header\" class=\"header-narrow\"  ng-if=\"!isAdmin()\">\n" +
+    "    <div id=\"header\" class=\"header-narrow\" ng-if=\"!isAdmin()\">\n" +
     "        <div class=\"header-body\">\n" +
     "            <div class=\"header-container container\">\n" +
     "                <div class=\"header-row\">\n" +
@@ -12038,7 +12099,33 @@ angular.module("pricing/pricing.tpl.html", []).run(["$templateCache", function($
 
 angular.module("sidebar.tpl.html", []).run(["$templateCache", function($templateCache) {
   $templateCache.put("sidebar.tpl.html",
-    "<div ng-controller=\"HeaderCtrl\">\n" +
+    "<!-- <div flex layout=\"row\">\n" +
+    "    <md-sidenav flex=\"15\" md-is-locked-open=\"true\" class=\"md-whiteframe-z1\">\n" +
+    "      <md-content>\n" +
+    "        sidenav\n" +
+    "      </md-content>\n" +
+    "    </md-sidenav>\n" +
+    "    <div layout=\"column\" flex>\n" +
+    "      <div class=\"box1\">\n" +
+    "        70\n" +
+    "      </div>\n" +
+    "      <div class=\"box2\">\n" +
+    "        fixed\n" +
+    "      </div>\n" +
+    "      <div class=\"box3\">\n" +
+    "        flex\n" +
+    "      </div>\n" +
+    "    </div>\n" +
+    "\n" +
+    "  </div> -->\n" +
+    "\n" +
+    "<div ng-controller=\"SidebarCtrl\" flex layout=\"row\">\n" +
+    "<!-- <md-sidenav flex=\"15\" md-is-locked-open=\"true\" class=\"md-whiteframe-z1\"> -->\n" +
+    "<!-- <md-content>\n" +
+    "        sidenav\n" +
+    "      </md-content> -->\n" +
+    "<md-sidenav flex=\"15\" md-is-locked-open=\"true\" class=\"md-whiteframe-4dp\">\n" +
+    "<md-content flex layout=\"column\">\n" +
     "        <div class=\"navbar-header\">\n" +
     "            <div class=\"sidebar-nav navbar-collapse\">\n" +
     "            <nav class=\"navbar-sidebar\" ng-if=\"isAdmin()\" role=\"navigation\">\n" +
@@ -12071,8 +12158,9 @@ angular.module("sidebar.tpl.html", []).run(["$templateCache", function($template
     "                </nav>\n" +
     "            </div>\n" +
     "        </div>\n" +
+    "        </md-content>\n" +
+    "    </md-sidenav>\n" +
     "    </div>\n" +
-    "\n" +
     "");
 }]);
 

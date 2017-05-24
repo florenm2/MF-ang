@@ -4,18 +4,18 @@ angular.module('app', [
   'base',
   'signup',
   'login',
-  'account',
   'admin',
   'services.i18nNotifications',
   'services.httpRequestTracker',
   'services.products',
+  'services.accountResource',
   'security',
   'templates.app',
   'templates.common',
   'pricing',
   'hl.sticky',
   'ui.bootstrap',
-  'ngAnalytics'
+  'ngMaterial'
   ]);
 
 angular.module('app').config(['$httpProvider', 'XSRF_COOKIE_NAME', function($httpProvider, XSRF_COOKIE_NAME){
@@ -50,25 +50,30 @@ angular.module('app').config(['$routeProvider', '$locationProvider', function ($
     templateUrl: '404.tpl.html',
     title: 'Page Not Found'
   });
+
 }]);
 
-angular.module('app').run(['$location', '$window', '$rootScope', 'security', 'ngAnalyticsService', function($location, $window, $rootScope, security, ngAnalyticsService) {
+angular.module('app').run(['$location', '$window', '$rootScope', 'security', 'accountResource', function($location, $window, $rootScope, security, accountResource) {
   // Get the current user when the application starts
   // (in case they are still logged in from a previous session)
   security.requestCurrentUser();
 
-  ngAnalyticsService.setClientId('45835906318-12kumlot5j29eo6ut94hohvbh88riea5.apps.googleusercontent.com');
-
+  $rootScope.$on('$routeChangeStart', function(e, toState) {
+      if($location.url() == '/'){
+        accountResource.addHomePageView();
+      }
+      if($location.url() == '/pricing/checkout'){
+        accountResource.addCartView();
+      }
+    });
 
   // add a listener to $routeChangeSuccess
   $rootScope.$on('$routeChangeSuccess', function (event, current, previous) {
-    $window.scrollTo(0,0);
     $rootScope.title = current.$$route && current.$$route.title? current.$$route.title: 'SafeConnect Solar';
   });
 }]);
 
-angular.module('app').controller('AppCtrl', ['$scope', 'i18nNotifications', 'localizedMessages',  'ngAnalyticsService', function($scope, i18nNotifications, localizedMessages, ngAnalyticsService) {
-
+angular.module('app').controller('AppCtrl', ['$scope', 'i18nNotifications', 'localizedMessages', function($scope, i18nNotifications, localizedMessages) {
 
   $scope.notifications = i18nNotifications;
 
@@ -223,27 +228,5 @@ angular.module('app').controller('OwlCtrl', ['$scope',
     }
   }
   ]);
-
-
-
-
-// var cartApp = angular.module('CartSession', []).
-//   config(['$routeProvider', function($routeProvider) {
-//   $routeProvider.
-//     when('/pricing', { 
-//       templateUrl: 'pricing/information/pricing.tpl.html',
-//       controller: storeController }).
-//     when('/pricing/checkoutInformation', {
-//       templateUrl: 'pricing/checkout',
-//       controller: storeController }).
-//     when('/pricing/checkoutPayment', { 
-//       templateUrl: 'partials/shoppingCart.htm',
-//       controller: storeController }).
-//     otherwise({
-//       redirectTo: '/store' });
-// }]);
-
-
-
 
 

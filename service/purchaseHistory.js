@@ -5,10 +5,8 @@ var purchaseHistory = {
   getOnePurchaseHistory: function(req, res, next){
     req.app.db.models.PurchaseHistory.findById(req).exec(function(err, ph) {
       if (err) {
-        console.log(err);
         return next(err);
       }
-      console.log(ph);
       return res.status(200).json(ph);
     })
   },

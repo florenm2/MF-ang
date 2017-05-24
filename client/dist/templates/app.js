@@ -1309,7 +1309,7 @@ angular.module("admin/activity/activity.tpl.html", []).run(["$templateCache", fu
   $templateCache.put("admin/activity/activity.tpl.html",
     "<div id=\"page-wrapper\">\n" +
     "    <div ng-show=\"isSet(1)\">\n" +
-    "       <div class=\"row\">\n" +
+    "     <div class=\"row\">\n" +
     "        <div class=\"col-lg-12\">\n" +
     "            <h1>Activity this Month</h1>\n" +
     "            <br>\n" +
@@ -1332,16 +1332,28 @@ angular.module("admin/activity/activity.tpl.html", []).run(["$templateCache", fu
     "                </div>\n" +
     "                <div class=\"panel-body\">\n" +
     "                    <canvas id=\"line\" class=\"chart chart-line\" chart-data=\"totalDay\"\n" +
-    "                    chart-labels=\"labelDay\" chart-options=\"optionsDayTotal\"\n" +
+    "                    chart-labels=\"labelDay\" chart-options=\"optionsSalesDayTotal\"\n" +
     "                    chart-click=\"onClick\">\n" +
     "                </canvas>\n" +
+    "            </div>\n" +
     "        </div>\n" +
+    "\n" +
+    "        <br>\n" +
+    "        <br>\n" +
+    "\n" +
+    "        <br>\n" +
+    "\n" +
+    "\n" +
+    "<!-- <div class=\"panel panel-default\">\n" +
+    "        <div class=\"panel-heading\">\n" +
+    "            Home Page Views\n" +
+    "        </div>\n" +
+    "        <div class=\"panel-body\">\n" +
+    "            <canvas id=\"line\" class=\"chart chart-line\" chart-options=\"viewsOptions\" chart-legend=\"true\" chart-data=\"homePageViewData\" chart-click=\"onClick\">\n" +
+    "        </canvas>\n" +
+    "        format dates then include chart-labels=\"viewDataDates\" \n" +
     "    </div>\n" +
-    "\n" +
-    "    <br>\n" +
-    "<br>\n" +
-    "\n" +
-    "<br>\n" +
+    "</div>  -->\n" +
     "\n" +
     "\n" +
     "<div class=\"panel panel-default\">\n" +
@@ -1405,45 +1417,39 @@ angular.module("admin/activity/activity.tpl.html", []).run(["$templateCache", fu
     "            <br>\n" +
     "            <div class=\"panel-body\">\n" +
     "                <canvas id=\"line\" class=\"chart chart-bar\" chart-type=\"bar\" chart-options=\"optionsMonthTotal\" chart-data=\"totalMonth\" chart-labels=\"labels\" chart-legend=\"true\" chart-click=\"onClick\">\n" +
-    "            </canvas>\n" +
+    "                </canvas>\n" +
+    "            </div>\n" +
+    "        </div>\n" +
+    "        <br>\n" +
+    "        <br>\n" +
+    "        <div class=\"panel panel-default\">\n" +
+    "            <div class=\"panel-heading\">\n" +
+    "                <i class=\"fa fa-bar-chart-o fa-fw\"></i> Shopping Cart Views\n" +
+    "            </div>\n" +
+    "            <div class=\"panel-body\">\n" +
+    "                <div class=\"row\">\n" +
+    "                    <div\n" +
+    "                    area-chart\n" +
+    "                    area-data='[\n" +
+    "                    { y: \"2006\", a: 100, b: 90 },\n" +
+    "                    { y: \"2007\", a: 75,  b: 65 },\n" +
+    "                    { y: \"2008\", a: 50,  b: 40 },\n" +
+    "                    { y: \"2009\", a: 75,  b: 65 },\n" +
+    "                    { y: \"2010\", a: 50,  b: 40 },\n" +
+    "                    { y: \"2011\", a: 75,  b: 65 },\n" +
+    "                    { y: \"2012\", a: 100, b: 90 }\n" +
+    "                    ]'\n" +
+    "                    area-xkey='y'\n" +
+    "                    area-ykeys='[\"a\", \"b\"]'\n" +
+    "                    area-labels='[\"Year\", \"Month\"]'\n" +
+    "                    line-colors='[\"#89b4f9\", \"#6d90c7\"]'>\n" +
+    "                </div>\n" +
+    "            </div>\n" +
     "        </div>\n" +
     "    </div>\n" +
-    "    \n" +
-    "\n" +
-    "    <br>\n" +
-    "\n" +
-    "\n" +
-    "<br>\n" +
-    "<div class=\"panel panel-default\">\n" +
-    "    <div class=\"panel-heading\">\n" +
-    "        <i class=\"fa fa-bar-chart-o fa-fw\"></i> Shopping Cart Views\n" +
-    "    </div>\n" +
-    "    <div class=\"panel-body\">\n" +
-    "        <div class=\"row\">\n" +
-    "            <div\n" +
-    "            area-chart\n" +
-    "            area-data='[\n" +
-    "            { y: \"2006\", a: 100, b: 90 },\n" +
-    "            { y: \"2007\", a: 75,  b: 65 },\n" +
-    "            { y: \"2008\", a: 50,  b: 40 },\n" +
-    "            { y: \"2009\", a: 75,  b: 65 },\n" +
-    "            { y: \"2010\", a: 50,  b: 40 },\n" +
-    "            { y: \"2011\", a: 75,  b: 65 },\n" +
-    "            { y: \"2012\", a: 100, b: 90 }\n" +
-    "            ]'\n" +
-    "            area-xkey='y'\n" +
-    "            area-ykeys='[\"a\", \"b\"]'\n" +
-    "            area-labels='[\"Year\", \"Month\"]'\n" +
-    "            line-colors='[\"#89b4f9\", \"#6d90c7\"]'>\n" +
-    "        </div>\n" +
-    "    </div>\n" +
     "</div>\n" +
     "</div>\n" +
     "</div>\n" +
-    "</div>\n" +
-    "</div>\n" +
-    "\n" +
-    "\n" +
     "</div>");
 }]);
 
@@ -3268,10 +3274,7 @@ angular.module("footer.tpl.html", []).run(["$templateCache", function($templateC
     "						<a href=\"/\" class=\"logo footer-logo\">\n" +
     "							<img alt=\"Porto Website Template\" class=\"img-responsive\" src=\"img/sc_logo.png\">\n" +
     "						</a>\n" +
-    "	                    \n" +
     "					</div>\n" +
-    "					\n" +
-    "					\n" +
     "				</div>\n" +
     "			</div>\n" +
     "		</div>\n" +
@@ -3283,7 +3286,7 @@ angular.module("header.tpl.html", []).run(["$templateCache", function($templateC
   $templateCache.put("header.tpl.html",
     "<div ng-controller=\"HeaderCtrl\">\n" +
     "    <header hl-sticky=\"\">\n" +
-    "    <div id=\"header\" class=\"header-narrow\"  ng-if=\"!isAdmin()\">\n" +
+    "    <div id=\"header\" class=\"header-narrow\" ng-if=\"!isAdmin()\">\n" +
     "        <div class=\"header-body\">\n" +
     "            <div class=\"header-container container\">\n" +
     "                <div class=\"header-row\">\n" +
@@ -4523,7 +4526,33 @@ angular.module("pricing/pricing.tpl.html", []).run(["$templateCache", function($
 
 angular.module("sidebar.tpl.html", []).run(["$templateCache", function($templateCache) {
   $templateCache.put("sidebar.tpl.html",
-    "<div ng-controller=\"HeaderCtrl\">\n" +
+    "<!-- <div flex layout=\"row\">\n" +
+    "    <md-sidenav flex=\"15\" md-is-locked-open=\"true\" class=\"md-whiteframe-z1\">\n" +
+    "      <md-content>\n" +
+    "        sidenav\n" +
+    "      </md-content>\n" +
+    "    </md-sidenav>\n" +
+    "    <div layout=\"column\" flex>\n" +
+    "      <div class=\"box1\">\n" +
+    "        70\n" +
+    "      </div>\n" +
+    "      <div class=\"box2\">\n" +
+    "        fixed\n" +
+    "      </div>\n" +
+    "      <div class=\"box3\">\n" +
+    "        flex\n" +
+    "      </div>\n" +
+    "    </div>\n" +
+    "\n" +
+    "  </div> -->\n" +
+    "\n" +
+    "<div ng-controller=\"SidebarCtrl\" flex layout=\"row\">\n" +
+    "<!-- <md-sidenav flex=\"15\" md-is-locked-open=\"true\" class=\"md-whiteframe-z1\"> -->\n" +
+    "<!-- <md-content>\n" +
+    "        sidenav\n" +
+    "      </md-content> -->\n" +
+    "<md-sidenav flex=\"15\" md-is-locked-open=\"true\" class=\"md-whiteframe-4dp\">\n" +
+    "<md-content flex layout=\"column\">\n" +
     "        <div class=\"navbar-header\">\n" +
     "            <div class=\"sidebar-nav navbar-collapse\">\n" +
     "            <nav class=\"navbar-sidebar\" ng-if=\"isAdmin()\" role=\"navigation\">\n" +
@@ -4556,8 +4585,9 @@ angular.module("sidebar.tpl.html", []).run(["$templateCache", function($template
     "                </nav>\n" +
     "            </div>\n" +
     "        </div>\n" +
+    "        </md-content>\n" +
+    "    </md-sidenav>\n" +
     "    </div>\n" +
-    "\n" +
     "");
 }]);
 
