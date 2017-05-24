@@ -1,0 +1,102 @@
+<div id="page-wrapper">
+<div id="admin-purchase-history-single">
+    <div class="col-xs-12">
+        <div>
+            <!-- <h1><a ng-href="/admin/purchase-history">Purchase Record</a> / {{phDetail.orderNumber}}</h1> -->
+            <h1>Purchase Record</h1>
+        </div>
+        
+        <p style="padding-left: .8em">Date: <span ng-bind="phDetail.orderDate | date:'MM/dd/yyyy'"/>
+        <br>Customer: 
+        <br>Company: </p>
+
+        <br>
+        <p style="padding-left: .8em">Transaction Number: {{phDetail.orderNumber}}
+        <br>Purchase Amount: <span ng-bind="phDetail.cost.total | currency"/>
+        <br>Payment Method: </p>
+
+
+        <br>
+
+        <h4>Order</h4>
+        <div class="panel panel-default">
+                    <!-- <div class="panel-heading">
+                        Order
+                    </div> -->
+            <div class="panel-body">
+                    <table width="100%" class="table">
+                        <thead>
+                            <tr>
+                                <th>Item</th>
+                                <th>Unit Cost</th>
+                                <th>Quantity</th>
+                                <th>Total</th>
+                            </tr>
+                        </thead>
+                        
+                        <tbody>
+                            <tr class="odd gradeX">
+                                <td> Cable </td>
+                                <td ng-bind="phDetail.cost.raw | currency"></td>
+                                <td> 1 </td>
+                                <td ng-bind="phDetail.cost.raw | currency"></td>
+                            </tr>
+                            
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td class="align-right" colspan="6">
+                                    <p>
+                                        Shipping cost: <span ng-bind="phDetail.cost.shipping | currency"/>
+                                    <br>
+                                        Taxes: <span ng-bind="phDetail.cost.tax | currency"/>
+                                    <br>
+                                        Total: <span ng-bind="phDetail.cost.total | currency"/>
+                                    </p>
+                                </td>
+                            </tr>
+                        </tfoot>
+                    </table>
+
+                </div>
+            </div>
+        <br>
+
+            </div>
+
+
+
+        <!-- <form name="identityForm"><fieldset>
+            <legend>Details</legend>
+            <div class="form-group">
+                <label class="control-label" for="orderNumber">Order Number:</label>
+                <input type="text" name="orderNumber" id="orderNumber" class="form-control" ng-model="phDetail.orderNumber" required server-error>
+            </div>
+            <div class="form-group">
+                <label class="control-label" for="orderDate">Order Date:</label>
+                <input type="text" name="orderDate" id="orderDate" class="form-control" ng-model="phDetail.orderDate" required server-error>
+            </div>
+            <div class="form-group">
+                <label class="control-label" for="cost">Cost:</label>
+                <input type="text" name="cost" id="cost" class="form-control" ng-model="phDetail.cost.total" required server-error>
+            </div>
+            <div class="form-group">
+                <button type="button" class="btn btn-primary" ng-disabled="!canSave(identityForm)" ng-click="updateIdentity()">Update</button>
+            </div>
+        </fieldset></form> -->
+
+        <!-- <form name="deleteForm"><fieldset>
+            <alert ng-repeat="alert in deleteAlerts" type="{{alert.type}}" close="closeDeleteAlert($index)">{{alert.msg}}</alert>
+            <div class="form-group">
+                <span class="help-block">
+                    <span class="label label-danger">If you do this, it cannot be undone.</span>
+                </span>
+            </div>
+            <div class="form-group">
+                <button type="button" class="btn btn-danger" ng-click="deleteUser()">Delete</button>
+            </div>
+        </fieldset></form> -->
+    </div>
+</div>
+
+

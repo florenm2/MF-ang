@@ -1,0 +1,75 @@
+<div ng-controller="HeaderCtrl">
+    <header hl-sticky="">
+    <div id="header" class="header-narrow"  ng-if="!isAdmin()">
+        <div class="header-body">
+            <div class="header-container container">
+                <div class="header-row">
+                    <div class="header-column">
+                        <div class="header-logo">
+                            <a href="/">
+                                <img alt="SafeConnect Solar" width="" height="40" src="img/sc_logo.png">
+                            </a>
+                        </div>
+                    </div>
+                    <div class="header-column">
+                        <div class="header-row">
+                            <div class="header-nav header-nav-top-line">
+                                <button class="btn header-btn-collapse-nav" ng-init="menuCollapsed = true" ng-click="menuCollapsed = !menuCollapsed">
+                                    <i class="fa fa-bars"></i>
+                                </button>
+
+                                <div class="header-nav-main header-nav-main-square header-nav-main-effect-2 header-nav-main-sub-effect-1 collapse" collapse="menuCollapsed" ng-click="menuCollapsed = true">
+                                    <nav>
+                                        <ul class="nav nav-pills" id="mainNav">
+                                            <li ng-class="{active: isActive('/')}"><a href="/">Home</a></li>
+                                            <li ng-class="{active: isActive('/specs')}"><a href="/specs">Product Details</a></li>
+                                            <li class="dropdown">
+                                                <a href="/pricing/information" class="dropdown-toggle">Pricing / Purchase</a>
+                                                <ul class="dropdown-menu">
+                                                    <li ><a href="/pricing/information">What Do I Need For My Installation?</a></li>
+                                                    <li><a href="/pricing">Pricing/Purchasing</a></li>
+                                                </ul>
+                                            </li>
+                                            <li ng-class="{active: isActive('/about')}"><a href="/about">About Us</a></li>
+                                            <li ng-class="{active: isActive('/contact')}"><a href="/contact">Contact</a></li>
+                                            <li ng-if="isAuthenticated()" class="dropdown">
+                                                <a href="/account/settings" class="dropdown-toggle">My Account</a>
+                                                <ul href="/account/purchaseHistory" ng-if="isAuthenticated()" class="dropdown-menu">
+                                                    <li ng-if="isAuthenticated()" ><a href="/account/purchaseHistory">Purchase History</a></li>
+                                                    <li ng-if="isAuthenticated()" ><a href="/account/settings">Settings</a></li>
+                                                    <li ng-if="isAuthenticated()"><a href="" ng-click="logout()">Sign Out</a></li>
+                                                </ul>
+                                            </li>
+
+                                            
+                                            <li ng-if="!isAuthenticated()"><a href="/login"><i class="fa fa-user"></i> My Account</a></li>
+                                            
+                                        </ul>
+                                        
+                                    </nav>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+        <div class="header-narrow" ng-if="isAdmin()" ng-controller="AdminHeaderCtrl">
+            <nav class="navbar navbar-default navbar-static-top" role="navigation">
+                <div class="navbar-header">
+                        <div class="header-logo">
+                            <a href="/admin">
+                                <img alt="SafeConnect Solar" width="" height="40" src="img/sc_logo.png">
+                            </a>
+                        </div>
+                    </div>
+                    <div class="navbar-form navbar-right">
+                        <div ng-if="isAuthenticated()" class="header-nav header-nav-top-line">
+                            <a href="/admin/admin-account-settings/">{{name}}&nbsp&nbsp&nbsp</a>
+                        </div>
+                    </div>
+                </nav>
+            </div>
+    </header>
+</div>

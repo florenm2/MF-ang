@@ -1,0 +1,80 @@
+<div role="main" class="main">
+
+    <div class="container"><div class="row"></div></div>
+
+    <ng-map style="width:100%; height: 55%; position: absolute; background-color: rgb(229, 227, 223); left: 0px; top: 0px; overflow: hidden; z-index: 0;" zoom="15" center="[21.309063, -157.860265]">
+        <marker position="1003 Bishop St Suite 2020, Honolulu, HI 96813"
+        title="Pauahi Tower Office"
+        centered="true"></marker>
+    </ng-map>
+
+    <div class="container"><div class="row"></div></div>
+
+    <div class="container" style="margin-top: 30%;">
+
+        <div class="row">
+            <div class="col-md-6">
+
+                <h2 class="mb-sm mt-sm"><strong>Contact</strong> Us</h2>
+                
+                <form name="msgForm">
+                    <div class="row">
+                        <alert ng-repeat="alert in alerts" type="{{alert.type}}" close="closeAlert($index)">{{alert.msg}}</alert>
+                        <div class="form-group" ng-class="{'has-error': hasError(msgForm.name)}">
+                            <div class="col-md-6">
+                                <label class="control-label" for="name">Your name *</label>
+                                <input type="text" name="name" id="name" class="form-control" ng-model="msg.name" required>
+                                <span class="help-block" ng-show="showError(msgForm.name, 'required')">Please enter your name.</span>
+                            </div>
+                        </div>
+                        <div class="form-group" ng-class="{'has-error': hasError(msgForm.email)}">
+                            <div class="col-md-6">
+                                <label class="control-label" for="email">Your email address *</label>
+                                <input type="email" name="email" id="email" class="form-control" ng-model="msg.email" required>
+                                <span class="help-block" ng-show="showError(msgForm.email, 'required')">Email address is required.</span>
+                                <span class="help-block" ng-show="showError(msgForm.email, 'email')">Please enter a valid email</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group" ng-class="{'has-error': hasError(msgForm.message)}">
+                            <div class="col-md-12">
+                                <label class="control-label" for="message">Message *</label>
+                                <textarea name="message" id="message" rows="5" class="form-control" ng-model="msg.message" required></textarea>
+                                <span class="help-block" ng-show="showError(msgForm.message, 'required')">Please enter your message.</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <button type="button" class="btn btn-primary btn-contact" ng-disabled="!canSave(msgForm)" ng-click="submit()">Send Message</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div> 
+
+            <div class="col-md-5 col-md-offset-1">
+
+                <h4 class="heading-primary mt-lg">Get in <strong>Touch</strong></h4>
+                <p>Thank you for your interest in SafeConnect Solar! If you would like to contact us, either use the contact form or send us an email at <a href="mailto:info@safeconnectsolar.com">info@safeconnectsolar.com</a>. </p>
+
+                <hr>
+
+                <ul class="list list-icons list-icons-style-3 mt-xlg">
+                    <li><i class="fa fa-envelope"></i> <strong>Email:</strong> <a href="mailto:info@safeconnectsolar.com">info@safeconnectsolar.com</a></li>
+                    <li><i class="fa fa-map-marker"></i> <strong>Address:</strong> 1003 Bishop Street, Suite 2020, Honolulu, HI 96813, United States</li>
+                    
+                </ul>
+
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+

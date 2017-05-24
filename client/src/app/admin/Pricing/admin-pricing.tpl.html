@@ -1,0 +1,129 @@
+<div id="page-wrapper">
+    <div class="row">
+        <div class="col-lg-10">
+            <h1> Pricing</h1>
+            <br>
+            
+            <h2>Smart Box</h2>
+            <div table-layout="fixed" style="padding-left: 3em">
+                <table style="width:100%">
+                  <tr ng-repeat="product in products| filter:{type:'SmartBox'}">
+                    <td width="33%">{{product.title}}</td>
+                    <td width="33%">${{product.price}} ea</td>
+                    <td width="33%" ng-click="updateModal(product)">Update Price</td>
+                    <!-- <td><a ng-href="/admin/users/{{user._id}}">Edit</a></td> -->
+
+                </tr>
+            </table>
+        </div>
+
+        <h2>Cabling</h2>
+        <div table-layout="fixed" style="padding-left: 3em">
+            <table style="width:100%">
+              <tr ng-repeat="product in products| filter:{type:'Cabling'}">
+                <td width="33%">{{product.title}}</td>
+                <td width="33%">${{product.price}} ea</td>
+                <td width="33%" ng-click="updateModal(product)">Update Price</td>
+                
+            </tr>
+        </table>
+    </div>
+
+
+    <h2>Connectors</h2>
+    <div table-layout="fixed" style="padding-left: 3em">
+        <table style="width:100%">
+          <tr ng-repeat="product in products| filter:{type:'Adapter'}">
+            <td width="33%">{{product.title}}</td>
+            <td width="33%">${{product.price}} ea</td>
+            <td width="33%" ng-click="updateModal(product)">Update Price</td>
+
+        </tr>
+    </table>
+</div>
+
+</div>
+</div>
+
+<br>
+<br>
+<br>
+<h2>Change History</h2>
+
+<br>
+
+<div class="panel panel-default">
+    <div class="panel-body">
+        <table width="100%" class="table">
+            <thead>
+                <tr>
+                    <th>Item</th>
+                    <th>Date</th>
+                    <th>New Price</th>
+                    <th>Old Price</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+
+                <tr ng-repeat="product in products | orderBy:'title'">
+                  <td>{{product.title}}</td>
+                  <td>
+                    <ul style="list-style: none; list-style-position:inside; margin:0; padding:0;">
+                        <li ng-repeat="record in product.priceHistory">
+                          <span>{{record.date | date:"MM/dd/yyyy"}}</span>
+                      </li>
+                  </ul>
+              </td>
+              <td>
+                  <ul style="list-style: none; list-style-position:inside; margin:0; padding:0;">
+                    <li ng-repeat="record in product.priceHistory">
+                      <span>${{record.newPrice}}</span>
+                  </li>
+              </ul>
+          </td>
+          <td>
+              <ul style="list-style: none; list-style-position:inside; margin:0; padding:0;">
+                <li ng-repeat="record in product.priceHistory">
+                  <span>${{record.oldPrice}}</span>
+              </li>
+          </ul>
+      </td>
+  </tr>
+
+
+
+               <!--  <tr class="odd gradeX">
+                    <td> Date </td>
+                    <td> Item</td>
+                    <td> New Price </td>
+                    <td> Old Price </td>
+                </tr> -->
+
+<!-- 
+                                
+                                <tr ng-repeat="ph in phList" ng-click="goToPH();">
+                                    
+                                    <td>{{ph.orderDate |  date:"MM/dd/yyyy"}}</td>
+                                    <td ng-bind="ph.company"></td>
+                                    <td ng-bind="ph.user.name"></td>
+                                    <td ng-bind="ph.user._id"></td>
+                                    <td></td>
+                                    <td>${{ph.cost.total}}</td>
+                                    <td ng-bind="ph.orderNumber"></td>
+                                </tr>
+                                <tr ng-show="phList.length === 0">
+                                    <td colspan="5">no documents matched</td>
+                                </tr> -->
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+                </div>
+
+
+
+            </div>

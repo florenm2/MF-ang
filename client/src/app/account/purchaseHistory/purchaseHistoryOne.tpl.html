@@ -1,0 +1,63 @@
+<div id="admin-purchase-history-single">
+    <div class="col-xs-12">
+        <div>
+            <h1>Purchase Record</h1>
+            <h6><big><a ng-href="/account/purchaseHistory">&nbsp&nbspBack to Purchase History</a></big></h6>
+        </div>
+        
+        <p style="padding-left: .8em">Date: <span ng-bind="phDetail.orderDate | date:'MM/dd/yyyy'"/>
+        <br>Customer: 
+        <br>Company: </p>
+
+        <br>
+        <p style="padding-left: .8em">Transaction Number: {{phDetail.orderNumber}}
+        <br>Purchase Amount: <span ng-bind="phDetail.cost.total | currency"/>
+        <br>Payment Method: </p>
+
+        <br>
+
+        <h4>Order</h4>
+        <div class="panel panel-default">
+                    <!-- <div class="panel-heading">
+                        Order
+                    </div> -->
+            <div class="panel-body">
+                    <table width="100%" class="table">
+                        <thead>
+                            <tr>
+                                <th>Item</th>
+                                <th>Unit Cost</th>
+                                <th>Quantity</th>
+                                <th>Total</th>
+                            </tr>
+                        </thead>
+                        
+                        <tbody>
+                            <tr class="odd gradeX">
+                                <td> Cable </td>
+                                <td ng-bind="phDetail.cost.raw | currency"></td>
+                                <td> 1 </td>
+                                <td ng-bind="phDetail.cost.raw | currency"></td>
+                            </tr>
+                            
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td class="align-right" colspan="6">
+                                    <p>
+                                        Shipping cost: <span ng-bind="phDetail.cost.shipping | currency"/>
+                                    <br>
+                                        Taxes: <span ng-bind="phDetail.cost.tax | currency"/>
+                                    <br>
+                                        Total: <span ng-bind="phDetail.cost.total | currency"/>
+                                    </p>
+                                </td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+        <br>
+    </div>
+</div>
+

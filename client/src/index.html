@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html ng-app="app">
+<head>
+
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+	<title ng-bind="title">SafeConnect Solar</title>
+	<meta content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport">
+	<meta name="keywords" content="Solar" />
+	<meta name="description" content="SafeConnect Solar">
+	<meta name="author" content="Akiona Technologies LLC">
+
+
+	<!-- Favicon -->
+	<link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
+	<link rel="apple-touch-icon" href="img/Logo_C_64.png">
+
+	<!-- Web Fonts  -->
+	<link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800%7CShadows+Into+Light" rel="stylesheet" type="text/css">
+
+	<!-- build:css({.,app}) styles/vendor.css -->
+	<!-- bower:css -->
+	<link rel="stylesheet" href="/bootstrap/css/bootstrap.css">
+	<link rel="stylesheet" href="/bootstrap/css/bootstrap-theme.css">
+	<link href="/bootstrap/css/bootstrap.css.map">
+	<link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
+	<link rel="stylesheet" href="/css/font-awesome.css">
+	<link rel="stylesheet" href="/css/simple-line-icons.css">
+	<link rel="stylesheet" href="/css/owl.carousel.css">
+	<link rel="stylesheet" href="/css/owl.theme.default.css">
+	<link rel="stylesheet" href="/css/sb-admin-2.css">
+	<link rel="stylesheet" href="/vendor/metisMenu.css">
+
+	<link rel="stylesheet" href="/vendor/morris.css">
+
+	<link rel="stylesheet" href="/css/theme.css">
+	<link rel="stylesheet" href="/css/theme-elements.css">
+	<link rel="stylesheet" href="/css/theme-blog.css">
+	<link rel="stylesheet" href="/css/theme-shop.css">
+	<link rel="stylesheet" href="/css/theme-animate.css">
+	<link href="/css/nivo-slider.css">
+
+	<link rel="stylesheet" href="/css/settings.css">
+	<link href="/css/component.css">
+	<link rel="stylesheet" href="/css/default.css">
+
+	<!-- endbower -->
+
+	<!-- build:css /css/style.min.css -->
+
+	<link rel="stylesheet" href="/css/style.css">
+	<link rel="stylesheet" href="/css/custom.css">
+	<!-- endbuild -->
+	
+	<!-- build:js /app.min.js -->
+	<script type="text/javascript" src="/vendor/modernizr.min.js"></script>
+
+	<script type="text/javascript" src="/vendor/jquery.js"></script>
+	<script type="text/javascript" src="/vendor/angular.js"></script>
+	
+	<script type="text/javascript" src="/vendor/jquery.appear.js"></script>
+	<script type="text/javascript" src="/vendor/jquery.easing.js"></script>
+	<script type="text/javascript" src="/vendor/jquery.cookie.js"></script>
+	<script type="text/javascript" src="/vendor/ui-bootstrap.js"></script>
+	<script type="text/javascript" src="/vendor/ui-bootstrap-tpls.js"></script>
+	<script type="text/javascript" src="/bootstrap/js/bootstrap.js"></script>
+
+	<script type="text/javascript" src="/vendor/owl.carousel.js"></script>
+	<script type="text/javascript" src="/vendor/common.js"></script>
+	<script type="text/javascript" src="/vendor/jquery.validate.js"></script>
+	<script type="text/javascript" src="/vendor/jquery.stellar.js"></script>
+	<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCUx5sYTXKMXIImkUmZYjgOtF3pVbb_V8E"></script>
+
+	<script type="text/javascript" src="/vendor/angular-cookies.js"></script>
+	<script type="text/javascript" src="/vendor/angular-resource.js"></script>
+	<script type="text/javascript" src="/vendor/angular-route.js"></script>
+	<script type="text/javascript" src="/vendor/angular-sanitize.js"></script>
+	<script type="text/javascript" src="/vendor/angular-touch.js"></script>
+	<script type="text/javascript" src="/vendor/moment.js"></script>
+	<script type="text/javascript" src="/vendor/angular-animate.js"></script>
+	<script type="text/javascript" src="/vendor/angular-stripe.js"></script>
+	<script type="text/javascript" src="/vendor/angular-sticky.js"></script>
+	<script type="text/javascript" src="/vendor/masonry.pkgd.js"></script>
+	<script type="text/javascript" src="/vendor/mm-foundation.js"></script>
+	<script type="text/javascript" src="https://js.stripe.com/v2/"></script>
+	<script type="text/javascript" src="/vendor/angular-payments.js"></script>
+
+	<script type="text/javascript" src="/js/theme.js"></script>
+	<script type="text/javascript" src="/vendor/metisMenu.js"></script>
+	<script type="text/javascript" src="/vendor/morris.js"></script>
+	<script type="text/javascript" src="/vendor/raphael.js"></script>
+	<script type="text/javascript" src="/vendor/angular-morris.js"></script>
+    <script type="text/javascript" src="/vendor/ng-map.min.js"></script>
+
+	<script type="text/javascript" src="/vendor/Chart.min.js"></script>
+	<script type="text/javascript" src="/vendor/angular-chart.min.js"></script>
+	<script type="text/javascript" src="/vendor/date.min.js"></script>
+	<script type="text/javascript" src="/vendor/time_span.js"></script>
+
+	<!-- <script type="text/html" src="/js/sidepanel.js"></script> -->
+	<!-- <script type="text/html" src="/js/sb-admin-2.js"></script> -->
+	
+	<script type="text/javascript" src="/vendor/jquery.themepunch.plugins.min.js"></script>
+	<script type="text/javascript" src="/vendor/jquery.themepunch.revolution.min.js"></script>
+	<script type="text/javascript" src="/vendor/ng-analytics.min.js"></script>
+
+	<script type="text/javascript" src="/js/view.home.js"></script>
+
+	<script type="text/javascript" src="/js/custom.js"></script>
+	
+	<script type="text/javascript" src="/js/theme.init.js"></script>
+	
+	<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+
+	<script type="text/javascript" src="/app.js"></script>
+	<!-- endbuild -->
+
+
+</head>
+
+<body ng-controller="AppCtrl" class="body">
+	<div ng-include="'header.tpl.html'"></div>
+	<div ng-include="'sidebar.tpl.html'"></div>
+	<div class="page">
+		<div ng-view class="container"></div>
+	</div>
+	<div ng-include="'footer.tpl.html'"></div>
+</body>
+
+</html>

@@ -1,0 +1,68 @@
+<div id="page-wrapper">
+    <div class="row">   
+        <h1>Sales</h1>
+        <br> 
+
+        <div id="stats" class="container" style="height: 180px;">
+        <div style='float:left;width:50%'>
+            <h4>Lifetime</h4>
+            <div style="padding-left: 3em">
+                <p>Number of Purchases: {{tallyOverall}}</p>
+                <p>Total Revenue: ${{totalOverall}}</p>
+                <p>Average Purchase Size: ${{averageOverall | number:2}}</p>
+            </div>
+        </div>
+        
+        <div style='float:right;width:50%'>
+            <h4>Last 30 Days</h4>
+            <div style="padding-left: 3em">
+                <p>Number of Purchases: {{tally30Days}}</p>
+                <p>Total Revenue: ${{total30Days}}</p>
+                <p>Average Purchase Size: ${{average30Days | number:2}}</p>
+            </div>
+        </div>
+        </div>
+
+
+        <div class="panel panel-default" padding-top="-50px">
+            <div class="panel-heading">
+                Monthly
+            </div>
+            <div class="panel-body">
+                <canvas id="line" class="chart chart-line" chart-data="totalDay"
+                chart-labels="labelDay" chart-legend="true" chart-options="optionsDayTotal"
+                chart-click="onClick">
+            </canvas>
+        </div>
+    </div>
+
+    <br>         
+    <div class="panel panel-default" >
+        <div class="panel-heading">
+            Yearly Sales
+        </div>
+        <br>
+        <div class="panel-body">
+            <canvas class="chart chart-bar" chart-options="optionsMonthTotal" chart-data="totalMonth" chart-labels="labels" chart-colors="xcolors" chart-legend="true" chart-click="onClick" chart-dataset-override="datasetOverride1">
+            </canvas>
+
+        </div>
+
+    </div>
+
+    <br> 
+    <br> 
+
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            Sales Size and Quantity
+        </div>
+        <div class="panel-body">
+            <canvas id="line" class="chart chart-line" chart-legend="true" chart-data="sizeQuantityData"
+            chart-labels="labels" chart-series="series" chart-options="sizeQuantityOptions"
+            chart-dataset-override="datasetOverride" chart-click="onClick">
+        </canvas>
+    </div>
+</div> 
+</div>
+</div>

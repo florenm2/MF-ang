@@ -1,0 +1,214 @@
+/* Add here all your CSS customizations */
+
+body {
+    overflow: hidden;
+}
+
+
+.footer-logo {
+    width: 150px;
+    margin-left: auto;
+    margin-right: 0;
+}
+
+
+
+/*Alignment*/
+.text-centered {
+    text-align: center;
+}
+
+.text-right {
+    text-align: right;
+}
+
+.center-svg {
+    display: block;
+    margin: auto;
+}
+
+ #demoContainer span {
+   background-color: #ddd;
+   padding: 12px;
+ }
+ 
+ #demoContainer {
+   margin: 100px;
+   cursor: pointer;
+   position: relative;
+ }
+ 
+ #divPopup {
+   position: absolute;
+   top: -26px;
+   left: 83px;
+ }
+ 
+ #divPopup span {
+   background-color: #B46D6D;
+   padding: 12px;
+   color: whitesmoke;
+ }
+ .floatLeft{
+   float:left;
+ }
+ .margin3{
+   margin-top: 3px;
+ }
+
+
+
+
+/*Custom Font CSS*/
+.primary-font {
+    font-family: "Open Sans", Arial, sans-serif;
+    font-size: 1.05em;
+    line-height: 1.70em;
+    letter-spacing: 0.025em;
+}
+
+.heading-font {
+    font-family: "Open Sans", Arial, sans-serif;
+    font-weight: 600;
+    letter-spacing: 0.015em;
+}
+
+.preheading-font {
+    font-family: "Open Sans", Arial, sans-serif;
+    font-style: italic;
+    font-weight: 400;
+    font-size: 1.7em;
+    letter-spacing: 0.05em;
+}
+
+.subheading-font {
+    font-family: "Open Sans", Arial, sans-serif;
+/*    font-style: italic;*/
+    font-weight: 600;
+    font-size: 1.3em;
+    letter-spacing: 0.01em;
+}
+
+.tabheading-font {
+    font-family: "Open Sans", Arial, sans-serif;
+/*    font-style: italic;*/
+    font-weight: 400;
+    font-size: 1.3em;
+    letter-spacing: 0.015em;
+}
+
+.italic {
+    font-style: italic;
+}
+
+
+
+
+
+/*Spacing CSS*/
+.spacing-top-none {
+    margin-top: 0px;
+}
+
+.spacing-top-sm {
+    margin-top: 10px;
+}
+
+.spacing-top-md {
+    margin-top: 20px;
+}
+
+.spacing-top-lg {
+    margin-top: 30px;
+}
+
+.spacing-top-xlg {
+    margin-top: 70px;
+}
+
+.spacing-top-xxlg {
+    margin-top: 100px;
+}
+
+.spacing-top-neg {
+    margin-top: -10px;
+}
+
+.spacing-bot-none {
+    margin-bottom: 0px;
+}
+
+.spacing-bot-sm {
+    margin-bottom: 10px;
+}
+
+.spacing-bot-md {
+    margin-bottom: 20px;
+}
+
+.spacing-bot-lg {
+    margin-bottom: 30px;
+}
+
+.spacing-bot-xlg {
+    margin-bottom: 40px;
+}
+
+.no-padding {
+    padding: 0px;
+    margin: 0px;
+}
+
+
+/*Custom Google Map CSS*/
+.google-map-custom {
+    margin-top: 0px;
+    height: 300px;
+}
+
+
+
+
+
+/*Border CSS*/
+.no-border {
+    border-top: 0px solid #DDD;
+}
+
+.thick-break {
+    height: 1.5px;
+}
+
+
+
+/*Callout Box CSS*/
+.callout-rbox {
+/*    background-image: linear-gradient(-180deg, #E9E7E6 0%, #D1D0CF 100%);*/
+    border: 2px solid #979797;
+    border-radius: 15px;
+    
+    padding:  0px 50px;
+}
+
+
+
+#cart-total-box {
+    padding: 30px 40px 5px 40px;
+}
+
+
+.logo-c-bkgnd {    
+    padding-top: 40px;
+    padding-left: 80px;
+
+    position: absolute;
+    top: 80px;
+    left: 0;
+    z-index: -1;
+    
+    width: 100%;
+    max-width: 900px;
+}
+
+
+

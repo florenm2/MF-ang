@@ -1,0 +1,284 @@
+<div class="container">
+
+	<div class="row">
+		<div class="col-md-12">
+			<div class="portfolio-title">
+				<div class="row">
+					<div class="col-md-12 center">
+						<h1 class="header"><strong>What Do I Need For My Installation?</strong></h1>
+						<br>
+						<p><strong>How to Fill in The Required Information. </strong>SafeConnect’s design software determines which products you need. At this stage, the necessary information comes from a solar professional. After your contractor determines how much solar energy your home requires, ask him or her to tell you the (1) AC system size, (2) bus bar rating, (3) compatibility of your solar panels, (4) number of panels, and (5) distance from the last panel to the SmartBox mounting location. Enter this information below.</p>
+
+					</div>
+				</div>
+			</div>
+			<br>
+			<br>
+		</div>
+	</div>
+
+
+	<div class="row">
+		<div class="col-md-6">
+			<br>
+			<br>
+			<form name="calculatingForm">
+				
+				<div class="row">
+					<div class="col-md-8">
+						<alert ng-repeat="alert in alerts.calculating" type="{{alert.type}}" close="closeAlert('calculating', $index)">{{alert.msg}}</alert>
+						<div class="form-group" ng-class="{'has-error': hasError(calculatingForm.AC_size_input)}">
+							<label class="control-label" for="AC_size_input">AC System Size (kW): </label>
+							<input type="text" name="AC_size_input" id="AC_size_input" class="form-control" ng-model="AC_size_input" ng-change="change();" pos valid-number acmax required server-error>
+							<span class="help-block" ng-show="showError(calculatingForm.AC_size_input, 'required')">Please enter a valid number</span>
+							<span class="help-block" ng-show="showError(calculatingForm.AC_size_input, 'server')">{{errfor.username}}</span>
+							<span class="help-block" ng-show="showError(calculatingForm.AC_size_input, 'pos')">System size must be a positive number</span>
+							<span class="help-block" ng-show="showError(calculatingForm.AC_size_input, 'isNum')">Please enter a valid number</span>
+							<span class="help-block" ng-show="showError(calculatingForm.AC_size_input, 'acmax')">Maximum AC system size is 7.6 kW</span>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-8">
+						<div class="form-group" >
+							<label class="control-label" for="bus_bar_rating">Bus Bar Rating: </label>
+							<select id="bus_bar_rating" name="bus_bar_rating" class="form-control" ng-model="bus_bar_rating">
+								<option value="1">1-99</option>
+								<option value="2">100-199</option>
+								<option value="3">200+</option>
+							</select>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-8 ">
+						<div class="form-group">
+							<label class="control-label" for="acceptable_panels">Do You Have SafeConnect Compatible Solar Panels? </label><br>
+							
+							<label float="left;" style="padding-left:30px">
+								<input type="radio" name="acceptable_panels" ng-change="panels_check(2)" data-ng-model="acceptable_panels" value="2">
+								Yes&nbsp;&nbsp;&nbsp;&nbsp;
+							</label>
+							<label>
+								<input type="radio" name="acceptable_panels" ng-change="panels_check(1)" data-ng-model="acceptable_panels" value="1">
+								No&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+							</label>
+							<span><a id="panel_view" href ng-click="panelModal()">view compatible modules</a></span>
+						</div>
+					</div>
+				</div>
+				<div class ="row">
+					<div class="col-md-8">
+						<alert ng-repeat="alert in alerts.calculating" type="{{alert.type}}" close="closeAlert('calculating', $index)">{{alert.msg}}</alert>
+						<div class="form-group" ng-class="{'has-error': hasError(calculatingForm.num_panels_input)}">
+							<label class="control-label" for="num_panels_input">Number of Panels: </label>
+							<input type="text" name="num_panels_input" id="num_panels_input" class="form-control" ng-model="num_panels_input" ng-model-options="{ updateOn: 'blur'}" pos valid-number-no-decimals required server-error>
+							<span class="help-block" ng-show="showError(calculatingForm.num_panels_input, 'required')">Please enter a valid number</span>
+							<span class="help-block" ng-show="showError(calculatingForm.num_panels_input, 'server')">{{errfor.num_panels_input}}</span>
+							<span class="help-block" ng-show="showError(calculatingForm.num_panels_input, 'pos')">Number of panels must be a positive number</span>
+							<span class="help-block" ng-show="showError(calculatingForm.num_panels_input, 'isInt')">Please enter a valid number</span>
+						</div>
+					</div>
+				</div>
+				<div class ="row">
+					<div ng-attr-class="{{(AC_size_input>3.6) && 'col-md-4' || 'col-md-8' }}" >
+						<alert ng-repeat="alert in alerts.calculating" type="{{alert.type}}" close="closeAlert('calculating', $index)">{{alert.msg}}</alert>
+						<div class="form-group" ng-class="{'has-error': hasError(calculatingForm.d_length_input)}">
+							<label ng-show="(AC_size_input>3.6)" class="control-label" for="d_length_input">Length of Roof Run to SmartBox 1: </label>
+							<label ng-hide="(AC_size_input>3.6)" class="control-label" for="d_length2_input">Length of Roof Run to SmartBox: </label>
+							<input type="text" name="d_length_input" ng-model-options="{ updateOn: 'blur'}" id="d_length_input" class="form-control" ng-model="d_length_input" cablemin cablemax valid-number required server-error>
+							<span class="help-block" ng-show="showError(calculatingForm.d_length_input, 'required')">Please enter a valid number</span>
+							<span class="help-block" ng-show="showError(calculatingForm.d_length_input, 'server')">{{errfor.d_length_input}}</span>
+							<span class="help-block" ng-show="showError(calculatingForm.d_length_input, 'cablemin')">Minimum cable length is 8 feet</span>
+							<span class="help-block" ng-show="showError(calculatingForm.d_length_input, 'cablemax')">Maximum cable length is 80 feet</span>
+							<span class="help-block" ng-show="showError(calculatingForm.d_length_input, 'isNum')">Please enter a valid number</span>
+						</div>
+						
+
+
+					</div>
+
+					<div ng-show="(AC_size_input>3.6)" class="col-md-4">
+						<alert ng-repeat="alert in alerts.calculating" type="{{alert.type}}" close="closeAlert('calculating', $index)">{{alert.msg}}</alert>
+						<div class="form-group" ng-class="{'has-error': hasError(calculatingForm.d_length2_input)}">
+							<div title="Your system requires two SmartBoxes. You need a length of cable to run to the solar array from each SmartBox. Please enter the lengths of cable for the two SmartBoxes." data-toggle="tooltip" data-placement="bottom">
+								<label class="control-label" for="d_length2_input"><i class="fa fa-info-circle" style="color:#545454"></i> Length of Roof Run to SmartBox 2: </label>
+							</div>
+							<input type="text" name="d_length2_input" id="d_length2_input" class="form-control" ng-model="d_length2_input" cable2min cablemax valid-number required server-error>
+							<span class="help-block" ng-show="showError(calculatingForm.d_length2_input, 'required')">Please enter a valid number</span>
+							<span class="help-block" ng-show="showError(calculatingForm.d_length2_input, 'server')">{{errfor.d_length_input}}</span>
+							<span class="help-block" ng-show="showError(calculatingForm.d_length2_input, 'cable2min')">Minimum cable length is 8 feet</span>
+							<span class="help-block" ng-show="showError(calculatingForm.d_length2_input, 'cablemax')">Maximum cable length is 80 feet</span>
+							<span class="help-block" ng-show="showError(calculatingForm.d_length2_input, 'isNum')">Please enter a valid number</span>
+						</div>
+					</div>
+					<div class ="row">
+						<div class="col-md-8" align="right">
+							<div class="form-group">
+								<button type="button" class="btn btn-primary btn-update" ng-disabled="!canSave(calculatingForm)" ng-click="calculate(acceptable_panels, d_length_input, d_length2_input)">Calculate</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</form>
+		</div>
+
+
+		<div class="col-md-4">
+			<div class="spacing-bot-md spacing-left-md center">
+				<img padding-left="20%" width="140%" height="140%" src="/img/SmartBoxMainPageIcon.jpg" alt="SmartBox">
+			</div>
+		</div>
+
+		<div ng-show="no_cart_bus_bar" class="row" style="margin-top:50px;">
+			<div class="row">
+				<br>
+				<br>
+			</div>
+			<div class="row" style="padding-left:30px;padding-top:30px;">
+				<div class="col-md-8" align="left">
+					<font size="3">You do not have a sufficient bus bar rating for the recommended configuration. Please contact your contractor if you would like to upgrade your system. </font>
+				</div>
+			</div>
+		</div>
+
+		<div ng-show="no_cart_panels" class="row" style="margin-top:50px;">
+			<div class="row">
+				<br>
+				<br>
+			</div>
+			<div class="row" style="padding-left:30px;padding-top:30px;">
+				<div class="col-md-8" align="left">
+					<font size="3">Your panels are not compatible with current SafeConnect configurations. To view compatible panels view <a id="panel_view" href ng-click="panelModal()">compatible solar panels</a> .<br /> </font>
+				</div>
+			</div>
+		</div>
+
+
+		<a name="cart">
+			<div ng-show="calculated" class="row">
+				<div class="col-md-8">
+					<h4>What you need: </h4>
+					<br>
+					<br>
+					<div class="panel panel-default">
+						<div class="panel-heading">
+							<h4 class="panel-title">
+								<a class="accordion">
+									Cart
+								</a>
+							</h4>
+						</div>
+
+
+
+						<div class="main shop">
+							<div class="accordion-body">
+								<div class="panel-body">
+									<table class="shop_table cart">
+										<thead>
+											<tr>
+												<th class="product-remove">
+													&nbsp;
+												</th>
+												<th class="product-thumbnail">
+													&nbsp;
+												</th>
+												<th class="product-name">
+													Product
+												</th>
+												<th class="product-price">
+													Price
+												</th>
+												<th>
+												</th>
+												<th class="product-quantity">
+													Quantity
+												</th>
+												<th class="product-subtotal">
+													Total
+												</th>
+											</tr>
+										</thead>
+										<tbody ng-if="cart.length">
+											<tr class="cart_table_item" ng-repeat="product in cart | filter: greaterThan('quantity', 0)">
+												<td class="product-remove">
+													<a title="Remove this item" class="remove" ng-click="removeFromCart(product)">
+														<i class="fa fa-times"></i>
+													</a>
+												</td>
+												<td class="product-thumbnail">
+													<a><img width="100" height="100" alt="" class="img-responsive" ng-src="{{product.imagePath}}">
+													</a>
+												</td>
+												<td class="product-name">
+													<a href="shop-product-sidebar.html">{{product.title}}</a>
+												</td>
+												<td class="product-price">
+													<span class="amount">${{product.price}}</span>
+												</td>
+												<td>
+													&nbsp;
+												</td>
+												<td class="product-quantity">
+													<form class="cart">
+														<div class="quantity">
+															<button class="minus" ng-click="subtractQty(product)">-</button>
+															<input type="text" name="quantity" id="qty" class="input-text qty text" ng-model="product.quantity">
+															<button class="plus" ng-click="addQty(product)">+</button>
+														</div>
+													</form>
+												</td>
+												<td class="product-subtotal">
+													<span class="amount">${{getProductPrice(product)}}</span>
+												</td>
+											</tr>
+										</tbody>
+									</table>
+
+
+									<div style="width:50%; float:right;">
+										<!-- <h4 class="heading-primary">Cart Totals</h4> -->
+										<br>
+										<table class="cart-totals">
+											<tbody >
+												<tr class="cart-subtotal">
+													<th>
+														<strong>Cart Subtotal</strong>
+													</th>
+													<td>
+														<strong>${{getCartPrice()}}</strong>
+													</td>
+												</tr>
+												<tr class="shipping">
+													<th>
+														Shipping
+													</th>
+													<td>
+														Free Shipping<input type="hidden" value="free_shipping" id="shipping_method" name="shipping_method">
+													</td>
+												</tr>
+												<tr class="total">
+													<th>
+														<strong>Order Total</strong>
+													</th>
+													<td>
+														<strong><span class="amount">${{getCartPrice()}}</span></strong>
+													</td>
+												</tr>
+											</tbody>
+										</table>
+
+										<div class="actions-continue">
+											<input type="submit" value="Checkout" name="update_cart" ng-disabled="cart.length == 0" ng-click="checkout();" class="btn btn-default">
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</a>
+	</div>
+</div>

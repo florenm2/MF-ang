@@ -1,0 +1,89 @@
+<div id="page-wrapper">
+    <div class="row">
+        <div class="col-lg-12">
+        <h1>API/Developers</h1>
+        <p style="padding-left: 1.8em">Number of Developers: 8</p>
+        <div>
+            <p class="pull-right" style="padding-right: 3.8em">API Calls Last Month: 18<br>API Calls Last Year: 180</p>
+        </div>
+        <br>
+        <br>
+        <br>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <i class="fa fa-bar-chart-o fa-fw"></i> 30 Day API Calculations
+                </div>
+                <div class="panel-body">
+                    <div
+                    area-chart
+                    area-data='[
+                    { y: "2006", a: 100},
+                    { y: "2007", a: 75},
+                    { y: "2008", a: 50},
+                    { y: "2009", a: 75},
+                    { y: "2010", a: 50},
+                    { y: "2011", a: 75},
+                    { y: "2012", a: 100}
+                    ]'
+                    area-xkey='y'
+                    area-ykeys='["a"]'
+                    area-labels='["Month"]'
+                    line-colors='["#89b4f9"]'>
+                </div>
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <i class="fa fa-bar-chart-o fa-fw"></i> 12 Month API Calls
+            </div>
+            <div class="panel-body">
+                <div bar-chart bar-data='[
+                { y: "2009", a: 75,  b: 65 },
+                { y: "2010", a: 50,  b: 40 },
+                { y: "2011", a: 75,  b: 65 },
+                { y: "2012", a: 100, b: 90 }
+                ]' bar-x='y' bar-y='["a", "b"]' bar-labels='["Year", "Month"]' bar-colors='["#89b4f9", "#5f7dae"]'>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+
+<div class="panel panel-default">
+    <div class="panel-body">
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Company</th>
+                        <th>Number of API Calls</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>12</td>
+                        <td>Website</td>
+                        <td>Company One</td>
+                        <td>22</td>
+                    </tr>
+                    <tr>
+                        <td>23</td>
+                        <td>Website</td>
+                        <td>Company One</td>
+                        <td>12</td>
+                    </tr>
+                    <tr>
+                        <td>31</td>
+                        <td>Website</td>
+                        <td>Company Two</td>
+                        <td>5</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+</div>

@@ -1,0 +1,33 @@
+//bootstrap
+@import 'client/bower_components/bootstrap-sass/assets/stylesheets/bootstrap';
+@import 'client/bower_components/bootstrap-sass/assets/stylesheets/bootstrap/theme';
+
+//font-awesome
+@import 'client/bower_components/font-awesome/scss/font-awesome';
+
+//skins
+@import 'skins/default';
+
+//component
+@import 'component/_ajax_spinner';
+
+@import 'client/bower_components/owl.carousel/src/scss/owl.theme.default';
+
+@import 'client/bower_components/owl.carousel/src/scss/owl.carousel';
+
+
+
+//variable & mixin
+//@import 'util/_variable';
+//@import 'util/_mixin';
+
+//layout
+//@import 'layout/_default';
+//@import 'layout/_header';
+//@import 'layout/_footer';
+
+//page
+//@import 'page/_index';
+//@import 'page/_signup';
+//@import 'page/_account';
+//@import 'page/_admin';

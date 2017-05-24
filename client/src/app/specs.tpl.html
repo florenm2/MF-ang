@@ -1,0 +1,84 @@
+<div role="main" class="main">		
+	<div class="container" align="middle">
+		<div class="col-md-12">
+			<h1 class="header"><strong>Product Specifications</strong></h1>
+			<div class="row mt-xlg">
+				<div ng-controller="OwlCtrl" id="slides_control">
+					<div class="col-md-6 col-md-offset-3">					
+						<carousel interval="3000">
+							<slide ng-repeat="product in products" active="slide.active">
+								<img ng-src="{{product.image}}"  class="img-responsive center-block" style="margin:0 auto;">
+								<div class="carousel-caption">
+									<h4>{{product.title}}</h4>
+								</div>
+							</slide>
+						</carousel>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<ul class="products product-thumb-info-list">
+			<li class="col-md-3 col-sm-6 col-xs-12 product" ng-repeat="product in products | filter:{type:'Cabling'}"">
+				<span class="product-thumb-info">
+					<span class="product-thumb-info">
+						<a href="" class="add-to-cart-product">
+							<span><i class="fa fa-shopping-cart"></i>
+								<button ng-click="addToCart(product);">Add to cart</button>
+							</span>
+						</a>
+						
+						<img alt="" class="img-responsive" ng-src="{{product.imagePath}}" alt="{{product.title}}">
+						
+						<span class="product-thumb-info-content">
+							<h4 class="heading-tertiary">{{product.title}}</h4>
+							<span class="price text-color-primary">
+								<ins><span class="amount">${{product.price}}</span></ins>
+							</span>
+						</span>
+					</span>
+				
+			</li>
+		</ul>
+
+		  
+		
+		<div class="row">
+			
+			<div style="margin-top: 50px;" class="col-md-12">
+				<div class="tabs tabs-secondary">
+					<ul class="nav nav-tabs">
+						<li ng-class="{ active: isSet(1) }">
+							<a href ng-click="setTab(1)"><h4 class="tabheading-font text-color-secondary">3.6 kW SmartBox</h4></a>
+						</li>
+						<li ng-class="{ active: isSet(2) }">
+							<a href ng-click="setTab(2)"><h4 class="tabheading-font text-color-secondary">SmartCabling</h4></a>
+						</li>
+						<li ng-class="{ active: isSet(3) }">
+							<a href ng-click="setTab(3)"><h4 class="tabheading-font text-color-secondary">SmartConnectors</h4></a>
+						</li>
+					</ul>
+					<div class="tab-content">
+						<div ng-show="isSet(1)">
+							<div id="36-smart-box-tb" class="tab-pane active">
+								<h4>3.6 kW SmartBox</h4>
+								<p>The SmartBox masterminds all of the electrical safety functionality behind your home PV system.  The SmartBox continuously manages voltage and frequency, checks for electrical faults, and ensures that the right number of PV panels are connected. If any of these operating conditions are violated the system shuts down safely and immediately, protecting you and your family.</p>
+							</div>
+						</div>
+						<div ng-show="isSet(2)">
+							<div id="72-smart-box-tb" class="tab-pane">
+								<h4>SmartCabling</h4>
+								<p>SafeConnect’s SmartCabling ends the era of specialized electricians connecting bare wires to connect your solar panels to your home’s electrical system.  SafeConnect replaces failure-prone and cumbersome on-site wiring with pluggable connections that are safe for anyone to click together.  The cables come in various lengths. SafeConnect’s PV system design tool will specify the right ones based on the design of your home PV system.</p>
+							</div>
+						</div>
+						<div ng-show="isSet(3)">
+							<div id="cabling-tb" class="tab-pane">
+								<h4>SmartConnectors</h4>
+								<p>SafeConnect’s cabling system and SmartBox work with standard AC solar panels. The panels are simply connected to each other using one SmartConnector for each. The last module is connected to the SmartCabling and run down to the SmartBox mounted on the side of your home.</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>

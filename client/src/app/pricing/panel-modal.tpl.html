@@ -1,0 +1,58 @@
+<header class="modal-header">
+	<h3 class="modal-title" id="modal-title">Compatible Modules</h3>
+</header>
+
+
+		
+		<div class="row">
+			<div class="col-md-6">
+				<h1 style="padding: 25px 25px;" class="mb-none preheading-font">ET Solar</h1>
+			</div>
+		</div>
+
+		<br>
+
+
+		<div class="row">
+		<ul style="list-style: none;margin-right: 30px;">
+			<li class="col-md-6 col-sm-6 col-xs-12" ng-repeat="product in etproducts">
+				<span >
+					<span class="product-thumb-info" style="margin-bottom: 30px;padding: 25px 25px;">
+						
+						<img alt="" class="img-responsive" ng-src="{{product.imagePath}}" alt="{{product.title}}">
+						
+						<span class="product-thumb-info-content">
+							<p>{{product.title}}</p>
+					</span>
+				
+			</li>
+		</ul>
+		</div>
+	
+
+
+		<div class="row">
+			<div class="col-md-6">
+				<h1 style="padding: 25px 25px;" class="mb-none preheading-font">SunPower</h1>
+			</div>
+		</div>
+
+		<br>
+
+
+		<div class="row">
+		<ul style="list-style: none;margin-right: 30px;">
+			<li class="col-md-6 col-sm-6 col-xs-12" ng-repeat="product in sunproducts">
+				<span >
+					<span class="product-thumb-info" style="margin-bottom: 30px;padding: 25px 25px;">
+						
+						<img alt="" class="img-responsive" ng-src="{{product.imagePath}}" alt="{{product.title}}">
+						
+						<span class="product-thumb-info-content">
+							<p>{{product.title}}</p>
+					</span>
+				
+			</li>
+		</ul>
+		</div>
+
