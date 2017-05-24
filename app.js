@@ -101,5 +101,9 @@ app.post('/stripe-webhook', function(request, response){
   response.send('OK');
 });
 
+process.on('uncaughtException', function (err) {
+    console.log(err);
+}); 
+
 app.server.listen(app.config.port, function(){
 });
