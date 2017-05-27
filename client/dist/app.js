@@ -12230,7 +12230,7 @@ angular.module("specs.tpl.html", []).run(["$templateCache", function($templateCa
     "			</div>\n" +
     "		</div>\n" +
     "\n" +
-    "		<ul class=\"products product-thumb-info-list\">\n" +
+    "		<!-- <ul class=\"products product-thumb-info-list\">\n" +
     "			<li class=\"col-md-3 col-sm-6 col-xs-12 product\" ng-repeat=\"product in products | filter:{type:'Cabling'}\"\">\n" +
     "				<span class=\"product-thumb-info\">\n" +
     "					<span class=\"product-thumb-info\">\n" +
@@ -12251,7 +12251,7 @@ angular.module("specs.tpl.html", []).run(["$templateCache", function($templateCa
     "					</span>\n" +
     "				\n" +
     "			</li>\n" +
-    "		</ul>\n" +
+    "		</ul> -->\n" +
     "\n" +
     "		  \n" +
     "		\n" +
