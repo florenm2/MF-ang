@@ -87,8 +87,8 @@ module.exports = function(grunt) {
             src: ['jquery.cookie.js'], dest: '<%= distdir %>/vendor/'
           },
           {
-            expand: true, cwd: 'client/bower_components/modernizr/src/',
-            src: ['Modernizr.js'], dest: '<%= distdir %>/vendor/'
+            expand: true, cwd: 'client/src/vendor/modernizr/',
+            src: ['modernizr.min.js'], dest: '<%= distdir %>/vendor/'
           },
           {
             expand: true, cwd: 'client/bower_components/moment/',
