@@ -11897,6 +11897,33 @@ angular.module("pricing/pricing.tpl.html", []).run(["$templateCache", function($
     "	</div>\n" +
     "\n" +
     "	\n" +
+    "<!-- \n" +
+    "\n" +
+    "\n" +
+    "	<ul class=\"products product-thumb-info-list\">\n" +
+    "			<li class=\"col-md-3 col-sm-6 col-xs-12 product\" ng-repeat=\"product in products | filter:{type:'Cabling'}\"\">\n" +
+    "				<span class=\"product-thumb-info\">\n" +
+    "					<span class=\"product-thumb-info\">\n" +
+    "						<a href=\"\" class=\"add-to-cart-product\">\n" +
+    "							<span><i class=\"fa fa-shopping-cart\"></i>\n" +
+    "								<button ng-click=\"addToCart(product);\">Add to cart</button>\n" +
+    "							</span>\n" +
+    "						</a>\n" +
+    "						\n" +
+    "						<img alt=\"\" class=\"img-responsive\" ng-src=\"{{product.imagePath}}\" alt=\"{{product.title}}\">\n" +
+    "						\n" +
+    "						<span class=\"product-thumb-info-content\">\n" +
+    "							<h4 class=\"heading-tertiary\">{{product.title}}</h4>\n" +
+    "							<span class=\"price text-color-primary\">\n" +
+    "								<ins><span class=\"amount\">${{product.price}}</span></ins>\n" +
+    "							</span>\n" +
+    "						</span>\n" +
+    "					</span>\n" +
+    "				\n" +
+    "			</li>\n" +
+    "		</ul>\n" +
+    "\n" +
+    "		 -->\n" +
     "	<div ng-if=\"cart.length\" class=\"container\">\n" +
     "		\n" +
     "		<div class=\"row spacing-bot-neg\">\n" +
@@ -12142,31 +12169,8 @@ angular.module("specs.tpl.html", []).run(["$templateCache", function($templateCa
     "			</div>\n" +
     "		</div>\n" +
     "\n" +
-    "		<ul class=\"products product-thumb-info-list\">\n" +
-    "			<li class=\"col-md-3 col-sm-6 col-xs-12 product\" ng-repeat=\"product in products | filter:{type:'Cabling'}\"\">\n" +
-    "				<span class=\"product-thumb-info\">\n" +
-    "					<span class=\"product-thumb-info\">\n" +
-    "						<a href=\"\" class=\"add-to-cart-product\">\n" +
-    "							<span><i class=\"fa fa-shopping-cart\"></i>\n" +
-    "								<button ng-click=\"addToCart(product);\">Add to cart</button>\n" +
-    "							</span>\n" +
-    "						</a>\n" +
-    "						\n" +
-    "						<img alt=\"\" class=\"img-responsive\" ng-src=\"{{product.imagePath}}\" alt=\"{{product.title}}\">\n" +
-    "						\n" +
-    "						<span class=\"product-thumb-info-content\">\n" +
-    "							<h4 class=\"heading-tertiary\">{{product.title}}</h4>\n" +
-    "							<span class=\"price text-color-primary\">\n" +
-    "								<ins><span class=\"amount\">${{product.price}}</span></ins>\n" +
-    "							</span>\n" +
-    "						</span>\n" +
-    "					</span>\n" +
-    "				\n" +
-    "			</li>\n" +
-    "		</ul>\n" +
-    "\n" +
-    "		  \n" +
     "		\n" +
+    "\n" +
     "		<div class=\"row\">\n" +
     "			\n" +
     "			<div style=\"margin-top: 50px;\" class=\"col-md-12\">\n" +
