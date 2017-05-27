@@ -22,26 +22,6 @@ angular.module('admin.activity').config(['$routeProvider', function($routeProvid
             });
           return promise;
         }],
-        viewCount: ['$q', '$location', '$log', 'securityAuthorization', 'adminResource', function($q, $location, $log, securityAuthorization, adminResource){
-          //get app stats only for admin-user, otherwise redirect to /account
-          var redirectUrl;
-          var promise = securityAuthorization.requireAdminUser()
-            .then(function(){
-              //handles url with query(search) parameter
-              return adminResource.getRecentViewCount();
-            }, function(reason){
-              //rejected either user is un-authorized or un-authenticated
-              redirectUrl = reason === 'unauthorized-client'? '/account': '/login';
-              return $q.reject();
-            })
-            .catch(function(){
-              redirectUrl = redirectUrl || '/account';
-              $location.search({});
-              $location.path(redirectUrl);
-              return $q.reject();
-            });
-          return promise;
-        }],
         tally: ['$q', '$location', '$log', 'securityAuthorization', 'adminResource', function($q, $location, $log, securityAuthorization, adminResource){
           //get app stats only for admin-user, otherwise redirect to /account
           var redirectUrl;
@@ -85,8 +65,8 @@ angular.module('admin.activity').config(['$routeProvider', function($routeProvid
       }
     })
 }]);
-angular.module('admin.activity').controller('ActivityCtrl', ['$scope', '$log', 'stats', 'phList', 'adminResource', 'tally', 'securityAuthorization', '$q', 'viewCount',
-  function($scope, $log, stats, phData, adminResource, tally, securityAuthorization, $q, viewCount){
+angular.module('admin.activity').controller('ActivityCtrl', ['$scope', '$log', 'stats', 'phList', 'adminResource', 'tally',
+  function($scope, $log, stats, phData, adminResource, tally){
 
     $scope.tab = 1;
 
@@ -98,21 +78,18 @@ angular.module('admin.activity').controller('ActivityCtrl', ['$scope', '$log', '
       return $scope.tab === tabNum;
     }
 
-
-    var deserializeData = function(phData, tally, viewCount){
+    var deserializeData = function(phData, tally){
       $scope.items = phData.items;
       $scope.pages = phData.pages;
       $scope.filters = phData.filters;
       $scope.phList = phData.data;
-      //$scope.viewRecent = viewCount;
 
-      //console.log($scope.viewRecent);
       $scope.tally = tally.data;
 
-      //viewData($scope.viewRecent);
       dataToVariables(tally);
     };
     
+
     var yearInfo = function(tallyYear){
 
           $scope.tallyYear = [];
@@ -139,6 +116,9 @@ angular.module('admin.activity').controller('ActivityCtrl', ['$scope', '$log', '
           }
 
         monthInfo($scope.graphData);
+
+          // console.log($scope.tallyYear);
+          // console.log($scope.totalYear);
           
         };
     var monthInfo = function(tallyMonth){
@@ -165,10 +145,18 @@ angular.module('admin.activity').controller('ActivityCtrl', ['$scope', '$log', '
         if($scope.tallyMonth[mo] > 0){
           $scope.avgMonthSaleSize[mo] = ($scope.totalMonth[mo]/$scope.tallyMonth[mo]);
         }
+
       }
+
+
+       //console.log($scope.tallyMonth);
+       //console.log($scope.totalMonth);
+
       thirtyDayInfo($scope.graphData);
 
     };
+
+    
 
     var thirtyDayInfo = function(tallyDay){
 
@@ -202,27 +190,17 @@ angular.module('admin.activity').controller('ActivityCtrl', ['$scope', '$log', '
           $scope.tallyDay[n]++;
           $scope.totalDay[n]+=tallyDay[d].total;
         }
+
       }
+
+      //console.log($scope.tallyDay);
+      //console.log($scope.totalDay);
+
     };
 
 
-    var viewData = function(viewCount){
-        // $scope.viewDataDates = []; 
-        // $scope.viewCounts = []; 
-
-        // for(var v in $scope.viewCount){
-        //   $scope.viewDataDates.push($scope.viewCount[v].date);
-        //   $scope.viewCounts.push($scope.viewCount[v].homePageViews);
-        // }
-
-        // console.log($scope.viewDataDates);
-
-        // console.log($scope.viewCounts);
-
-      };
-
-
     var dataToVariables = function(tally){
+      console.log(tally);
       var graphData = []; 
 
       for(var tal in tally){
@@ -241,8 +219,8 @@ angular.module('admin.activity').controller('ActivityCtrl', ['$scope', '$log', '
 
     };
 
-
-    deserializeData(phData, tally, viewCount);
+    //console.log($scope.phData);
+    deserializeData(phData, tally);
 
 
 //GRAPH INFORMATION
@@ -255,7 +233,7 @@ $scope.labels = ["January", "February", "March", "April", "May", "June", "July",
     65, 59, 80, 81, 56, 55, 40
     ];
     $scope.onClick = function (points, evt) {
-      //console.log(points, evt);
+      console.log(points, evt);
     };
     
     $scope.options = {
@@ -271,7 +249,7 @@ $scope.labels = ["January", "February", "March", "April", "May", "June", "July",
       }
     };
 
-    $scope.optionsSalesDayTotal = {
+    $scope.optionsDayTotal = {
       scales: {
         yAxes: [
         {
@@ -280,23 +258,6 @@ $scope.labels = ["January", "February", "March", "April", "May", "June", "July",
           scaleLabel: {
             display: true,
             labelString: 'Total Sales'
-          },
-          display: true,
-          position: 'left'
-        }
-        ]
-      }
-    };
-
-    $scope.optionsViewsDayTotal = {
-      scales: {
-        yAxes: [
-        {
-          id: 'y-axis-1',
-          type: 'linear',
-          scaleLabel: {
-            display: true,
-            labelString: 'Total Views'
           },
           display: true,
           position: 'left'
@@ -399,6 +360,7 @@ $scope.labels = ["January", "February", "March", "April", "May", "June", "July",
       $scope.tallyMonth,
       $scope.avgMonthSaleSize
     ];
+    //console.log($scope.sizeQuantityData);
 
     $scope.datasetOverride = [{ yAxisID: 'y-axis-1' }, { yAxisID: 'y-axis-2' }];
     $scope.sizeQuantityOptions = {
@@ -437,12 +399,6 @@ $scope.labels = ["January", "February", "March", "April", "May", "June", "July",
         ]
       }
     }
-
-    // $scope.homePageViewData = [
-    //   $scope.thirtyDayInfo,
-    //   $scope.viewRecent.homePageViewData
-    // ];
-
 
 
   }]);

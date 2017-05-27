@@ -1,6 +1,6 @@
 <div id="page-wrapper">
     <div ng-show="isSet(1)">
-     <div class="row">
+       <div class="row">
         <div class="col-lg-12">
             <h1>Activity this Month</h1>
             <br>
@@ -23,28 +23,16 @@
                 </div>
                 <div class="panel-body">
                     <canvas id="line" class="chart chart-line" chart-data="totalDay"
-                    chart-labels="labelDay" chart-options="optionsSalesDayTotal"
+                    chart-labels="labelDay" chart-options="optionsDayTotal"
                     chart-click="onClick">
                 </canvas>
-            </div>
         </div>
-
-        <br>
-        <br>
-
-        <br>
-
-
-<!-- <div class="panel panel-default">
-        <div class="panel-heading">
-            Home Page Views
-        </div>
-        <div class="panel-body">
-            <canvas id="line" class="chart chart-line" chart-options="viewsOptions" chart-legend="true" chart-data="homePageViewData" chart-click="onClick">
-        </canvas>
-        format dates then include chart-labels="viewDataDates" 
     </div>
-</div>  -->
+
+    <br>
+<br>
+
+<br>
 
 
 <div class="panel panel-default">
@@ -108,37 +96,43 @@
             <br>
             <div class="panel-body">
                 <canvas id="line" class="chart chart-bar" chart-type="bar" chart-options="optionsMonthTotal" chart-data="totalMonth" chart-labels="labels" chart-legend="true" chart-click="onClick">
-                </canvas>
-            </div>
+            </canvas>
         </div>
-        <br>
-        <br>
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                <i class="fa fa-bar-chart-o fa-fw"></i> Shopping Cart Views
-            </div>
-            <div class="panel-body">
-                <div class="row">
-                    <div
-                    area-chart
-                    area-data='[
-                    { y: "2006", a: 100, b: 90 },
-                    { y: "2007", a: 75,  b: 65 },
-                    { y: "2008", a: 50,  b: 40 },
-                    { y: "2009", a: 75,  b: 65 },
-                    { y: "2010", a: 50,  b: 40 },
-                    { y: "2011", a: 75,  b: 65 },
-                    { y: "2012", a: 100, b: 90 }
-                    ]'
-                    area-xkey='y'
-                    area-ykeys='["a", "b"]'
-                    area-labels='["Year", "Month"]'
-                    line-colors='["#89b4f9", "#6d90c7"]'>
-                </div>
-            </div>
+    </div>
+    
+
+    <br>
+
+
+<br>
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <i class="fa fa-bar-chart-o fa-fw"></i> Shopping Cart Views
+    </div>
+    <div class="panel-body">
+        <div class="row">
+            <div
+            area-chart
+            area-data='[
+            { y: "2006", a: 100, b: 90 },
+            { y: "2007", a: 75,  b: 65 },
+            { y: "2008", a: 50,  b: 40 },
+            { y: "2009", a: 75,  b: 65 },
+            { y: "2010", a: 50,  b: 40 },
+            { y: "2011", a: 75,  b: 65 },
+            { y: "2012", a: 100, b: 90 }
+            ]'
+            area-xkey='y'
+            area-ykeys='["a", "b"]'
+            area-labels='["Year", "Month"]'
+            line-colors='["#89b4f9", "#6d90c7"]'>
         </div>
     </div>
 </div>
 </div>
 </div>
+</div>
+</div>
+
+
 </div>

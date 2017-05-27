@@ -12,17 +12,11 @@ angular.module('services.accountResource', ['security.service']).factory('accoun
     return $q.reject(msg.join(' '));
   };
   // public api
- 
   var resource = {};
-  resource.getProductList = function() {
+   resource.getProductList = function() {
     return $http.get('/api/getProducts').then(processResponse, processError);
   };
-  resource.addHomePageView = function() {
-    return $http.post('/api/addHomePageView').then(processResponse, processError);
-  };
-  resource.addCartView = function() {
-    return $http.post('/api/addCartView/').then(processResponse, processError);
-  };
+
   resource.sendMessage = function(data){
     return $http.post(baseUrl + '/sendMessage', data).then(processResponse, processError);
   };
@@ -32,6 +26,7 @@ angular.module('services.accountResource', ['security.service']).factory('accoun
   resource.setAccountDetails = function(data){
     return $http.put(baseUrl + '/account/settings', data).then(processResponse, processError);
   };
+
   resource.getOnePurchaseHistory = function(){
       return $http.get(baseUrl + '/account/getOnePurchaseHistory').then(processResponse, processError);
   };
@@ -42,6 +37,7 @@ angular.module('services.accountResource', ['security.service']).factory('accoun
   resource.newPurchase = function(data){
     return $http.post(baseUrl + '/account/purchaseHistory', data).then(processResponse, processError);
   };
+  
   resource.newAddress = function(data){
     return $http.post(baseUrl + '/account/address', data).then(processResponse, processError);
   };

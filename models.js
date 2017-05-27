@@ -17,5 +17,4 @@ exports = module.exports = function(app, mongoose) {
   require('./schema/Address')(app, mongoose);
   require('./schema/Product')(app, mongoose);
   require('./schema/Cart')(app, mongoose);
-  require('./schema/View')(app, mongoose);
 };

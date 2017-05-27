@@ -31,7 +31,6 @@
 	<link rel="stylesheet" href="/css/owl.theme.default.css">
 	<link rel="stylesheet" href="/css/sb-admin-2.css">
 	<link rel="stylesheet" href="/vendor/metisMenu.css">
-	<link rel="stylesheet" href="/vendor/angular-material.css">
 
 	<link rel="stylesheet" href="/vendor/morris.css">
 
@@ -87,6 +86,7 @@
 	<script type="text/javascript" src="https://js.stripe.com/v2/"></script>
 	<script type="text/javascript" src="/vendor/angular-payments.js"></script>
 
+	<script type="text/javascript" src="/js/theme.js"></script>
 	<script type="text/javascript" src="/vendor/metisMenu.js"></script>
 	<script type="text/javascript" src="/vendor/morris.js"></script>
 	<script type="text/javascript" src="/vendor/raphael.js"></script>
@@ -97,11 +97,9 @@
 	<script type="text/javascript" src="/vendor/angular-chart.min.js"></script>
 	<script type="text/javascript" src="/vendor/date.min.js"></script>
 	<script type="text/javascript" src="/vendor/time_span.js"></script>
-	<script type="text/javascript" src="/vendor/angular-aria.js"></script>
-	<script type="text/javascript" src="/vendor/angular-material.js"></script>
 
-	<script type="text/html" src="/js/sidepanel.js"></script>
-	<script type="text/html" src="/js/sb-admin-2.js"></script>
+	<!-- <script type="text/html" src="/js/sidepanel.js"></script> -->
+	<!-- <script type="text/html" src="/js/sb-admin-2.js"></script> -->
 	
 	<script type="text/javascript" src="/vendor/jquery.themepunch.plugins.min.js"></script>
 	<script type="text/javascript" src="/vendor/jquery.themepunch.revolution.min.js"></script>
@@ -109,11 +107,11 @@
 
 	<script type="text/javascript" src="/js/view.home.js"></script>
 
-	<script type="text/javascript" src="/js/theme.js"></script>
-	
 	<script type="text/javascript" src="/js/custom.js"></script>
 	
 	<script type="text/javascript" src="/js/theme.init.js"></script>
+	
+	<script type="text/javascript" src="https://www.google.com/jsapi"></script>
 
 	<script type="text/javascript" src="/app.js"></script>
 	<!-- endbuild -->
@@ -121,10 +119,10 @@
 
 </head>
 
-<body ng-controller="AppCtrl" class="body" layout="column">
+<body ng-controller="AppCtrl" class="body">
 	<div ng-include="'header.tpl.html'"></div>
 	<div ng-include="'sidebar.tpl.html'"></div>
-	<div class="page" flex layout="row">
+	<div class="page">
 		<div ng-view class="container"></div>
 	</div>
 	<div ng-include="'footer.tpl.html'"></div>
