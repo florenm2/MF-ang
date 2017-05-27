@@ -12065,8 +12065,9 @@ angular.module("pricing/pricing.tpl.html", []).run(["$templateCache", function($
 
 angular.module("sidebar.tpl.html", []).run(["$templateCache", function($templateCache) {
   $templateCache.put("sidebar.tpl.html",
-    "<div ng-controller=\"HeaderCtrl\">\n" +
-    "        <div class=\"navbar-header\">\n" +
+    "<div hl-sticky=\"\">\n" +
+    "    <div ng-controller=\"HeaderCtrl\">\n" +
+    "        <div class=\"navbar-header\" >\n" +
     "            <div class=\"sidebar-nav navbar-collapse\">\n" +
     "            <nav class=\"navbar-sidebar\" ng-if=\"isAdmin()\" role=\"navigation\">\n" +
     "                <ul class=\"nav\" id=\"side-menu\">\n" +
@@ -12099,7 +12100,7 @@ angular.module("sidebar.tpl.html", []).run(["$templateCache", function($template
     "            </div>\n" +
     "        </div>\n" +
     "    </div>\n" +
-    "\n" +
+    "</div>\n" +
     "");
 }]);
 
