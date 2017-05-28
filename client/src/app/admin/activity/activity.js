@@ -98,18 +98,17 @@ angular.module('admin.activity').controller('ActivityCtrl', ['$scope', '$log', '
       return $scope.tab === tabNum;
     }
 
-
     var deserializeData = function(phData, tally, viewCount){
       $scope.items = phData.items;
       $scope.pages = phData.pages;
       $scope.filters = phData.filters;
       $scope.phList = phData.data;
-      //$scope.viewRecent = viewCount;
+      $scope.viewRecent = viewCount;
 
-      //console.log($scope.viewRecent);
+      console.log($scope.viewRecent);
       $scope.tally = tally.data;
 
-      //viewData($scope.viewRecent);
+      viewData($scope.viewRecent);
       dataToVariables(tally);
     };
     
@@ -142,9 +141,6 @@ angular.module('admin.activity').controller('ActivityCtrl', ['$scope', '$log', '
           
         };
     var monthInfo = function(tallyMonth){
-
-      $scope.tallyMonth = [];
-      $scope.totalMonth = []; 
 
       $scope.tallyMonth = [0,0,0,0,0,0,0,0,0,0,0,0];
       $scope.totalMonth = [0,0,0,0,0,0,0,0,0,0,0,0];
@@ -207,19 +203,73 @@ angular.module('admin.activity').controller('ActivityCtrl', ['$scope', '$log', '
 
 
     var viewData = function(viewCount){
-        // $scope.viewDataDates = []; 
-        // $scope.viewCounts = []; 
+         $scope.viewDataDates = []; 
+         $scope.homeViewCounts = []; 
+         $scope.cartViewCounts = []; 
 
-        // for(var v in $scope.viewCount){
-        //   $scope.viewDataDates.push($scope.viewCount[v].date);
-        //   $scope.viewCounts.push($scope.viewCount[v].homePageViews);
-        // }
+         $scope.homeViewYear = [];
+         $scope.cartViewYear = [];
 
-        // console.log($scope.viewDataDates);
+         $scope.homeViewMonth = [0,0,0,0,0,0,0,0,0,0,0,0];
+         $scope.cartViewMonth = [0,0,0,0,0,0,0,0,0,0,0,0];
 
-        // console.log($scope.viewCounts);
+         $scope.homeView30Day = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
+         $scope.cartView30Day = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
+
+         var cutOff = Date.today().add(-30).days();
+
+         angular.forEach(viewCount, function(view, key) {
+            $scope.viewDataDates.push(view.date);
+            $scope.homeViewCounts.push(view.homePageViews);
+            $scope.cartViewCounts.push(view.cartViews);
+
+            var viewDate = new Date(view.date);
+
+            var ts = new TimeSpan(viewDate-cutOff);
+            var n = ts.days - 1;
+            if(n > 0 && n < 30){
+              var f = 30-n;
+              $scope.homeView30Day[n]+=view.homePageViews;
+              $scope.cartView30Day[n]+=view.cartViews;
+            }
+
+            var mon = viewDate.getMonth();
+            var n = mon;
+
+            if(view.homePageViews)
+            $scope.homeViewMonth[n]+=view.homePageViews;
+            
+            if(view.cartViews)
+            $scope.cartViewMonth[n]+=view.cartViews;
+
+
+         });
+         console.log($scope.homeViewMonth);
+         console.log($scope.cartViewMonth);
+
+          var currentDate = new Date();
+          var currentYear = currentDate.getFullYear();
+
+          var i;
+          var n = currentYear-2015;
+
+          for(i=0;i<n;i++){
+            $scope.homeViewYear.push(0);
+            $scope.cartViewYear.push(0);
+          }
+
+          for(var view in viewCount){
+            var viewDate = new Date(view.date);
+            var year = viewDate.getFullYear();
+            var n = year - 2015;
+
+            $scope.homeViewYear[n]+=view.homePageViews;
+            $scope.cartViewYear[n]+=view.cartViews;
+
+          }
 
       };
+
 
 
     var dataToVariables = function(tally){
@@ -319,6 +369,28 @@ $scope.labels = ["January", "February", "March", "April", "May", "June", "July",
           scaleLabel: {
             display: true,
             labelString: 'Number of Sales'
+          },
+          display: true,
+          position: 'left'
+        }
+        ]
+      }
+    };
+
+    $scope.optionsMonthViews = {
+      scales: {
+        yAxes: [
+        {
+          id: 'y-axis-1',
+          scaleSteps : 1,
+          ticks: {
+            suggestedMax: 500,
+            min: 0,
+            stepSize: 50
+          },
+          scaleLabel: {
+            display: true,
+            labelString: 'Total Views'
           },
           display: true,
           position: 'left'

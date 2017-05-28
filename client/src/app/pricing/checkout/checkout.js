@@ -1,19 +1,20 @@
 Stripe.setPublishableKey('pk_test_1Ol0KXlUc2OASvEVg1JwhHp2');
 
-angular.module('pricing.checkout', ['ngRoute', 'angularPayments']);
+angular.module('pricing.checkout', ['ngRoute', 'angularPayments', 'services.cart']);
 angular.module('pricing.checkout').config(['$routeProvider', function($routeProvider){
   $routeProvider
-    .when('/pricing/checkout/:totalAmount', {
+    .when('/pricing/checkout', {
       templateUrl: 'pricing/checkout/checkout.tpl.html',
       controller: 'CheckoutCtrl',
       title: 'Checkout'
     });
 }]);
-angular.module('pricing.checkout').controller('CheckoutCtrl', ['$scope','$routeParams', function ($scope, $routeParams) {
+angular.module('pricing.checkout').controller('CheckoutCtrl', ['$scope','$routeParams', 'cartService', function ($scope, $routeParams, cartService) {
 		
-		var totalAmount = $routeParams.totalAmount;
+		//var totalAmount = $routeParams.totalAmount;
+		var totalAmount = cartService.getCartPrice;
 
-		
+		$scope.cart = cartService;
 
 		$scope.onSubmit = function () {
 			$scope.processing = true;

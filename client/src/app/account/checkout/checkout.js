@@ -1,7 +1,7 @@
 angular.module('account.checkout', ['config', 'account.settings.social', 'security.service', 'security.authorization', 'services.accountResource', 'services.utility','ui.bootstrap', 'directives.serverError', 'services.cart']);
 angular.module('account.checkout').config(['$routeProvider', 'securityAuthorizationProvider', function($routeProvider){
   $routeProvider
-    .when('/account/checkout/:totalAmount', {
+    .when('/account/checkout', {
       templateUrl: 'account/checkout/checkout.tpl.html',
       controller: 'CheckoutLoggedInCtrl',
       title: 'Checkout',

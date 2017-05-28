@@ -56,25 +56,6 @@ var views = {
 
     workflow.emit('addView');
   },
-  //  : function(req, res){
-  //   var workflow = req.app.utility.workflow(req, res);
-
-  //   workflow.on('getAll', function() {
-
-  //       req.app.db.models.View.find({}, function(err, view) {
-  //         if (err) {
-  //           return workflow.emit('exception', err);
-  //         }
-
-  //         workflow.view = view;
-  //         return workflow.emit('response');
-  //       });
-
-
-  //     });
-
-  //   workflow.emit('getAll');
-  // },
   getRecentViewCount: function(req, res, next){
     req.app.db.models.View.find().exec(function(err, view) {
       if (err) {

@@ -39,66 +39,12 @@
 			<div class="col-md-6">
 				<h1 class="mb-none preheading-font">SmartBox</h1>
 			</div>
-			<div class="col-md-6">
-				<h1 class="mb-none preheading-font">SmartConnector</h1>
-			</div>
 		</div>
 
 		<div class="row">
-		<ul class="products product-thumb-info-list">
-			<li class="col-md-6 col-sm-6 col-xs-12 product" ng-repeat="product in products| filter:{type:'SmartBox'}">
-			<span style="width:47%; height:47%;" class="product-thumb-info">
-				<a href="" class="add-to-cart-product">
-					<span><i class="fa fa-shopping-cart"></i>
-						<button ng-click="addToCart(product);">Add to cart</button>
-					</span>
-				</a>
-				
-				<img alt="" class="img-responsive" ng-src="{{product.imagePath}}" alt="{{product.title}}">
-				
-				<span class="product-thumb-info-content">
-					<h4 class="heading-tertiary">{{product.title}}</h4>
-					<span class="price text-color-primary">
-						<ins><span class="amount">${{product.price}}</span></ins>
-					</span>
-				</span>
-				
-			</li>
-			<li class="col-md-6 col-sm-6 col-xs-12 product" ng-repeat="product in products | filter:{type:'Adapter'}"">
-				<span style="width:47%; height:47%;" class="product-thumb-info">
-					<span class="product-thumb-info">
-						<a href="" class="add-to-cart-product">
-							<span><i class="fa fa-shopping-cart"></i>
-								<button ng-click="addToCart(product);">Add to cart</button>
-							</span>
-						</a>
-						
-						<img class="img-responsive" ng-src="{{product.imagePath}}" alt="{{product.title}}">
-						
-						<span class="product-thumb-info-content">
-							<h4 class="heading-tertiary">{{product.title}}</h4>
-							<span class="price text-color-primary">
-								<ins><span class="amount">${{product.price}}</span></ins>
-							</span>
-						</span>
-					</span>
-			</li>
-		</ul>
-		</div>
-
-		
-		<div class="row">
-			<div class="col-md-6">
-				<h1 class="mb-none preheading-font">SmartCabling</h1>
-			</div>
-		</div>
-
-
-		<div class="row">
-		<ul class="products product-thumb-info-list">
-			<li class="col-md-3 col-sm-6 col-xs-12 product" ng-repeat="product in products | filter:{type:'Cabling'}"">
-				<span class="product-thumb-info">
-					<span class="product-thumb-info">
+			<ul class="products product-thumb-info-list">
+				<li class="col-md-6 col-sm-6 col-xs-12 product" ng-repeat="product in products| filter:{type:'SmartBox'}">
+					<span style="width:50%; height:50%;" class="product-thumb-info">
 						<a href="" class="add-to-cart-product">
 							<span><i class="fa fa-shopping-cart"></i>
 								<button ng-click="addToCart(product);">Add to cart</button>
@@ -113,149 +59,216 @@
 								<ins><span class="amount">${{product.price}}</span></ins>
 							</span>
 						</span>
-					</span>
+						
+
+					</ul>
+				</div>
+
 				
-			</li>
-		</ul>
-		</div>
+				<div class="row">
+					<div class="col-md-6">
+						<h1 class="mb-none preheading-font">SmartCabling</h1>
+					</div>
+				</div>
 
-	</div>
 
-	
-	<div ng-if="cart.length" class="container">
-		
-		<div class="row spacing-bot-neg">
-			<div class="col-md-12">
-				<hr class="tall">
-			</div>
-		</div>
-		
-		<div class="row">
-			<h1 class="mb-none"><strong>Your Cart</strong></h1>
-		</div>
-		
-		<div class="featured-boxes spacing-top-lg">
-			<div class="row">
-				<div class="col-md-12">
-					<div class="panel panel-default">
-						<div class="panel-heading">
-							<h4 class="panel-title">
-								<a class="accordion">
-									Cart
-								</a>
-							</h4>
+				<div class="row">
+					<ul class="products product-thumb-info-list">
+						<li class="col-md-3 col-sm-6 col-xs-12 product" ng-repeat="product in products | filter:{type:'Cabling'}"">
+							<span class="product-thumb-info">
+								<span class="product-thumb-info">
+									<a href="" class="add-to-cart-product">
+										<span><i class="fa fa-shopping-cart"></i>
+											<button ng-click="addToCart(product);">Add to cart</button>
+										</span>
+									</a>
+									
+									<img alt="" class="img-responsive" ng-src="{{product.imagePath}}" alt="{{product.title}}">
+									
+									<span class="product-thumb-info-content">
+										<h4 class="heading-tertiary">{{product.title}}</h4>
+										<span class="price text-color-primary">
+											<ins><span class="amount">${{product.price}}</span></ins>
+										</span>
+									</span>
+								</span>
+								
+							</li>
+						</ul>
+					</div>
+
+
+					<div class="row">
+						<div class="col-md-6">
+							<h1 class="mb-none preheading-font">SmartConnector</h1>
+						</div>
+					</div>
+
+					<div class="row">
+						<ul class="products product-thumb-info-list">
+							<li class="col-md-6 col-sm-6 col-xs-12 product" ng-repeat="product in products | filter:{type:'Adapter'}"">
+								<span style="width:47%; height:47%;" class="product-thumb-info">
+									<span class="product-thumb-info">
+										<a href="" class="add-to-cart-product">
+											<span><i class="fa fa-shopping-cart"></i>
+												<button ng-click="addToCart(product);">Add to cart</button>
+											</span>
+										</a>
+										
+										<img class="img-responsive" ng-src="{{product.imagePath}}" alt="{{product.title}}">
+										
+										<span class="product-thumb-info-content">
+											<h4 class="heading-tertiary">{{product.title}}</h4>
+											<span class="price text-color-primary">
+												<ins><span class="amount">${{product.price}}</span></ins>
+											</span>
+										</span>
+									</span>
+								</li>
+							</ul>
 						</div>
 
 
 
-						<div class="main shop">
-							<div class="accordion-body">
-								<div class="panel-body">
-									<table class="shop_table cart">
-										<thead>
-											<tr>
-												<th class="product-remove">
-													&nbsp;
-												</th>
-												<th class="product-thumbnail">
-													&nbsp;
-												</th>
-												<th class="product-name">
-													Product
-												</th>
-												<th class="product-price">
-													Price
-												</th>
-												<th>
-												</th>
-												<th class="product-quantity">
-													Quantity
-												</th>
-												<th class="product-subtotal">
-													Total
-												</th>
-											</tr>
-										</thead>
-										<tbody ng-if="cart.length">
-											<tr class="cart_table_item" ng-repeat="product in cart | filter: greaterThan('quantity', 0)">
-												<td class="product-remove">
-													<a title="Remove this item" class="remove" ng-click="removeFromCart(product)">
-														<i class="fa fa-times"></i>
-													</a>
-												</td>
-												<td class="product-thumbnail">
-													<a><img width="100" height="100" alt="" class="img-responsive" ng-src="{{product.imagePath}}">
-													</a>
-												</td>
-												<td class="product-name">
-													<a href="shop-product-sidebar.html">{{product.title}}</a>
-												</td>
-												<td class="product-price">
-													<span class="amount">${{product.price}}</span>
-												</td>
-												<td>
-													&nbsp;
-												</td>
-												<td class="product-quantity">
-													<form class="cart">
-														<div class="quantity">
-															<button class="minus" ng-click="subtractQty(product)">-</button>
-															<input type="text" name="quantity" id="qty" class="input-text qty text" ng-model="product.quantity">
-															<button class="plus" ng-click="addQty(product)">+</button>
+						
+
+					</div>
+
+					
+					<div ng-if="cart.length" class="container">
+						
+						<div class="row spacing-bot-neg">
+							<div class="col-md-12">
+								<hr class="tall">
+							</div>
+						</div>
+						
+						<div class="row">
+							<h1 class="mb-none"><strong>Your Cart</strong></h1>
+						</div>
+						
+						<div class="featured-boxes spacing-top-lg">
+							<div class="row">
+								<div class="col-md-12">
+									<div class="panel panel-default">
+										<div class="panel-heading">
+											<h4 class="panel-title">
+												<a class="accordion">
+													Cart
+												</a>
+											</h4>
+										</div>
+
+
+
+										<div class="main shop">
+											<div class="accordion-body">
+												<div class="panel-body">
+													<table class="shop_table cart">
+														<thead>
+															<tr>
+																<th class="product-remove">
+																	&nbsp;
+																</th>
+																<th class="product-thumbnail">
+																	&nbsp;
+																</th>
+																<th class="product-name">
+																	Product
+																</th>
+																<th class="product-price">
+																	Price
+																</th>
+																<th>
+																</th>
+																<th class="product-quantity">
+																	Quantity
+																</th>
+																<th class="product-subtotal">
+																	Total
+																</th>
+															</tr>
+														</thead>
+														<tbody ng-if="cart.length">
+															<tr class="cart_table_item" ng-repeat="product in cart | filter: greaterThan('quantity', 0)">
+																<td class="product-remove">
+																	<a title="Remove this item" class="remove" ng-click="removeFromCart(product)">
+																		<i class="fa fa-times"></i>
+																	</a>
+																</td>
+																<td class="product-thumbnail">
+																	<a><img width="100" height="100" alt="" class="img-responsive" ng-src="{{product.imagePath}}">
+																	</a>
+																</td>
+																<td class="product-name">
+																	<a href="shop-product-sidebar.html">{{product.title}}</a>
+																</td>
+																<td class="product-price">
+																	<span class="amount">${{product.price}}</span>
+																</td>
+																<td>
+																	&nbsp;
+																</td>
+																<td class="product-quantity">
+																	<form class="cart">
+																		<div class="quantity">
+																			<button class="minus" ng-click="subtractQty(product)">-</button>
+																			<input type="text" name="quantity" id="qty" class="input-text qty text" ng-model="product.quantity">
+																			<button class="plus" ng-click="addQty(product)">+</button>
+																		</div>
+																	</form>
+																</td>
+																<td class="product-subtotal">
+																	<span class="amount">${{getProductPrice(product)}}</span>
+																</td>
+															</tr>
+														</tbody>
+													</table>
+
+
+													<div style="width:50%; float:right;">
+														<!-- <h4 class="heading-primary">Cart Totals</h4> -->
+														<br>
+														<table class="cart-totals">
+															<tbody >
+																<tr class="cart-subtotal">
+																	<th>
+																		<strong>Cart Subtotal</strong>
+																	</th>
+																	<td>
+																		<strong>${{getCartPrice()}}</strong>
+																	</td>
+																</tr>
+																<tr class="shipping">
+																	<th>
+																		Shipping
+																	</th>
+																	<td>
+																		Free Shipping<input type="hidden" value="free_shipping" id="shipping_method" name="shipping_method">
+																	</td>
+																</tr>
+																<tr class="total">
+																	<th>
+																		<strong>Order Total</strong>
+																	</th>
+																	<td>
+																		<strong><span class="amount">${{getCartPrice()}}</span></strong>
+																	</td>
+																</tr>
+															</tbody>
+														</table>
+
+														<div class="actions-continue">
+															<input type="submit" value="Checkout" name="update_cart" ng-disabled="cart.length == 0" ng-click="checkout();" class="btn btn-default">
 														</div>
-													</form>
-												</td>
-												<td class="product-subtotal">
-													<span class="amount">${{getProductPrice(product)}}</span>
-												</td>
-											</tr>
-										</tbody>
-									</table>
-
-
-									<div style="width:50%; float:right;">
-										<!-- <h4 class="heading-primary">Cart Totals</h4> -->
-										<br>
-										<table class="cart-totals">
-											<tbody >
-												<tr class="cart-subtotal">
-													<th>
-														<strong>Cart Subtotal</strong>
-													</th>
-													<td>
-														<strong>${{getCartPrice()}}</strong>
-													</td>
-												</tr>
-												<tr class="shipping">
-													<th>
-														Shipping
-													</th>
-													<td>
-														Free Shipping<input type="hidden" value="free_shipping" id="shipping_method" name="shipping_method">
-													</td>
-												</tr>
-												<tr class="total">
-													<th>
-														<strong>Order Total</strong>
-													</th>
-													<td>
-														<strong><span class="amount">${{getCartPrice()}}</span></strong>
-													</td>
-												</tr>
-											</tbody>
-										</table>
-
-										<div class="actions-continue">
-												<input type="submit" value="Checkout" name="update_cart" ng-disabled="cart.length == 0" ng-click="checkout();" class="btn btn-default">
+													</div>
+												</div>
 											</div>
+										</div>
 									</div>
 								</div>
 							</div>
 						</div>
 					</div>
-				</div>
-			</div>
-		</div>
-	</div>
 
-</div>
+				</div>
