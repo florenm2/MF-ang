@@ -1,25 +1,25 @@
 angular.module('account.settings', ['config', 'account.settings.social', 'security.service', 'security.authorization', 'services.accountResource', 'services.utility','ui.bootstrap', 'directives.serverError']);
 angular.module('account.settings').config(['$routeProvider', 'securityAuthorizationProvider', function($routeProvider){
   $routeProvider
-    .when('/account/settings', {
-      templateUrl: 'account/settings/account-settings.tpl.html',
-      controller: 'AccountSettingsCtrl',
-      title: 'Account Settings',
-      resolve: {
-        accountDetails: ['$q', '$location', 'securityAuthorization', 'accountResource' ,function($q, $location, securityAuthorization, accountResource){
+  .when('/account/settings', {
+    templateUrl: 'account/settings/account-settings.tpl.html',
+    controller: 'AccountSettingsCtrl',
+    title: 'Account Settings',
+    resolve: {
+      accountDetails: ['$q', '$location', 'securityAuthorization', 'accountResource' ,function($q, $location, securityAuthorization, accountResource){
           //get account details only for verified-user, otherwise redirect to /account/verification
           var redirectUrl;
           var promise = securityAuthorization.requireVerifiedUser()
-            .then(accountResource.getAccountDetails, function(reason){
+          .then(accountResource.getAccountDetails, function(reason){
               //rejected either user is unverified or un-authenticated
               redirectUrl = reason === 'unverified-client'? '/account/verification': '/login';
               return $q.reject();
             })
-            .catch(function(){
-              redirectUrl = redirectUrl || '/account';
-              $location.path(redirectUrl);
-              return $q.reject();
-            });
+          .catch(function(){
+            redirectUrl = redirectUrl || '/account';
+            $location.path(redirectUrl);
+            return $q.reject();
+          });
           return promise;
         }]
       }
@@ -191,16 +191,16 @@ angular.module('account.settings').controller('AccountSettingsCtrl', [ '$scope',
     $scope.submit = function(ngFormCtrl){
       switch (ngFormCtrl.$name){
         case 'detailForm':
-          submitDetailForm();
-          break;
+        submitDetailForm();
+        break;
         case 'identityForm':
-          submitIdentityForm();
-          break;
+        submitIdentityForm();
+        break;
         case 'passwordForm':
-          submitPasswordForm();
-          break;
+        submitPasswordForm();
+        break;
         default:
-          return;
+        return;
       }
     };
     $scope.disconnect = function(provider){
@@ -208,5 +208,25 @@ angular.module('account.settings').controller('AccountSettingsCtrl', [ '$scope',
         disconnect(provider);
       }
     };
+    function openCity(evt, cityName) {
+      // Declare all variables
+      var i, tabcontent, tablinks;
+
+      // Get all elements with class="tabcontent" and hide them
+      tabcontent = document.getElementsByClassName("tabcontent");
+      for (i = 0; i < tabcontent.length; i++) {
+        tabcontent[i].style.display = "none";
+      }
+
+      // Get all elements with class="tablinks" and remove the class "active"
+      tablinks = document.getElementsByClassName("tablinks");
+      for (i = 0; i < tablinks.length; i++) {
+        tablinks[i].className = tablinks[i].className.replace(" active", "");
+      }
+
+      // Show the current tab, and add an "active" class to the link that opened the tab
+      document.getElementById(cityName).style.display = "block";
+      evt.currentTarget.className += " active";
+    }
   }
 ]);

@@ -205,6 +205,10 @@ module.exports = function(grunt) {
           {
             expand: true, cwd: 'client/bower_components/angular-material/',
             src: ['angular-material.js'], dest: '<%= distdir %>/vendor/'
+          },
+          {
+            expand: true, cwd: 'client/bower_components/angular-messages/',
+            src: ['angular-messages.js'], dest: '<%= distdir %>/vendor/'
           }
         ]
       },
