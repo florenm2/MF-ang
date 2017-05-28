@@ -51,27 +51,27 @@ angular.module('pricing.index').controller('PricingCtrl', ['$scope', '$q', '$htt
     $scope.openInfoModal = function () {
       var modalInstance = $timeout(function(){ $modal.open({
         templateUrl: 'pricing/information-modal.tpl.html',
-        controller: 'InfoModalCtrl',
-        resolve: {
-          totalAmount: $scope.getCartPrice
-        }
+        controller: 'InfoModalCtrl'
+        // resolve: {
+        //   totalAmount: $scope.getCartPrice
+        // }
       })}, 2000);
     };
 
     $scope.checkout = function () {
-      var total = $scope.getCartPrice;
+     // var total = $scope.getCartPrice;
 
       if(!security.isAuthenticated()){
         $modal.open({
-          templateUrl: 'pricing/login-modal.tpl.html',
-          controller: 'LoginOrGuestCtrl',
-          resolve: {
-            totalAmount: total
-          }
+          templateUrl: 'pricing/login-modal2.tpl.html',
+          controller: 'LoginOrGuestCtrl2'
+          // resolve: {
+          //   totalAmount: total
+          // }
         });
       }
       else {
-        $location.path('/account/checkout/' + total);
+        $location.url('/account/checkout');
       }
     };
 
@@ -85,10 +85,10 @@ angular.module('pricing.index').controller('PricingCtrl', ['$scope', '$q', '$htt
 
   }])
 .controller('InfoModalCtrl',
-  function($scope, $location, $modalInstance){
+  function($scope, $location, $modalInstance, cartService){
 
     $scope.newPage = function(){
-      $location.path("/pricing/information");
+      $location.path('/pricing/information');
       $modalInstance.dismiss('cancel');
     };
     $scope.cancel = function () {
@@ -96,17 +96,39 @@ angular.module('pricing.index').controller('PricingCtrl', ['$scope', '$q', '$htt
     };
   })
 .controller('LoginOrGuestCtrl',
-  function($scope, $location, $modalInstance, totalAmount){
+  function($scope, $location, $modalInstance, cartService){
 
     $scope.signin = function(){
-      $location.path("/account/checkout/" + totalAmount);
+      $location.url('/account/checkout');
+      //$location.path("/account/checkout/" + totalAmount);
       $modalInstance.dismiss('cancel');
     };
     $scope.guest = function(){
-      $location.path("/pricing/checkout/" + totalAmount);
+      $location.path('/specs');
+      //$location.url('/pricing/checkout');
+      //$location.path("/pricing/checkout/" + totalAmount);
       $modalInstance.dismiss('cancel');
     };
     $scope.cancel = function () {
+      $modalInstance.dismiss('cancel');
+    };
+
+  })
+.controller('LoginOrGuestCtrl2',
+  function($scope, $location, $modalInstance, cartService){
+
+    $scope.signin2 = function(){
+      $location.url('/account/checkout');
+      //$location.path("/account/checkout/" + totalAmount);
+      $modalInstance.dismiss('cancel');
+    };
+    $scope.guest2 = function(){
+      $location.path('/pricing/checkout');
+      //$location.url('/pricing/checkout');
+      //$location.path("/pricing/checkout/" + totalAmount);
+      $modalInstance.dismiss('cancel');
+    };
+    $scope.cancel2 = function () {
       $modalInstance.dismiss('cancel');
     };
 

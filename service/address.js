@@ -52,14 +52,6 @@ var address = {
       var workflow = req.app.utility.workflow(req, res);
 
       workflow.on('validate', function() {
-        // if (!req.body.first) {
-        //   workflow.outcome.errfor.first = 'required';
-        // }
-
-        // if (!req.body.last) {
-        //   workflow.outcome.errfor.last = 'required';
-        // }
-
         if (workflow.hasErrors()) {
           return workflow.emit('response');
         }

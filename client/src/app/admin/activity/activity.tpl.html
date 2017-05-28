@@ -35,43 +35,27 @@
         <br>
 
 
-<!-- <div class="panel panel-default">
-        <div class="panel-heading">
-            Home Page Views
+        <div class="panel panel-default">
+                <div class="panel-heading">
+                    Home Page Views
+                </div>
+                <div class="panel-body">
+                    <canvas id="line" class="chart chart-line" chart-data="homeView30Day" chart-labels="labelDay" chart-options="optionsViewsDayTotal" chart-click="onClick">
+                </canvas>
+            </div>
         </div>
-        <div class="panel-body">
-            <canvas id="line" class="chart chart-line" chart-options="viewsOptions" chart-legend="true" chart-data="homePageViewData" chart-click="onClick">
-        </canvas>
-        format dates then include chart-labels="viewDataDates" 
-    </div>
-</div>  -->
 
 
-<div class="panel panel-default">
-    <div class="panel-heading">
-        <i class="fa fa-bar-chart-o fa-fw"></i> Shopping Cart Views
-    </div>
-    <div class="panel-body">
-        <div class="row">
-            <div
-            area-chart
-            area-data='[
-            { y: "2006", a: 100, b: 90 },
-            { y: "2007", a: 75,  b: 65 },
-            { y: "2008", a: 50,  b: 40 },
-            { y: "2009", a: 75,  b: 65 },
-            { y: "2010", a: 50,  b: 40 },
-            { y: "2011", a: 75,  b: 65 },
-            { y: "2012", a: 100, b: 90 }
-            ]'
-            area-xkey='y'
-            area-ykeys='["a", "b"]'
-            area-labels='["Year", "Month"]'
-            line-colors='["#89b4f9", "#6d90c7"]'>
+
+        <div class="panel panel-default">
+                <div class="panel-heading">
+                    Cart Page Views
+                </div>
+                <div class="panel-body">
+                    <canvas id="line" class="chart chart-line" chart-data="cartView30Day" chart-labels="labelDay" chart-options="optionsViewsDayTotal" chart-click="onClick">
+                </canvas>
+            </div>
         </div>
-    </div>
-</div>
-</div>
 
 <br>
 
@@ -113,32 +97,31 @@
         </div>
         <br>
         <br>
+
         <div class="panel panel-default">
-            <div class="panel-heading">
-                <i class="fa fa-bar-chart-o fa-fw"></i> Shopping Cart Views
-            </div>
-            <div class="panel-body">
-                <div class="row">
-                    <div
-                    area-chart
-                    area-data='[
-                    { y: "2006", a: 100, b: 90 },
-                    { y: "2007", a: 75,  b: 65 },
-                    { y: "2008", a: 50,  b: 40 },
-                    { y: "2009", a: 75,  b: 65 },
-                    { y: "2010", a: 50,  b: 40 },
-                    { y: "2011", a: 75,  b: 65 },
-                    { y: "2012", a: 100, b: 90 }
-                    ]'
-                    area-xkey='y'
-                    area-ykeys='["a", "b"]'
-                    area-labels='["Year", "Month"]'
-                    line-colors='["#89b4f9", "#6d90c7"]'>
+                <div class="panel-heading">
+                    Home Page Views
                 </div>
+                <div class="panel-body">
+                    <canvas id="line" class="chart chart-line" chart-data="homeViewMonth" chart-labels="labels" chart-options="optionsMonthViews" chart-click="onClick">
+                </canvas>
             </div>
         </div>
-    </div>
-</div>
+
+
+
+        <div class="panel panel-default">
+                <div class="panel-heading">
+                    Cart Page Views
+                </div>
+                <div class="panel-body">
+                    <canvas id="line" class="chart chart-line" chart-data="cartViewMonth" chart-labels="labels" chart-options="optionsMonthViews" chart-click="onClick">
+                </canvas>
+            </div>
+        </div>
+
+
+
 </div>
 </div>
 </div>

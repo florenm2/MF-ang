@@ -720,9 +720,10 @@ angular.module('security.service', [
       return queue.retryReason();
     },
 
-    // Show the modal login dialog
+    // Redirect to the login page if not logged in
     showLogin: function() {
-      openLoginDialog();
+      redirect('/login');
+      //openLoginDialog();
     },
 
     socialDisconnect: function(provider){
@@ -1471,12 +1472,21 @@ angular.module('account.index').controller('AccountCtrl', [ '$scope',
 angular.module('account.checkout', ['config', 'account.settings.social', 'security.service', 'security.authorization', 'services.accountResource', 'services.utility','ui.bootstrap', 'directives.serverError', 'services.cart']);
 angular.module('account.checkout').config(['$routeProvider', 'securityAuthorizationProvider', function($routeProvider){
   $routeProvider
+<<<<<<< HEAD
   .when('/account/checkout/:totalAmount', {
     templateUrl: 'account/checkout/checkout.tpl.html',
     controller: 'CheckoutLoggedInCtrl',
     title: 'Checkout',
     resolve: {
       accountDetails: ['$q', '$location', 'securityAuthorization', 'accountResource' ,function($q, $location, securityAuthorization, accountResource){
+=======
+    .when('/account/checkout', {
+      templateUrl: 'account/checkout/checkout.tpl.html',
+      controller: 'CheckoutLoggedInCtrl',
+      title: 'Checkout',
+      resolve: {
+        accountDetails: ['$q', '$location', 'securityAuthorization', 'accountResource' ,function($q, $location, securityAuthorization, accountResource){
+>>>>>>> 212bec6d48db1270d24dbcc86459b09bb8b0e112
           //get account details only for verified-user, otherwise redirect to /account/verification
           var redirectUrl;
           var promise = securityAuthorization.requireVerifiedUser()
@@ -3151,18 +3161,17 @@ angular.module('admin.activity').controller('ActivityCtrl', ['$scope', '$log', '
       return $scope.tab === tabNum;
     }
 
-
     var deserializeData = function(phData, tally, viewCount){
       $scope.items = phData.items;
       $scope.pages = phData.pages;
       $scope.filters = phData.filters;
       $scope.phList = phData.data;
-      //$scope.viewRecent = viewCount;
+      $scope.viewRecent = viewCount;
 
-      //console.log($scope.viewRecent);
+      console.log($scope.viewRecent);
       $scope.tally = tally.data;
 
-      //viewData($scope.viewRecent);
+      viewData($scope.viewRecent);
       dataToVariables(tally);
     };
     
@@ -3195,9 +3204,6 @@ angular.module('admin.activity').controller('ActivityCtrl', ['$scope', '$log', '
           
         };
     var monthInfo = function(tallyMonth){
-
-      $scope.tallyMonth = [];
-      $scope.totalMonth = []; 
 
       $scope.tallyMonth = [0,0,0,0,0,0,0,0,0,0,0,0];
       $scope.totalMonth = [0,0,0,0,0,0,0,0,0,0,0,0];
@@ -3260,19 +3266,73 @@ angular.module('admin.activity').controller('ActivityCtrl', ['$scope', '$log', '
 
 
     var viewData = function(viewCount){
-        // $scope.viewDataDates = []; 
-        // $scope.viewCounts = []; 
+         $scope.viewDataDates = []; 
+         $scope.homeViewCounts = []; 
+         $scope.cartViewCounts = []; 
 
-        // for(var v in $scope.viewCount){
-        //   $scope.viewDataDates.push($scope.viewCount[v].date);
-        //   $scope.viewCounts.push($scope.viewCount[v].homePageViews);
-        // }
+         $scope.homeViewYear = [];
+         $scope.cartViewYear = [];
 
-        // console.log($scope.viewDataDates);
+         $scope.homeViewMonth = [0,0,0,0,0,0,0,0,0,0,0,0];
+         $scope.cartViewMonth = [0,0,0,0,0,0,0,0,0,0,0,0];
 
-        // console.log($scope.viewCounts);
+         $scope.homeView30Day = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
+         $scope.cartView30Day = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
+
+         var cutOff = Date.today().add(-30).days();
+
+         angular.forEach(viewCount, function(view, key) {
+            $scope.viewDataDates.push(view.date);
+            $scope.homeViewCounts.push(view.homePageViews);
+            $scope.cartViewCounts.push(view.cartViews);
+
+            var viewDate = new Date(view.date);
+
+            var ts = new TimeSpan(viewDate-cutOff);
+            var n = ts.days - 1;
+            if(n > 0 && n < 30){
+              var f = 30-n;
+              $scope.homeView30Day[n]+=view.homePageViews;
+              $scope.cartView30Day[n]+=view.cartViews;
+            }
+
+            var mon = viewDate.getMonth();
+            var n = mon;
+
+            if(view.homePageViews)
+            $scope.homeViewMonth[n]+=view.homePageViews;
+            
+            if(view.cartViews)
+            $scope.cartViewMonth[n]+=view.cartViews;
+
+
+         });
+         console.log($scope.homeViewMonth);
+         console.log($scope.cartViewMonth);
+
+          var currentDate = new Date();
+          var currentYear = currentDate.getFullYear();
+
+          var i;
+          var n = currentYear-2015;
+
+          for(i=0;i<n;i++){
+            $scope.homeViewYear.push(0);
+            $scope.cartViewYear.push(0);
+          }
+
+          for(var view in viewCount){
+            var viewDate = new Date(view.date);
+            var year = viewDate.getFullYear();
+            var n = year - 2015;
+
+            $scope.homeViewYear[n]+=view.homePageViews;
+            $scope.cartViewYear[n]+=view.cartViews;
+
+          }
 
       };
+
 
 
     var dataToVariables = function(tally){
@@ -3372,6 +3432,28 @@ $scope.labels = ["January", "February", "March", "April", "May", "June", "July",
           scaleLabel: {
             display: true,
             labelString: 'Number of Sales'
+          },
+          display: true,
+          position: 'left'
+        }
+        ]
+      }
+    };
+
+    $scope.optionsMonthViews = {
+      scales: {
+        yAxes: [
+        {
+          id: 'y-axis-1',
+          scaleSteps : 1,
+          ticks: {
+            suggestedMax: 500,
+            min: 0,
+            stepSize: 50
+          },
+          scaleLabel: {
+            display: true,
+            labelString: 'Total Views'
           },
           display: true,
           position: 'left'
@@ -3964,7 +4046,7 @@ angular.module('admin.admin-groups', [
   'admin.admin-groups.index',
   'admin.admin-groups.detail'
 ]);
-angular.module('admin.index', ['ngRoute', 'security.authorization', 'services.adminResource', 'angular.morris']);
+angular.module('admin.index', ['ngRoute', 'security.authorization', 'services.adminResource', 'angular.morris', 'chart.js']);
 angular.module('admin.index').config(['$routeProvider', function($routeProvider){
   $routeProvider
     .when('/admin', {
@@ -3987,22 +4069,108 @@ angular.module('admin.index').config(['$routeProvider', function($routeProvider)
               return $q.reject();
             });
           return promise;
+        }],
+        viewCount: ['$q', '$location', '$log', 'securityAuthorization', 'adminResource', function($q, $location, $log, securityAuthorization, adminResource){
+          //get app stats only for admin-user, otherwise redirect to /account
+          var redirectUrl;
+          var promise = securityAuthorization.requireAdminUser()
+            .then(function(){
+              //handles url with query(search) parameter
+              return adminResource.getRecentViewCount();
+            }, function(reason){
+              //rejected either user is un-authorized or un-authenticated
+              redirectUrl = reason === 'unauthorized-client'? '/account': '/login';
+              return $q.reject();
+            })
+            .catch(function(){
+              redirectUrl = redirectUrl || '/account';
+              $location.search({});
+              $location.path(redirectUrl);
+              return $q.reject();
+            });
+          return promise;
         }]
       }
     })
 }]);
-angular.module('admin.index').controller('AdminCtrl', ['$scope', '$log', 'stats',
-  function($scope, $log, stats){
-    $scope.user = {
-      users: stats['User'],
-      accounts: stats['Account'],
-      admins: stats['Admin'],
-      groups: stats['AdminGroup']
+angular.module('admin.index').controller('AdminCtrl', ['$scope', '$log', 'stats', 'viewCount',
+  function($scope, $log, stats, viewCount){
+    // $scope.user = {
+    //   users: stats['User'],
+    //   accounts: stats['Account'],
+    //   admins: stats['Admin'],
+    //   groups: stats['AdminGroup']
+    // };
+    // $scope.pivoted = {
+    //   categories: stats['Category'],
+    //   statuses: stats['Status']
+    // };
+
+
+
+    var viewData = function(viewCount){
+         $scope.viewDataDates = []; 
+         $scope.homeViewCounts = []; 
+         $scope.cartViewCounts = []; 
+         $scope.labelDay = [];
+
+         $scope.homeView30Day = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
+         $scope.cartView30Day = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
+
+         var cutOff = Date.today().add(-30).days();
+
+         for(var i = 29; i>=0; i--){
+            if(((i-4)%5)==0){
+              var dlabel = Date.today().add(-i).days().toString('MMM dS');
+
+              $scope.labelDay.push(dlabel);
+            } else {
+              $scope.labelDay.push('');
+            }
+          }
+
+
+         angular.forEach(viewCount, function(view, key) {
+            $scope.viewDataDates.push(view.date);
+            $scope.homeViewCounts.push(view.homePageViews);
+            $scope.cartViewCounts.push(view.cartViews);
+
+            var currentDate = new Date(view.date);
+
+            var ts = new TimeSpan(currentDate-cutOff);
+            var n = ts.days - 1;
+            if(n > 0 && n < 30){
+              var f = 30-n;
+              $scope.homeView30Day[n]+=view.homePageViews;
+              $scope.cartView30Day[n]+=view.cartViews;
+            }
+           
+         });
+
+      };
+      viewData(viewCount);    
+
+
+      $scope.optionsViewsDayTotal = {
+      scales: {
+        yAxes: [
+        {
+          id: 'y-axis-1',
+          type: 'linear',
+          scaleLabel: {
+            display: true,
+            labelString: 'Total Views'
+          },
+          display: true,
+          position: 'left'
+        }
+        ]
+      }
     };
-    $scope.pivoted = {
-      categories: stats['Category'],
-      statuses: stats['Status']
-    };
+
+
+
+
   }]);
 angular.module('admin.administrators.detail', ['ngRoute', 'security.authorization', 'services.utility', 'services.adminResource', 'directives.serverError', 'ui.bootstrap']);
 angular.module('admin.administrators.detail').config(['$routeProvider', function($routeProvider){
@@ -5587,8 +5755,7 @@ angular.module('app', [
   'templates.common',
   'pricing',
   'hl.sticky',
-  'ui.bootstrap',
-  'ngAnalytics'
+  'ui.bootstrap'
   ]);
 
 angular.module('app').config(['$httpProvider', 'XSRF_COOKIE_NAME', function($httpProvider, XSRF_COOKIE_NAME){
@@ -5625,22 +5792,30 @@ angular.module('app').config(['$routeProvider', '$locationProvider', function ($
   });
 }]);
 
-angular.module('app').run(['$location', '$window', '$rootScope', 'security', 'ngAnalyticsService', function($location, $window, $rootScope, security, ngAnalyticsService) {
+angular.module('app').run(['$location', '$window', '$rootScope', 'security', 'accountResource', function($location, $window, $rootScope, security, accountResource) {
   // Get the current user when the application starts
   // (in case they are still logged in from a previous session)
   security.requestCurrentUser();
 
-  //ngAnalyticsService.setClientId('45835906318-12kumlot5j29eo6ut94hohvbh88riea5.apps.googleusercontent.com');
-
+  $rootScope.$on('$routeChangeStart', function(e, toState) {
+      if($location.url() == '/'){
+        accountResource.addHomePageView();
+      }
+      if($location.path() == '/pricing/checkout'){
+        accountResource.addCartView();
+      }
+      if($location.path() == '/account/checkout'){
+        accountResource.addCartView();
+      }
+    });
 
   // add a listener to $routeChangeSuccess
   $rootScope.$on('$routeChangeSuccess', function (event, current, previous) {
-    $window.scrollTo(0,0);
     $rootScope.title = current.$$route && current.$$route.title? current.$$route.title: 'SafeConnect Solar';
   });
 }]);
 
-angular.module('app').controller('AppCtrl', ['$scope', 'i18nNotifications', 'localizedMessages',  'ngAnalyticsService', function($scope, i18nNotifications, localizedMessages, ngAnalyticsService) {
+angular.module('app').controller('AppCtrl', ['$scope', 'i18nNotifications', 'localizedMessages', function($scope, i18nNotifications, localizedMessages) {
 
 
   $scope.notifications = i18nNotifications;
@@ -5648,73 +5823,6 @@ angular.module('app').controller('AppCtrl', ['$scope', 'i18nNotifications', 'loc
   $scope.removeNotification = function (notification) {
     i18nNotifications.remove(notification);
   };
-
-  $scope.charts = [{
-        reportType: 'ga',
-        query: {
-            metrics: 'ga:sessions',
-            dimensions: 'ga:date',
-            'start-date': '30daysAgo',
-            'end-date': 'yesterday'
-        },
-        chart: {
-            container: 'chart-container-1',
-            type: 'LINE',
-            options: {
-                width: '100%'
-            }
-        }
-    }, {
-        reportType: 'ga',
-        query: {
-            metrics: 'ga:sessions',
-            dimensions: 'ga:browser',
-            'start-date': '30daysAgo',
-            'end-date': 'yesterday'
-        },
-        chart: {
-            container: 'chart-container-2',
-            type: 'PIE',
-            options: {
-                width: '100%',
-                is3D: true,
-                title: 'Browser Usage'
-            }
-        }
-    }];
-    $scope.extraChart = {
-        reportType: 'ga',
-        query: {
-            metrics: 'ga:sessions',
-            dimensions: 'ga:date',
-            'start-date': '360daysAgo',
-            'end-date': 'yesterday',
-            ids: 'ga:136221478' // put your viewID here
-        },
-        chart: {
-            container: 'chart-container-3',
-            type: 'LINE',
-            options: {
-                width: '100%'
-            }
-        }
-    };
-    $scope.defaultIds = {
-        ids: 'ga:136221478'
-    };
-    $scope.queries = [{
-        query: {
-            ids: 'ga:136221478',  // put your viewID here
-            metrics: 'ga:sessions',
-            dimensions: 'ga:city'
-        }
-    }];
-    // if a report is ready
-    $scope.$on('$gaReportSuccess', function (e, report, element) {
-        console.log(report, element);
-    });
-
-
 
   $scope.$on('$routeChangeError', function(event, current, previous, rejection){
     i18nNotifications.pushForCurrentRoute('errors.route.changeError', 'error', {}, {rejection: rejection});
@@ -5796,27 +5904,6 @@ angular.module('app').controller('OwlCtrl', ['$scope',
     }
   }
   ]);
-
-
-
-
-// var cartApp = angular.module('CartSession', []).
-//   config(['$routeProvider', function($routeProvider) {
-//   $routeProvider.
-//     when('/pricing', { 
-//       templateUrl: 'pricing/information/pricing.tpl.html',
-//       controller: storeController }).
-//     when('/pricing/checkoutInformation', {
-//       templateUrl: 'pricing/checkout',
-//       controller: storeController }).
-//     when('/pricing/checkoutPayment', { 
-//       templateUrl: 'partials/shoppingCart.htm',
-//       controller: storeController }).
-//     otherwise({
-//       redirectTo: '/store' });
-// }]);
-
-
 
 
 
@@ -5935,7 +6022,6 @@ angular.module('base').controller('AdminHeaderCtrl' ,['$scope', 'adminResource',
     var accountInformation = accountInfo;
     var account = restResource.getAccountDetails.user;
     getName();
-    //console.log(accountInformation.account);
 
   }
 ]);
@@ -5981,7 +6067,6 @@ angular.module('base').controller('ContactCtrl', ['$scope', 'utility', 'accountR
         if(data.success){
           $scope.alerts.push(successAlert);
         }else{
-          //TODO: optionally do case study errfor/errors
           $scope.alerts.push(errorAlert);
         }
       }, function(x){
@@ -6351,21 +6436,30 @@ angular.module('login.social.google').config(['$routeProvider', function($routeP
 
 Stripe.setPublishableKey('pk_test_1Ol0KXlUc2OASvEVg1JwhHp2');
 
-angular.module('pricing.checkout', ['ngRoute', 'angularPayments']);
+angular.module('pricing.checkout', ['ngRoute', 'angularPayments', 'services.cart']);
 angular.module('pricing.checkout').config(['$routeProvider', function($routeProvider){
   $routeProvider
-    .when('/pricing/checkout/:totalAmount', {
+    .when('/pricing/checkout', {
       templateUrl: 'pricing/checkout/checkout.tpl.html',
       controller: 'CheckoutCtrl',
       title: 'Checkout'
     });
 }]);
+<<<<<<< HEAD
 angular.module('pricing.checkout').controller('CheckoutCtrl', ['$scope','$routeParams', function ($scope, $routeParams) {
 	var totalAmount = $routeParams.totalAmount;
 
 	$scope.onSubmit = function () {
 		$scope.processing = true;
 	};
+=======
+angular.module('pricing.checkout').controller('CheckoutCtrl', ['$scope','$routeParams', 'cartService', function ($scope, $routeParams, cartService) {
+		
+		//var totalAmount = $routeParams.totalAmount;
+		var totalAmount = cartService.getCartPrice;
+
+		$scope.cart = cartService;
+>>>>>>> 212bec6d48db1270d24dbcc86459b09bb8b0e112
 
 	$scope.stripeCallback = function (code, result) {
 		$scope.processing = false;
@@ -7485,27 +7579,27 @@ angular.module('pricing.index').controller('PricingCtrl', ['$scope', '$q', '$htt
     $scope.openInfoModal = function () {
       var modalInstance = $timeout(function(){ $modal.open({
         templateUrl: 'pricing/information-modal.tpl.html',
-        controller: 'InfoModalCtrl',
-        resolve: {
-          totalAmount: $scope.getCartPrice
-        }
+        controller: 'InfoModalCtrl'
+        // resolve: {
+        //   totalAmount: $scope.getCartPrice
+        // }
       })}, 2000);
     };
 
     $scope.checkout = function () {
-      var total = $scope.getCartPrice;
+     // var total = $scope.getCartPrice;
 
       if(!security.isAuthenticated()){
         $modal.open({
-          templateUrl: 'pricing/login-modal.tpl.html',
-          controller: 'LoginOrGuestCtrl',
-          resolve: {
-            totalAmount: total
-          }
+          templateUrl: 'pricing/login-modal2.tpl.html',
+          controller: 'LoginOrGuestCtrl2'
+          // resolve: {
+          //   totalAmount: total
+          // }
         });
       }
       else {
-        $location.path('/account/checkout/' + total);
+        $location.url('/account/checkout');
       }
     };
 
@@ -7519,10 +7613,10 @@ angular.module('pricing.index').controller('PricingCtrl', ['$scope', '$q', '$htt
 
   }])
 .controller('InfoModalCtrl',
-  function($scope, $location, $modalInstance){
+  function($scope, $location, $modalInstance, cartService){
 
     $scope.newPage = function(){
-      $location.path("/pricing/information");
+      $location.path('/pricing/information');
       $modalInstance.dismiss('cancel');
     };
     $scope.cancel = function () {
@@ -7530,65 +7624,44 @@ angular.module('pricing.index').controller('PricingCtrl', ['$scope', '$q', '$htt
     };
   })
 .controller('LoginOrGuestCtrl',
-  function($scope, $location, $modalInstance, totalAmount){
+  function($scope, $location, $modalInstance, cartService){
 
     $scope.signin = function(){
-      $location.path("/account/checkout/" + totalAmount);
+      $location.url('/account/checkout');
+      //$location.path("/account/checkout/" + totalAmount);
       $modalInstance.dismiss('cancel');
     };
     $scope.guest = function(){
-      $location.path("/pricing/checkout/" + totalAmount);
+      $location.path('/specs');
+      //$location.url('/pricing/checkout');
+      //$location.path("/pricing/checkout/" + totalAmount);
       $modalInstance.dismiss('cancel');
     };
     $scope.cancel = function () {
       $modalInstance.dismiss('cancel');
     };
 
+  })
+.controller('LoginOrGuestCtrl2',
+  function($scope, $location, $modalInstance, cartService){
+
+    $scope.signin2 = function(){
+      $location.url('/account/checkout');
+      //$location.path("/account/checkout/" + totalAmount);
+      $modalInstance.dismiss('cancel');
+    };
+    $scope.guest2 = function(){
+      $location.path('/pricing/checkout');
+      //$location.url('/pricing/checkout');
+      //$location.path("/pricing/checkout/" + totalAmount);
+      $modalInstance.dismiss('cancel');
+    };
+    $scope.cancel2 = function () {
+      $modalInstance.dismiss('cancel');
+    };
+
   });
 
-
-$(function() {
-    $('#side-menu').metisMenu();
-});
-
-//Loads the correct sidebar on window load,
-//collapses the sidebar on window resize.
-// Sets the min-height of #page-wrapper to window size
-$(function() {
-    $(window).bind("load resize", function() {
-        var topOffset = 50;
-        var width = (this.window.innerWidth > 0) ? this.window.innerWidth : this.screen.width;
-        if (width < 768) {
-            $('div.navbar-collapse').addClass('collapse');
-            topOffset = 100; // 2-row-menu
-        } else {
-            $('div.navbar-collapse').removeClass('collapse');
-        }
-
-        var height = ((this.window.innerHeight > 0) ? this.window.innerHeight : this.screen.height) - 1;
-        height = height - topOffset;
-        if (height < 1) height = 1;
-        if (height > topOffset) {
-            $("#page-wrapper").css("min-height", (height) + "px");
-        }
-    });
-
-    var url = window.location;
-    // var element = $('ul.nav a').filter(function() {
-    //     return this.href == url;
-    // }).addClass('active').parent().parent().addClass('in').parent();
-    var element = $('ul.nav a').filter(function() {
-        return this.href == url;
-    }).addClass('active').parent();
-
-    while (true) {
-        if (element.is('li')) {
-            element = element.parent().addClass('in').parent();
-        } else {
-            break;
-        }
-    }
-});
 
 angular.module('signup', ['ngRoute', 'config', 'services.utility', 'security.service', 'directives.serverError', 'ui.bootstrap']);
 angular.module('signup').config(['$routeProvider', function($routeProvider){
@@ -7653,7 +7726,7 @@ angular.module('signup').controller('SignupCtrl', [ '$scope', '$location', '$log
       security.signup($scope.user).then(signupSuccess, signupError);
     };
   }]);
-angular.module('templates.app', ['404.tpl.html', 'about.tpl.html', 'account/account.tpl.html', 'account/checkout/checkout.tpl.html', 'account/checkout/checkoutAddress.tpl.html', 'account/checkout/checkoutCredit.tpl.html', 'account/checkout/checkoutFinal.tpl.html', 'account/purchaseHistory/purchaseHistory.tpl.html', 'account/purchaseHistory/purchaseHistoryOne.tpl.html', 'account/settings/account-settings.tpl.html', 'account/verification/account-verification.tpl.html', 'admin/Pricing/admin-pricing-modal.tpl.html', 'admin/Pricing/admin-pricing.tpl.html', 'admin/Sales/admin-sales.tpl.html', 'admin/accounts/admin-account.tpl.html', 'admin/accounts/admin-accounts.tpl.html', 'admin/activity/activity.tpl.html', 'admin/admin-account-settings/admin-account-settings.tpl.html', 'admin/admin-groups/admin-group.tpl.html', 'admin/admin-groups/admin-groups.tpl.html', 'admin/admin.tpl.html', 'admin/administrators/admin-administrator.tpl.html', 'admin/administrators/admin-administrators.tpl.html', 'admin/categories/admin-categories.tpl.html', 'admin/categories/admin-category.tpl.html', 'admin/developers/developers.tpl.html', 'admin/purchase-history/admin-purchase-histories.tpl.html', 'admin/purchase-history/admin-purchase-histories2.tpl.html', 'admin/purchase-history/admin-purchase-history.tpl.html', 'admin/statuses/admin-status.tpl.html', 'admin/statuses/admin-statuses.tpl.html', 'admin/users/admin-user.tpl.html', 'admin/users/admin-users.tpl.html', 'contact.tpl.html', 'footer.tpl.html', 'header.tpl.html', 'login/forgot/login-forgot.tpl.html', 'login/login.tpl.html', 'login/reset/login-reset.tpl.html', 'main.tpl.html', 'pricing/checkout/checkout.tpl.html', 'pricing/information-modal.tpl.html', 'pricing/information/information.tpl.html', 'pricing/login-modal.tpl.html', 'pricing/panel-modal.tpl.html', 'pricing/pricing.tpl.html', 'sidebar.tpl.html', 'signup/signup.tpl.html', 'specs.tpl.html']);
+angular.module('templates.app', ['404.tpl.html', 'about.tpl.html', 'account/account.tpl.html', 'account/checkout/checkout.tpl.html', 'account/checkout/checkoutAddress.tpl.html', 'account/checkout/checkoutCredit.tpl.html', 'account/checkout/checkoutFinal.tpl.html', 'account/purchaseHistory/purchaseHistory.tpl.html', 'account/purchaseHistory/purchaseHistoryOne.tpl.html', 'account/settings/account-settings.tpl.html', 'account/verification/account-verification.tpl.html', 'admin/Pricing/admin-pricing-modal.tpl.html', 'admin/Pricing/admin-pricing.tpl.html', 'admin/Sales/admin-sales.tpl.html', 'admin/accounts/admin-account.tpl.html', 'admin/accounts/admin-accounts.tpl.html', 'admin/activity/activity.tpl.html', 'admin/admin-account-settings/admin-account-settings.tpl.html', 'admin/admin-groups/admin-group.tpl.html', 'admin/admin-groups/admin-groups.tpl.html', 'admin/admin.tpl.html', 'admin/administrators/admin-administrator.tpl.html', 'admin/administrators/admin-administrators.tpl.html', 'admin/categories/admin-categories.tpl.html', 'admin/categories/admin-category.tpl.html', 'admin/developers/developers.tpl.html', 'admin/purchase-history/admin-purchase-histories.tpl.html', 'admin/purchase-history/admin-purchase-histories2.tpl.html', 'admin/purchase-history/admin-purchase-history.tpl.html', 'admin/statuses/admin-status.tpl.html', 'admin/statuses/admin-statuses.tpl.html', 'admin/users/admin-user.tpl.html', 'admin/users/admin-users.tpl.html', 'contact.tpl.html', 'footer.tpl.html', 'header.tpl.html', 'login/forgot/login-forgot.tpl.html', 'login/login.tpl.html', 'login/reset/login-reset.tpl.html', 'main.tpl.html', 'pricing/checkout/checkout.tpl.html', 'pricing/information-modal.tpl.html', 'pricing/information/information.tpl.html', 'pricing/login-modal.tpl.html', 'pricing/login-modal2.tpl.html', 'pricing/panel-modal.tpl.html', 'pricing/pricing.tpl.html', 'sidebar.tpl.html', 'signup/signup.tpl.html', 'specs.tpl.html']);
 
 angular.module("404.tpl.html", []).run(["$templateCache", function($templateCache) {
   $templateCache.put("404.tpl.html",
@@ -8936,43 +9009,27 @@ angular.module("admin/activity/activity.tpl.html", []).run(["$templateCache", fu
     "        <br>\n" +
     "\n" +
     "\n" +
-    "<!-- <div class=\"panel panel-default\">\n" +
-    "        <div class=\"panel-heading\">\n" +
-    "            Home Page Views\n" +
+    "        <div class=\"panel panel-default\">\n" +
+    "                <div class=\"panel-heading\">\n" +
+    "                    Home Page Views\n" +
+    "                </div>\n" +
+    "                <div class=\"panel-body\">\n" +
+    "                    <canvas id=\"line\" class=\"chart chart-line\" chart-data=\"homeView30Day\" chart-labels=\"labelDay\" chart-options=\"optionsViewsDayTotal\" chart-click=\"onClick\">\n" +
+    "                </canvas>\n" +
+    "            </div>\n" +
     "        </div>\n" +
-    "        <div class=\"panel-body\">\n" +
-    "            <canvas id=\"line\" class=\"chart chart-line\" chart-options=\"viewsOptions\" chart-legend=\"true\" chart-data=\"homePageViewData\" chart-click=\"onClick\">\n" +
-    "        </canvas>\n" +
-    "        format dates then include chart-labels=\"viewDataDates\" \n" +
-    "    </div>\n" +
-    "</div>  -->\n" +
     "\n" +
     "\n" +
-    "<div class=\"panel panel-default\">\n" +
-    "    <div class=\"panel-heading\">\n" +
-    "        <i class=\"fa fa-bar-chart-o fa-fw\"></i> Shopping Cart Views\n" +
-    "    </div>\n" +
-    "    <div class=\"panel-body\">\n" +
-    "        <div class=\"row\">\n" +
-    "            <div\n" +
-    "            area-chart\n" +
-    "            area-data='[\n" +
-    "            { y: \"2006\", a: 100, b: 90 },\n" +
-    "            { y: \"2007\", a: 75,  b: 65 },\n" +
-    "            { y: \"2008\", a: 50,  b: 40 },\n" +
-    "            { y: \"2009\", a: 75,  b: 65 },\n" +
-    "            { y: \"2010\", a: 50,  b: 40 },\n" +
-    "            { y: \"2011\", a: 75,  b: 65 },\n" +
-    "            { y: \"2012\", a: 100, b: 90 }\n" +
-    "            ]'\n" +
-    "            area-xkey='y'\n" +
-    "            area-ykeys='[\"a\", \"b\"]'\n" +
-    "            area-labels='[\"Year\", \"Month\"]'\n" +
-    "            line-colors='[\"#89b4f9\", \"#6d90c7\"]'>\n" +
+    "\n" +
+    "        <div class=\"panel panel-default\">\n" +
+    "                <div class=\"panel-heading\">\n" +
+    "                    Cart Page Views\n" +
+    "                </div>\n" +
+    "                <div class=\"panel-body\">\n" +
+    "                    <canvas id=\"line\" class=\"chart chart-line\" chart-data=\"cartView30Day\" chart-labels=\"labelDay\" chart-options=\"optionsViewsDayTotal\" chart-click=\"onClick\">\n" +
+    "                </canvas>\n" +
+    "            </div>\n" +
     "        </div>\n" +
-    "    </div>\n" +
-    "</div>\n" +
-    "</div>\n" +
     "\n" +
     "<br>\n" +
     "\n" +
@@ -9014,32 +9071,31 @@ angular.module("admin/activity/activity.tpl.html", []).run(["$templateCache", fu
     "        </div>\n" +
     "        <br>\n" +
     "        <br>\n" +
+    "\n" +
     "        <div class=\"panel panel-default\">\n" +
-    "            <div class=\"panel-heading\">\n" +
-    "                <i class=\"fa fa-bar-chart-o fa-fw\"></i> Shopping Cart Views\n" +
-    "            </div>\n" +
-    "            <div class=\"panel-body\">\n" +
-    "                <div class=\"row\">\n" +
-    "                    <div\n" +
-    "                    area-chart\n" +
-    "                    area-data='[\n" +
-    "                    { y: \"2006\", a: 100, b: 90 },\n" +
-    "                    { y: \"2007\", a: 75,  b: 65 },\n" +
-    "                    { y: \"2008\", a: 50,  b: 40 },\n" +
-    "                    { y: \"2009\", a: 75,  b: 65 },\n" +
-    "                    { y: \"2010\", a: 50,  b: 40 },\n" +
-    "                    { y: \"2011\", a: 75,  b: 65 },\n" +
-    "                    { y: \"2012\", a: 100, b: 90 }\n" +
-    "                    ]'\n" +
-    "                    area-xkey='y'\n" +
-    "                    area-ykeys='[\"a\", \"b\"]'\n" +
-    "                    area-labels='[\"Year\", \"Month\"]'\n" +
-    "                    line-colors='[\"#89b4f9\", \"#6d90c7\"]'>\n" +
+    "                <div class=\"panel-heading\">\n" +
+    "                    Home Page Views\n" +
     "                </div>\n" +
+    "                <div class=\"panel-body\">\n" +
+    "                    <canvas id=\"line\" class=\"chart chart-line\" chart-data=\"homeViewMonth\" chart-labels=\"labels\" chart-options=\"optionsMonthViews\" chart-click=\"onClick\">\n" +
+    "                </canvas>\n" +
     "            </div>\n" +
     "        </div>\n" +
-    "    </div>\n" +
-    "</div>\n" +
+    "\n" +
+    "\n" +
+    "\n" +
+    "        <div class=\"panel panel-default\">\n" +
+    "                <div class=\"panel-heading\">\n" +
+    "                    Cart Page Views\n" +
+    "                </div>\n" +
+    "                <div class=\"panel-body\">\n" +
+    "                    <canvas id=\"line\" class=\"chart chart-line\" chart-data=\"cartViewMonth\" chart-labels=\"labels\" chart-options=\"optionsMonthViews\" chart-click=\"onClick\">\n" +
+    "                </canvas>\n" +
+    "            </div>\n" +
+    "        </div>\n" +
+    "\n" +
+    "\n" +
+    "\n" +
     "</div>\n" +
     "</div>\n" +
     "</div>");
@@ -9277,11 +9333,7 @@ angular.module("admin/admin-groups/admin-groups.tpl.html", []).run(["$templateCa
 angular.module("admin/admin.tpl.html", []).run(["$templateCache", function($templateCache) {
   $templateCache.put("admin/admin.tpl.html",
     "<div id=\"page-wrapper\">\n" +
-    "    <!-- <div class=\"row\">\n" +
-    "        <div class=\"col-lg-12\">\n" +
-    "            <h1>Dashboard</h1>\n" +
-    "        </div>\n" +
-    "    </div> -->\n" +
+    "    \n" +
     "    <div class=\"row\">\n" +
     "        <div class=\"col-lg-12\">\n" +
     "         <h1>Dashboard</h1>\n" +
@@ -9289,43 +9341,10 @@ angular.module("admin/admin.tpl.html", []).run(["$templateCache", function($temp
     "            <div class=\"panel panel-default\">\n" +
     "                <div class=\"panel-heading\">\n" +
     "                    <i class=\"fa fa-bar-chart-o fa-fw\"></i> Home Page Views\n" +
-    "                    <div class=\"pull-right\">\n" +
-    "                        <div class=\"btn-group\">\n" +
-    "                            <button type=\"button\" class=\"btn btn-default btn-xs dropdown-toggle\" data-toggle=\"dropdown\">\n" +
-    "                                Actions\n" +
-    "                                <span class=\"caret\"></span>\n" +
-    "                            </button>\n" +
-    "                            <ul class=\"dropdown-menu pull-right\" role=\"menu\">\n" +
-    "                                <li><a href=\"#\">Action</a>\n" +
-    "                                </li>\n" +
-    "                                <li><a href=\"#\">Another action</a>\n" +
-    "                                </li>\n" +
-    "                                <li><a href=\"#\">Something else</a>\n" +
-    "                                </li>\n" +
-    "                                <li class=\"divider\"></li>\n" +
-    "                                <li><a href=\"#\">Separate</a>\n" +
-    "                                </li>\n" +
-    "                            </ul>\n" +
-    "                        </div>\n" +
-    "                    </div>\n" +
     "                </div>\n" +
     "                <div class=\"panel-body\">\n" +
-    "                    <div\n" +
-    "                    area-chart\n" +
-    "                    area-data='[\n" +
-    "                    { y: \"2006\", a: 100},\n" +
-    "                    { y: \"2007\", a: 75},\n" +
-    "                    { y: \"2008\", a: 50},\n" +
-    "                    { y: \"2009\", a: 75},\n" +
-    "                    { y: \"2010\", a: 50},\n" +
-    "                    { y: \"2011\", a: 75},\n" +
-    "                    { y: \"2012\", a: 100}\n" +
-    "                    ]'\n" +
-    "                    area-xkey='y'\n" +
-    "                    area-ykeys='[\"a\"]'\n" +
-    "                    area-labels='[\"Month\"]'\n" +
-    "                    line-colors='[\"#89b4f9\"]'>\n" +
-    "                </div>\n" +
+    "                    <canvas id=\"line\" class=\"chart chart-line\" chart-data=\"homeView30Day\" chart-labels=\"labelDay\" chart-options=\"optionsViewsDayTotal\" chart-click=\"onClick\">\n" +
+    "                </canvas>\n" +
     "            </div>\n" +
     "        </div>\n" +
     "        <div class=\"panel panel-default\">\n" +
@@ -9333,24 +9352,8 @@ angular.module("admin/admin.tpl.html", []).run(["$templateCache", function($temp
     "                <i class=\"fa fa-bar-chart-o fa-fw\"></i> Shopping Cart Views\n" +
     "            </div>\n" +
     "            <div class=\"panel-body\">\n" +
-    "                <div class=\"row\">\n" +
-    "                        <div\n" +
-    "                        area-chart\n" +
-    "                        area-data='[\n" +
-    "                        { y: \"2006\", a: 100, b: 90 },\n" +
-    "                        { y: \"2007\", a: 75,  b: 65 },\n" +
-    "                        { y: \"2008\", a: 50,  b: 40 },\n" +
-    "                        { y: \"2009\", a: 75,  b: 65 },\n" +
-    "                        { y: \"2010\", a: 50,  b: 40 },\n" +
-    "                        { y: \"2011\", a: 75,  b: 65 },\n" +
-    "                        { y: \"2012\", a: 100, b: 90 }\n" +
-    "                        ]'\n" +
-    "                        area-xkey='y'\n" +
-    "                        area-ykeys='[\"a\", \"b\"]'\n" +
-    "                        area-labels='[\"Year\", \"Month\"]'\n" +
-    "                        line-colors='[\"#89b4f9\", \"#6d90c7\"]'>\n" +
-    "                    </div>\n" +
-    "            </div>\n" +
+    "                <canvas id=\"line\" class=\"chart chart-line\" chart-data=\"cartView30Day\" chart-labels=\"labelDay\" chart-options=\"optionsViewsDayTotal\" chart-click=\"onClick\">\n" +
+    "            </canvas>\n" +
     "        </div>\n" +
     "    </div>\n" +
     "        <div class=\"panel panel-default\">\n" +
@@ -10356,13 +10359,13 @@ angular.module("admin/purchase-history/admin-purchase-history.tpl.html", []).run
     "        </div>\n" +
     "        \n" +
     "        <p style=\"padding-left: .8em\">Date: <span ng-bind=\"phDetail.orderDate | date:'MM/dd/yyyy'\"/>\n" +
-    "        <br>Customer: \n" +
-    "        <br>Company: </p>\n" +
+    "        <br>Customer: <span ng-bind=\"phDetail.user.name\"/>\n" +
+    "        <br>Company: <span ng-bind=\"phDetail.company\"/></p>\n" +
     "\n" +
     "        <br>\n" +
     "        <p style=\"padding-left: .8em\">Transaction Number: {{phDetail.orderNumber}}\n" +
     "        <br>Purchase Amount: <span ng-bind=\"phDetail.cost.total | currency\"/>\n" +
-    "        <br>Payment Method: </p>\n" +
+    "        <br>Payment Method: <span ng-bind=\"phDetail.paymentMethod\"/></p>\n" +
     "\n" +
     "\n" +
     "        <br>\n" +
@@ -11141,8 +11144,12 @@ angular.module("pricing/checkout/checkout.tpl.html", []).run(["$templateCache", 
     "				<h2 class=\"mb-none\"><strong>Checkout</strong></h2>\n" +
     "			</div>\n" +
     "		</div>\n" +
+<<<<<<< HEAD
     "</div>\n" +
     "</div>\n" +
+=======
+    "\n" +
+>>>>>>> 212bec6d48db1270d24dbcc86459b09bb8b0e112
     "		<br>\n" +
     "\n" +
     "		<div class=\"row\">\n" +
@@ -11414,9 +11421,21 @@ angular.module("pricing/checkout/checkout.tpl.html", []).run(["$templateCache", 
     "	</div>\n" +
     "	\n" +
     "\n" +
+<<<<<<< HEAD
     "	<button class=\"accordion\">Section 1</button>\n" +
     "	<div class=\"panel\">\n" +
     "	  <p>Lorem ipsum...</p>\n" +
+=======
+    "</div>\n" +
+    "\n" +
+    "\n" +
+    "<!-- <div class=\"container\">\n" +
+    "\n" +
+    "	<div class=\"spacing-top-md spacing-bot-neg\">\n" +
+    "		<div class=\"row spacing-top-neg\">\n" +
+    "			<h1 class=\"mb-none\"><strong>Checkout</strong></h1>\n" +
+    "		</div>\n" +
+>>>>>>> 212bec6d48db1270d24dbcc86459b09bb8b0e112
     "	</div>\n" +
     "\n" +
     "	<button class=\"accordion\">Section 2</button>\n" +
@@ -11756,6 +11775,23 @@ angular.module("pricing/login-modal.tpl.html", []).run(["$templateCache", functi
     "");
 }]);
 
+angular.module("pricing/login-modal2.tpl.html", []).run(["$templateCache", function($templateCache) {
+  $templateCache.put("pricing/login-modal2.tpl.html",
+    "<header class=\"modal-header\">\n" +
+    "	<h3 class=\"modal-title\" id=\"modal-title\">Do you want to sign in?</h3>\n" +
+    "</header>\n" +
+    "<footer class=\"modal-footer\">\n" +
+    "	<div class=\"row\">\n" +
+    "		<div class=\"col-md-12 text-right\">\n" +
+    "			<button class=\"btn btn-primary modal-confirm\" ng-click=\"signin2()\">Sign in or create account</button>\n" +
+    "		<button class=\"btn btn-primary modal-confirm\" ng-click=\"guest2()\">Continue as guest</button>\n" +
+    "		<button class=\"btn btn-default modal-dismiss\" ng-click=\"cancel2()\">Cancel</button>\n" +
+    "		</div>\n" +
+    "	</div>\n" +
+    "</footer>\n" +
+    "");
+}]);
+
 angular.module("pricing/panel-modal.tpl.html", []).run(["$templateCache", function($templateCache) {
   $templateCache.put("pricing/panel-modal.tpl.html",
     "<header class=\"modal-header\">\n" +
@@ -11862,66 +11898,12 @@ angular.module("pricing/pricing.tpl.html", []).run(["$templateCache", function($
     "			<div class=\"col-md-6\">\n" +
     "				<h1 class=\"mb-none preheading-font\">SmartBox</h1>\n" +
     "			</div>\n" +
-    "			<div class=\"col-md-6\">\n" +
-    "				<h1 class=\"mb-none preheading-font\">SmartConnector</h1>\n" +
-    "			</div>\n" +
     "		</div>\n" +
     "\n" +
     "		<div class=\"row\">\n" +
-    "		<ul class=\"products product-thumb-info-list\">\n" +
-    "			<li class=\"col-md-6 col-sm-6 col-xs-12 product\" ng-repeat=\"product in products| filter:{type:'SmartBox'}\">\n" +
-    "			<span style=\"width:47%; height:47%;\" class=\"product-thumb-info\">\n" +
-    "				<a href=\"\" class=\"add-to-cart-product\">\n" +
-    "					<span><i class=\"fa fa-shopping-cart\"></i>\n" +
-    "						<button ng-click=\"addToCart(product);\">Add to cart</button>\n" +
-    "					</span>\n" +
-    "				</a>\n" +
-    "				\n" +
-    "				<img alt=\"\" class=\"img-responsive\" ng-src=\"{{product.imagePath}}\" alt=\"{{product.title}}\">\n" +
-    "				\n" +
-    "				<span class=\"product-thumb-info-content\">\n" +
-    "					<h4 class=\"heading-tertiary\">{{product.title}}</h4>\n" +
-    "					<span class=\"price text-color-primary\">\n" +
-    "						<ins><span class=\"amount\">${{product.price}}</span></ins>\n" +
-    "					</span>\n" +
-    "				</span>\n" +
-    "				\n" +
-    "			</li>\n" +
-    "			<li class=\"col-md-6 col-sm-6 col-xs-12 product\" ng-repeat=\"product in products | filter:{type:'Adapter'}\"\">\n" +
-    "				<span style=\"width:47%; height:47%;\" class=\"product-thumb-info\">\n" +
-    "					<span class=\"product-thumb-info\">\n" +
-    "						<a href=\"\" class=\"add-to-cart-product\">\n" +
-    "							<span><i class=\"fa fa-shopping-cart\"></i>\n" +
-    "								<button ng-click=\"addToCart(product);\">Add to cart</button>\n" +
-    "							</span>\n" +
-    "						</a>\n" +
-    "						\n" +
-    "						<img class=\"img-responsive\" ng-src=\"{{product.imagePath}}\" alt=\"{{product.title}}\">\n" +
-    "						\n" +
-    "						<span class=\"product-thumb-info-content\">\n" +
-    "							<h4 class=\"heading-tertiary\">{{product.title}}</h4>\n" +
-    "							<span class=\"price text-color-primary\">\n" +
-    "								<ins><span class=\"amount\">${{product.price}}</span></ins>\n" +
-    "							</span>\n" +
-    "						</span>\n" +
-    "					</span>\n" +
-    "			</li>\n" +
-    "		</ul>\n" +
-    "		</div>\n" +
-    "\n" +
-    "		\n" +
-    "		<div class=\"row\">\n" +
-    "			<div class=\"col-md-6\">\n" +
-    "				<h1 class=\"mb-none preheading-font\">SmartCabling</h1>\n" +
-    "			</div>\n" +
-    "		</div>\n" +
-    "\n" +
-    "\n" +
-    "		<div class=\"row\">\n" +
-    "		<ul class=\"products product-thumb-info-list\">\n" +
-    "			<li class=\"col-md-3 col-sm-6 col-xs-12 product\" ng-repeat=\"product in products | filter:{type:'Cabling'}\"\">\n" +
-    "				<span class=\"product-thumb-info\">\n" +
-    "					<span class=\"product-thumb-info\">\n" +
+    "			<ul class=\"products product-thumb-info-list\">\n" +
+    "				<li class=\"col-md-6 col-sm-6 col-xs-12 product\" ng-repeat=\"product in products| filter:{type:'SmartBox'}\">\n" +
+    "					<span style=\"width:50%; height:50%;\" class=\"product-thumb-info\">\n" +
     "						<a href=\"\" class=\"add-to-cart-product\">\n" +
     "							<span><i class=\"fa fa-shopping-cart\"></i>\n" +
     "								<button ng-click=\"addToCart(product);\">Add to cart</button>\n" +
@@ -11936,218 +11918,261 @@ angular.module("pricing/pricing.tpl.html", []).run(["$templateCache", function($
     "								<ins><span class=\"amount\">${{product.price}}</span></ins>\n" +
     "							</span>\n" +
     "						</span>\n" +
-    "					</span>\n" +
+    "						\n" +
+    "\n" +
+    "					</ul>\n" +
+    "				</div>\n" +
+    "\n" +
     "				\n" +
-    "			</li>\n" +
-    "		</ul>\n" +
-    "		</div>\n" +
+    "				<div class=\"row\">\n" +
+    "					<div class=\"col-md-6\">\n" +
+    "						<h1 class=\"mb-none preheading-font\">SmartCabling</h1>\n" +
+    "					</div>\n" +
+    "				</div>\n" +
     "\n" +
-    "	</div>\n" +
     "\n" +
-    "	\n" +
-    "	<div ng-if=\"cart.length\" class=\"container\">\n" +
-    "		\n" +
-    "		<div class=\"row spacing-bot-neg\">\n" +
-    "			<div class=\"col-md-12\">\n" +
-    "				<hr class=\"tall\">\n" +
-    "			</div>\n" +
-    "		</div>\n" +
-    "		\n" +
-    "		<div class=\"row\">\n" +
-    "			<h1 class=\"mb-none\"><strong>Your Cart</strong></h1>\n" +
-    "		</div>\n" +
-    "		\n" +
-    "		<div class=\"featured-boxes spacing-top-lg\">\n" +
-    "			<div class=\"row\">\n" +
-    "				<div class=\"col-md-12\">\n" +
-    "					<div class=\"panel panel-default\">\n" +
-    "						<div class=\"panel-heading\">\n" +
-    "							<h4 class=\"panel-title\">\n" +
-    "								<a class=\"accordion\">\n" +
-    "									Cart\n" +
-    "								</a>\n" +
-    "							</h4>\n" +
+    "				<div class=\"row\">\n" +
+    "					<ul class=\"products product-thumb-info-list\">\n" +
+    "						<li class=\"col-md-3 col-sm-6 col-xs-12 product\" ng-repeat=\"product in products | filter:{type:'Cabling'}\"\">\n" +
+    "							<span class=\"product-thumb-info\">\n" +
+    "								<span class=\"product-thumb-info\">\n" +
+    "									<a href=\"\" class=\"add-to-cart-product\">\n" +
+    "										<span><i class=\"fa fa-shopping-cart\"></i>\n" +
+    "											<button ng-click=\"addToCart(product);\">Add to cart</button>\n" +
+    "										</span>\n" +
+    "									</a>\n" +
+    "									\n" +
+    "									<img alt=\"\" class=\"img-responsive\" ng-src=\"{{product.imagePath}}\" alt=\"{{product.title}}\">\n" +
+    "									\n" +
+    "									<span class=\"product-thumb-info-content\">\n" +
+    "										<h4 class=\"heading-tertiary\">{{product.title}}</h4>\n" +
+    "										<span class=\"price text-color-primary\">\n" +
+    "											<ins><span class=\"amount\">${{product.price}}</span></ins>\n" +
+    "										</span>\n" +
+    "									</span>\n" +
+    "								</span>\n" +
+    "								\n" +
+    "							</li>\n" +
+    "						</ul>\n" +
+    "					</div>\n" +
+    "\n" +
+    "\n" +
+    "					<div class=\"row\">\n" +
+    "						<div class=\"col-md-6\">\n" +
+    "							<h1 class=\"mb-none preheading-font\">SmartConnector</h1>\n" +
+    "						</div>\n" +
+    "					</div>\n" +
+    "\n" +
+    "					<div class=\"row\">\n" +
+    "						<ul class=\"products product-thumb-info-list\">\n" +
+    "							<li class=\"col-md-6 col-sm-6 col-xs-12 product\" ng-repeat=\"product in products | filter:{type:'Adapter'}\"\">\n" +
+    "								<span style=\"width:47%; height:47%;\" class=\"product-thumb-info\">\n" +
+    "									<span class=\"product-thumb-info\">\n" +
+    "										<a href=\"\" class=\"add-to-cart-product\">\n" +
+    "											<span><i class=\"fa fa-shopping-cart\"></i>\n" +
+    "												<button ng-click=\"addToCart(product);\">Add to cart</button>\n" +
+    "											</span>\n" +
+    "										</a>\n" +
+    "										\n" +
+    "										<img class=\"img-responsive\" ng-src=\"{{product.imagePath}}\" alt=\"{{product.title}}\">\n" +
+    "										\n" +
+    "										<span class=\"product-thumb-info-content\">\n" +
+    "											<h4 class=\"heading-tertiary\">{{product.title}}</h4>\n" +
+    "											<span class=\"price text-color-primary\">\n" +
+    "												<ins><span class=\"amount\">${{product.price}}</span></ins>\n" +
+    "											</span>\n" +
+    "										</span>\n" +
+    "									</span>\n" +
+    "								</li>\n" +
+    "							</ul>\n" +
     "						</div>\n" +
     "\n" +
     "\n" +
     "\n" +
-    "						<div class=\"main shop\">\n" +
-    "							<div class=\"accordion-body\">\n" +
-    "								<div class=\"panel-body\">\n" +
-    "									<table class=\"shop_table cart\">\n" +
-    "										<thead>\n" +
-    "											<tr>\n" +
-    "												<th class=\"product-remove\">\n" +
-    "													&nbsp;\n" +
-    "												</th>\n" +
-    "												<th class=\"product-thumbnail\">\n" +
-    "													&nbsp;\n" +
-    "												</th>\n" +
-    "												<th class=\"product-name\">\n" +
-    "													Product\n" +
-    "												</th>\n" +
-    "												<th class=\"product-price\">\n" +
-    "													Price\n" +
-    "												</th>\n" +
-    "												<th>\n" +
-    "												</th>\n" +
-    "												<th class=\"product-quantity\">\n" +
-    "													Quantity\n" +
-    "												</th>\n" +
-    "												<th class=\"product-subtotal\">\n" +
-    "													Total\n" +
-    "												</th>\n" +
-    "											</tr>\n" +
-    "										</thead>\n" +
-    "										<tbody ng-if=\"cart.length\">\n" +
-    "											<tr class=\"cart_table_item\" ng-repeat=\"product in cart | filter: greaterThan('quantity', 0)\">\n" +
-    "												<td class=\"product-remove\">\n" +
-    "													<a title=\"Remove this item\" class=\"remove\" ng-click=\"removeFromCart(product)\">\n" +
-    "														<i class=\"fa fa-times\"></i>\n" +
-    "													</a>\n" +
-    "												</td>\n" +
-    "												<td class=\"product-thumbnail\">\n" +
-    "													<a><img width=\"100\" height=\"100\" alt=\"\" class=\"img-responsive\" ng-src=\"{{product.imagePath}}\">\n" +
-    "													</a>\n" +
-    "												</td>\n" +
-    "												<td class=\"product-name\">\n" +
-    "													<a href=\"shop-product-sidebar.html\">{{product.title}}</a>\n" +
-    "												</td>\n" +
-    "												<td class=\"product-price\">\n" +
-    "													<span class=\"amount\">${{product.price}}</span>\n" +
-    "												</td>\n" +
-    "												<td>\n" +
-    "													&nbsp;\n" +
-    "												</td>\n" +
-    "												<td class=\"product-quantity\">\n" +
-    "													<form class=\"cart\">\n" +
-    "														<div class=\"quantity\">\n" +
-    "															<button class=\"minus\" ng-click=\"subtractQty(product)\">-</button>\n" +
-    "															<input type=\"text\" name=\"quantity\" id=\"qty\" class=\"input-text qty text\" ng-model=\"product.quantity\">\n" +
-    "															<button class=\"plus\" ng-click=\"addQty(product)\">+</button>\n" +
+    "						\n" +
+    "\n" +
+    "					</div>\n" +
+    "\n" +
+    "					\n" +
+    "					<div ng-if=\"cart.length\" class=\"container\">\n" +
+    "						\n" +
+    "						<div class=\"row spacing-bot-neg\">\n" +
+    "							<div class=\"col-md-12\">\n" +
+    "								<hr class=\"tall\">\n" +
+    "							</div>\n" +
+    "						</div>\n" +
+    "						\n" +
+    "						<div class=\"row\">\n" +
+    "							<h1 class=\"mb-none\"><strong>Your Cart</strong></h1>\n" +
+    "						</div>\n" +
+    "						\n" +
+    "						<div class=\"featured-boxes spacing-top-lg\">\n" +
+    "							<div class=\"row\">\n" +
+    "								<div class=\"col-md-12\">\n" +
+    "									<div class=\"panel panel-default\">\n" +
+    "										<div class=\"panel-heading\">\n" +
+    "											<h4 class=\"panel-title\">\n" +
+    "												<a class=\"accordion\">\n" +
+    "													Cart\n" +
+    "												</a>\n" +
+    "											</h4>\n" +
+    "										</div>\n" +
+    "\n" +
+    "\n" +
+    "\n" +
+    "										<div class=\"main shop\">\n" +
+    "											<div class=\"accordion-body\">\n" +
+    "												<div class=\"panel-body\">\n" +
+    "													<table class=\"shop_table cart\">\n" +
+    "														<thead>\n" +
+    "															<tr>\n" +
+    "																<th class=\"product-remove\">\n" +
+    "																	&nbsp;\n" +
+    "																</th>\n" +
+    "																<th class=\"product-thumbnail\">\n" +
+    "																	&nbsp;\n" +
+    "																</th>\n" +
+    "																<th class=\"product-name\">\n" +
+    "																	Product\n" +
+    "																</th>\n" +
+    "																<th class=\"product-price\">\n" +
+    "																	Price\n" +
+    "																</th>\n" +
+    "																<th>\n" +
+    "																</th>\n" +
+    "																<th class=\"product-quantity\">\n" +
+    "																	Quantity\n" +
+    "																</th>\n" +
+    "																<th class=\"product-subtotal\">\n" +
+    "																	Total\n" +
+    "																</th>\n" +
+    "															</tr>\n" +
+    "														</thead>\n" +
+    "														<tbody ng-if=\"cart.length\">\n" +
+    "															<tr class=\"cart_table_item\" ng-repeat=\"product in cart | filter: greaterThan('quantity', 0)\">\n" +
+    "																<td class=\"product-remove\">\n" +
+    "																	<a title=\"Remove this item\" class=\"remove\" ng-click=\"removeFromCart(product)\">\n" +
+    "																		<i class=\"fa fa-times\"></i>\n" +
+    "																	</a>\n" +
+    "																</td>\n" +
+    "																<td class=\"product-thumbnail\">\n" +
+    "																	<a><img width=\"100\" height=\"100\" alt=\"\" class=\"img-responsive\" ng-src=\"{{product.imagePath}}\">\n" +
+    "																	</a>\n" +
+    "																</td>\n" +
+    "																<td class=\"product-name\">\n" +
+    "																	<a href=\"shop-product-sidebar.html\">{{product.title}}</a>\n" +
+    "																</td>\n" +
+    "																<td class=\"product-price\">\n" +
+    "																	<span class=\"amount\">${{product.price}}</span>\n" +
+    "																</td>\n" +
+    "																<td>\n" +
+    "																	&nbsp;\n" +
+    "																</td>\n" +
+    "																<td class=\"product-quantity\">\n" +
+    "																	<form class=\"cart\">\n" +
+    "																		<div class=\"quantity\">\n" +
+    "																			<button class=\"minus\" ng-click=\"subtractQty(product)\">-</button>\n" +
+    "																			<input type=\"text\" name=\"quantity\" id=\"qty\" class=\"input-text qty text\" ng-model=\"product.quantity\">\n" +
+    "																			<button class=\"plus\" ng-click=\"addQty(product)\">+</button>\n" +
+    "																		</div>\n" +
+    "																	</form>\n" +
+    "																</td>\n" +
+    "																<td class=\"product-subtotal\">\n" +
+    "																	<span class=\"amount\">${{getProductPrice(product)}}</span>\n" +
+    "																</td>\n" +
+    "															</tr>\n" +
+    "														</tbody>\n" +
+    "													</table>\n" +
+    "\n" +
+    "\n" +
+    "													<div style=\"width:50%; float:right;\">\n" +
+    "														<!-- <h4 class=\"heading-primary\">Cart Totals</h4> -->\n" +
+    "														<br>\n" +
+    "														<table class=\"cart-totals\">\n" +
+    "															<tbody >\n" +
+    "																<tr class=\"cart-subtotal\">\n" +
+    "																	<th>\n" +
+    "																		<strong>Cart Subtotal</strong>\n" +
+    "																	</th>\n" +
+    "																	<td>\n" +
+    "																		<strong>${{getCartPrice()}}</strong>\n" +
+    "																	</td>\n" +
+    "																</tr>\n" +
+    "																<tr class=\"shipping\">\n" +
+    "																	<th>\n" +
+    "																		Shipping\n" +
+    "																	</th>\n" +
+    "																	<td>\n" +
+    "																		Free Shipping<input type=\"hidden\" value=\"free_shipping\" id=\"shipping_method\" name=\"shipping_method\">\n" +
+    "																	</td>\n" +
+    "																</tr>\n" +
+    "																<tr class=\"total\">\n" +
+    "																	<th>\n" +
+    "																		<strong>Order Total</strong>\n" +
+    "																	</th>\n" +
+    "																	<td>\n" +
+    "																		<strong><span class=\"amount\">${{getCartPrice()}}</span></strong>\n" +
+    "																	</td>\n" +
+    "																</tr>\n" +
+    "															</tbody>\n" +
+    "														</table>\n" +
+    "\n" +
+    "														<div class=\"actions-continue\">\n" +
+    "															<input type=\"submit\" value=\"Checkout\" name=\"update_cart\" ng-disabled=\"cart.length == 0\" ng-click=\"checkout();\" class=\"btn btn-default\">\n" +
     "														</div>\n" +
-    "													</form>\n" +
-    "												</td>\n" +
-    "												<td class=\"product-subtotal\">\n" +
-    "													<span class=\"amount\">${{getProductPrice(product)}}</span>\n" +
-    "												</td>\n" +
-    "											</tr>\n" +
-    "										</tbody>\n" +
-    "									</table>\n" +
-    "\n" +
-    "\n" +
-    "									<div style=\"width:50%; float:right;\">\n" +
-    "										<!-- <h4 class=\"heading-primary\">Cart Totals</h4> -->\n" +
-    "										<br>\n" +
-    "										<table class=\"cart-totals\">\n" +
-    "											<tbody >\n" +
-    "												<tr class=\"cart-subtotal\">\n" +
-    "													<th>\n" +
-    "														<strong>Cart Subtotal</strong>\n" +
-    "													</th>\n" +
-    "													<td>\n" +
-    "														<strong>${{getCartPrice()}}</strong>\n" +
-    "													</td>\n" +
-    "												</tr>\n" +
-    "												<tr class=\"shipping\">\n" +
-    "													<th>\n" +
-    "														Shipping\n" +
-    "													</th>\n" +
-    "													<td>\n" +
-    "														Free Shipping<input type=\"hidden\" value=\"free_shipping\" id=\"shipping_method\" name=\"shipping_method\">\n" +
-    "													</td>\n" +
-    "												</tr>\n" +
-    "												<tr class=\"total\">\n" +
-    "													<th>\n" +
-    "														<strong>Order Total</strong>\n" +
-    "													</th>\n" +
-    "													<td>\n" +
-    "														<strong><span class=\"amount\">${{getCartPrice()}}</span></strong>\n" +
-    "													</td>\n" +
-    "												</tr>\n" +
-    "											</tbody>\n" +
-    "										</table>\n" +
-    "\n" +
-    "										<div class=\"actions-continue\">\n" +
-    "												<input type=\"submit\" value=\"Checkout\" name=\"update_cart\" ng-disabled=\"cart.length == 0\" ng-click=\"checkout();\" class=\"btn btn-default\">\n" +
+    "													</div>\n" +
+    "												</div>\n" +
     "											</div>\n" +
+    "										</div>\n" +
     "									</div>\n" +
     "								</div>\n" +
     "							</div>\n" +
     "						</div>\n" +
     "					</div>\n" +
-    "				</div>\n" +
-    "			</div>\n" +
-    "		</div>\n" +
-    "	</div>\n" +
     "\n" +
-    "</div>");
+    "				</div>");
 }]);
 
 angular.module("sidebar.tpl.html", []).run(["$templateCache", function($templateCache) {
   $templateCache.put("sidebar.tpl.html",
-    "<!-- <div flex layout=\"row\">\n" +
-    "    <md-sidenav flex=\"15\" md-is-locked-open=\"true\" class=\"md-whiteframe-z1\">\n" +
-    "      <md-content>\n" +
-    "        sidenav\n" +
-    "      </md-content>\n" +
-    "    </md-sidenav>\n" +
-    "    <div layout=\"column\" flex>\n" +
-    "      <div class=\"box1\">\n" +
-    "        70\n" +
-    "      </div>\n" +
-    "      <div class=\"box2\">\n" +
-    "        fixed\n" +
-    "      </div>\n" +
-    "      <div class=\"box3\">\n" +
-    "        flex\n" +
-    "      </div>\n" +
-    "    </div>\n" +
-    "\n" +
-    "  </div> -->\n" +
-    "\n" +
     "<div ng-controller=\"SidebarCtrl\" flex layout=\"row\">\n" +
-    "<!-- <md-sidenav flex=\"15\" md-is-locked-open=\"true\" class=\"md-whiteframe-z1\"> -->\n" +
-    "<!-- <md-content>\n" +
-    "        sidenav\n" +
-    "      </md-content> -->\n" +
-    "<md-sidenav flex=\"15\" md-is-locked-open=\"true\" class=\"md-whiteframe-4dp\">\n" +
-    "<md-content flex layout=\"column\">\n" +
-    "        <div class=\"navbar-header\">\n" +
-    "            <div class=\"sidebar-nav navbar-collapse\">\n" +
-    "            <nav class=\"navbar-sidebar\" ng-if=\"isAdmin()\" role=\"navigation\">\n" +
-    "                <ul class=\"nav\" id=\"side-menu\">\n" +
-    "                    <li>\n" +
-    "                        <a href=\"/admin\"><i class=\"fa fa-bar-chart-o fa-fw\"></i> Dashboard</a>\n" +
-    "                    </li>\n" +
-    "                    <li>\n" +
-    "                        <a href=\"/admin/activity\"><i class=\"fa fa-bar-chart-o fa-fw\"></i> Activity</a>\n" +
-    "                    </li>\n" +
-    "                    <li>\n" +
-    "                        <a href=\"/admin/sales\"><i class=\"fa fa-table fa-fw\"></i> Sales</a>\n" +
-    "                    </li>\n" +
-    "                    <li>\n" +
-    "                        <a href=\"/admin/purchase-history\"><i class=\"fa fa-edit fa-fw\"></i> Purchase History</a>\n" +
-    "                    </li>\n" +
-    "                    <li>\n" +
-    "                        <a href=\"/admin/users\"><i class=\"fa fa-wrench fa-fw\"></i> User Info</a>\n" +
-    "                    </li>\n" +
-    "                    <li>\n" +
-    "                        <a href=\"/admin/developers\"><i class=\"fa fa-sitemap fa-fw\"></i> Developers</a>\n" +
-    "                    </li>\n" +
-    "                    <li>\n" +
-    "                        <a href=\"/admin/pricing\"><i class=\"fa fa-files-o fa-fw\"></i> Pricing</a>\n" +
-    "                    </li>\n" +
-    "                    <li>\n" +
-    "                        <a href=\"\" ng-click=\"logout()\"><i class=\"fa fa-user\"></i> Sign Out</a>\n" +
-    "                    </li>\n" +
-    "                </ul>\n" +
-    "                </nav>\n" +
+    "    <md-sidenav flex=\"15\" md-is-locked-open=\"true\" class=\"md-whiteframe-4dp\">\n" +
+    "        <md-content flex layout=\"column\">\n" +
+    "            <div class=\"navbar-header\">\n" +
+    "                <div class=\"sidebar-nav navbar-collapse\">\n" +
+    "                    <nav class=\"navbar-sidebar\" ng-if=\"isAdmin()\" role=\"navigation\">\n" +
+    "                        <ul class=\"nav\" id=\"side-menu\">\n" +
+    "                            <li>\n" +
+    "                                <a href=\"/admin\"><i class=\"fa fa-bar-chart-o fa-fw\"></i> Dashboard</a>\n" +
+    "                            </li>\n" +
+    "                            <li>\n" +
+    "                                <a href=\"/admin/activity\"><i class=\"fa fa-bar-chart-o fa-fw\"></i> Activity</a>\n" +
+    "                            </li>\n" +
+    "                            <li>\n" +
+    "                                <a href=\"/admin/sales\"><i class=\"fa fa-table fa-fw\"></i> Sales</a>\n" +
+    "                            </li>\n" +
+    "                            <li>\n" +
+    "                                <a href=\"/admin/purchase-history\"><i class=\"fa fa-edit fa-fw\"></i> Purchase History</a>\n" +
+    "                            </li>\n" +
+    "                            <li>\n" +
+    "                                <a href=\"/admin/users\"><i class=\"fa fa-wrench fa-fw\"></i> User Info</a>\n" +
+    "                            </li>\n" +
+    "                            <li>\n" +
+    "                                <a href=\"/admin/developers\"><i class=\"fa fa-sitemap fa-fw\"></i> Developers</a>\n" +
+    "                            </li>\n" +
+    "                            <li>\n" +
+    "                                <a href=\"/admin/pricing\"><i class=\"fa fa-files-o fa-fw\"></i> Pricing</a>\n" +
+    "                            </li>\n" +
+    "                            <li>\n" +
+    "                                <a href=\"\" ng-click=\"logout()\"><i class=\"fa fa-user\"></i> Sign Out</a>\n" +
+    "                            </li>\n" +
+    "                        </ul>\n" +
+    "                    </nav>\n" +
+    "                </div>\n" +
     "            </div>\n" +
-    "        </div>\n" +
     "        </md-content>\n" +
     "    </md-sidenav>\n" +
-    "    </div>\n" +
+    "</div>\n" +
     "");
 }]);
 

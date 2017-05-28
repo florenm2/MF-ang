@@ -163,18 +163,6 @@ module.exports = function(grunt) {
             src: ['ng-map.min.js'], dest: '<%= distdir %>/vendor/'
           },
           {
-            expand: true, cwd: 'client/bower_components/angulartics/dist/',
-            src: ['angulartics.min.js'], dest: '<%= distdir %>/vendor/'
-          },
-          {
-            expand: true, cwd: 'client/bower_components/angulartics-google-analytics/dist/',
-            src: ['angulartics-ga.min.js'], dest: '<%= distdir %>/vendor/'
-          },
-          {
-            expand: true, cwd: 'client/bower_components/ngAnalytics/src/',
-            src: ['ng-analytics.min.js'], dest: '<%= distdir %>/vendor/'
-          },
-          {
             expand: true, cwd: 'client/bower_components/ngAnalytics/src/',
             src: ['charts.js'], dest: '<%= distdir %>/vendor/'
           },
@@ -305,18 +293,6 @@ module.exports = function(grunt) {
           {
             expand: true, cwd: 'client/src/assets/js/',
             src: ['custom.js'], dest: '<%= distdir %>/js/'
-          },
-          {
-            expand: true, cwd: 'client/src/assets/js/',
-            src: ['sb-admin-2.js'], dest: '<%= distdir %>/js/'
-          },
-          {
-            expand: true, cwd: 'client/src/assets/css/',
-            src: ['sb-admin-2.css'], dest: '<%= distdir %>/css/'
-          },
-          {
-            expand: true, cwd: 'client/src/app/',
-            src: ['sidepanel.js'], dest: '<%= distdir %>/js/'
           },
           {
             expand: true, cwd: 'client/src/assets/js/',

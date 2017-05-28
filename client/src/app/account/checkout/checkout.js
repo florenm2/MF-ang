@@ -1,12 +1,21 @@
 angular.module('account.checkout', ['config', 'account.settings.social', 'security.service', 'security.authorization', 'services.accountResource', 'services.utility','ui.bootstrap', 'directives.serverError', 'services.cart']);
 angular.module('account.checkout').config(['$routeProvider', 'securityAuthorizationProvider', function($routeProvider){
   $routeProvider
+<<<<<<< HEAD
   .when('/account/checkout/:totalAmount', {
     templateUrl: 'account/checkout/checkout.tpl.html',
     controller: 'CheckoutLoggedInCtrl',
     title: 'Checkout',
     resolve: {
       accountDetails: ['$q', '$location', 'securityAuthorization', 'accountResource' ,function($q, $location, securityAuthorization, accountResource){
+=======
+    .when('/account/checkout', {
+      templateUrl: 'account/checkout/checkout.tpl.html',
+      controller: 'CheckoutLoggedInCtrl',
+      title: 'Checkout',
+      resolve: {
+        accountDetails: ['$q', '$location', 'securityAuthorization', 'accountResource' ,function($q, $location, securityAuthorization, accountResource){
+>>>>>>> 212bec6d48db1270d24dbcc86459b09bb8b0e112
           //get account details only for verified-user, otherwise redirect to /account/verification
           var redirectUrl;
           var promise = securityAuthorization.requireVerifiedUser()

@@ -1,62 +1,38 @@
-<!-- <div flex layout="row">
-    <md-sidenav flex="15" md-is-locked-open="true" class="md-whiteframe-z1">
-      <md-content>
-        sidenav
-      </md-content>
-    </md-sidenav>
-    <div layout="column" flex>
-      <div class="box1">
-        70
-      </div>
-      <div class="box2">
-        fixed
-      </div>
-      <div class="box3">
-        flex
-      </div>
-    </div>
-
-  </div> -->
-
 <div ng-controller="SidebarCtrl" flex layout="row">
-<!-- <md-sidenav flex="15" md-is-locked-open="true" class="md-whiteframe-z1"> -->
-<!-- <md-content>
-        sidenav
-      </md-content> -->
-<md-sidenav flex="15" md-is-locked-open="true" class="md-whiteframe-4dp">
-<md-content flex layout="column">
-        <div class="navbar-header">
-            <div class="sidebar-nav navbar-collapse">
-            <nav class="navbar-sidebar" ng-if="isAdmin()" role="navigation">
-                <ul class="nav" id="side-menu">
-                    <li>
-                        <a href="/admin"><i class="fa fa-bar-chart-o fa-fw"></i> Dashboard</a>
-                    </li>
-                    <li>
-                        <a href="/admin/activity"><i class="fa fa-bar-chart-o fa-fw"></i> Activity</a>
-                    </li>
-                    <li>
-                        <a href="/admin/sales"><i class="fa fa-table fa-fw"></i> Sales</a>
-                    </li>
-                    <li>
-                        <a href="/admin/purchase-history"><i class="fa fa-edit fa-fw"></i> Purchase History</a>
-                    </li>
-                    <li>
-                        <a href="/admin/users"><i class="fa fa-wrench fa-fw"></i> User Info</a>
-                    </li>
-                    <li>
-                        <a href="/admin/developers"><i class="fa fa-sitemap fa-fw"></i> Developers</a>
-                    </li>
-                    <li>
-                        <a href="/admin/pricing"><i class="fa fa-files-o fa-fw"></i> Pricing</a>
-                    </li>
-                    <li>
-                        <a href="" ng-click="logout()"><i class="fa fa-user"></i> Sign Out</a>
-                    </li>
-                </ul>
-                </nav>
+    <md-sidenav flex="15" md-is-locked-open="true" class="md-whiteframe-4dp">
+        <md-content flex layout="column">
+            <div class="navbar-header">
+                <div class="sidebar-nav navbar-collapse">
+                    <nav class="navbar-sidebar" ng-if="isAdmin()" role="navigation">
+                        <ul class="nav" id="side-menu">
+                            <li>
+                                <a href="/admin"><i class="fa fa-bar-chart-o fa-fw"></i> Dashboard</a>
+                            </li>
+                            <li>
+                                <a href="/admin/activity"><i class="fa fa-bar-chart-o fa-fw"></i> Activity</a>
+                            </li>
+                            <li>
+                                <a href="/admin/sales"><i class="fa fa-table fa-fw"></i> Sales</a>
+                            </li>
+                            <li>
+                                <a href="/admin/purchase-history"><i class="fa fa-edit fa-fw"></i> Purchase History</a>
+                            </li>
+                            <li>
+                                <a href="/admin/users"><i class="fa fa-wrench fa-fw"></i> User Info</a>
+                            </li>
+                            <li>
+                                <a href="/admin/developers"><i class="fa fa-sitemap fa-fw"></i> Developers</a>
+                            </li>
+                            <li>
+                                <a href="/admin/pricing"><i class="fa fa-files-o fa-fw"></i> Pricing</a>
+                            </li>
+                            <li>
+                                <a href="" ng-click="logout()"><i class="fa fa-user"></i> Sign Out</a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
             </div>
-        </div>
         </md-content>
     </md-sidenav>
-    </div>
+</div>

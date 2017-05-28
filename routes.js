@@ -230,9 +230,7 @@ exports = module.exports = function(app, passport) {
 
   //pricing
   app.get('/pricing', useAngular);
-  
-  app.get('/pricing/checkout/:totalAmount', useAngular);
-  app.get('/pricing/checkout/:totalAmount', useAngular);
+  app.get('/pricing/checkout', useAngular);
   app.get('/pricing/information', useAngular);
   
   //admin

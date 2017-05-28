@@ -89,9 +89,10 @@ angular.module('security.service', [
       return queue.retryReason();
     },
 
-    // Show the modal login dialog
+    // Redirect to the login page if not logged in
     showLogin: function() {
-      openLoginDialog();
+      redirect('/login');
+      //openLoginDialog();
     },
 
     socialDisconnect: function(provider){

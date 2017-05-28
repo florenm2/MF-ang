@@ -3,14 +3,6 @@
 exports.hostname = process.env.hostname || 'localhost';
 exports.port = process.env.PORT || 3000;
 
-
-//old database -- delete after everything transferred over
-// exports.mongodb = {
-//   uri: process.env.MONGOLAB_URI || process.env.MONGOHQ_URL || 'mongodb://adminDEV:adminDEV@jello.modulusmongo.net:27017/gySyt2uv'
-// };
-
-
-//new database -- heroku
 exports.mongodb = {
   uri: process.env.MONGOLAB_URI || process.env.MONGOHQ_URL || 'mongodb://adminUSER:adminUSER@ds139705.mlab.com:39705/heroku_9b169n7t'
 };

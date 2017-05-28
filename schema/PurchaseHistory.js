@@ -19,6 +19,7 @@ exports = module.exports = function(app, mongoose) {
 	  completedDate: { type: Date },
     completed: { type: Boolean },
     company: { type: String, default: '' },
+    paymentMethod: { type: String, default: '' },
     cost: {
       raw: { type: Number },
       shipping: { type: Number },

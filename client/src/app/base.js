@@ -112,7 +112,6 @@ angular.module('base').controller('AdminHeaderCtrl' ,['$scope', 'adminResource',
     var accountInformation = accountInfo;
     var account = restResource.getAccountDetails.user;
     getName();
-    //console.log(accountInformation.account);
 
   }
 ]);
@@ -158,7 +157,6 @@ angular.module('base').controller('ContactCtrl', ['$scope', 'utility', 'accountR
         if(data.success){
           $scope.alerts.push(successAlert);
         }else{
-          //TODO: optionally do case study errfor/errors
           $scope.alerts.push(errorAlert);
         }
       }, function(x){
