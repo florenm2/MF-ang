@@ -61,7 +61,7 @@
             
             <div class="row">
                 <div class="col-md-4">
-
+                    
                     <div class="form-group" ng-class="{'has-error': hasError(detailForm.first)}">
                         <label class="control-label" for="first">First Name:</label>
                         <input type="text" name="first" id="first" class="form-control" ng-model="userDetail.first" required>
@@ -96,52 +96,8 @@
             </div>
         </form>
 
-
-
-        <ul >
-            <li >
-                <a href ng-click="tab=1">What you eat?</a>
-            </li>
-            <li >
-                <a href ng-click="tab=2">Favorite juice?</a>
-            </li>
-            <li >
-                <a href ng-click="tab=3">Do you close your eyes?</a>
-            </li>
-            <br><br>
-            <p ng-show="tab === 1"> I eat chocolates </p>
-            <p ng-show="tab === 2"> I drink OJ </p>
-            <p ng-show="tab === 3"> Yes </p>
-        </ul>
-
-
-        <div class="tab">
-            <button class="tablinks" onclick="openCity(event, 'London')">London</button>
-            <button class="tablinks" onclick="openCity(event, 'Paris')">Paris</button>
-            <button class="tablinks" onclick="openCity(event, 'Tokyo')">Tokyo</button>
-        </div>
-
-        <div id="London" class="tabcontent">
-            <h3>London</h3>
-            <p>London is the capital city of England.</p>
-        </div>
-
-        <div id="Paris" class="tabcontent">
-            <h3>Paris</h3>
-            <p>Paris is the capital of France.</p> 
-        </div>
-
-        <div id="Tokyo" class="tabcontent">
-            <h3>Tokyo</h3>
-            <p>Tokyo is the capital of Japan.</p>
-        </div>
+        
     </div>
-
-
-
-
-
-
     <div class="col-sm-3" ng-if="social">
         <legend>Social Connections</legend>
         <alert ng-repeat="alert in socialAlerts" type="{{alert.type}}" close="closeSocialAlert($index)">{{alert.msg}}</alert>
@@ -149,10 +105,3 @@
         <a ng-repeat-end target="_self" href="{{property.connect}}" ng-if="!property.connected" class="btn btn-block btn-default"><i ng-class="'fa ' + property.icon + ' fa-lg'"></i> Connect {{property.text}}</a>
     </div>
 </div>
-
-
-
-
-
-
-

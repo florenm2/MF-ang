@@ -1,34 +1,25 @@
 angular.module('account.checkout', ['config', 'account.settings.social', 'security.service', 'security.authorization', 'services.accountResource', 'services.utility','ui.bootstrap', 'directives.serverError', 'services.cart']);
 angular.module('account.checkout').config(['$routeProvider', 'securityAuthorizationProvider', function($routeProvider){
   $routeProvider
-<<<<<<< HEAD
-  .when('/account/checkout/:totalAmount', {
-    templateUrl: 'account/checkout/checkout.tpl.html',
-    controller: 'CheckoutLoggedInCtrl',
-    title: 'Checkout',
-    resolve: {
-      accountDetails: ['$q', '$location', 'securityAuthorization', 'accountResource' ,function($q, $location, securityAuthorization, accountResource){
-=======
     .when('/account/checkout', {
       templateUrl: 'account/checkout/checkout.tpl.html',
       controller: 'CheckoutLoggedInCtrl',
       title: 'Checkout',
       resolve: {
         accountDetails: ['$q', '$location', 'securityAuthorization', 'accountResource' ,function($q, $location, securityAuthorization, accountResource){
->>>>>>> 212bec6d48db1270d24dbcc86459b09bb8b0e112
           //get account details only for verified-user, otherwise redirect to /account/verification
           var redirectUrl;
           var promise = securityAuthorization.requireVerifiedUser()
-          .then(accountResource.getAccountDetails, function(reason){
+            .then(accountResource.getAccountDetails, function(reason){
               //rejected either user is unverified or un-authenticated
               redirectUrl = reason === 'unverified-client'? '/account/verification': '/login';
               return $q.reject();
             })
-          .catch(function(){
-            redirectUrl = redirectUrl || '/account';
-            $location.path(redirectUrl);
-            return $q.reject();
-          });
+            .catch(function(){
+              redirectUrl = redirectUrl || '/account';
+              $location.path(redirectUrl);
+              return $q.reject();
+            });
           return promise;
         }]
       }
@@ -41,7 +32,7 @@ angular.module('account.checkout').controller('CheckoutLoggedInCtrl', [ '$scope'
     var user = accountDetails.user;
     $scope.address =  accountDetails.mailingAddress;
     $scope.cart =  cartService;
-    
+  
     console.log($scope.address);
 
     $scope.submitADDRESS = function(){
@@ -77,7 +68,7 @@ angular.module('account.checkout').controller('CheckoutLoggedInCtrl', [ '$scope'
 
 
      $scope.errfor = {}; //for identity server-side validation
-     $scope.alerts = {
+    $scope.alerts = {
       detail: [], address: [], pass: []
     };
     
@@ -117,20 +108,5 @@ angular.module('account.checkout').controller('CheckoutLoggedInCtrl', [ '$scope'
       }), function(x){
         console.log(x);
       }
-    };
-    
-    var acc = document.getElementsByClassName("accordion");
-    var i;
-
-    for (i = 0; i < acc.length; i++) {
-      acc[i].onclick = function() {
-        this.classList.toggle("active");
-        var panel = this.nextElementSibling;
-        if (panel.style.maxHeight){
-          panel.style.maxHeight = null;
-        } else {
-          panel.style.maxHeight = panel.scrollHeight + "px";
-        } 
-      }
-    }
+     };
   }]);

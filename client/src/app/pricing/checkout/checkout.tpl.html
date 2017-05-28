@@ -7,12 +7,7 @@
 				<h2 class="mb-none"><strong>Checkout</strong></h2>
 			</div>
 		</div>
-<<<<<<< HEAD
-</div>
-</div>
-=======
 
->>>>>>> 212bec6d48db1270d24dbcc86459b09bb8b0e112
 		<br>
 
 		<div class="row">
@@ -282,13 +277,7 @@
 		</div>
 
 	</div>
-	
 
-<<<<<<< HEAD
-	<button class="accordion">Section 1</button>
-	<div class="panel">
-	  <p>Lorem ipsum...</p>
-=======
 </div>
 
 
@@ -298,16 +287,44 @@
 		<div class="row spacing-top-neg">
 			<h1 class="mb-none"><strong>Checkout</strong></h1>
 		</div>
->>>>>>> 212bec6d48db1270d24dbcc86459b09bb8b0e112
 	</div>
+	<br>
 
-	<button class="accordion">Section 2</button>
-	<div class="panel">
-	  <p>Lorem ipsum...</p>
-	</div>
 
-	<button class="accordion">Section 3</button>
-	<div class="panel">
-	  <p>Lorem ipsum...</p>
-	</div>
-</div>
+	<form name="checkoutForm" stripe-form="stripeCallback" ng-submit="onSubmit()" data-abide>
+
+		<div ng-if="processing" us-spinner></div>
+
+		<div class="row">
+			<div class="col-lg-10">
+				<legend>1. Contact Information</legend>
+				<alert ng-repeat="alert in alerts.detail" type="{{alert.type}}" close="closeAlert('detail', $index)">{{alert.msg}}</alert>
+				<div class="form-group" ng-class="{'has-error': hasError(detailForm.first)}">
+					<label class="control-label" for="first">First Name: </label>
+					<input type="text" name="first" id="first" class="form-control" ng-model="userDetail.first" required>
+					<span class="help-block" ng-show="showError(detailForm.first, 'required')">This field is required</span>
+				</div>
+				<div class="form-group" ng-class="{'has-error': hasError(detailForm.last)}">
+					<label class="control-label" for="last">Last Name:</label>
+					<input type="text" name="last" id="last" class="form-control" ng-model="userDetail.last" required>
+					<span class="help-block" ng-show="showError(detailForm.last, 'required')">This field is required</span>
+				</div>
+				<div class="form-group" ng-class="{'has-error': hasError(detailForm.company)}">
+					<label class="control-label" for="company">Company Name:</label>
+					<input type="text" name="company" id="company" class="form-control" ng-model="userDetail.company">
+				</div>
+				<div class="form-group" ng-class="{'has-error': hasError(detailForm.phone)}">
+					<label class="control-label" for="phone">Phone:</label>
+					<input type="text" name="phone" id="phone" class="form-control" ng-model="userDetail.phone">
+				</div>
+				<div class="form-group" ng-class="{'has-error': hasError(detailForm.zip)}">
+					<label class="control-label" for="zip">Zip:</label>
+					<input type="text" name="zip" id="zip" class="form-control" ng-model="userDetail.zip">
+				</div>
+				<div class="form-group">
+					<button type="button" class="btn btn-primary btn-update" ng-disabled="!canSave(detailForm)" ng-click="submit(detailForm)">Next</button>
+				</div>
+			</form>
+		</div>
+
+ -->
