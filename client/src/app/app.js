@@ -57,7 +57,7 @@ angular.module('app').run(['$location', '$window', '$rootScope', 'security', 'ng
   // (in case they are still logged in from a previous session)
   security.requestCurrentUser();
 
-  ngAnalyticsService.setClientId('45835906318-12kumlot5j29eo6ut94hohvbh88riea5.apps.googleusercontent.com');
+  //ngAnalyticsService.setClientId('45835906318-12kumlot5j29eo6ut94hohvbh88riea5.apps.googleusercontent.com');
 
 
   // add a listener to $routeChangeSuccess

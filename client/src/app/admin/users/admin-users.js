@@ -60,8 +60,10 @@ angular.module('admin.users.index').controller('UsersIndexCtrl', ['$scope', '$ro
       $scope.pages = results.pages;
       $scope.filters = results.filters;
       $scope.accounts = results.data;
+      $scope.numberOfCustomers = 0;
 
       $scope.accounts.forEach(function(account) {
+        $scope.numberOfCustomers++;
         account.purchaseAmount = 0;
         var phlog = account.purchaseHistoryLog;
 

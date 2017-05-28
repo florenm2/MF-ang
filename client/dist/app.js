@@ -2433,8 +2433,10 @@ angular.module('admin.sales').controller('SalesCtrl', ['$scope', '$log', 'stats'
 
       }
 
-      //console.log($scope.tallyDay);
-      //console.log($scope.totalDay);
+      $scope.tally30Days = $scope.tallyDay.reduce(function(sum, num){ return sum + num }, 0);
+      $scope.total30Days = $scope.totalDay.reduce(function(sum, num){ return sum + num }, 0);
+
+      $scope.average30Days = $scope.total30Days/$scope.tally30Days;
 
     };
 
@@ -2442,6 +2444,9 @@ angular.module('admin.sales').controller('SalesCtrl', ['$scope', '$log', 'stats'
     var dataToVariables = function(tally){
       console.log(tally);
       var graphData = []; 
+      $scope.totalOverall = 0;
+      $scope.tallyOverall = 0;
+      $scope.averageOverall = 0;
 
       for(var tal in tally){
         var entry = {
@@ -2450,10 +2455,13 @@ angular.module('admin.sales').controller('SalesCtrl', ['$scope', '$log', 'stats'
           year : tally[tal]._id.year,
           total : tally[tal].total
         }
-
+        
+        $scope.totalOverall += entry.total;
+        $scope.tallyOverall += 1;
         graphData.push(entry);
       }
 
+      $scope.averageOverall = $scope.totalOverall/$scope.tallyOverall;
       $scope.graphData = graphData;
       yearInfo($scope.graphData);
 
@@ -5235,8 +5243,10 @@ angular.module('admin.users.index').controller('UsersIndexCtrl', ['$scope', '$ro
       $scope.pages = results.pages;
       $scope.filters = results.filters;
       $scope.accounts = results.data;
+      $scope.numberOfCustomers = 0;
 
       $scope.accounts.forEach(function(account) {
+        $scope.numberOfCustomers++;
         account.purchaseAmount = 0;
         var phlog = account.purchaseHistoryLog;
 
@@ -5526,7 +5536,7 @@ angular.module('app').run(['$location', '$window', '$rootScope', 'security', 'ng
   // (in case they are still logged in from a previous session)
   security.requestCurrentUser();
 
-  ngAnalyticsService.setClientId('45835906318-12kumlot5j29eo6ut94hohvbh88riea5.apps.googleusercontent.com');
+  //ngAnalyticsService.setClientId('45835906318-12kumlot5j29eo6ut94hohvbh88riea5.apps.googleusercontent.com');
 
 
   // add a listener to $routeChangeSuccess
@@ -10607,7 +10617,7 @@ angular.module("admin/users/admin-users.tpl.html", []).run(["$templateCache", fu
     "            <div class=\"col-lg-12\">\n" +
     "                <h1>Customer Information</h1>\n" +
     "                <br>\n" +
-    "                <p>Number of Customer Accounts: </p>\n" +
+    "                <p>Number of Customer Accounts: {{numberOfCustomers}}</p>\n" +
     "                <div class=\"sidebar-search\" style=\"width: 30%;float:right\">\n" +
     "                    <div class=\"input-group custom-search-form\">\n" +
     "                        <input name=\"username\" type=\"text\" class=\"form-control\" ng-model=\"filters.username\" ng-model-options=\"{ debounce: 500 }\" ng-change=\"filtersUpdated()\" placeholder=\"Search...\">\n" +

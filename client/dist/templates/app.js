@@ -3092,7 +3092,7 @@ angular.module("admin/users/admin-users.tpl.html", []).run(["$templateCache", fu
     "            <div class=\"col-lg-12\">\n" +
     "                <h1>Customer Information</h1>\n" +
     "                <br>\n" +
-    "                <p>Number of Customer Accounts: </p>\n" +
+    "                <p>Number of Customer Accounts: {{numberOfCustomers}}</p>\n" +
     "                <div class=\"sidebar-search\" style=\"width: 30%;float:right\">\n" +
     "                    <div class=\"input-group custom-search-form\">\n" +
     "                        <input name=\"username\" type=\"text\" class=\"form-control\" ng-model=\"filters.username\" ng-model-options=\"{ debounce: 500 }\" ng-change=\"filtersUpdated()\" placeholder=\"Search...\">\n" +
