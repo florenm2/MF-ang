@@ -76,24 +76,24 @@ angular.module('account.checkout').controller('CheckoutLoggedInCtrl', [ '$scope'
       addressLine1:    $scope.address.addressLine1
     };
 
-		$scope.onSubmit = function () {
-			$scope.processing = true;
-		};
+    $scope.onSubmit = function () {
+      $scope.processing = true;
+    };
 
-		$scope.stripeCallback = function (code, result) {
-			$scope.processing = false;
-			$scope.hideAlerts();
-			if (result.error) {
-				$scope.stripeError = result.error.message;
-			} else {
-				$scope.stripeToken = result.id;
-			}
-		};
+    $scope.stripeCallback = function (code, result) {
+      $scope.processing = false;
+      $scope.hideAlerts();
+      if (result.error) {
+        $scope.stripeError = result.error.message;
+      } else {
+        $scope.stripeToken = result.id;
+      }
+    };
 
-		$scope.hideAlerts = function () {
-			$scope.stripeError = null;
-			$scope.stripeToken = null;
-		};
+    $scope.hideAlerts = function () {
+      $scope.stripeError = null;
+      $scope.stripeToken = null;
+    };
 
     $scope.submit = function(){
       restResource.newAddress($scope.addressDetail).then(function(result){
@@ -109,4 +109,4 @@ angular.module('account.checkout').controller('CheckoutLoggedInCtrl', [ '$scope'
         console.log(x);
       }
      };
-	}]);
+  }]);

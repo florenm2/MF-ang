@@ -198,13 +198,12 @@ var purchaseHistory = {
           req.body.orderDate
         ]
       };
-      var options = { new: true }; //so that user returned is the updated not original doc
+      var options = { new: true }; //so the user returned is the updated not original doc
 
       req.app.db.models.PurchaseHistory.findByIdAndUpdate(req.params.id, fieldsToSet, options, function(err, ph) {
         if (err) {
           return workflow.emit('exception', err);
         }
-        //workflow.emit('patchAdmin', ph);
         workflow.emit('patchAccount', ph);
       });
     });
@@ -261,19 +260,12 @@ var purchaseHistory = {
   },
 
   delete: function(req, res, next){
+    //can delete workflow stuff
+    //
+    //
     var workflow = req.app.utility.workflow(req, res);
 
     workflow.on('validate', function() {
-      // if (!req.user.roles.admin.isMemberOf('root')) {
-      //   workflow.outcome.errors.push('You may not delete users.');
-      //   return workflow.emit('response');
-      // }
-
-      // // work around as typeof req.user._id === "Object"
-      // if (req.user._id + '' === req.params.id) {
-      //   workflow.outcome.errors.push('You may not delete yourself from user.');
-      //   return workflow.emit('response');
-      // }
 
       workflow.emit('deletePH');
     });

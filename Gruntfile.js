@@ -87,7 +87,7 @@ module.exports = function(grunt) {
             src: ['jquery.cookie.js'], dest: '<%= distdir %>/vendor/'
           },
           {
-            expand: true, cwd: 'client/src/vendor/modernizr/',
+            expand: true, cwd: 'client/bower_components/modernizr/',
             src: ['modernizr.min.js'], dest: '<%= distdir %>/vendor/'
           },
           {
@@ -187,12 +187,24 @@ module.exports = function(grunt) {
             src: ['angular-chart.min.js'], dest: '<%= distdir %>/vendor/'
           },
           {
+            expand: true, cwd: 'client/bower_components/angular-chart.js/dist/',
+            src: ['angular-chart.min.js.map'], dest: '<%= distdir %>/vendor/'
+          },
+          {
             expand: true, cwd: 'client/bower_components/DateJS/build/production/',
             src: ['date.min.js'], dest: '<%= distdir %>/vendor/'
           },
           {
             expand: true, cwd: 'client/bower_components/DateJS/src/core/',
             src: ['time_span.js'], dest: '<%= distdir %>/vendor/'
+          },
+          {
+            expand: true, cwd: 'client/bower_components/angular-aria/',
+            src: ['angular-aria.js'], dest: '<%= distdir %>/vendor/'
+          },
+          {
+            expand: true, cwd: 'client/bower_components/angular-material/',
+            src: ['angular-material.js'], dest: '<%= distdir %>/vendor/'
           }
         ]
       },
@@ -299,12 +311,16 @@ module.exports = function(grunt) {
             src: ['sb-admin-2.css'], dest: '<%= distdir %>/css/'
           },
           {
-            expand: true, cwd: 'client/src/',
+            expand: true, cwd: 'client/src/app/',
             src: ['sidepanel.js'], dest: '<%= distdir %>/js/'
           },
           {
             expand: true, cwd: 'client/src/assets/js/',
             src: ['morris-data.js'], dest: '<%= distdir %>/js/'
+          },
+          {
+            expand: true, cwd: 'client/bower_components/angular-material/',
+            src: ['angular-material.css'], dest: '<%= distdir %>/css/'
           }
         ]
       },

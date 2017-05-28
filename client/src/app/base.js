@@ -25,6 +25,26 @@ angular.module('base').controller('HeaderCtrl', ['$scope', '$location', 'securit
     };
   }
 ]);
+angular.module('base').controller('SidebarCtrl', ['$scope', '$location', 'security', 'accountResource',
+  function ($scope, $location, security, restResource) {
+    $scope.isAuthenticated = function(){
+      return security.isAuthenticated();
+    };
+    $scope.isAdmin = function(){
+      if($location.path().indexOf('/admin') === -1){
+        return false;
+      }else{
+        return security.isAdmin();
+      }
+    };
+    $scope.logout = function(){
+      return security.logout();
+    };
+    $scope.isActive = function(viewLocation){
+      return $location.path() === viewLocation;
+    };
+  }
+]);
 angular.module('base').controller('AdminHeaderCtrl' ,['$scope', 'adminResource', 'accountResource', 'accountInfo', 'security',
   function($scope, adminResource, restResource, accountInfo, security){
 

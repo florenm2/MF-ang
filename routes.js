@@ -2,6 +2,7 @@
 
 var preAuth = require('./service/pre-auth');
 var security = require('./service/security');
+var view = require('./service/views');
 var account = require('./service/account');
 var purchaseHistory = require('./service/purchaseHistory');
 var products = require('./service/products');
@@ -73,6 +74,10 @@ exports = module.exports = function(app, passport) {
   app.get('/api/login/facebook/callback', security.loginFacebook);
   app.get('/api/login/google/callback', security.loginGoogle);
   app.post('/api/logout', security.logout);
+
+  app.get('/api/getRecentViewCount', view.getRecentViewCount);
+  app.post('/api/addHomePageView', view.addHomePageView);
+  app.post('/api/addCartView/', view.addCartView);
 
   //-----authentication required api-----
   app.all('/api/account*', apiEnsureAuthenticated);
@@ -225,7 +230,8 @@ exports = module.exports = function(app, passport) {
 
   //pricing
   app.get('/pricing', useAngular);
-  //app.get('/pricing/checkout', useAngular);
+  
+  app.get('/pricing/checkout/:totalAmount', useAngular);
   app.get('/pricing/checkout/:totalAmount', useAngular);
   app.get('/pricing/information', useAngular);
   

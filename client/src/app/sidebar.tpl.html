@@ -1,6 +1,31 @@
-<div hl-sticky="">
-    <div ng-controller="HeaderCtrl">
-        <div class="navbar-header" >
+<!-- <div flex layout="row">
+    <md-sidenav flex="15" md-is-locked-open="true" class="md-whiteframe-z1">
+      <md-content>
+        sidenav
+      </md-content>
+    </md-sidenav>
+    <div layout="column" flex>
+      <div class="box1">
+        70
+      </div>
+      <div class="box2">
+        fixed
+      </div>
+      <div class="box3">
+        flex
+      </div>
+    </div>
+
+  </div> -->
+
+<div ng-controller="SidebarCtrl" flex layout="row">
+<!-- <md-sidenav flex="15" md-is-locked-open="true" class="md-whiteframe-z1"> -->
+<!-- <md-content>
+        sidenav
+      </md-content> -->
+<md-sidenav flex="15" md-is-locked-open="true" class="md-whiteframe-4dp">
+<md-content flex layout="column">
+        <div class="navbar-header">
             <div class="sidebar-nav navbar-collapse">
             <nav class="navbar-sidebar" ng-if="isAdmin()" role="navigation">
                 <ul class="nav" id="side-menu">
@@ -32,5 +57,6 @@
                 </nav>
             </div>
         </div>
+        </md-content>
+    </md-sidenav>
     </div>
-</div>

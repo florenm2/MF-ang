@@ -199,6 +199,10 @@ angular.module('admin.sales').controller('SalesCtrl', ['$scope', '$log', 'stats'
 
       $scope.average30Days = $scope.total30Days/$scope.tally30Days;
 
+
+      //console.log($scope.tallyDay);
+      //console.log($scope.totalDay);
+
     };
 
 
@@ -209,6 +213,7 @@ angular.module('admin.sales').controller('SalesCtrl', ['$scope', '$log', 'stats'
       $scope.tallyOverall = 0;
       $scope.averageOverall = 0;
 
+
       for(var tal in tally){
         var entry = {
           day : tally[tal]._id.day,
@@ -216,7 +221,7 @@ angular.module('admin.sales').controller('SalesCtrl', ['$scope', '$log', 'stats'
           year : tally[tal]._id.year,
           total : tally[tal].total
         }
-        
+
         $scope.totalOverall += entry.total;
         $scope.tallyOverall += 1;
         graphData.push(entry);
