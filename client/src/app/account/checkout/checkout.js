@@ -109,4 +109,19 @@ angular.module('account.checkout').controller('CheckoutLoggedInCtrl', [ '$scope'
         console.log(x);
       }
      };
+
+    var acc = document.getElementsByClassName("accordion");
+    var i;
+
+    for (i = 0; i < acc.length; i++) {
+      acc[i].onclick = function() {
+        this.classList.toggle("active");
+        var paneling = this.nextElementSibling;
+        if (paneling.style.maxHeight){
+          paneling.style.maxHeight = null;
+        } else {
+          paneling.style.maxHeight = paneling.scrollHeight + "px";
+        } 
+      }
+    }
   }]);
