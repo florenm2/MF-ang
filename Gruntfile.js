@@ -128,7 +128,7 @@ module.exports = function(grunt) {
           },
           {
             expand: true, cwd: 'client/bower_components/angular-payments/lib/',
-            src: ['angular-payments.js'], dest: '<%= distdir %>/vendor/'
+            src: ['angular-payments.min.js'], dest: '<%= distdir %>/vendor/'
           },
           {
             expand: true, cwd: 'client/bower_components/angular-touch/',

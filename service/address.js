@@ -80,9 +80,9 @@ var address = {
             req.body.zip
           ]
         };
-        var options = { select: 'company phone zip' };
+        var options = { select: 'company phone zip' , upsert: true };
 
-        req.app.db.models.Address.findByIdAndUpdate(req.body.mailingAddress, fieldsToSet, options, function(err, address) {
+        req.app.db.models.Address.update({"account.id" : req.user.roles.account.id}, fieldsToSet, options, function(err, address) {
           if (err) {
             return workflow.emit('exception', err);
           }

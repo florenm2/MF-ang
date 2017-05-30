@@ -1,4 +1,6 @@
-angular.module('account.checkout', ['config', 'account.settings.social', 'security.service', 'security.authorization', 'services.accountResource', 'services.utility','ui.bootstrap', 'directives.serverError', 'services.cart']);
+Stripe.setPublishableKey('pk_test_1Ol0KXlUc2OASvEVg1JwhHp2');
+
+angular.module('account.checkout', ['config', 'account.settings.social', 'security.service', 'security.authorization', 'services.accountResource', 'services.utility','ui.bootstrap', 'directives.serverError', 'services.cart', 'angularPayments']);
 angular.module('account.checkout').config(['$routeProvider', 'securityAuthorizationProvider', function($routeProvider){
   $routeProvider
   .when('/account/checkout', {
@@ -34,61 +36,151 @@ angular.module('account.checkout').controller('CheckoutLoggedInCtrl', [ '$scope'
     $scope.cart =  cartService;
     $scope.billingChecked = false;
 
+    //console.log($scope.cart.getCartProducts());
+    console.log($scope.cart.getCart());
+
+    $scope.stripeSubmit = function(status, response){
+      if(response.error) {
+          // there was an error. Fix it.
+        } else {
+          // got stripe token, now charge it or smt
+          token = response.id;
+          $scope.submitAddress();
+        }
+      }
+
+
+    // $scope.onSubmit = function () {
+    //   $scope.processing = true;
+    // };
+
+    // $scope.stripeCallback = function (code, result) {
+    //   //$scope.processing = false;
+    //   $scope.hideAlerts();
+    //   if (result.error) {
+    //     $scope.stripeError = result.error.message;
+    //   } else {
+    //     $scope.stripeToken = result.id;
+    //   }
+    // };
+
     //mailing address
-    $scope.name = {
-      first: account.name.first,
-      last: account.name.last
-    };
+    if(address==null){
+      $scope.mailingAddress =
+      {
+        name : {
+          first: "",
+          last: ""
+        },
+        company : "",
+        addressLine1 : "",
+        addressLine2 : "",
+        city : "",
+        state : "",
+        zip : "",
+        country : "",
+        type : 'mailing'
+      };
+    } else {
+      $scope.mailingAddress =
+      {
+        name : {
+          first: account.name.first,
+          last: account.name.last
+        },
+        company : account.company,
+        addressLine1 : address.addressLine1,
+        addressLine2 : address.addressLine2,
+        city : address.city,
+        state : address.state,
+        zip : address.zip,
+        country : address.country,
+        type : 'mailing'
+      };
+    }
+  
 
-    $scope.company = account.company;
-    $scope.addressLine1 = address.addressLine1;
-    $scope.addressLine2 = address.addressLine2;
-    $scope.city = address.city;
-    $scope.state = address.state;
-    $scope.zip = address.zip;
-    $scope.country = address.country;
 
-    
-
+  //console.log($scope.mailingAddress);
     //billing address
     $scope.checkBillAddress = function(){
       if($scope.billingChecked){
-        $scope.nameBilling = $scope.name;
-        $scope.companyBilling = $scope.company;
-        $scope.addressLine1Billing = $scope.addressLine1;
-        $scope.addressLine2Billing = $scope.addressLine2;
-        $scope.cityBilling = $scope.city;
-        $scope.stateBilling = $scope.state;
-        $scope.zipBilling = $scope.zip;
-        $scope.countryBilling = $scope.country;
+        $scope.billingAddress = $scope.mailingAddress;
       } else {
-        $scope.nameBilling = {
-          first: "",
-          last: ""
+        $scope.billingAddress =
+        {
+          name : {
+            first: "",
+            last: ""
+          },
+          company : "",
+          addressLine1 : "",
+          addressLine2 : "",
+          city : "",
+          state : "",
+          zip : "",
+          country : "",
+          type : 'billing'
         };
-        $scope.companyBilling = "";
-        $scope.addressLine1Billing = "";
-        $scope.addressLine2Billing = "";
-        $scope.cityBilling = "";
-        $scope.stateBilling = "";
-        $scope.zipBilling = "";
-        $scope.countryBilling = "";
       }
     }
 
+    $scope.test = function(){
+      console.log("hello");
+    }
 
-    //credit card
-    $scope.cardNumber = 0;
-    $scope.exprationDate = 0;
-    $scope.cvv = 0;
+    // $scope.purchaseInformation = {
+    //   //orderNumber: ,
+    //   product: cart,
+    //   billingAddress: req.body.billingAddress,
+    //   mailingAddress: req.body.mailingAddress,
+    //   orderDate: req.body.orderDate,
+    //   company: req.body.company,
+    //   paymentMethod: req.body.paymentMethod,
+    //   cost: {
+    //     raw: req.body.cost.raw,
+    //     shipping: req.body.cost.shipping,
+    //     tax: req.body.cost.tax,
+    //     total: req.body.cost.total
+    //   }
+    // };
 
 
-    
-    
-    $scope.submitADDRESS = function(){
+    $scope.submitAddress = function(){
 
       $scope.alerts.address = [];
-      restResource.setMailingAddress($scope.addressDetail).then(function(data){
+      restResource.setMailingAddress($scope.mailingAddress).then(function(data){
+        if(data.success){
+          console.log("hi");
+          $scope.alerts.address.push({
+            type: 'success',
+            msg: 'User identity is updated.'
+          });
+        }else{
+          //error due to server side validation
+          $scope.errfor = data.errfor;
+          angular.forEach(data.errfor, function(err, field){
+            $scope.addressForm[field].$setValidity('server', false);
+          });
+          angular.forEach(data.errors, function(err, index){
+            $scope.alerts.address.push({
+              type: 'danger',
+              msg: err
+            });
+          });
+        }
+      }, function(x){
+        $scope.alerts.address.push({
+          type: 'danger',
+          msg: 'Error updating user identity: ' + x
+        });
+      });
+    };
+
+    $scope.submitPurchaseHistory = function(){
+
+      $scope.alerts.address = [];
+      restResource.newPurchase($scope.purchaseInformation).then(function(data){
         if(data.success){
           console.log("hi");
           $scope.alerts.address.push({
@@ -123,39 +215,39 @@ angular.module('account.checkout').controller('CheckoutLoggedInCtrl', [ '$scope'
     };
     
 
-    $scope.onSubmit = function () {
-      $scope.processing = true;
-    };
+    // $scope.onSubmit = function () {
+    //   $scope.processing = true;
+    // };
 
-    $scope.stripeCallback = function (code, result) {
-      $scope.processing = false;
-      $scope.hideAlerts();
-      if (result.error) {
-        $scope.stripeError = result.error.message;
-      } else {
-        $scope.stripeToken = result.id;
-      }
-    };
+    // $scope.stripeCallback = function (code, result) {
+    //   $scope.processing = false;
+    //   $scope.hideAlerts();
+    //   if (result.error) {
+    //     $scope.stripeError = result.error.message;
+    //   } else {
+    //     $scope.stripeToken = result.id;
+    //   }
+    // };
 
     $scope.hideAlerts = function () {
       $scope.stripeError = null;
       $scope.stripeToken = null;
     };
 
-    $scope.submit = function(){
-      restResource.newAddress($scope.addressDetail).then(function(result){
-        if(result.success){
-          console.log(result.account);
-        }else{
-          //error due to server side validation
-          angular.forEach(result.errors, function(err, index){
-            console.log(err);
-          });
-        }
-      }), function(x){
-        console.log(x);
-      }
-    };
+    // $scope.submit = function(){
+    //   restResource.newAddress($scope.addressDetail).then(function(result){
+    //     if(result.success){
+    //       console.log(result.account);
+    //     }else{
+    //       //error due to server side validation
+    //       angular.forEach(result.errors, function(err, index){
+    //         console.log(err);
+    //       });
+    //     }
+    //   }), function(x){
+    //     console.log(x);
+    //   }
+    // };
 
     var acc = document.getElementsByClassName("accordion");
     var i;

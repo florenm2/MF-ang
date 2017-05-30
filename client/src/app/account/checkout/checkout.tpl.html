@@ -20,11 +20,11 @@
 							<div class="form-group">
 								<div class="col-md-6">
 									<label>First Name</label>
-									<input type="text" name="firstname" ng-model="name.first" class="form-control">
+									<input type="text" name="firstnameMailing" ng-model="mailingAddress.name.first" class="form-control">
 								</div>
 								<div class="col-md-6">
 									<label>Last Name</label>
-									<input type="text" name="lastname" ng-model="name.last"  class="form-control">
+									<input type="text" name="lastnameMailing" ng-model="mailingAddress.name.last"  class="form-control">
 								</div>
 							</div>
 						</div>
@@ -32,7 +32,7 @@
 							<div class="form-group">
 								<div class="col-md-12">
 									<label>Company Name</label>
-									<input type="text" name="company" ng-model="company" class="form-control">
+									<input type="text" name="companyMailing" ng-model="mailingAddress.company" class="form-control">
 								</div>
 							</div>
 						</div>
@@ -40,7 +40,7 @@
 							<div class="form-group">
 								<div class="col-md-12">
 									<label class="control-label">Address Line 1</label>
-									<input type="text" class="form-control" name="addressLine1" id="addressLine1" ng-model="addressLine1">
+									<input type="text" class="form-control" name="addressLine1Mailing" ng-model="mailingAddress.addressLine1">
 								</div>
 							</div>
 						</div>
@@ -48,31 +48,31 @@
 							<div class="form-group">
 								<div class="col-md-12">
 									<label class="control-label">Address Line 2</label>
-									<input type="text" class="form-control" name="addressLine2" ng-model="addressLine2">
+									<input type="text" class="form-control" name="addressLine2Mailing" ng-model="mailingAddress.addressLine2">
 								</div>
 							</div>
 						</div>
 						<div class="row">
 							<div class="form-group">
-								<div class="col-md-12">
+								<div class="col-md-6">
 									<label>City </label>
-									<input type="text" name="city" ng-model="city" class="form-control">
+									<input type="text" name="cityMailing" ng-model="mailingAddress.city" class="form-control">
 								</div>
-								<div class="col-md-12">
+								<div class="col-md-6">
 									<label>State </label>
-									<input type="text" name="state" ng-model="state" class="form-control">
+									<input type="text" name="stateMailing" ng-model="mailingAddress.state" class="form-control">
 								</div>
 							</div>
 						</div>
 						<div class="row">
 							<div class="form-group">
-								<div class="col-md-12">
+								<div class="col-md-6">
 									<label>Zip Code</label>
-									<input type="text" name="zip" ng-model="zip" class="form-control">
+									<input type="text" name="zipMailing" ng-model="mailingAddress.zip" class="form-control">
 								</div>
-								<div class="col-md-12">
+								<div class="col-md-6">
 									<label>Country</label>
-									<input type="text" name="country" ng-model="country" class="form-control">
+									<input type="text" name="countryMailing" ng-model="mailingAddress.country" class="form-control">
 								</div>
 							</div>
 						</div>
@@ -82,7 +82,7 @@
 
 				<button class="accordion">Billing Address</button>
 				<div class="paneling">
-				<br>
+					<br>
 					<form id="frmBillingAddress">
 						<div class="row">
 							<div class="col-md-12">
@@ -97,11 +97,11 @@
 							<div class="form-group">
 								<div class="col-md-6">
 									<label>First Name</label>
-									<input type="text" name="firstnamebilling" ng-model="nameBilling.first" class="form-control">
+									<input type="text" name="firstnamebilling" ng-model="billingAddress.name.first" class="form-control">
 								</div>
 								<div class="col-md-6">
 									<label>Last Name</label>
-									<input type="text" name="lastnamebilling" ng-model="nameBilling.last"  class="form-control">
+									<input type="text" name="lastnamebilling" ng-model="billingAddress.name.last"  class="form-control">
 								</div>
 							</div>
 						</div>
@@ -109,7 +109,7 @@
 							<div class="form-group">
 								<div class="col-md-12">
 									<label>Company Name</label>
-									<input type="text" name="companybilling" ng-model="companyBilling" class="form-control">
+									<input type="text" name="companybilling" ng-model="billingAddress.company" class="form-control">
 								</div>
 							</div>
 						</div>
@@ -117,7 +117,7 @@
 							<div class="form-group">
 								<div class="col-md-12">
 									<label class="control-label">Address Line 1</label>
-									<input type="text" class="form-control" name="addressLine1billing" id="addressLine1" ng-model="addressLine1Billing">
+									<input type="text" class="form-control" name="addressLine1billing" ng-model="billingAddress.addressLine1">
 								</div>
 							</div>
 						</div>
@@ -125,7 +125,7 @@
 							<div class="form-group">
 								<div class="col-md-12">
 									<label class="control-label">Address Line 2</label>
-									<input type="text" class="form-control" name="addressLine2billing" ng-model="addressLine2Billing">
+									<input type="text" class="form-control" name="addressLine2billing" ng-model="billingAddress.addressLine2">
 								</div>
 							</div>
 						</div>
@@ -133,11 +133,11 @@
 							<div class="form-group">
 								<div class="col-md-12">
 									<label>City </label>
-									<input type="text" name="citybilling" ng-model="cityBilling" class="form-control">
+									<input type="text" name="citybilling" ng-model="billingAddress.city" class="form-control">
 								</div>
 								<div class="col-md-12">
 									<label>State </label>
-									<input type="text" name="statebilling" ng-model="stateBilling" class="form-control">
+									<input type="text" name="statebilling" ng-model="billingAddress.state" class="form-control">
 								</div>
 							</div>
 						</div>
@@ -145,11 +145,11 @@
 							<div class="form-group">
 								<div class="col-md-12">
 									<label>Zip Code</label>
-									<input type="text" name="zipbilling" ng-model="zipBilling" class="form-control">
+									<input type="text" name="zipbilling" ng-model="billingAddress.zip" class="form-control">
 								</div>
 								<div class="col-md-12">
 									<label>Country</label>
-									<input type="text" name="countrybilling" ng-model="countryBilling" class="form-control">
+									<input type="text" name="countrybilling" ng-model="billingAddress.country" class="form-control">
 								</div>
 							</div>
 						</div>
@@ -160,32 +160,39 @@
 				<button class="accordion">Payment Method</button>
 				<div class="paneling">
 					<br>
-					<form id="frmCreditCardInformation">
+					<form stripe-form="stripeSubmit" name="paymentinfo">
 						<div class="row">
 							<div class="form-group">
 								<div class="col-md-6">
-									<label>Card Number</label>
-									<input type="password" name="cardnumber" ng-model="cardNumber" class="form-control">
+									<label for="">Card number</label>
+									<input type="text" class="form-control" ng-model="number" payments-validate="card" payments-format="card" payments-type-model="type" ng-class="myForm.number.$card.type"/>
 								</div>
 								<div class="col-md-6">
-									<label>Expiration Date</label>
-									<input type="text" name="expirationdate" ng-model="expirationDate"  class="form-control">
+									<label for="">Name on card </label>
+									<input type="text" ng-model="name" class="form-control">
 								</div>
 							</div>
-						</div>
-						<div class="row">
 							<div class="form-group">
-								<div class="col-md-12">
-									<label>CVV</label>
-									<input type="text" name="cvv" ng-model="cvv" class="form-control">
+								<div class="col-md-6">
+								<label for="">Expiration Date</label>
+									<input type="text" class="form-control" ng-model="expiry" payments-validate="expiry" payments-format="expiry" />
+								</div>
+								<div class="col-md-6">
+									<label for="">CVC</label>
+									<input type="text" class="form-control" ng-model="cvc" payments-validate="cvc" payments-format="cvc" payments-type-model="type"/>
+								</div>
+							</div>
+
+							<div class="form-group">
+								<div class="col-md-6">
+									<button type="submit" class="btn btn-primary btn-large">Submit</button>
 								</div>
 							</div>
 						</div>
-
-
+					</form>
 				</div>
 				<br>
-				
+
 
 				<button class="accordion">Order Review</button>
 				<div class="paneling">

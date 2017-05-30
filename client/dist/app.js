@@ -1271,6 +1271,18 @@ angular.module('services.cart').factory('cartService', ['$http', '$q', function(
       return total;
     };
 
+  cart.getCartProducts = function () {
+      var total = [];
+      this.forEach(function (product) {
+        total.push(angular.extend(product.title, product.quantity));
+      });
+      return total;
+    };
+
+    cart.getCart = function () {
+      return this;
+    };
+
   cart.getItemAmount = function () {
       var total = 0;
       this.forEach(function (product) {
@@ -1469,7 +1481,9 @@ angular.module('account.index').controller('AccountCtrl', [ '$scope',
     $scope.hourOfDay = moment().format('H');
   }]);
 
-angular.module('account.checkout', ['config', 'account.settings.social', 'security.service', 'security.authorization', 'services.accountResource', 'services.utility','ui.bootstrap', 'directives.serverError', 'services.cart']);
+Stripe.setPublishableKey('pk_test_1Ol0KXlUc2OASvEVg1JwhHp2');
+
+angular.module('account.checkout', ['config', 'account.settings.social', 'security.service', 'security.authorization', 'services.accountResource', 'services.utility','ui.bootstrap', 'directives.serverError', 'services.cart', 'angularPayments']);
 angular.module('account.checkout').config(['$routeProvider', 'securityAuthorizationProvider', function($routeProvider){
   $routeProvider
   .when('/account/checkout', {
@@ -1505,61 +1519,151 @@ angular.module('account.checkout').controller('CheckoutLoggedInCtrl', [ '$scope'
     $scope.cart =  cartService;
     $scope.billingChecked = false;
 
+    //console.log($scope.cart.getCartProducts());
+    console.log($scope.cart.getCart());
+
+    $scope.stripeSubmit = function(status, response){
+      if(response.error) {
+          // there was an error. Fix it.
+        } else {
+          // got stripe token, now charge it or smt
+          token = response.id;
+          $scope.submitAddress();
+        }
+      }
+
+
+    // $scope.onSubmit = function () {
+    //   $scope.processing = true;
+    // };
+
+    // $scope.stripeCallback = function (code, result) {
+    //   //$scope.processing = false;
+    //   $scope.hideAlerts();
+    //   if (result.error) {
+    //     $scope.stripeError = result.error.message;
+    //   } else {
+    //     $scope.stripeToken = result.id;
+    //   }
+    // };
+
     //mailing address
-    $scope.name = {
-      first: account.name.first,
-      last: account.name.last
-    };
+    if(address==null){
+      $scope.mailingAddress =
+      {
+        name : {
+          first: "",
+          last: ""
+        },
+        company : "",
+        addressLine1 : "",
+        addressLine2 : "",
+        city : "",
+        state : "",
+        zip : "",
+        country : "",
+        type : 'mailing'
+      };
+    } else {
+      $scope.mailingAddress =
+      {
+        name : {
+          first: account.name.first,
+          last: account.name.last
+        },
+        company : account.company,
+        addressLine1 : address.addressLine1,
+        addressLine2 : address.addressLine2,
+        city : address.city,
+        state : address.state,
+        zip : address.zip,
+        country : address.country,
+        type : 'mailing'
+      };
+    }
+  
 
-    $scope.company = account.company;
-    $scope.addressLine1 = address.addressLine1;
-    $scope.addressLine2 = address.addressLine2;
-    $scope.city = address.city;
-    $scope.state = address.state;
-    $scope.zip = address.zip;
-    $scope.country = address.country;
 
-    
-
+  //console.log($scope.mailingAddress);
     //billing address
     $scope.checkBillAddress = function(){
       if($scope.billingChecked){
-        $scope.nameBilling = $scope.name;
-        $scope.companyBilling = $scope.company;
-        $scope.addressLine1Billing = $scope.addressLine1;
-        $scope.addressLine2Billing = $scope.addressLine2;
-        $scope.cityBilling = $scope.city;
-        $scope.stateBilling = $scope.state;
-        $scope.zipBilling = $scope.zip;
-        $scope.countryBilling = $scope.country;
+        $scope.billingAddress = $scope.mailingAddress;
       } else {
-        $scope.nameBilling = {
-          first: "",
-          last: ""
+        $scope.billingAddress =
+        {
+          name : {
+            first: "",
+            last: ""
+          },
+          company : "",
+          addressLine1 : "",
+          addressLine2 : "",
+          city : "",
+          state : "",
+          zip : "",
+          country : "",
+          type : 'billing'
         };
-        $scope.companyBilling = "";
-        $scope.addressLine1Billing = "";
-        $scope.addressLine2Billing = "";
-        $scope.cityBilling = "";
-        $scope.stateBilling = "";
-        $scope.zipBilling = "";
-        $scope.countryBilling = "";
       }
     }
 
+    $scope.test = function(){
+      console.log("hello");
+    }
 
-    //credit card
-    $scope.cardNumber = 0;
-    $scope.exprationDate = 0;
-    $scope.cvv = 0;
+    // $scope.purchaseInformation = {
+    //   //orderNumber: ,
+    //   product: cart,
+    //   billingAddress: req.body.billingAddress,
+    //   mailingAddress: req.body.mailingAddress,
+    //   orderDate: req.body.orderDate,
+    //   company: req.body.company,
+    //   paymentMethod: req.body.paymentMethod,
+    //   cost: {
+    //     raw: req.body.cost.raw,
+    //     shipping: req.body.cost.shipping,
+    //     tax: req.body.cost.tax,
+    //     total: req.body.cost.total
+    //   }
+    // };
 
 
-    
-    
-    $scope.submitADDRESS = function(){
+    $scope.submitAddress = function(){
 
       $scope.alerts.address = [];
-      restResource.setMailingAddress($scope.addressDetail).then(function(data){
+      restResource.setMailingAddress($scope.mailingAddress).then(function(data){
+        if(data.success){
+          console.log("hi");
+          $scope.alerts.address.push({
+            type: 'success',
+            msg: 'User identity is updated.'
+          });
+        }else{
+          //error due to server side validation
+          $scope.errfor = data.errfor;
+          angular.forEach(data.errfor, function(err, field){
+            $scope.addressForm[field].$setValidity('server', false);
+          });
+          angular.forEach(data.errors, function(err, index){
+            $scope.alerts.address.push({
+              type: 'danger',
+              msg: err
+            });
+          });
+        }
+      }, function(x){
+        $scope.alerts.address.push({
+          type: 'danger',
+          msg: 'Error updating user identity: ' + x
+        });
+      });
+    };
+
+    $scope.submitPurchaseHistory = function(){
+
+      $scope.alerts.address = [];
+      restResource.newPurchase($scope.purchaseInformation).then(function(data){
         if(data.success){
           console.log("hi");
           $scope.alerts.address.push({
@@ -1594,39 +1698,39 @@ angular.module('account.checkout').controller('CheckoutLoggedInCtrl', [ '$scope'
     };
     
 
-    $scope.onSubmit = function () {
-      $scope.processing = true;
-    };
+    // $scope.onSubmit = function () {
+    //   $scope.processing = true;
+    // };
 
-    $scope.stripeCallback = function (code, result) {
-      $scope.processing = false;
-      $scope.hideAlerts();
-      if (result.error) {
-        $scope.stripeError = result.error.message;
-      } else {
-        $scope.stripeToken = result.id;
-      }
-    };
+    // $scope.stripeCallback = function (code, result) {
+    //   $scope.processing = false;
+    //   $scope.hideAlerts();
+    //   if (result.error) {
+    //     $scope.stripeError = result.error.message;
+    //   } else {
+    //     $scope.stripeToken = result.id;
+    //   }
+    // };
 
     $scope.hideAlerts = function () {
       $scope.stripeError = null;
       $scope.stripeToken = null;
     };
 
-    $scope.submit = function(){
-      restResource.newAddress($scope.addressDetail).then(function(result){
-        if(result.success){
-          console.log(result.account);
-        }else{
-          //error due to server side validation
-          angular.forEach(result.errors, function(err, index){
-            console.log(err);
-          });
-        }
-      }), function(x){
-        console.log(x);
-      }
-    };
+    // $scope.submit = function(){
+    //   restResource.newAddress($scope.addressDetail).then(function(result){
+    //     if(result.success){
+    //       console.log(result.account);
+    //     }else{
+    //       //error due to server side validation
+    //       angular.forEach(result.errors, function(err, index){
+    //         console.log(err);
+    //       });
+    //     }
+    //   }), function(x){
+    //     console.log(x);
+    //   }
+    // };
 
     var acc = document.getElementsByClassName("accordion");
     var i;
@@ -1814,7 +1918,7 @@ angular.module('account.purchaseHistory.one').controller('PurchaseHistoryOneCtrl
 
 
 
-angular.module('account.settings', ['config', 'account.settings.social', 'security.service', 'security.authorization', 'services.accountResource', 'services.utility','ui.bootstrap', 'directives.serverError']);
+angular.module('account.settings', ['config', 'account.settings.social', 'security.service', 'security.authorization', 'services.accountResource', 'services.utility', 'ui.bootstrap', 'directives.serverError']);
 angular.module('account.settings').config(['$routeProvider', 'securityAuthorizationProvider', function($routeProvider){
   $routeProvider
     .when('/account/settings', {
@@ -7913,11 +8017,11 @@ angular.module("account/checkout/checkout.tpl.html", []).run(["$templateCache", 
     "							<div class=\"form-group\">\n" +
     "								<div class=\"col-md-6\">\n" +
     "									<label>First Name</label>\n" +
-    "									<input type=\"text\" name=\"firstname\" ng-model=\"name.first\" class=\"form-control\">\n" +
+    "									<input type=\"text\" name=\"firstnameMailing\" ng-model=\"mailingAddress.name.first\" class=\"form-control\">\n" +
     "								</div>\n" +
     "								<div class=\"col-md-6\">\n" +
     "									<label>Last Name</label>\n" +
-    "									<input type=\"text\" name=\"lastname\" ng-model=\"name.last\"  class=\"form-control\">\n" +
+    "									<input type=\"text\" name=\"lastnameMailing\" ng-model=\"mailingAddress.name.last\"  class=\"form-control\">\n" +
     "								</div>\n" +
     "							</div>\n" +
     "						</div>\n" +
@@ -7925,7 +8029,7 @@ angular.module("account/checkout/checkout.tpl.html", []).run(["$templateCache", 
     "							<div class=\"form-group\">\n" +
     "								<div class=\"col-md-12\">\n" +
     "									<label>Company Name</label>\n" +
-    "									<input type=\"text\" name=\"company\" ng-model=\"company\" class=\"form-control\">\n" +
+    "									<input type=\"text\" name=\"companyMailing\" ng-model=\"mailingAddress.company\" class=\"form-control\">\n" +
     "								</div>\n" +
     "							</div>\n" +
     "						</div>\n" +
@@ -7933,7 +8037,7 @@ angular.module("account/checkout/checkout.tpl.html", []).run(["$templateCache", 
     "							<div class=\"form-group\">\n" +
     "								<div class=\"col-md-12\">\n" +
     "									<label class=\"control-label\">Address Line 1</label>\n" +
-    "									<input type=\"text\" class=\"form-control\" name=\"addressLine1\" id=\"addressLine1\" ng-model=\"addressLine1\">\n" +
+    "									<input type=\"text\" class=\"form-control\" name=\"addressLine1Mailing\" ng-model=\"mailingAddress.addressLine1\">\n" +
     "								</div>\n" +
     "							</div>\n" +
     "						</div>\n" +
@@ -7941,31 +8045,31 @@ angular.module("account/checkout/checkout.tpl.html", []).run(["$templateCache", 
     "							<div class=\"form-group\">\n" +
     "								<div class=\"col-md-12\">\n" +
     "									<label class=\"control-label\">Address Line 2</label>\n" +
-    "									<input type=\"text\" class=\"form-control\" name=\"addressLine2\" ng-model=\"addressLine2\">\n" +
+    "									<input type=\"text\" class=\"form-control\" name=\"addressLine2Mailing\" ng-model=\"mailingAddress.addressLine2\">\n" +
     "								</div>\n" +
     "							</div>\n" +
     "						</div>\n" +
     "						<div class=\"row\">\n" +
     "							<div class=\"form-group\">\n" +
-    "								<div class=\"col-md-12\">\n" +
+    "								<div class=\"col-md-6\">\n" +
     "									<label>City </label>\n" +
-    "									<input type=\"text\" name=\"city\" ng-model=\"city\" class=\"form-control\">\n" +
+    "									<input type=\"text\" name=\"cityMailing\" ng-model=\"mailingAddress.city\" class=\"form-control\">\n" +
     "								</div>\n" +
-    "								<div class=\"col-md-12\">\n" +
+    "								<div class=\"col-md-6\">\n" +
     "									<label>State </label>\n" +
-    "									<input type=\"text\" name=\"state\" ng-model=\"state\" class=\"form-control\">\n" +
+    "									<input type=\"text\" name=\"stateMailing\" ng-model=\"mailingAddress.state\" class=\"form-control\">\n" +
     "								</div>\n" +
     "							</div>\n" +
     "						</div>\n" +
     "						<div class=\"row\">\n" +
     "							<div class=\"form-group\">\n" +
-    "								<div class=\"col-md-12\">\n" +
+    "								<div class=\"col-md-6\">\n" +
     "									<label>Zip Code</label>\n" +
-    "									<input type=\"text\" name=\"zip\" ng-model=\"zip\" class=\"form-control\">\n" +
+    "									<input type=\"text\" name=\"zipMailing\" ng-model=\"mailingAddress.zip\" class=\"form-control\">\n" +
     "								</div>\n" +
-    "								<div class=\"col-md-12\">\n" +
+    "								<div class=\"col-md-6\">\n" +
     "									<label>Country</label>\n" +
-    "									<input type=\"text\" name=\"country\" ng-model=\"country\" class=\"form-control\">\n" +
+    "									<input type=\"text\" name=\"countryMailing\" ng-model=\"mailingAddress.country\" class=\"form-control\">\n" +
     "								</div>\n" +
     "							</div>\n" +
     "						</div>\n" +
@@ -7975,7 +8079,7 @@ angular.module("account/checkout/checkout.tpl.html", []).run(["$templateCache", 
     "\n" +
     "				<button class=\"accordion\">Billing Address</button>\n" +
     "				<div class=\"paneling\">\n" +
-    "				<br>\n" +
+    "					<br>\n" +
     "					<form id=\"frmBillingAddress\">\n" +
     "						<div class=\"row\">\n" +
     "							<div class=\"col-md-12\">\n" +
@@ -7990,11 +8094,11 @@ angular.module("account/checkout/checkout.tpl.html", []).run(["$templateCache", 
     "							<div class=\"form-group\">\n" +
     "								<div class=\"col-md-6\">\n" +
     "									<label>First Name</label>\n" +
-    "									<input type=\"text\" name=\"firstnamebilling\" ng-model=\"nameBilling.first\" class=\"form-control\">\n" +
+    "									<input type=\"text\" name=\"firstnamebilling\" ng-model=\"billingAddress.name.first\" class=\"form-control\">\n" +
     "								</div>\n" +
     "								<div class=\"col-md-6\">\n" +
     "									<label>Last Name</label>\n" +
-    "									<input type=\"text\" name=\"lastnamebilling\" ng-model=\"nameBilling.last\"  class=\"form-control\">\n" +
+    "									<input type=\"text\" name=\"lastnamebilling\" ng-model=\"billingAddress.name.last\"  class=\"form-control\">\n" +
     "								</div>\n" +
     "							</div>\n" +
     "						</div>\n" +
@@ -8002,7 +8106,7 @@ angular.module("account/checkout/checkout.tpl.html", []).run(["$templateCache", 
     "							<div class=\"form-group\">\n" +
     "								<div class=\"col-md-12\">\n" +
     "									<label>Company Name</label>\n" +
-    "									<input type=\"text\" name=\"companybilling\" ng-model=\"companyBilling\" class=\"form-control\">\n" +
+    "									<input type=\"text\" name=\"companybilling\" ng-model=\"billingAddress.company\" class=\"form-control\">\n" +
     "								</div>\n" +
     "							</div>\n" +
     "						</div>\n" +
@@ -8010,7 +8114,7 @@ angular.module("account/checkout/checkout.tpl.html", []).run(["$templateCache", 
     "							<div class=\"form-group\">\n" +
     "								<div class=\"col-md-12\">\n" +
     "									<label class=\"control-label\">Address Line 1</label>\n" +
-    "									<input type=\"text\" class=\"form-control\" name=\"addressLine1billing\" id=\"addressLine1\" ng-model=\"addressLine1Billing\">\n" +
+    "									<input type=\"text\" class=\"form-control\" name=\"addressLine1billing\" ng-model=\"billingAddress.addressLine1\">\n" +
     "								</div>\n" +
     "							</div>\n" +
     "						</div>\n" +
@@ -8018,7 +8122,7 @@ angular.module("account/checkout/checkout.tpl.html", []).run(["$templateCache", 
     "							<div class=\"form-group\">\n" +
     "								<div class=\"col-md-12\">\n" +
     "									<label class=\"control-label\">Address Line 2</label>\n" +
-    "									<input type=\"text\" class=\"form-control\" name=\"addressLine2billing\" ng-model=\"addressLine2Billing\">\n" +
+    "									<input type=\"text\" class=\"form-control\" name=\"addressLine2billing\" ng-model=\"billingAddress.addressLine2\">\n" +
     "								</div>\n" +
     "							</div>\n" +
     "						</div>\n" +
@@ -8026,11 +8130,11 @@ angular.module("account/checkout/checkout.tpl.html", []).run(["$templateCache", 
     "							<div class=\"form-group\">\n" +
     "								<div class=\"col-md-12\">\n" +
     "									<label>City </label>\n" +
-    "									<input type=\"text\" name=\"citybilling\" ng-model=\"cityBilling\" class=\"form-control\">\n" +
+    "									<input type=\"text\" name=\"citybilling\" ng-model=\"billingAddress.city\" class=\"form-control\">\n" +
     "								</div>\n" +
     "								<div class=\"col-md-12\">\n" +
     "									<label>State </label>\n" +
-    "									<input type=\"text\" name=\"statebilling\" ng-model=\"stateBilling\" class=\"form-control\">\n" +
+    "									<input type=\"text\" name=\"statebilling\" ng-model=\"billingAddress.state\" class=\"form-control\">\n" +
     "								</div>\n" +
     "							</div>\n" +
     "						</div>\n" +
@@ -8038,11 +8142,11 @@ angular.module("account/checkout/checkout.tpl.html", []).run(["$templateCache", 
     "							<div class=\"form-group\">\n" +
     "								<div class=\"col-md-12\">\n" +
     "									<label>Zip Code</label>\n" +
-    "									<input type=\"text\" name=\"zipbilling\" ng-model=\"zipBilling\" class=\"form-control\">\n" +
+    "									<input type=\"text\" name=\"zipbilling\" ng-model=\"billingAddress.zip\" class=\"form-control\">\n" +
     "								</div>\n" +
     "								<div class=\"col-md-12\">\n" +
     "									<label>Country</label>\n" +
-    "									<input type=\"text\" name=\"countrybilling\" ng-model=\"countryBilling\" class=\"form-control\">\n" +
+    "									<input type=\"text\" name=\"countrybilling\" ng-model=\"billingAddress.country\" class=\"form-control\">\n" +
     "								</div>\n" +
     "							</div>\n" +
     "						</div>\n" +
@@ -8053,32 +8157,39 @@ angular.module("account/checkout/checkout.tpl.html", []).run(["$templateCache", 
     "				<button class=\"accordion\">Payment Method</button>\n" +
     "				<div class=\"paneling\">\n" +
     "					<br>\n" +
-    "					<form id=\"frmCreditCardInformation\">\n" +
+    "					<form stripe-form=\"stripeSubmit\" name=\"paymentinfo\">\n" +
     "						<div class=\"row\">\n" +
     "							<div class=\"form-group\">\n" +
     "								<div class=\"col-md-6\">\n" +
-    "									<label>Card Number</label>\n" +
-    "									<input type=\"password\" name=\"cardnumber\" ng-model=\"cardNumber\" class=\"form-control\">\n" +
+    "									<label for=\"\">Card number</label>\n" +
+    "									<input type=\"text\" class=\"form-control\" ng-model=\"number\" payments-validate=\"card\" payments-format=\"card\" payments-type-model=\"type\" ng-class=\"myForm.number.$card.type\"/>\n" +
     "								</div>\n" +
     "								<div class=\"col-md-6\">\n" +
-    "									<label>Expiration Date</label>\n" +
-    "									<input type=\"text\" name=\"expirationdate\" ng-model=\"expirationDate\"  class=\"form-control\">\n" +
+    "									<label for=\"\">Name on card </label>\n" +
+    "									<input type=\"text\" ng-model=\"name\" class=\"form-control\">\n" +
     "								</div>\n" +
     "							</div>\n" +
-    "						</div>\n" +
-    "						<div class=\"row\">\n" +
     "							<div class=\"form-group\">\n" +
-    "								<div class=\"col-md-12\">\n" +
-    "									<label>CVV</label>\n" +
-    "									<input type=\"text\" name=\"cvv\" ng-model=\"cvv\" class=\"form-control\">\n" +
+    "								<div class=\"col-md-6\">\n" +
+    "								<label for=\"\">Expiration Date</label>\n" +
+    "									<input type=\"text\" class=\"form-control\" ng-model=\"expiry\" payments-validate=\"expiry\" payments-format=\"expiry\" />\n" +
+    "								</div>\n" +
+    "								<div class=\"col-md-6\">\n" +
+    "									<label for=\"\">CVC</label>\n" +
+    "									<input type=\"text\" class=\"form-control\" ng-model=\"cvc\" payments-validate=\"cvc\" payments-format=\"cvc\" payments-type-model=\"type\"/>\n" +
+    "								</div>\n" +
+    "							</div>\n" +
+    "\n" +
+    "							<div class=\"form-group\">\n" +
+    "								<div class=\"col-md-6\">\n" +
+    "									<button type=\"submit\" class=\"btn btn-primary btn-large\">Submit</button>\n" +
     "								</div>\n" +
     "							</div>\n" +
     "						</div>\n" +
-    "\n" +
-    "\n" +
+    "					</form>\n" +
     "				</div>\n" +
     "				<br>\n" +
-    "				\n" +
+    "\n" +
     "\n" +
     "				<button class=\"accordion\">Order Review</button>\n" +
     "				<div class=\"paneling\">\n" +

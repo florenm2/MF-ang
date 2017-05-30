@@ -29,10 +29,19 @@ var purchaseHistory = {
 
     workflow.on('createPH', function() {
         var fieldsToSet = {
-          account: {
-            id: req.body.accountid
-          },
-          orderNumber: req.body.orderNumber 
+          orderNumber: req.body.orderNumber,
+          product: req.body.product,
+          billingAddress: req.body.billingAddress,
+          mailingAddress: req.body.mailingAddress,
+          orderDate: req.body.orderDate,
+          company: req.body.company,
+          paymentMethod: req.body.paymentMethod,
+          cost: {
+            raw: req.body.cost.raw,
+            shipping: req.body.cost.shipping,
+            tax: req.body.cost.tax,
+            total: req.body.cost.total
+          }
         };
         req.app.db.models.PurchaseHistory.create(fieldsToSet, function(err, ph) {
           if (err) {
@@ -61,7 +70,48 @@ var purchaseHistory = {
     });    
 
     workflow.emit('validate');
-  }
+  },
+  update: function(req, res, next){
+      var workflow = req.app.utility.workflow(req, res);
+
+      workflow.on('validate', function() {
+        if (workflow.hasErrors()) {
+          return workflow.emit('response');
+        }
+
+        workflow.emit('patchPH');
+      });
+
+      workflow.on('patchPH', function() {
+        var fieldsToSet = {
+          orderNumber: req.body.orderNumber,
+          product: req.body.product,
+          billingAddress: req.body.billingAddress,
+          mailingAddress: req.body.mailingAddress,
+          orderDate: req.body.orderDate,
+          company: req.body.company,
+          paymentMethod: req.body.paymentMethod,
+          cost: {
+            raw: req.body.cost.raw,
+            shipping: req.body.cost.shipping,
+            tax: req.body.cost.tax,
+            total: req.body.cost.total
+          }
+        };
+        var options = { select: 'company' , upsert: true };
+
+        req.app.db.models.Address.update({"account.id" : req.user.roles.account.id}, fieldsToSet, options, function(err, address) {
+          if (err) {
+            return workflow.emit('exception', err);
+          }
+
+          workflow.outcome.address = address;
+          return workflow.emit('response');
+        });
+      });
+
+      workflow.emit('validate');
+    }
 };
 
 module.exports = purchaseHistory;

@@ -190,11 +190,11 @@ angular.module("account/checkout/checkout.tpl.html", []).run(["$templateCache", 
     "							<div class=\"form-group\">\n" +
     "								<div class=\"col-md-6\">\n" +
     "									<label>First Name</label>\n" +
-    "									<input type=\"text\" name=\"firstname\" ng-model=\"name.first\" class=\"form-control\">\n" +
+    "									<input type=\"text\" name=\"firstnameMailing\" ng-model=\"mailingAddress.name.first\" class=\"form-control\">\n" +
     "								</div>\n" +
     "								<div class=\"col-md-6\">\n" +
     "									<label>Last Name</label>\n" +
-    "									<input type=\"text\" name=\"lastname\" ng-model=\"name.last\"  class=\"form-control\">\n" +
+    "									<input type=\"text\" name=\"lastnameMailing\" ng-model=\"mailingAddress.name.last\"  class=\"form-control\">\n" +
     "								</div>\n" +
     "							</div>\n" +
     "						</div>\n" +
@@ -202,7 +202,7 @@ angular.module("account/checkout/checkout.tpl.html", []).run(["$templateCache", 
     "							<div class=\"form-group\">\n" +
     "								<div class=\"col-md-12\">\n" +
     "									<label>Company Name</label>\n" +
-    "									<input type=\"text\" name=\"company\" ng-model=\"company\" class=\"form-control\">\n" +
+    "									<input type=\"text\" name=\"companyMailing\" ng-model=\"mailingAddress.company\" class=\"form-control\">\n" +
     "								</div>\n" +
     "							</div>\n" +
     "						</div>\n" +
@@ -210,7 +210,7 @@ angular.module("account/checkout/checkout.tpl.html", []).run(["$templateCache", 
     "							<div class=\"form-group\">\n" +
     "								<div class=\"col-md-12\">\n" +
     "									<label class=\"control-label\">Address Line 1</label>\n" +
-    "									<input type=\"text\" class=\"form-control\" name=\"addressLine1\" id=\"addressLine1\" ng-model=\"addressLine1\">\n" +
+    "									<input type=\"text\" class=\"form-control\" name=\"addressLine1Mailing\" ng-model=\"mailingAddress.addressLine1\">\n" +
     "								</div>\n" +
     "							</div>\n" +
     "						</div>\n" +
@@ -218,31 +218,31 @@ angular.module("account/checkout/checkout.tpl.html", []).run(["$templateCache", 
     "							<div class=\"form-group\">\n" +
     "								<div class=\"col-md-12\">\n" +
     "									<label class=\"control-label\">Address Line 2</label>\n" +
-    "									<input type=\"text\" class=\"form-control\" name=\"addressLine2\" ng-model=\"addressLine2\">\n" +
+    "									<input type=\"text\" class=\"form-control\" name=\"addressLine2Mailing\" ng-model=\"mailingAddress.addressLine2\">\n" +
     "								</div>\n" +
     "							</div>\n" +
     "						</div>\n" +
     "						<div class=\"row\">\n" +
     "							<div class=\"form-group\">\n" +
-    "								<div class=\"col-md-12\">\n" +
+    "								<div class=\"col-md-6\">\n" +
     "									<label>City </label>\n" +
-    "									<input type=\"text\" name=\"city\" ng-model=\"city\" class=\"form-control\">\n" +
+    "									<input type=\"text\" name=\"cityMailing\" ng-model=\"mailingAddress.city\" class=\"form-control\">\n" +
     "								</div>\n" +
-    "								<div class=\"col-md-12\">\n" +
+    "								<div class=\"col-md-6\">\n" +
     "									<label>State </label>\n" +
-    "									<input type=\"text\" name=\"state\" ng-model=\"state\" class=\"form-control\">\n" +
+    "									<input type=\"text\" name=\"stateMailing\" ng-model=\"mailingAddress.state\" class=\"form-control\">\n" +
     "								</div>\n" +
     "							</div>\n" +
     "						</div>\n" +
     "						<div class=\"row\">\n" +
     "							<div class=\"form-group\">\n" +
-    "								<div class=\"col-md-12\">\n" +
+    "								<div class=\"col-md-6\">\n" +
     "									<label>Zip Code</label>\n" +
-    "									<input type=\"text\" name=\"zip\" ng-model=\"zip\" class=\"form-control\">\n" +
+    "									<input type=\"text\" name=\"zipMailing\" ng-model=\"mailingAddress.zip\" class=\"form-control\">\n" +
     "								</div>\n" +
-    "								<div class=\"col-md-12\">\n" +
+    "								<div class=\"col-md-6\">\n" +
     "									<label>Country</label>\n" +
-    "									<input type=\"text\" name=\"country\" ng-model=\"country\" class=\"form-control\">\n" +
+    "									<input type=\"text\" name=\"countryMailing\" ng-model=\"mailingAddress.country\" class=\"form-control\">\n" +
     "								</div>\n" +
     "							</div>\n" +
     "						</div>\n" +
@@ -252,7 +252,7 @@ angular.module("account/checkout/checkout.tpl.html", []).run(["$templateCache", 
     "\n" +
     "				<button class=\"accordion\">Billing Address</button>\n" +
     "				<div class=\"paneling\">\n" +
-    "				<br>\n" +
+    "					<br>\n" +
     "					<form id=\"frmBillingAddress\">\n" +
     "						<div class=\"row\">\n" +
     "							<div class=\"col-md-12\">\n" +
@@ -267,11 +267,11 @@ angular.module("account/checkout/checkout.tpl.html", []).run(["$templateCache", 
     "							<div class=\"form-group\">\n" +
     "								<div class=\"col-md-6\">\n" +
     "									<label>First Name</label>\n" +
-    "									<input type=\"text\" name=\"firstnamebilling\" ng-model=\"nameBilling.first\" class=\"form-control\">\n" +
+    "									<input type=\"text\" name=\"firstnamebilling\" ng-model=\"billingAddress.name.first\" class=\"form-control\">\n" +
     "								</div>\n" +
     "								<div class=\"col-md-6\">\n" +
     "									<label>Last Name</label>\n" +
-    "									<input type=\"text\" name=\"lastnamebilling\" ng-model=\"nameBilling.last\"  class=\"form-control\">\n" +
+    "									<input type=\"text\" name=\"lastnamebilling\" ng-model=\"billingAddress.name.last\"  class=\"form-control\">\n" +
     "								</div>\n" +
     "							</div>\n" +
     "						</div>\n" +
@@ -279,7 +279,7 @@ angular.module("account/checkout/checkout.tpl.html", []).run(["$templateCache", 
     "							<div class=\"form-group\">\n" +
     "								<div class=\"col-md-12\">\n" +
     "									<label>Company Name</label>\n" +
-    "									<input type=\"text\" name=\"companybilling\" ng-model=\"companyBilling\" class=\"form-control\">\n" +
+    "									<input type=\"text\" name=\"companybilling\" ng-model=\"billingAddress.company\" class=\"form-control\">\n" +
     "								</div>\n" +
     "							</div>\n" +
     "						</div>\n" +
@@ -287,7 +287,7 @@ angular.module("account/checkout/checkout.tpl.html", []).run(["$templateCache", 
     "							<div class=\"form-group\">\n" +
     "								<div class=\"col-md-12\">\n" +
     "									<label class=\"control-label\">Address Line 1</label>\n" +
-    "									<input type=\"text\" class=\"form-control\" name=\"addressLine1billing\" id=\"addressLine1\" ng-model=\"addressLine1Billing\">\n" +
+    "									<input type=\"text\" class=\"form-control\" name=\"addressLine1billing\" ng-model=\"billingAddress.addressLine1\">\n" +
     "								</div>\n" +
     "							</div>\n" +
     "						</div>\n" +
@@ -295,7 +295,7 @@ angular.module("account/checkout/checkout.tpl.html", []).run(["$templateCache", 
     "							<div class=\"form-group\">\n" +
     "								<div class=\"col-md-12\">\n" +
     "									<label class=\"control-label\">Address Line 2</label>\n" +
-    "									<input type=\"text\" class=\"form-control\" name=\"addressLine2billing\" ng-model=\"addressLine2Billing\">\n" +
+    "									<input type=\"text\" class=\"form-control\" name=\"addressLine2billing\" ng-model=\"billingAddress.addressLine2\">\n" +
     "								</div>\n" +
     "							</div>\n" +
     "						</div>\n" +
@@ -303,11 +303,11 @@ angular.module("account/checkout/checkout.tpl.html", []).run(["$templateCache", 
     "							<div class=\"form-group\">\n" +
     "								<div class=\"col-md-12\">\n" +
     "									<label>City </label>\n" +
-    "									<input type=\"text\" name=\"citybilling\" ng-model=\"cityBilling\" class=\"form-control\">\n" +
+    "									<input type=\"text\" name=\"citybilling\" ng-model=\"billingAddress.city\" class=\"form-control\">\n" +
     "								</div>\n" +
     "								<div class=\"col-md-12\">\n" +
     "									<label>State </label>\n" +
-    "									<input type=\"text\" name=\"statebilling\" ng-model=\"stateBilling\" class=\"form-control\">\n" +
+    "									<input type=\"text\" name=\"statebilling\" ng-model=\"billingAddress.state\" class=\"form-control\">\n" +
     "								</div>\n" +
     "							</div>\n" +
     "						</div>\n" +
@@ -315,11 +315,11 @@ angular.module("account/checkout/checkout.tpl.html", []).run(["$templateCache", 
     "							<div class=\"form-group\">\n" +
     "								<div class=\"col-md-12\">\n" +
     "									<label>Zip Code</label>\n" +
-    "									<input type=\"text\" name=\"zipbilling\" ng-model=\"zipBilling\" class=\"form-control\">\n" +
+    "									<input type=\"text\" name=\"zipbilling\" ng-model=\"billingAddress.zip\" class=\"form-control\">\n" +
     "								</div>\n" +
     "								<div class=\"col-md-12\">\n" +
     "									<label>Country</label>\n" +
-    "									<input type=\"text\" name=\"countrybilling\" ng-model=\"countryBilling\" class=\"form-control\">\n" +
+    "									<input type=\"text\" name=\"countrybilling\" ng-model=\"billingAddress.country\" class=\"form-control\">\n" +
     "								</div>\n" +
     "							</div>\n" +
     "						</div>\n" +
@@ -330,32 +330,39 @@ angular.module("account/checkout/checkout.tpl.html", []).run(["$templateCache", 
     "				<button class=\"accordion\">Payment Method</button>\n" +
     "				<div class=\"paneling\">\n" +
     "					<br>\n" +
-    "					<form id=\"frmCreditCardInformation\">\n" +
+    "					<form stripe-form=\"stripeSubmit\" name=\"paymentinfo\">\n" +
     "						<div class=\"row\">\n" +
     "							<div class=\"form-group\">\n" +
     "								<div class=\"col-md-6\">\n" +
-    "									<label>Card Number</label>\n" +
-    "									<input type=\"password\" name=\"cardnumber\" ng-model=\"cardNumber\" class=\"form-control\">\n" +
+    "									<label for=\"\">Card number</label>\n" +
+    "									<input type=\"text\" class=\"form-control\" ng-model=\"number\" payments-validate=\"card\" payments-format=\"card\" payments-type-model=\"type\" ng-class=\"myForm.number.$card.type\"/>\n" +
     "								</div>\n" +
     "								<div class=\"col-md-6\">\n" +
-    "									<label>Expiration Date</label>\n" +
-    "									<input type=\"text\" name=\"expirationdate\" ng-model=\"expirationDate\"  class=\"form-control\">\n" +
+    "									<label for=\"\">Name on card </label>\n" +
+    "									<input type=\"text\" ng-model=\"name\" class=\"form-control\">\n" +
     "								</div>\n" +
     "							</div>\n" +
-    "						</div>\n" +
-    "						<div class=\"row\">\n" +
     "							<div class=\"form-group\">\n" +
-    "								<div class=\"col-md-12\">\n" +
-    "									<label>CVV</label>\n" +
-    "									<input type=\"text\" name=\"cvv\" ng-model=\"cvv\" class=\"form-control\">\n" +
+    "								<div class=\"col-md-6\">\n" +
+    "								<label for=\"\">Expiration Date</label>\n" +
+    "									<input type=\"text\" class=\"form-control\" ng-model=\"expiry\" payments-validate=\"expiry\" payments-format=\"expiry\" />\n" +
+    "								</div>\n" +
+    "								<div class=\"col-md-6\">\n" +
+    "									<label for=\"\">CVC</label>\n" +
+    "									<input type=\"text\" class=\"form-control\" ng-model=\"cvc\" payments-validate=\"cvc\" payments-format=\"cvc\" payments-type-model=\"type\"/>\n" +
+    "								</div>\n" +
+    "							</div>\n" +
+    "\n" +
+    "							<div class=\"form-group\">\n" +
+    "								<div class=\"col-md-6\">\n" +
+    "									<button type=\"submit\" class=\"btn btn-primary btn-large\">Submit</button>\n" +
     "								</div>\n" +
     "							</div>\n" +
     "						</div>\n" +
-    "\n" +
-    "\n" +
+    "					</form>\n" +
     "				</div>\n" +
     "				<br>\n" +
-    "				\n" +
+    "\n" +
     "\n" +
     "				<button class=\"accordion\">Order Review</button>\n" +
     "				<div class=\"paneling\">\n" +
