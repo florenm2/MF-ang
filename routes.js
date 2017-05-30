@@ -103,6 +103,7 @@ exports = module.exports = function(app, passport) {
 
   app.post('/api/account/purchaseHistory/', purchaseHistory.add);
   app.post('/api/account/address/', address.add);
+  app.get('/api/account/address/', address.get);
   
 
   //-----athorization required api-----

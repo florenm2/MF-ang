@@ -1,9 +1,9 @@
 /*
- * metismenu - v2.7.0
+ * metismenu - v2.6.1
  * A jQuery menu plugin
- * https://github.com/onokumus/metismenu#readme
+ * https://github.com/onokumus/metisMenu#readme
  *
- * Made by Osman Nuri Okumus <onokumus@gmail.com> (https://github.com/onokumus)
+ * Made by Osman Nuri Okumuş <onokumus@gmail.com> (https://github.com/onokumus)
  * Under MIT License
  */
 
@@ -16,7 +16,7 @@
 }
 
 /*
- * Require Bootstrap 3.x
+ * Require Bootstrap
  * https://github.com/twbs/bootstrap
 */
 
@@ -109,7 +109,7 @@
   height: .5em;
   border-width: 1px 0 0 1px;
   border-style: solid;
-  border-color: initial;
+  border-color: #fff;
   right: 1em;
   -webkit-transform: rotate(-45deg) translate(0, -50%);
       -ms-transform: rotate(-45deg) translate(0, -50%);

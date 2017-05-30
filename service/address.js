@@ -93,6 +93,14 @@ var address = {
       });
 
       workflow.emit('validate');
+    },
+    get: function(req, res, next){
+      req.app.db.models.Address.find({user:req}).exec(function(err, address) {
+        if (err) {
+          return next(err);
+        }
+        return res.status(200).json(address);
+      })
     }
   };
 

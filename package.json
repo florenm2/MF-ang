@@ -21,7 +21,7 @@
   "dependencies": {
     "angular-chart.js": "^1.1.1",
     "async": "^1.x.x",
-    "bcrypt": "^0.8.x",
+    "bcrypt": "^0.8.7",
     "body-parser": "^1.x.x",
     "bower": "latest",
     "compression": "^1.x.x",

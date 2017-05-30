@@ -134,7 +134,7 @@ var account = {
     };
 
     var getMailAddressData = function(callback) {
-      req.app.db.models.Address.find({ "account.id" : req.user.roles.account.id }, 'account.name type addressLine1 addressLine2 city state zip').exec(function(err, mailingAddress) {
+      req.app.db.models.Address.findOne({ "account.id" : req.user.roles.account.id, "type" : "mailing" }, 'account.name type addressLine1 addressLine2 city state zip country').exec(function(err, mailingAddress) {
         if (err) {
           callback(err, null);
         }
@@ -149,24 +149,6 @@ var account = {
         return next(err);
       }
       res.status(200).json(outcome);
-
-      //res.render('account/settings/index', {
-      //  data: {
-      //    account: escape(JSON.stringify(outcome.account)),
-      //    user: escape(JSON.stringify(outcome.user))
-      //  },
-      //  oauthMessage: oauthMessage,
-      //  oauthTwitter: !!req.app.config.oauth.twitter.key,
-      //  oauthTwitterActive: outcome.user.twitter ? !!outcome.user.twitter.id : false,
-      //  oauthGitHub: !!req.app.config.oauth.github.key,
-      //  oauthGitHubActive: outcome.user.github ? !!outcome.user.github.id : false,
-      //  oauthFacebook: !!req.app.config.oauth.facebook.key,
-      //  oauthFacebookActive: outcome.user.facebook ? !!outcome.user.facebook.id : false,
-      //  oauthGoogle: !!req.app.config.oauth.google.key,
-      //  oauthGoogleActive: outcome.user.google ? !!outcome.user.google.id : false,
-      //  oauthTumblr: !!req.app.config.oauth.tumblr.key,
-      //  oauthTumblrActive: outcome.user.tumblr ? !!outcome.user.tumblr.id : false
-      //});
     };
 
     require('async').parallel([getAccountData, getUserData, getPHData, getMailAddressData], asyncFinally);

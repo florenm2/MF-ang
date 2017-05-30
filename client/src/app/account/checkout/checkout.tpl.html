@@ -12,28 +12,19 @@
 
 		<div class="row">
 			<div class="col-md-9">
-				<button class="accordion active">Billing Address</button>
+				<button class="accordion active">Shipping Address</button>
 				<div class="paneling" style='max-height: 100%;'>
-					<form action="/" id="frmBillingAddress" method="post">
-						<div class="row">
-							<div class="form-group">
-								<div class="col-md-12">
-									<label>Country</label>
-									<select class="form-control">
-										<option value="">Select a country</option>
-									</select>
-								</div>
-							</div>
-						</div>
+					<br>
+					<form id="frmShippingAddress">
 						<div class="row">
 							<div class="form-group">
 								<div class="col-md-6">
 									<label>First Name</label>
-									<input type="text" value="" class="form-control">
+									<input type="text" name="firstname" ng-model="name.first" class="form-control">
 								</div>
 								<div class="col-md-6">
 									<label>Last Name</label>
-									<input type="text" value="" class="form-control">
+									<input type="text" name="lastname" ng-model="name.last"  class="form-control">
 								</div>
 							</div>
 						</div>
@@ -41,63 +32,76 @@
 							<div class="form-group">
 								<div class="col-md-12">
 									<label>Company Name</label>
-									<input type="text" value="" class="form-control">
+									<input type="text" name="company" ng-model="company" class="form-control">
 								</div>
 							</div>
 						</div>
 						<div class="row">
 							<div class="form-group">
 								<div class="col-md-12">
-									<label class="control-label" for="addressLine1">Address Line 1</label>
-									<input type="text" value="" class="form-control" name="addressLine1" id="addressLine1" ng-model="address.addressLine1">
+									<label class="control-label">Address Line 1</label>
+									<input type="text" class="form-control" name="addressLine1" id="addressLine1" ng-model="addressLine1">
 								</div>
 							</div>
 						</div>
-						<div class="form-group">
-							<button type="button" class="btn btn-primary btn-update" ng-click="submitADDRESS()">Update</button>
+						<div class="row">
+							<div class="form-group">
+								<div class="col-md-12">
+									<label class="control-label">Address Line 2</label>
+									<input type="text" class="form-control" name="addressLine2" ng-model="addressLine2">
+								</div>
+							</div>
 						</div>
 						<div class="row">
 							<div class="form-group">
 								<div class="col-md-12">
 									<label>City </label>
-									<input type="text" value="" class="form-control">
+									<input type="text" name="city" ng-model="city" class="form-control">
+								</div>
+								<div class="col-md-12">
+									<label>State </label>
+									<input type="text" name="state" ng-model="state" class="form-control">
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="form-group">
+								<div class="col-md-12">
+									<label>Zip Code</label>
+									<input type="text" name="zip" ng-model="zip" class="form-control">
+								</div>
+								<div class="col-md-12">
+									<label>Country</label>
+									<input type="text" name="country" ng-model="country" class="form-control">
 								</div>
 							</div>
 						</div>
 					</form>
 				</div>
+				<br>
 
-				<button class="accordion">Shipping Address</button>
+				<button class="accordion">Billing Address</button>
 				<div class="paneling">
-					<form action="/" id="frmShippingAddress" method="post">
+				<br>
+					<form id="frmBillingAddress">
 						<div class="row">
 							<div class="col-md-12">
 								<span class="remember-box checkbox">
 									<label>
-										<input type="checkbox" checked="checked">Ship to billing address?
+										<input type="checkbox" ng-click="checkBillAddress()" ng-Model="billingChecked">Use shipping address?
 									</label>
 								</span>
 							</div>
 						</div>
 						<div class="row">
 							<div class="form-group">
-								<div class="col-md-12">
-									<label>Country</label>
-									<select class="form-control">
-										<option value="">Select a country</option>
-									</select>
-								</div>
-							</div>
-						</div>
-						<div class="row">
-							<div class="form-group">
 								<div class="col-md-6">
 									<label>First Name</label>
-									<input type="text" value="" class="form-control">
+									<input type="text" name="firstnamebilling" ng-model="nameBilling.first" class="form-control">
 								</div>
 								<div class="col-md-6">
 									<label>Last Name</label>
-									<input type="text" value="" class="form-control">
+									<input type="text" name="lastnamebilling" ng-model="nameBilling.last"  class="form-control">
 								</div>
 							</div>
 						</div>
@@ -105,15 +109,23 @@
 							<div class="form-group">
 								<div class="col-md-12">
 									<label>Company Name</label>
-									<input type="text" value="" class="form-control">
+									<input type="text" name="companybilling" ng-model="companyBilling" class="form-control">
 								</div>
 							</div>
 						</div>
 						<div class="row">
 							<div class="form-group">
 								<div class="col-md-12">
-									<label>Address </label>
-									<input type="text" value="" class="form-control">
+									<label class="control-label">Address Line 1</label>
+									<input type="text" class="form-control" name="addressLine1billing" id="addressLine1" ng-model="addressLine1Billing">
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="form-group">
+								<div class="col-md-12">
+									<label class="control-label">Address Line 2</label>
+									<input type="text" class="form-control" name="addressLine2billing" ng-model="addressLine2Billing">
 								</div>
 							</div>
 						</div>
@@ -121,14 +133,61 @@
 							<div class="form-group">
 								<div class="col-md-12">
 									<label>City </label>
-									<input type="text" value="" class="form-control">
+									<input type="text" name="citybilling" ng-model="cityBilling" class="form-control">
+								</div>
+								<div class="col-md-12">
+									<label>State </label>
+									<input type="text" name="statebilling" ng-model="stateBilling" class="form-control">
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="form-group">
+								<div class="col-md-12">
+									<label>Zip Code</label>
+									<input type="text" name="zipbilling" ng-model="zipBilling" class="form-control">
+								</div>
+								<div class="col-md-12">
+									<label>Country</label>
+									<input type="text" name="countrybilling" ng-model="countryBilling" class="form-control">
 								</div>
 							</div>
 						</div>
 					</form>
 				</div>
+				<br>
 
-				<button class="accordion">Review & Payment</button>
+				<button class="accordion">Payment Method</button>
+				<div class="paneling">
+					<br>
+					<form id="frmCreditCardInformation">
+						<div class="row">
+							<div class="form-group">
+								<div class="col-md-6">
+									<label>Card Number</label>
+									<input type="password" name="cardnumber" ng-model="cardNumber" class="form-control">
+								</div>
+								<div class="col-md-6">
+									<label>Expiration Date</label>
+									<input type="text" name="expirationdate" ng-model="expirationDate"  class="form-control">
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="form-group">
+								<div class="col-md-12">
+									<label>CVV</label>
+									<input type="text" name="cvv" ng-model="cvv" class="form-control">
+								</div>
+							</div>
+						</div>
+
+
+				</div>
+				<br>
+				
+
+				<button class="accordion">Order Review</button>
 				<div class="paneling">
 					<table class="shop_table cart">
 						<thead>
