@@ -627,100 +627,249 @@ angular.module("account/settings/account-settings.tpl.html", []).run(["$template
     "        <form name=\"identityForm\">\n" +
     "            <legend>Identity</legend>\n" +
     "            <div class=\"row\">\n" +
-    "                <div class=\"col-md-6\">\n" +
-    "                    <alert ng-repeat=\"alert in alerts.identity\" type=\"{{alert.type}}\" close=\"closeAlert('identity', $index)\">{{alert.msg}}</alert>\n" +
-    "                    <div class=\"form-group\" ng-class=\"{'has-error': hasError(identityForm.username)}\">\n" +
-    "                        <label class=\"control-label\" for=\"username\">Username:</label>\n" +
-    "                        <input type=\"text\" name=\"username\" id=\"username\" class=\"form-control\" ng-model=\"user.username\" required server-error>\n" +
-    "                        <span class=\"help-block\" ng-show=\"showError(identityForm.username, 'required')\">This field is required</span>\n" +
-    "                        <span class=\"help-block\" ng-show=\"showError(identityForm.username, 'server')\">{{errfor.username}}</span>\n" +
-    "                    </div>\n" +
+    "                <div class=\"col-md-2\">\n" +
+    "                    <label class=\"control-label\" for=\"username\">Username:</label>\n" +
+    "                </div>\n" +
+    "                <alert ng-repeat=\"alert in alerts.identity\" type=\"{{alert.type}}\" close=\"closeAlert('identity', $index)\">{{alert.msg}}</alert>\n" +
+    "                <div class=\"col-md-6 form-group\" ng-class=\"{'has-error': hasError(identityForm.username)}\">\n" +
+    "                    <input type=\"text\" name=\"username\" id=\"username\" class=\"form-control\" ng-model=\"user.username\" required server-error>\n" +
+    "                    <span class=\"help-block\" ng-show=\"showError(identityForm.username, 'required')\">This field is required</span>\n" +
+    "                    <span class=\"help-block\" ng-show=\"showError(identityForm.username, 'server')\">{{errfor.username}}</span>\n" +
     "                </div>\n" +
     "            </div>\n" +
-    "            <div class=\"form-group\" ng-class=\"{'has-error': hasError(identityForm.email)}\">\n" +
-    "                <div class=\"row\">\n" +
-    "                    <div class=\"col-md-6\">\n" +
-    "                        <label class=\"control-label\" for=\"email\">Email:</label>\n" +
-    "                        <input type=\"email\" name=\"email\" id=\"email\" class=\"form-control\" ng-model=\"user.email\" required server-error>\n" +
-    "                        <span class=\"help-block\" ng-show=\"showError(identityForm.email, 'required')\">This field is required</span>\n" +
-    "                        <span class=\"help-block\" ng-show=\"showError(identityForm.email, 'email')\">Please enter a valid email</span>\n" +
-    "                        <span class=\"help-block\" ng-show=\"showError(identityForm.email, 'server')\">{{errfor.email}}</span>\n" +
-    "                    </div>\n" +
+    "            <div class=\"row\">\n" +
+    "                <div class=\"col-md-2\">\n" +
+    "                    <label class=\"control-label\" for=\"email\">Email:</label>\n" +
+    "                </div>\n" +
+    "                <div class=\"col-md-6 form-group\" ng-class=\"{'has-error': hasError(identityForm.email)}\">\n" +
+    "                    <input type=\"email\" name=\"email\" id=\"email\" class=\"form-control\" ng-model=\"user.email\" required server-error>\n" +
+    "                    <span class=\"help-block\" ng-show=\"showError(identityForm.email, 'required')\">This field is required</span>\n" +
+    "                    <span class=\"help-block\" ng-show=\"showError(identityForm.email, 'email')\">Please enter a valid email</span>\n" +
+    "                    <span class=\"help-block\" ng-show=\"showError(identityForm.email, 'server')\">{{errfor.email}}</span>\n" +
     "                </div>\n" +
     "            </div>\n" +
-    "            <div class=\"form-group\">\n" +
+    "            <div class=\"form-group col-md-6\" style=\"float: right; width: 45%;\">\n" +
     "                <button type=\"button\" class=\"btn btn-primary btn-update\" ng-disabled=\"!canSave(identityForm)\" ng-click=\"submit(identityForm)\">Update</button>\n" +
     "            </div>\n" +
     "        </form>\n" +
+    "\n" +
+    "\n" +
     "        <form name=\"passwordForm\">\n" +
     "            <legend>Change Password</legend>\n" +
     "            <div class=\"row\">\n" +
-    "                <div class=\"col-md-6\">\n" +
-    "                    <alert ng-repeat=\"alert in alerts.pass\" type=\"{{alert.type}}\" close=\"closeAlert('pass', $index)\">{{alert.msg}}</alert>\n" +
-    "                    <div class=\"form-group\" ng-class=\"{'has-error': hasError(passwordForm.password)}\">\n" +
-    "                        <label class=\"control-label\" for=\"password\">New Password:</label>\n" +
-    "                        <input type=\"password\" name=\"password\" id=\"password\" class=\"form-control\" ng-model=\"pass.newPassword\" required>\n" +
-    "                        <span class=\"help-block\" ng-show=\"showError(passwordForm.password, 'required')\">This field is required</span>\n" +
-    "                    </div>\n" +
-    "                    <div class=\"form-group\" ng-class=\"{'has-error': hasError(passwordForm.confirm)}\">\n" +
-    "                        <label class=\"control-label\" for=\"confirm\">Confirm Password:</label>\n" +
-    "                        <input type=\"password\" name=\"confirm\" id=\"confirm\" class=\"form-control\" ng-model=\"pass.confirm\" required>\n" +
-    "                        <span class=\"help-block\" ng-show=\"showError(passwordForm.confirm, 'required')\">This field is required</span>\n" +
-    "                    </div>\n" +
-    "                    <div class=\"form-group\">\n" +
-    "                        <button type=\"button\" class=\"btn btn-primary btn-password\" ng-disabled=\"!canSave(passwordForm)\" ng-click=\"submit(passwordForm)\">Change Password</button>\n" +
-    "                    </div>\n" +
+    "                <div class=\"col-md-2\">\n" +
+    "                    <label class=\"control-label\" for=\"password\">New Password:</label>\n" +
     "                </div>\n" +
+    "                <alert ng-repeat=\"alert in alerts.pass\" type=\"{{alert.type}}\" close=\"closeAlert('pass', $index)\">{{alert.msg}}</alert>\n" +
+    "                <div class=\"col-md-6 form-group\" ng-class=\"{'has-error': hasError(passwordForm.password)}\">\n" +
+    "                    <input type=\"password\" name=\"password\" id=\"password\" class=\"form-control\" ng-model=\"pass.newPassword\" required>\n" +
+    "                    <span class=\"help-block\" ng-show=\"showError(passwordForm.password, 'required')\">This field is required</span>\n" +
+    "                </div>\n" +
+    "            </div>\n" +
+    "            <div class=\"row\">\n" +
+    "                <div class=\"col-md-2\" style=\"padding-right: 0px;\">\n" +
+    "                    <label class=\"control-label\" for=\"confirm\">Confirm Password:</label>\n" +
+    "                </div>\n" +
+    "                <div class=\"col-md-6 form-group\" ng-class=\"{'has-error': hasError(passwordForm.confirm)}\">\n" +
+    "                    <input type=\"password\" name=\"confirm\" id=\"confirm\" class=\"form-control\" ng-model=\"pass.confirm\" required>\n" +
+    "                    <span class=\"help-block\" ng-show=\"showError(passwordForm.confirm, 'required')\">This field is required</span>\n" +
+    "                </div>\n" +
+    "            </div>\n" +
+    "            <div class=\"form-group col-md-2\" style=\"float: right; width: 45%;\">\n" +
+    "                <button type=\"button\" class=\"btn btn-primary btn-password\" ng-disabled=\"!canSave(passwordForm)\" ng-click=\"submit(passwordForm)\">Update</button>\n" +
     "            </div>\n" +
     "        </form>\n" +
+    "\n" +
+    "\n" +
     "        <form name=\"detailForm\">\n" +
     "            <legend>Contact Info</legend>\n" +
-    "            <alert ng-repeat=\"alert in alerts.detail\" type=\"{{alert.type}}\" close=\"closeAlert('detail', $index)\">{{alert.msg}}</alert>\n" +
-    "            \n" +
     "            <div class=\"row\">\n" +
-    "                <div class=\"col-md-4\">\n" +
-    "                    \n" +
-    "                    <div class=\"form-group\" ng-class=\"{'has-error': hasError(detailForm.first)}\">\n" +
-    "                        <label class=\"control-label\" for=\"first\">First Name:</label>\n" +
-    "                        <input type=\"text\" name=\"first\" id=\"first\" class=\"form-control\" ng-model=\"userDetail.first\" required>\n" +
-    "                        <span class=\"help-block\" ng-show=\"showError(detailForm.first, 'required')\">This field is required</span>\n" +
-    "                    </div>\n" +
-    "                    \n" +
-    "                    <div class=\"form-group\" ng-class=\"{'has-error': hasError(detailForm.last)}\">\n" +
-    "                        <label class=\"control-label\" for=\"last\">Last Name:</label>\n" +
-    "                        <input type=\"text\" name=\"last\" id=\"last\" class=\"form-control\" ng-model=\"userDetail.last\" required>\n" +
-    "                        <span class=\"help-block\" ng-show=\"showError(detailForm.last, 'required')\">This field is required</span>\n" +
-    "                    </div>\n" +
+    "                <div class=\"col-md-2\">\n" +
+    "                    <label class=\"control-label\" for=\"first\">First Name:</label>\n" +
+    "                </div>\n" +
+    "                <alert ng-repeat=\"alert in alerts.detail\" type=\"{{alert.type}}\" close=\"closeAlert('detail', $index)\">{{alert.msg}}</alert>\n" +
+    "                <div class=\"col-md-4 form-group\" ng-class=\"{'has-error': hasError(detailForm.first)}\">\n" +
+    "                    <input type=\"text\" name=\"first\" id=\"first\" class=\"form-control\" ng-model=\"userDetail.first\" required>\n" +
+    "                    <span class=\"help-block\" ng-show=\"showError(detailForm.first, 'required')\">This field is required</span>\n" +
+    "                </div>\n" +
+    "                <div class=\"col-md-2\">\n" +
+    "                    <label class=\"control-label\" for=\"last\">Last Name:</label>\n" +
+    "                </div>\n" +
+    "                <div class=\"col-md-4 form-group\" ng-class=\"{'has-error': hasError(detailForm.last)}\">\n" +
+    "                    <input type=\"text\" name=\"last\" id=\"last\" class=\"form-control\" ng-model=\"userDetail.last\" required>\n" +
+    "                    <span class=\"help-block\" ng-show=\"showError(detailForm.last, 'required')\">This field is required</span>\n" +
     "                </div>\n" +
     "            </div>\n" +
     "            <div class=\"row\">\n" +
-    "                <div class=\"col-md-8\">\n" +
-    "                    <div class=\"form-group\" ng-class=\"{'has-error': hasError(detailForm.company)}\">\n" +
-    "                        <label class=\"control-label\" for=\"company\">Company Name:</label>\n" +
-    "                        <input type=\"text\" name=\"company\" id=\"company\" class=\"form-control\" ng-model=\"userDetail.company\">\n" +
-    "                    </div>\n" +
+    "                <div class=\"col-md-2\">\n" +
+    "                    <label class=\"control-label\" for=\"company\">Company Name:</label>\n" +
+    "                </div>\n" +
+    "                <div class=\"col-md-6 form-group\" ng-class=\"{'has-error': hasError(detailForm.company)}\">\n" +
+    "                    <input type=\"text\" name=\"company\" id=\"company\" class=\"form-control\" ng-model=\"userDetail.company\">\n" +
     "                </div>\n" +
     "            </div>\n" +
-    "            <div class=\"form-group\" ng-class=\"{'has-error': hasError(detailForm.phone)}\">\n" +
-    "                <label class=\"control-label\" for=\"phone\">Phone:</label>\n" +
-    "                <input type=\"text\" name=\"phone\" id=\"phone\" class=\"form-control\" ng-model=\"userDetail.phone\">\n" +
+    "            <div class=\"row\">\n" +
+    "                <div class=\"col-md-2\">\n" +
+    "                    <label class=\"control-label\" for=\"phone\">Phone:</label>\n" +
+    "                </div>\n" +
+    "                <div class=\"col-md-6 form-group\" ng-class=\"{'has-error': hasError(detailForm.phone)}\">\n" +
+    "                    <input type=\"text\" name=\"phone\" id=\"phone\" class=\"form-control\" ng-model=\"userDetail.phone\">\n" +
+    "                </div>\n" +
     "            </div>\n" +
-    "            <div class=\"form-group\" ng-class=\"{'has-error': hasError(detailForm.zip)}\">\n" +
-    "                <label class=\"control-label\" for=\"zip\">Zip:</label>\n" +
-    "                <input type=\"text\" name=\"zip\" id=\"zip\" class=\"form-control\" ng-model=\"userDetail.zip\">\n" +
-    "            </div>\n" +
-    "            <div class=\"form-group\">\n" +
+    "            <div class=\"form-group col-md-6\" style=\"float: right; width: 45%;\">\n" +
     "                <button type=\"button\" class=\"btn btn-primary btn-update\" ng-disabled=\"!canSave(detailForm)\" ng-click=\"submit(detailForm)\">Update</button>\n" +
     "            </div>\n" +
     "        </form>\n" +
     "\n" +
-    "        \n" +
-    "    </div>\n" +
-    "    <div class=\"col-sm-3\" ng-if=\"social\">\n" +
-    "        <legend>Social Connections</legend>\n" +
-    "        <alert ng-repeat=\"alert in socialAlerts\" type=\"{{alert.type}}\" close=\"closeSocialAlert($index)\">{{alert.msg}}</alert>\n" +
-    "        <a ng-repeat-start=\"(provider, property) in social\" ng-if=\"property.connected\" ng-click=\"disconnect(provider)\" class=\"btn btn-block btn-danger\"><i ng-class=\"'fa ' + property.icon + ' fa-lg'\"></i> Disconnect {{property.text}}</a>\n" +
-    "        <a ng-repeat-end target=\"_self\" href=\"{{property.connect}}\" ng-if=\"!property.connected\" class=\"btn btn-block btn-default\"><i ng-class=\"'fa ' + property.icon + ' fa-lg'\"></i> Connect {{property.text}}</a>\n" +
+    "\n" +
+    "        <form name=\"shipinfoForm\">\n" +
+    "            <legend>Shipping Information</legend>\n" +
+    "            <div class=\"row\">\n" +
+    "                <div class=\"col-md-1\">\n" +
+    "                <!-- MAKE THIS NUMBER MOTHER FUCKING CHANGE WHEN THERE ARE MORE ADDRESSES -->\n" +
+    "                    <span>1)</span>\n" +
+    "                </div>\n" +
+    "            <div class=\"col-md-11\">\n" +
+    "                <div class=\"row\">\n" +
+    "                    <div class=\"col-md-2\">\n" +
+    "                        <label class=\"control-label\" for=\"full\">Full Name:</label>\n" +
+    "                    </div>\n" +
+    "\n" +
+    "                    <!--        PUT PROPER ALERT HERE\n" +
+    "                    <alert ng-repeat=\"alert in alerts.detail\" type=\"{{alert.type}}\" close=\"closeAlert('detail', $index)\">{{alert.msg}}</alert>\n" +
+    "                     -->\n" +
+    "\n" +
+    "                    <div class=\"col-md-6 form-group\" ng-class=\"{'has-error': hasError(shipinfoForm.full)}\" style=\"width: 47%;\">\n" +
+    "                        <input type=\"text\" name=\"full\" id=\"full\" class=\"form-control\" ng-model=\"userDetail.full\" required>\n" +
+    "                        <span class=\"help-block\" ng-show=\"showError(shipinfoForm.full, 'required')\">This field is required</span>\n" +
+    "                    </div>\n" +
+    "                </div>\n" +
+    "                <div class=\"row\">\n" +
+    "                    <div class=\"col-md-2\">\n" +
+    "                        <label class=\"control-label\" for=\"address\">Address Line 1: </label>\n" +
+    "                    </div>\n" +
+    "                    <div class=\"col-md-6 form-group\" ng-class=\"{'has-error': hasError(shipinfoForm.address)}\" style=\"width: 47%;\">\n" +
+    "                        <input type=\"text\" name=\"address\" id=\"address\" class=\"form-control\" ng-model=\"userDetail.address\">\n" +
+    "                    </div>\n" +
+    "                </div>\n" +
+    "                <div class=\"row\">\n" +
+    "                    <div class=\"col-md-2\">\n" +
+    "                        <label class=\"control-label\" for=\"address2\">Address Line 2: </label>\n" +
+    "                    </div>\n" +
+    "                    <div class=\"col-md-6 form-group\" ng-class=\"{'has-error': hasError(shipinfoForm.address)}\" style=\"width: 47%;\">\n" +
+    "                        <input type=\"text\" name=\"address2\" id=\"address2\" class=\"form-control\" ng-model=\"userDetail.address2\">\n" +
+    "                    </div>\n" +
+    "                </div>\n" +
+    "                <div class=\"row\">\n" +
+    "                    <div class=\"col-md-2\">\n" +
+    "                        <label class=\"control-label\" for=\"city\">City</label>\n" +
+    "                    </div>\n" +
+    "                    <div class=\"col-md-3 form-group\" ng-class=\"{'has-error': hasError(shipinfoForm.city)}\">\n" +
+    "                        <input type=\"text\" name=\"city\" id=\"city\" class=\"form-control\" ng-model=\"userDetail.city\">\n" +
+    "                    </div>\n" +
+    "                    <div class=\"col-md-1\">\n" +
+    "                        <label class=\"control-label\" for=\"usstate\">State</label>\n" +
+    "                    </div>\n" +
+    "                    <div class=\"col-md-2 form-group\" ng-class=\"{'has-error': hasError(shipinfoForm.usstate)}\" style=\"width: 13.5%;\">\n" +
+    "                        <select name=\"usstate\" class=\"form-control\" ng-model=\"filters.usstate\" ng-change=\"filtersUpdated()\">\n" +
+    "                            <option ng-repeat=\"x in usstates\">{{x}}</option>\n" +
+    "                        </select>\n" +
+    "                    </div>\n" +
+    "                    <div class=\"col-md-1\">\n" +
+    "                        <label class=\"control-label\" for=\"zip\">Zip</label>\n" +
+    "                    </div>\n" +
+    "                    <div class=\"col-md-2 form-group\" ng-class=\"{'has-error': hasError(shipinfoForm.zip)}\">\n" +
+    "                        <input type=\"text\" name=\"zip\" id=\"zip\" class=\"form-control\" ng-model=\"userDetail.zip\">\n" +
+    "                    </div>\n" +
+    "                </div>\n" +
+    "            </div>\n" +
+    "            <div class=\"row\">\n" +
+    "                <div class=\"form-group col-md-6\" style=\"float: right; width: 45%;\">\n" +
+    "                    <button type=\"button\" class=\"btn btn-primary btn-update\" ng-disabled=\"!canSave(shipinfoForm)\" ng-click=\"submit(shipinfoForm)\">Update</button>\n" +
+    "                </div>\n" +
+    "                <div class=\"col-md-3 form-group\" style=\"float: right;\">\n" +
+    "\n" +
+    "                <!-- MAKE CLICKING THIS TEXT CREATE ANOTHER MOTHER FUCKING ADDRESS -->\n" +
+    "\n" +
+    "                    <span><a id=\"panel_view\" href ng-click=\"panelModal()\">Add Another Address</a></span>\n" +
+    "                </div>\n" +
+    "            </div>\n" +
+    "        </form>\n" +
+    "\n" +
+    "\n" +
+    "        <form name=\"billinfoForm\">\n" +
+    "            <legend>Billing Information</legend>\n" +
+    "            <div class=\"row\">\n" +
+    "                <div class=\"col-md-1\">\n" +
+    "                <!-- MAKE THIS NUMBER MOTHER FUCKING CHANGE WHEN THERE ARE MORE ADDRESSES -->\n" +
+    "                    <span>1)</span>\n" +
+    "                </div>\n" +
+    "            <div class=\"col-md-11\">\n" +
+    "                <div class=\"row\">\n" +
+    "                    <div class=\"col-md-2\">\n" +
+    "                        <label class=\"control-label\" for=\"full\">Full Name:</label>\n" +
+    "                    </div>\n" +
+    "\n" +
+    "                    <!--        PUT PROPER ALERT HERE\n" +
+    "                    <alert ng-repeat=\"alert in alerts.detail\" type=\"{{alert.type}}\" close=\"closeAlert('detail', $index)\">{{alert.msg}}</alert>\n" +
+    "                     -->\n" +
+    "\n" +
+    "                    <div class=\"col-md-6 form-group\" ng-class=\"{'has-error': hasError(billinfoForm.full)}\" style=\"width: 47%;\">\n" +
+    "                        <input type=\"text\" name=\"full\" id=\"full\" class=\"form-control\" ng-model=\"userDetail.full\" required>\n" +
+    "                        <span class=\"help-block\" ng-show=\"showError(billinfoForm.full, 'required')\">This field is required</span>\n" +
+    "                    </div>\n" +
+    "                </div>\n" +
+    "                <div class=\"row\">\n" +
+    "                    <div class=\"col-md-2\">\n" +
+    "                        <label class=\"control-label\" for=\"address\">Address Line 1: </label>\n" +
+    "                    </div>\n" +
+    "                    <div class=\"col-md-6 form-group\" ng-class=\"{'has-error': hasError(billinfoForm.address)}\" style=\"width: 47%;\">\n" +
+    "                        <input type=\"text\" name=\"address\" id=\"address\" class=\"form-control\" ng-model=\"userDetail.address\">\n" +
+    "                    </div>\n" +
+    "                </div>\n" +
+    "                <div class=\"row\">\n" +
+    "                    <div class=\"col-md-2\">\n" +
+    "                        <label class=\"control-label\" for=\"address2\">Address Line 2: </label>\n" +
+    "                    </div>\n" +
+    "                    <div class=\"col-md-6 form-group\" ng-class=\"{'has-error': hasError(billinfoForm.address)}\" style=\"width: 47%;\">\n" +
+    "                        <input type=\"text\" name=\"address2\" id=\"address2\" class=\"form-control\" ng-model=\"userDetail.address2\">\n" +
+    "                    </div>\n" +
+    "                </div>\n" +
+    "                <div class=\"row\">\n" +
+    "                    <div class=\"col-md-2\">\n" +
+    "                        <label class=\"control-label\" for=\"city\">City</label>\n" +
+    "                    </div>\n" +
+    "                    <div class=\"col-md-3 form-group\" ng-class=\"{'has-error': hasError(billinfoForm.city)}\">\n" +
+    "                        <input type=\"text\" name=\"city\" id=\"city\" class=\"form-control\" ng-model=\"userDetail.city\">\n" +
+    "                    </div>\n" +
+    "                    <div class=\"col-md-1\">\n" +
+    "                        <label class=\"control-label\" for=\"usstate\">State</label>\n" +
+    "                    </div>\n" +
+    "                    <div class=\"col-md-2 form-group\" ng-class=\"{'has-error': hasError(billinfoForm.usstate)}\" style=\"width: 13.5%;\">\n" +
+    "                        <select name=\"usstate\" class=\"form-control\" ng-model=\"filters.usstate\" ng-change=\"filtersUpdated()\">\n" +
+    "                            <option ng-repeat=\"x in usstates\">{{x}}</option>\n" +
+    "                        </select>\n" +
+    "                    </div>\n" +
+    "                    <div class=\"col-md-1\">\n" +
+    "                        <label class=\"control-label\" for=\"zip\">Zip</label>\n" +
+    "                    </div>\n" +
+    "                    <div class=\"col-md-2 form-group\" ng-class=\"{'has-error': hasError(billinfoForm.zip)}\">\n" +
+    "                        <input type=\"text\" name=\"zip\" id=\"zip\" class=\"form-control\" ng-model=\"userDetail.zip\">\n" +
+    "                    </div>\n" +
+    "                </div>\n" +
+    "            </div>\n" +
+    "            <div class=\"row\">\n" +
+    "                <div class=\"form-group col-md-6\" style=\"float: right; width: 45%;\">\n" +
+    "                    <button type=\"button\" class=\"btn btn-primary btn-update\" ng-disabled=\"!canSave(billinfoForm)\" ng-click=\"submit(billinfoForm)\">Update</button>\n" +
+    "                </div>\n" +
+    "                <div class=\"col-md-3 form-group\" style=\"float: right;\">\n" +
+    "\n" +
+    "                <!-- MAKE CLICKING THIS TEXT CREATE ANOTHER MOTHER FUCKING ADDRESS -->\n" +
+    "\n" +
+    "                    <span><a id=\"panel_view\" href ng-click=\"panelModal()\">Add Another Address</a></span>\n" +
+    "                </div>\n" +
+    "            </div>\n" +
+    "        </form>\n" +
     "    </div>\n" +
     "</div>");
 }]);
