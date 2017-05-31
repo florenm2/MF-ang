@@ -1274,7 +1274,8 @@ angular.module('services.cart').factory('cartService', ['$http', '$q', function(
   cart.getCartProducts = function () {
       var total = [];
       this.forEach(function (product) {
-        total.push(angular.extend(product.title, product.quantity));
+        //console.log(product.title);
+        total.push((product.title, product.quantity));
       });
       return total;
     };
@@ -1519,8 +1520,9 @@ angular.module('account.checkout').controller('CheckoutLoggedInCtrl', [ '$scope'
     $scope.cart =  cartService;
     $scope.billingChecked = false;
 
-    //console.log($scope.cart.getCartProducts());
-    console.log($scope.cart.getCart());
+    $scope.productinfo = $scope.cart.getCartProducts();
+
+    console.log($scope.c);
 
     $scope.stripeSubmit = function(status, response){
       if(response.error) {
@@ -1532,20 +1534,6 @@ angular.module('account.checkout').controller('CheckoutLoggedInCtrl', [ '$scope'
         }
       }
 
-
-    // $scope.onSubmit = function () {
-    //   $scope.processing = true;
-    // };
-
-    // $scope.stripeCallback = function (code, result) {
-    //   //$scope.processing = false;
-    //   $scope.hideAlerts();
-    //   if (result.error) {
-    //     $scope.stripeError = result.error.message;
-    //   } else {
-    //     $scope.stripeToken = result.id;
-    //   }
-    // };
 
     //mailing address
     if(address==null){
@@ -1582,9 +1570,6 @@ angular.module('account.checkout').controller('CheckoutLoggedInCtrl', [ '$scope'
       };
     }
   
-
-
-  //console.log($scope.mailingAddress);
     //billing address
     $scope.checkBillAddress = function(){
       if($scope.billingChecked){
@@ -1612,21 +1597,21 @@ angular.module('account.checkout').controller('CheckoutLoggedInCtrl', [ '$scope'
       console.log("hello");
     }
 
-    // $scope.purchaseInformation = {
-    //   //orderNumber: ,
-    //   product: cart,
-    //   billingAddress: req.body.billingAddress,
-    //   mailingAddress: req.body.mailingAddress,
-    //   orderDate: req.body.orderDate,
-    //   company: req.body.company,
-    //   paymentMethod: req.body.paymentMethod,
-    //   cost: {
-    //     raw: req.body.cost.raw,
-    //     shipping: req.body.cost.shipping,
-    //     tax: req.body.cost.tax,
-    //     total: req.body.cost.total
-    //   }
-    // };
+    $scope.purchaseInformation = {
+      orderNumber: 22,
+      product: $scope.productinfo,
+      //billingAddress: $scope.billingAddress,
+      //mailingAddress: $scope.mailingAddress,
+      orderDate: new Date(),
+      company: $scope.mailingAddress.company,
+      //paymentMethod: req.body.paymentMethod,
+      cost: {
+        raw: $scope.cart.getCartPrice,
+        //shipping: req.body.cost.shipping,
+        //tax: req.body.cost.tax,
+        total: $scope.cart.getCartPrice
+      }
+    };
 
 
     $scope.submitAddress = function(){
@@ -1634,11 +1619,11 @@ angular.module('account.checkout').controller('CheckoutLoggedInCtrl', [ '$scope'
       $scope.alerts.address = [];
       restResource.setMailingAddress($scope.mailingAddress).then(function(data){
         if(data.success){
-          console.log("hi");
           $scope.alerts.address.push({
             type: 'success',
             msg: 'User identity is updated.'
           });
+          $scope.submitPurchaseHistory();
         }else{
           //error due to server side validation
           $scope.errfor = data.errfor;
@@ -1662,20 +1647,17 @@ angular.module('account.checkout').controller('CheckoutLoggedInCtrl', [ '$scope'
 
     $scope.submitPurchaseHistory = function(){
 
-      $scope.alerts.address = [];
+      $scope.alerts.purchasehistory = [];
       restResource.newPurchase($scope.purchaseInformation).then(function(data){
         if(data.success){
           console.log("hi");
-          $scope.alerts.address.push({
+          $scope.alerts.purchasehistory.push({
             type: 'success',
             msg: 'User identity is updated.'
           });
         }else{
           //error due to server side validation
           $scope.errfor = data.errfor;
-          angular.forEach(data.errfor, function(err, field){
-            $scope.addressForm[field].$setValidity('server', false);
-          });
           angular.forEach(data.errors, function(err, index){
             $scope.alerts.address.push({
               type: 'danger',
@@ -11101,18 +11083,20 @@ angular.module("login/login.tpl.html", []).run(["$templateCache", function($temp
     "            <alert ng-repeat=\"alert in alerts\" type=\"{{alert.type}}\" close=\"closeAlert($index)\">{{alert.msg}}</alert>\n" +
     "            <div class=\"form-group\" ng-class=\"{'has-error': hasError(loginForm.username)}\">\n" +
     "                <label class=\"control-label\" for=\"username\">Username or Email:</label>\n" +
-    "                <input type=\"text\" name=\"username\" id=\"username\" class=\"form-control\" ng-model=\"user.username\" required server-error>\n" +
+    "                <input type=\"text\" name=\"username\" id=\"username\" class=\"form-control\" ng-model=\"user.username\" required server-error onkeydown = \"if (event.keyCode == 13)\n" +
+    "                        document.getElementById('Submit').click()\">\n" +
     "                <span class=\"help-block\" ng-show=\"showError(loginForm.username, 'required')\">This field is required</span>\n" +
     "                <span class=\"help-block\" ng-show=\"showError(loginForm.username, 'server')\">{{errfor.username}}</span>\n" +
     "            </div>\n" +
     "            <div class=\"form-group\" ng-class=\"{'has-error': hasError(loginForm.password)}\">\n" +
     "                <label class=\"control-label\" for=\"password\">Password:</label>\n" +
-    "                <input type=\"password\" name=\"password\" id=\"password\" class=\"form-control\" ng-model=\"user.password\" required server-error>\n" +
+    "                <input type=\"password\" name=\"password\" id=\"password\" class=\"form-control\" ng-model=\"user.password\" required server-error onkeydown = \"if (event.keyCode == 13)\n" +
+    "                        document.getElementById('Submit').click()\">\n" +
     "                <span class=\"help-block\" ng-show=\"showError(loginForm.password, 'required')\">This field is required</span>\n" +
     "                <span class=\"help-block\" ng-show=\"showError(loginForm.password, 'server')\">{{errfor.password}}</span>\n" +
     "            </div>\n" +
     "            <div class=\"form-group\">\n" +
-    "                <button type=\"button\" class=\"btn btn-primary btn-login\" ng-disabled=\"!canSave(loginForm)\" ng-click=\"submit()\">Sign In</button>\n" +
+    "                <button type=\"button\" id=\"Submit\" class=\"btn btn-primary btn-login\" ng-disabled=\"!canSave(loginForm)\" ng-click=\"submit()\">Sign In</button>\n" +
     "                <!--<button type=\"button\" class=\"btn btn-primary btn-login\">Sign In</button>-->\n" +
     "                &nbsp;<a href=\"/login/forgot\" class=\"btn btn-link\">Forgot your password?</a>\n" +
     "            </div>\n" +

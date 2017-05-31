@@ -36,7 +36,8 @@ angular.module('services.cart').factory('cartService', ['$http', '$q', function(
   cart.getCartProducts = function () {
       var total = [];
       this.forEach(function (product) {
-        total.push(angular.extend(product.title, product.quantity));
+        //console.log(product.title);
+        total.push((product.title, product.quantity));
       });
       return total;
     };
