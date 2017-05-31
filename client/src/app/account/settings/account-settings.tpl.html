@@ -9,99 +9,248 @@
         <form name="identityForm">
             <legend>Identity</legend>
             <div class="row">
-                <div class="col-md-6">
-                    <alert ng-repeat="alert in alerts.identity" type="{{alert.type}}" close="closeAlert('identity', $index)">{{alert.msg}}</alert>
-                    <div class="form-group" ng-class="{'has-error': hasError(identityForm.username)}">
-                        <label class="control-label" for="username">Username:</label>
-                        <input type="text" name="username" id="username" class="form-control" ng-model="user.username" required server-error>
-                        <span class="help-block" ng-show="showError(identityForm.username, 'required')">This field is required</span>
-                        <span class="help-block" ng-show="showError(identityForm.username, 'server')">{{errfor.username}}</span>
-                    </div>
+                <div class="col-md-2">
+                    <label class="control-label" for="username">Username:</label>
+                </div>
+                <alert ng-repeat="alert in alerts.identity" type="{{alert.type}}" close="closeAlert('identity', $index)">{{alert.msg}}</alert>
+                <div class="col-md-6 form-group" ng-class="{'has-error': hasError(identityForm.username)}">
+                    <input type="text" name="username" id="username" class="form-control" ng-model="user.username" required server-error>
+                    <span class="help-block" ng-show="showError(identityForm.username, 'required')">This field is required</span>
+                    <span class="help-block" ng-show="showError(identityForm.username, 'server')">{{errfor.username}}</span>
                 </div>
             </div>
-            <div class="form-group" ng-class="{'has-error': hasError(identityForm.email)}">
-                <div class="row">
-                    <div class="col-md-6">
-                        <label class="control-label" for="email">Email:</label>
-                        <input type="email" name="email" id="email" class="form-control" ng-model="user.email" required server-error>
-                        <span class="help-block" ng-show="showError(identityForm.email, 'required')">This field is required</span>
-                        <span class="help-block" ng-show="showError(identityForm.email, 'email')">Please enter a valid email</span>
-                        <span class="help-block" ng-show="showError(identityForm.email, 'server')">{{errfor.email}}</span>
-                    </div>
+            <div class="row">
+                <div class="col-md-2">
+                    <label class="control-label" for="email">Email:</label>
+                </div>
+                <div class="col-md-6 form-group" ng-class="{'has-error': hasError(identityForm.email)}">
+                    <input type="email" name="email" id="email" class="form-control" ng-model="user.email" required server-error>
+                    <span class="help-block" ng-show="showError(identityForm.email, 'required')">This field is required</span>
+                    <span class="help-block" ng-show="showError(identityForm.email, 'email')">Please enter a valid email</span>
+                    <span class="help-block" ng-show="showError(identityForm.email, 'server')">{{errfor.email}}</span>
                 </div>
             </div>
-            <div class="form-group">
+            <div class="form-group col-md-6" style="float: right; width: 45%;">
                 <button type="button" class="btn btn-primary btn-update" ng-disabled="!canSave(identityForm)" ng-click="submit(identityForm)">Update</button>
             </div>
         </form>
+
+
         <form name="passwordForm">
             <legend>Change Password</legend>
             <div class="row">
-                <div class="col-md-6">
-                    <alert ng-repeat="alert in alerts.pass" type="{{alert.type}}" close="closeAlert('pass', $index)">{{alert.msg}}</alert>
-                    <div class="form-group" ng-class="{'has-error': hasError(passwordForm.password)}">
-                        <label class="control-label" for="password">New Password:</label>
-                        <input type="password" name="password" id="password" class="form-control" ng-model="pass.newPassword" required>
-                        <span class="help-block" ng-show="showError(passwordForm.password, 'required')">This field is required</span>
-                    </div>
-                    <div class="form-group" ng-class="{'has-error': hasError(passwordForm.confirm)}">
-                        <label class="control-label" for="confirm">Confirm Password:</label>
-                        <input type="password" name="confirm" id="confirm" class="form-control" ng-model="pass.confirm" required>
-                        <span class="help-block" ng-show="showError(passwordForm.confirm, 'required')">This field is required</span>
-                    </div>
-                    <div class="form-group">
-                        <button type="button" class="btn btn-primary btn-password" ng-disabled="!canSave(passwordForm)" ng-click="submit(passwordForm)">Change Password</button>
-                    </div>
+                <div class="col-md-2">
+                    <label class="control-label" for="password">New Password:</label>
                 </div>
+                <alert ng-repeat="alert in alerts.pass" type="{{alert.type}}" close="closeAlert('pass', $index)">{{alert.msg}}</alert>
+                <div class="col-md-6 form-group" ng-class="{'has-error': hasError(passwordForm.password)}">
+                    <input type="password" name="password" id="password" class="form-control" ng-model="pass.newPassword" required>
+                    <span class="help-block" ng-show="showError(passwordForm.password, 'required')">This field is required</span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-2" style="padding-right: 0px;">
+                    <label class="control-label" for="confirm">Confirm Password:</label>
+                </div>
+                <div class="col-md-6 form-group" ng-class="{'has-error': hasError(passwordForm.confirm)}">
+                    <input type="password" name="confirm" id="confirm" class="form-control" ng-model="pass.confirm" required>
+                    <span class="help-block" ng-show="showError(passwordForm.confirm, 'required')">This field is required</span>
+                </div>
+            </div>
+            <div class="form-group col-md-2" style="float: right; width: 45%;">
+                <button type="button" class="btn btn-primary btn-password" ng-disabled="!canSave(passwordForm)" ng-click="submit(passwordForm)">Update</button>
             </div>
         </form>
+
+
         <form name="detailForm">
             <legend>Contact Info</legend>
-            <alert ng-repeat="alert in alerts.detail" type="{{alert.type}}" close="closeAlert('detail', $index)">{{alert.msg}}</alert>
-            
             <div class="row">
-                <div class="col-md-4">
-                    
-                    <div class="form-group" ng-class="{'has-error': hasError(detailForm.first)}">
-                        <label class="control-label" for="first">First Name:</label>
-                        <input type="text" name="first" id="first" class="form-control" ng-model="userDetail.first" required>
-                        <span class="help-block" ng-show="showError(detailForm.first, 'required')">This field is required</span>
-                    </div>
-                    
-                    <div class="form-group" ng-class="{'has-error': hasError(detailForm.last)}">
-                        <label class="control-label" for="last">Last Name:</label>
-                        <input type="text" name="last" id="last" class="form-control" ng-model="userDetail.last" required>
-                        <span class="help-block" ng-show="showError(detailForm.last, 'required')">This field is required</span>
-                    </div>
+                <div class="col-md-2">
+                    <label class="control-label" for="first">First Name:</label>
+                </div>
+                <alert ng-repeat="alert in alerts.detail" type="{{alert.type}}" close="closeAlert('detail', $index)">{{alert.msg}}</alert>
+                <div class="col-md-4 form-group" ng-class="{'has-error': hasError(detailForm.first)}">
+                    <input type="text" name="first" id="first" class="form-control" ng-model="userDetail.first" required>
+                    <span class="help-block" ng-show="showError(detailForm.first, 'required')">This field is required</span>
+                </div>
+                <div class="col-md-2">
+                    <label class="control-label" for="last">Last Name:</label>
+                </div>
+                <div class="col-md-4 form-group" ng-class="{'has-error': hasError(detailForm.last)}">
+                    <input type="text" name="last" id="last" class="form-control" ng-model="userDetail.last" required>
+                    <span class="help-block" ng-show="showError(detailForm.last, 'required')">This field is required</span>
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-8">
-                    <div class="form-group" ng-class="{'has-error': hasError(detailForm.company)}">
-                        <label class="control-label" for="company">Company Name:</label>
-                        <input type="text" name="company" id="company" class="form-control" ng-model="userDetail.company">
-                    </div>
+                <div class="col-md-2">
+                    <label class="control-label" for="company">Company Name:</label>
+                </div>
+                <div class="col-md-6 form-group" ng-class="{'has-error': hasError(detailForm.company)}">
+                    <input type="text" name="company" id="company" class="form-control" ng-model="userDetail.company">
                 </div>
             </div>
-            <div class="form-group" ng-class="{'has-error': hasError(detailForm.phone)}">
-                <label class="control-label" for="phone">Phone:</label>
-                <input type="text" name="phone" id="phone" class="form-control" ng-model="userDetail.phone">
+            <div class="row">
+                <div class="col-md-2">
+                    <label class="control-label" for="phone">Phone:</label>
+                </div>
+                <div class="col-md-6 form-group" ng-class="{'has-error': hasError(detailForm.phone)}">
+                    <input type="text" name="phone" id="phone" class="form-control" ng-model="userDetail.phone">
+                </div>
             </div>
-            <div class="form-group" ng-class="{'has-error': hasError(detailForm.zip)}">
-                <label class="control-label" for="zip">Zip:</label>
-                <input type="text" name="zip" id="zip" class="form-control" ng-model="userDetail.zip">
-            </div>
-            <div class="form-group">
+            <div class="form-group col-md-6" style="float: right; width: 45%;">
                 <button type="button" class="btn btn-primary btn-update" ng-disabled="!canSave(detailForm)" ng-click="submit(detailForm)">Update</button>
             </div>
         </form>
 
-        
-    </div>
-    <div class="col-sm-3" ng-if="social">
-        <legend>Social Connections</legend>
-        <alert ng-repeat="alert in socialAlerts" type="{{alert.type}}" close="closeSocialAlert($index)">{{alert.msg}}</alert>
-        <a ng-repeat-start="(provider, property) in social" ng-if="property.connected" ng-click="disconnect(provider)" class="btn btn-block btn-danger"><i ng-class="'fa ' + property.icon + ' fa-lg'"></i> Disconnect {{property.text}}</a>
-        <a ng-repeat-end target="_self" href="{{property.connect}}" ng-if="!property.connected" class="btn btn-block btn-default"><i ng-class="'fa ' + property.icon + ' fa-lg'"></i> Connect {{property.text}}</a>
+
+        <form name="shipinfoForm">
+            <legend>Shipping Information</legend>
+            <div class="row">
+                <div class="col-md-1">
+                <!-- MAKE THIS NUMBER MOTHER FUCKING CHANGE WHEN THERE ARE MORE ADDRESSES -->
+                    <span>1)</span>
+                </div>
+            <div class="col-md-11">
+                <div class="row">
+                    <div class="col-md-2">
+                        <label class="control-label" for="full">Full Name:</label>
+                    </div>
+
+                    <!--        PUT PROPER ALERT HERE
+                    <alert ng-repeat="alert in alerts.detail" type="{{alert.type}}" close="closeAlert('detail', $index)">{{alert.msg}}</alert>
+                     -->
+
+                    <div class="col-md-6 form-group" ng-class="{'has-error': hasError(shipinfoForm.full)}" style="width: 47%;">
+                        <input type="text" name="full" id="full" class="form-control" ng-model="userDetail.full" required>
+                        <span class="help-block" ng-show="showError(shipinfoForm.full, 'required')">This field is required</span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-2">
+                        <label class="control-label" for="address">Address Line 1: </label>
+                    </div>
+                    <div class="col-md-6 form-group" ng-class="{'has-error': hasError(shipinfoForm.address)}" style="width: 47%;">
+                        <input type="text" name="address" id="address" class="form-control" ng-model="userDetail.address">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-2">
+                        <label class="control-label" for="address2">Address Line 2: </label>
+                    </div>
+                    <div class="col-md-6 form-group" ng-class="{'has-error': hasError(shipinfoForm.address)}" style="width: 47%;">
+                        <input type="text" name="address2" id="address2" class="form-control" ng-model="userDetail.address2">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-2">
+                        <label class="control-label" for="city">City</label>
+                    </div>
+                    <div class="col-md-3 form-group" ng-class="{'has-error': hasError(shipinfoForm.city)}">
+                        <input type="text" name="city" id="city" class="form-control" ng-model="userDetail.city">
+                    </div>
+                    <div class="col-md-1">
+                        <label class="control-label" for="usstate">State</label>
+                    </div>
+                    <div class="col-md-2 form-group" ng-class="{'has-error': hasError(shipinfoForm.usstate)}" style="width: 13.5%;">
+                        <select name="usstate" class="form-control" ng-model="filters.usstate" ng-change="filtersUpdated()">
+                            <option ng-repeat="x in usstates">{{x}}</option>
+                        </select>
+                    </div>
+                    <div class="col-md-1">
+                        <label class="control-label" for="zip">Zip</label>
+                    </div>
+                    <div class="col-md-2 form-group" ng-class="{'has-error': hasError(shipinfoForm.zip)}">
+                        <input type="text" name="zip" id="zip" class="form-control" ng-model="userDetail.zip">
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group col-md-6" style="float: right; width: 45%;">
+                    <button type="button" class="btn btn-primary btn-update" ng-disabled="!canSave(shipinfoForm)" ng-click="submit(shipinfoForm)">Update</button>
+                </div>
+                <div class="col-md-3 form-group" style="float: right;">
+
+                <!-- MAKE CLICKING THIS TEXT CREATE ANOTHER MOTHER FUCKING ADDRESS -->
+
+                    <span><a id="panel_view" href ng-click="panelModal()">Add Another Address</a></span>
+                </div>
+            </div>
+        </form>
+
+
+        <form name="billinfoForm">
+            <legend>Billing Information</legend>
+            <div class="row">
+                <div class="col-md-1">
+                <!-- MAKE THIS NUMBER MOTHER FUCKING CHANGE WHEN THERE ARE MORE ADDRESSES -->
+                    <span>1)</span>
+                </div>
+            <div class="col-md-11">
+                <div class="row">
+                    <div class="col-md-2">
+                        <label class="control-label" for="full">Full Name:</label>
+                    </div>
+
+                    <!--        PUT PROPER ALERT HERE
+                    <alert ng-repeat="alert in alerts.detail" type="{{alert.type}}" close="closeAlert('detail', $index)">{{alert.msg}}</alert>
+                     -->
+
+                    <div class="col-md-6 form-group" ng-class="{'has-error': hasError(billinfoForm.full)}" style="width: 47%;">
+                        <input type="text" name="full" id="full" class="form-control" ng-model="userDetail.full" required>
+                        <span class="help-block" ng-show="showError(billinfoForm.full, 'required')">This field is required</span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-2">
+                        <label class="control-label" for="address">Address Line 1: </label>
+                    </div>
+                    <div class="col-md-6 form-group" ng-class="{'has-error': hasError(billinfoForm.address)}" style="width: 47%;">
+                        <input type="text" name="address" id="address" class="form-control" ng-model="userDetail.address">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-2">
+                        <label class="control-label" for="address2">Address Line 2: </label>
+                    </div>
+                    <div class="col-md-6 form-group" ng-class="{'has-error': hasError(billinfoForm.address)}" style="width: 47%;">
+                        <input type="text" name="address2" id="address2" class="form-control" ng-model="userDetail.address2">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-2">
+                        <label class="control-label" for="city">City</label>
+                    </div>
+                    <div class="col-md-3 form-group" ng-class="{'has-error': hasError(billinfoForm.city)}">
+                        <input type="text" name="city" id="city" class="form-control" ng-model="userDetail.city">
+                    </div>
+                    <div class="col-md-1">
+                        <label class="control-label" for="usstate">State</label>
+                    </div>
+                    <div class="col-md-2 form-group" ng-class="{'has-error': hasError(billinfoForm.usstate)}" style="width: 13.5%;">
+                        <select name="usstate" class="form-control" ng-model="filters.usstate" ng-change="filtersUpdated()">
+                            <option ng-repeat="x in usstates">{{x}}</option>
+                        </select>
+                    </div>
+                    <div class="col-md-1">
+                        <label class="control-label" for="zip">Zip</label>
+                    </div>
+                    <div class="col-md-2 form-group" ng-class="{'has-error': hasError(billinfoForm.zip)}">
+                        <input type="text" name="zip" id="zip" class="form-control" ng-model="userDetail.zip">
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group col-md-6" style="float: right; width: 45%;">
+                    <button type="button" class="btn btn-primary btn-update" ng-disabled="!canSave(billinfoForm)" ng-click="submit(billinfoForm)">Update</button>
+                </div>
+                <div class="col-md-3 form-group" style="float: right;">
+
+                <!-- MAKE CLICKING THIS TEXT CREATE ANOTHER MOTHER FUCKING ADDRESS -->
+
+                    <span><a id="panel_view" href ng-click="panelModal()">Add Another Address</a></span>
+                </div>
+            </div>
+        </form>
     </div>
 </div>
