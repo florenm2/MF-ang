@@ -11,7 +11,10 @@ exports = module.exports = function(app, mongoose) {
       name: { type: String, default: '' }
     },
     orderNumber: { type: String, default: ''},
-    product: { type: String, default: '' },
+    product: {
+      title: { ype: String, default: ''},
+      quantity: { type: Number }
+    },
     sizeID: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
     billingAddress: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
     mailingAddress: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },

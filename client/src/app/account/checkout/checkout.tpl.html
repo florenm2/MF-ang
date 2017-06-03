@@ -156,11 +156,11 @@
 					</form>
 				</div>
 				<br>
+				<form stripe-form="stripeSubmit" name="paymentinfo">
+					<button class="accordion">Payment Method</button>
+					<div class="paneling">
+						<br>
 
-				<button class="accordion">Payment Method</button>
-				<div class="paneling">
-					<br>
-					<form stripe-form="stripeSubmit" name="paymentinfo">
 						<div class="row">
 							<div class="form-group">
 								<div class="col-md-6">
@@ -174,7 +174,7 @@
 							</div>
 							<div class="form-group">
 								<div class="col-md-6">
-								<label for="">Expiration Date</label>
+									<label for="">Expiration Date</label>
 									<input type="text" class="form-control" ng-model="expiry" payments-validate="expiry" payments-format="expiry" />
 								</div>
 								<div class="col-md-6">
@@ -182,67 +182,63 @@
 									<input type="text" class="form-control" ng-model="cvc" payments-validate="cvc" payments-format="cvc" payments-type-model="type"/>
 								</div>
 							</div>
-
-							<div class="form-group">
-								<div class="col-md-6">
-									<button type="submit" class="btn btn-primary btn-large">Submit</button>
-								</div>
-							</div>
 						</div>
-					</form>
-				</div>
-				<br>
+					</div>
+					<br>
 
 
-				<button class="accordion">Order Review</button>
-				<div class="paneling">
-					<table class="shop_table cart">
-						<thead>
-							<tr>
-								<th class="product-thumbnail">
-									&nbsp;
-								</th>
-								<th class="product-name">
-									Product
-								</th>
-								<th class="product-price">
-									Price
-								</th>
-								<th class="product-quantity">
-									Quantity
-								</th>
-								<th class="product-subtotal">
-									Total
-								</th>
-							</tr>
-						</thead>
-						<tbody>
+					<button class="accordion">Order Review</button>
+					<div class="paneling">
+						<table class="shop_table cart">
+							<thead>
+								<tr>
+									<th class="product-thumbnail">
+										&nbsp;
+									</th>
+									<th class="product-name">
+										Product
+									</th>
+									<th class="product-price">
+										Price
+									</th>
+									<th class="product-quantity">
+										Quantity
+									</th>
+									<th class="product-subtotal">
+										Total
+									</th>
+								</tr>
+							</thead>
+							<tbody>
 
-							<tr ng-repeat="item in cart" class="cart_table_item">
-								<td class="product-thumbnail">
-									<img ng-src="{{item.imagePath}}" alt="{{item.title}}">
-								</td>
-								<td class="product-name">
-									{{item.title}}
-								</td>
-								<td class="product-price">
-									${{item.price}}
-								</td>
-								<td class="product-quantity">
-									{{item.quantity}}
-								</td>
-								<td class="product-subtotal">
-									${{cart.getProductPrice(item)}}
-								</td>
-							</tr>
-						</tbody>
-					</table>
-				</div>
-				
+								<tr ng-repeat="item in cart" class="cart_table_item">
+									<td class="product-thumbnail">
+										<img ng-src="{{item.imagePath}}" alt="{{item.title}}">
+									</td>
+									<td class="product-name">
+										{{item.title}}
+									</td>
+									<td class="product-price">
+										${{item.price}}
+									</td>
+									<td class="product-quantity">
+										{{item.quantity}}
+									</td>
+									<td class="product-subtotal">
+										${{cart.getProductPrice(item)}}
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
 
-				<div class="actions-continue">
-					<input type="submit" value="Place Order" name="proceed" class="btn btn-lg btn-primary mt-xl">
-				</div>
+
+
+					<div class="actions-continue">
+						<input type="submit" value="Place Order" name="proceed" class="btn btn-lg btn-primary mt-xl">
+					</div>
+
+				</form>
 
 			</div>
 			<div class="col-md-3">

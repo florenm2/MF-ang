@@ -1274,8 +1274,11 @@ angular.module('services.cart').factory('cartService', ['$http', '$q', function(
   cart.getCartProducts = function () {
       var total = [];
       this.forEach(function (product) {
-        //console.log(product.title);
-        total.push((product.title, product.quantity));
+        var v = {
+          product: product.title,
+          quantity: product.quantity
+        };
+        total.push(v);
       });
       return total;
     };
@@ -1509,6 +1512,29 @@ angular.module('account.checkout').config(['$routeProvider', 'securityAuthorizat
           return promise;
         }]
       }
+    })
+  .when('/account/checkout/summary', {
+    templateUrl: 'account/checkout/order-summary.tpl.html',
+    controller: 'CheckoutLoggedInCtrl',
+    title: 'Order Summary',
+    resolve: {
+      accountDetails: ['$q', '$location', 'securityAuthorization', 'accountResource' ,function($q, $location, securityAuthorization, accountResource){
+          //get account details only for verified-user, otherwise redirect to /account/verification
+          var redirectUrl;
+          var promise = securityAuthorization.requireVerifiedUser()
+          .then(accountResource.getAccountDetails, function(reason){
+              //rejected either user is unverified or un-authenticated
+              redirectUrl = reason === 'unverified-client'? '/account/verification': '/login';
+              return $q.reject();
+            })
+          .catch(function(){
+            redirectUrl = redirectUrl || '/account';
+            $location.path(redirectUrl);
+            return $q.reject();
+          });
+          return promise;
+        }]
+      }
     });
 }]);
 angular.module('account.checkout').controller('CheckoutLoggedInCtrl', [ '$scope', '$location', '$log', 'security', 'utility', 'accountResource', 'accountDetails', 'SOCIAL', 'cartService',
@@ -1520,20 +1546,22 @@ angular.module('account.checkout').controller('CheckoutLoggedInCtrl', [ '$scope'
     $scope.cart =  cartService;
     $scope.billingChecked = false;
 
-    $scope.productinfo = $scope.cart.getCartProducts();
+    $scope.c = $scope.cart.getCartProducts();
 
     console.log($scope.c);
+    $scope.productinfo = [];
 
-    $scope.stripeSubmit = function(status, response){
-      if(response.error) {
-          // there was an error. Fix it.
-        } else {
-          // got stripe token, now charge it or smt
-          token = response.id;
-          $scope.submitAddress();
-        }
-      }
 
+    for(var i = 0; i<$scope.c.length; i++){
+        console.log($scope.c[i]);
+
+        var v = {
+          product: $scope.c[i].product,
+          quantity: $scope.c[i].quantity
+        };
+
+        $scope.productinfo.push(v);
+    }
 
     //mailing address
     if(address==null){
@@ -1593,10 +1621,6 @@ angular.module('account.checkout').controller('CheckoutLoggedInCtrl', [ '$scope'
       }
     }
 
-    $scope.test = function(){
-      console.log("hello");
-    }
-
     $scope.purchaseInformation = {
       orderNumber: 22,
       product: $scope.productinfo,
@@ -1613,6 +1637,14 @@ angular.module('account.checkout').controller('CheckoutLoggedInCtrl', [ '$scope'
       }
     };
 
+    $scope.stripeSubmit = function(status, response){
+      if(response.error) {
+          // error
+        } else {
+          token = response.id;
+          $scope.submitAddress();
+        }
+      }
 
     $scope.submitAddress = function(){
 
@@ -1650,11 +1682,11 @@ angular.module('account.checkout').controller('CheckoutLoggedInCtrl', [ '$scope'
       $scope.alerts.purchasehistory = [];
       restResource.newPurchase($scope.purchaseInformation).then(function(data){
         if(data.success){
-          console.log("hi");
           $scope.alerts.purchasehistory.push({
             type: 'success',
             msg: 'User identity is updated.'
           });
+          $location.path('/account/checkout/summary');
         }else{
           //error due to server side validation
           $scope.errfor = data.errfor;
@@ -1679,40 +1711,14 @@ angular.module('account.checkout').controller('CheckoutLoggedInCtrl', [ '$scope'
       detail: [], address: [], pass: []
     };
     
-
-    // $scope.onSubmit = function () {
-    //   $scope.processing = true;
-    // };
-
-    // $scope.stripeCallback = function (code, result) {
-    //   $scope.processing = false;
-    //   $scope.hideAlerts();
-    //   if (result.error) {
-    //     $scope.stripeError = result.error.message;
-    //   } else {
-    //     $scope.stripeToken = result.id;
-    //   }
-    // };
+    $scope.returnHome = function(){
+      $location.path('/');
+    }
 
     $scope.hideAlerts = function () {
       $scope.stripeError = null;
       $scope.stripeToken = null;
     };
-
-    // $scope.submit = function(){
-    //   restResource.newAddress($scope.addressDetail).then(function(result){
-    //     if(result.success){
-    //       console.log(result.account);
-    //     }else{
-    //       //error due to server side validation
-    //       angular.forEach(result.errors, function(err, index){
-    //         console.log(err);
-    //       });
-    //     }
-    //   }), function(x){
-    //     console.log(x);
-    //   }
-    // };
 
     var acc = document.getElementsByClassName("accordion");
     var i;
@@ -7808,7 +7814,7 @@ angular.module('signup').controller('SignupCtrl', [ '$scope', '$location', '$log
       security.signup($scope.user).then(signupSuccess, signupError);
     };
   }]);
-angular.module('templates.app', ['404.tpl.html', 'about.tpl.html', 'account/account.tpl.html', 'account/checkout/checkout.tpl.html', 'account/checkout/checkoutAddress.tpl.html', 'account/checkout/checkoutCredit.tpl.html', 'account/checkout/checkoutFinal.tpl.html', 'account/purchaseHistory/purchaseHistory.tpl.html', 'account/purchaseHistory/purchaseHistoryOne.tpl.html', 'account/settings/account-settings.tpl.html', 'account/verification/account-verification.tpl.html', 'admin/Pricing/admin-pricing-modal.tpl.html', 'admin/Pricing/admin-pricing.tpl.html', 'admin/Sales/admin-sales.tpl.html', 'admin/accounts/admin-account.tpl.html', 'admin/accounts/admin-accounts.tpl.html', 'admin/activity/activity.tpl.html', 'admin/admin-account-settings/admin-account-settings.tpl.html', 'admin/admin-groups/admin-group.tpl.html', 'admin/admin-groups/admin-groups.tpl.html', 'admin/admin.tpl.html', 'admin/administrators/admin-administrator.tpl.html', 'admin/administrators/admin-administrators.tpl.html', 'admin/categories/admin-categories.tpl.html', 'admin/categories/admin-category.tpl.html', 'admin/developers/developers.tpl.html', 'admin/purchase-history/admin-purchase-histories.tpl.html', 'admin/purchase-history/admin-purchase-histories2.tpl.html', 'admin/purchase-history/admin-purchase-history.tpl.html', 'admin/statuses/admin-status.tpl.html', 'admin/statuses/admin-statuses.tpl.html', 'admin/users/admin-user.tpl.html', 'admin/users/admin-users.tpl.html', 'contact.tpl.html', 'footer.tpl.html', 'header.tpl.html', 'login/forgot/login-forgot.tpl.html', 'login/login.tpl.html', 'login/reset/login-reset.tpl.html', 'main.tpl.html', 'pricing/checkout/checkout.tpl.html', 'pricing/information-modal.tpl.html', 'pricing/information/information.tpl.html', 'pricing/login-modal.tpl.html', 'pricing/login-modal2.tpl.html', 'pricing/panel-modal.tpl.html', 'pricing/pricing.tpl.html', 'sidebar.tpl.html', 'signup/signup.tpl.html', 'specs.tpl.html']);
+angular.module('templates.app', ['404.tpl.html', 'about.tpl.html', 'account/account.tpl.html', 'account/checkout/checkout.tpl.html', 'account/checkout/order-summary.tpl.html', 'account/purchaseHistory/purchaseHistory.tpl.html', 'account/purchaseHistory/purchaseHistoryOne.tpl.html', 'account/settings/account-settings.tpl.html', 'account/verification/account-verification.tpl.html', 'admin/Pricing/admin-pricing-modal.tpl.html', 'admin/Pricing/admin-pricing.tpl.html', 'admin/Sales/admin-sales.tpl.html', 'admin/accounts/admin-account.tpl.html', 'admin/accounts/admin-accounts.tpl.html', 'admin/activity/activity.tpl.html', 'admin/admin-account-settings/admin-account-settings.tpl.html', 'admin/admin-groups/admin-group.tpl.html', 'admin/admin-groups/admin-groups.tpl.html', 'admin/admin.tpl.html', 'admin/administrators/admin-administrator.tpl.html', 'admin/administrators/admin-administrators.tpl.html', 'admin/categories/admin-categories.tpl.html', 'admin/categories/admin-category.tpl.html', 'admin/developers/developers.tpl.html', 'admin/purchase-history/admin-purchase-histories.tpl.html', 'admin/purchase-history/admin-purchase-histories2.tpl.html', 'admin/purchase-history/admin-purchase-history.tpl.html', 'admin/statuses/admin-status.tpl.html', 'admin/statuses/admin-statuses.tpl.html', 'admin/users/admin-user.tpl.html', 'admin/users/admin-users.tpl.html', 'contact.tpl.html', 'footer.tpl.html', 'header.tpl.html', 'login/forgot/login-forgot.tpl.html', 'login/login.tpl.html', 'login/reset/login-reset.tpl.html', 'main.tpl.html', 'pricing/checkout/checkout.tpl.html', 'pricing/information-modal.tpl.html', 'pricing/information/information.tpl.html', 'pricing/login-modal.tpl.html', 'pricing/login-modal2.tpl.html', 'pricing/panel-modal.tpl.html', 'pricing/pricing.tpl.html', 'sidebar.tpl.html', 'signup/signup.tpl.html', 'specs.tpl.html']);
 
 angular.module("404.tpl.html", []).run(["$templateCache", function($templateCache) {
   $templateCache.put("404.tpl.html",
@@ -8136,11 +8142,11 @@ angular.module("account/checkout/checkout.tpl.html", []).run(["$templateCache", 
     "					</form>\n" +
     "				</div>\n" +
     "				<br>\n" +
+    "				<form stripe-form=\"stripeSubmit\" name=\"paymentinfo\">\n" +
+    "					<button class=\"accordion\">Payment Method</button>\n" +
+    "					<div class=\"paneling\">\n" +
+    "						<br>\n" +
     "\n" +
-    "				<button class=\"accordion\">Payment Method</button>\n" +
-    "				<div class=\"paneling\">\n" +
-    "					<br>\n" +
-    "					<form stripe-form=\"stripeSubmit\" name=\"paymentinfo\">\n" +
     "						<div class=\"row\">\n" +
     "							<div class=\"form-group\">\n" +
     "								<div class=\"col-md-6\">\n" +
@@ -8154,7 +8160,7 @@ angular.module("account/checkout/checkout.tpl.html", []).run(["$templateCache", 
     "							</div>\n" +
     "							<div class=\"form-group\">\n" +
     "								<div class=\"col-md-6\">\n" +
-    "								<label for=\"\">Expiration Date</label>\n" +
+    "									<label for=\"\">Expiration Date</label>\n" +
     "									<input type=\"text\" class=\"form-control\" ng-model=\"expiry\" payments-validate=\"expiry\" payments-format=\"expiry\" />\n" +
     "								</div>\n" +
     "								<div class=\"col-md-6\">\n" +
@@ -8162,67 +8168,63 @@ angular.module("account/checkout/checkout.tpl.html", []).run(["$templateCache", 
     "									<input type=\"text\" class=\"form-control\" ng-model=\"cvc\" payments-validate=\"cvc\" payments-format=\"cvc\" payments-type-model=\"type\"/>\n" +
     "								</div>\n" +
     "							</div>\n" +
-    "\n" +
-    "							<div class=\"form-group\">\n" +
-    "								<div class=\"col-md-6\">\n" +
-    "									<button type=\"submit\" class=\"btn btn-primary btn-large\">Submit</button>\n" +
-    "								</div>\n" +
-    "							</div>\n" +
     "						</div>\n" +
-    "					</form>\n" +
-    "				</div>\n" +
-    "				<br>\n" +
+    "					</div>\n" +
+    "					<br>\n" +
     "\n" +
     "\n" +
-    "				<button class=\"accordion\">Order Review</button>\n" +
-    "				<div class=\"paneling\">\n" +
-    "					<table class=\"shop_table cart\">\n" +
-    "						<thead>\n" +
-    "							<tr>\n" +
-    "								<th class=\"product-thumbnail\">\n" +
-    "									&nbsp;\n" +
-    "								</th>\n" +
-    "								<th class=\"product-name\">\n" +
-    "									Product\n" +
-    "								</th>\n" +
-    "								<th class=\"product-price\">\n" +
-    "									Price\n" +
-    "								</th>\n" +
-    "								<th class=\"product-quantity\">\n" +
-    "									Quantity\n" +
-    "								</th>\n" +
-    "								<th class=\"product-subtotal\">\n" +
-    "									Total\n" +
-    "								</th>\n" +
-    "							</tr>\n" +
-    "						</thead>\n" +
-    "						<tbody>\n" +
+    "					<button class=\"accordion\">Order Review</button>\n" +
+    "					<div class=\"paneling\">\n" +
+    "						<table class=\"shop_table cart\">\n" +
+    "							<thead>\n" +
+    "								<tr>\n" +
+    "									<th class=\"product-thumbnail\">\n" +
+    "										&nbsp;\n" +
+    "									</th>\n" +
+    "									<th class=\"product-name\">\n" +
+    "										Product\n" +
+    "									</th>\n" +
+    "									<th class=\"product-price\">\n" +
+    "										Price\n" +
+    "									</th>\n" +
+    "									<th class=\"product-quantity\">\n" +
+    "										Quantity\n" +
+    "									</th>\n" +
+    "									<th class=\"product-subtotal\">\n" +
+    "										Total\n" +
+    "									</th>\n" +
+    "								</tr>\n" +
+    "							</thead>\n" +
+    "							<tbody>\n" +
     "\n" +
-    "							<tr ng-repeat=\"item in cart\" class=\"cart_table_item\">\n" +
-    "								<td class=\"product-thumbnail\">\n" +
-    "									<img ng-src=\"{{item.imagePath}}\" alt=\"{{item.title}}\">\n" +
-    "								</td>\n" +
-    "								<td class=\"product-name\">\n" +
-    "									{{item.title}}\n" +
-    "								</td>\n" +
-    "								<td class=\"product-price\">\n" +
-    "									${{item.price}}\n" +
-    "								</td>\n" +
-    "								<td class=\"product-quantity\">\n" +
-    "									{{item.quantity}}\n" +
-    "								</td>\n" +
-    "								<td class=\"product-subtotal\">\n" +
-    "									${{cart.getProductPrice(item)}}\n" +
-    "								</td>\n" +
-    "							</tr>\n" +
-    "						</tbody>\n" +
-    "					</table>\n" +
-    "				</div>\n" +
-    "				\n" +
+    "								<tr ng-repeat=\"item in cart\" class=\"cart_table_item\">\n" +
+    "									<td class=\"product-thumbnail\">\n" +
+    "										<img ng-src=\"{{item.imagePath}}\" alt=\"{{item.title}}\">\n" +
+    "									</td>\n" +
+    "									<td class=\"product-name\">\n" +
+    "										{{item.title}}\n" +
+    "									</td>\n" +
+    "									<td class=\"product-price\">\n" +
+    "										${{item.price}}\n" +
+    "									</td>\n" +
+    "									<td class=\"product-quantity\">\n" +
+    "										{{item.quantity}}\n" +
+    "									</td>\n" +
+    "									<td class=\"product-subtotal\">\n" +
+    "										${{cart.getProductPrice(item)}}\n" +
+    "									</td>\n" +
+    "								</tr>\n" +
+    "							</tbody>\n" +
+    "						</table>\n" +
+    "					</div>\n" +
     "\n" +
-    "				<div class=\"actions-continue\">\n" +
-    "					<input type=\"submit\" value=\"Place Order\" name=\"proceed\" class=\"btn btn-lg btn-primary mt-xl\">\n" +
-    "				</div>\n" +
+    "\n" +
+    "\n" +
+    "					<div class=\"actions-continue\">\n" +
+    "						<input type=\"submit\" value=\"Place Order\" name=\"proceed\" class=\"btn btn-lg btn-primary mt-xl\">\n" +
+    "					</div>\n" +
+    "\n" +
+    "				</form>\n" +
     "\n" +
     "			</div>\n" +
     "			<div class=\"col-md-3\">\n" +
@@ -8265,98 +8267,11 @@ angular.module("account/checkout/checkout.tpl.html", []).run(["$templateCache", 
     "");
 }]);
 
-angular.module("account/checkout/checkoutAddress.tpl.html", []).run(["$templateCache", function($templateCache) {
-  $templateCache.put("account/checkout/checkoutAddress.tpl.html",
-    "<div class=\"container\" align=\"middle\">\n" +
+angular.module("account/checkout/order-summary.tpl.html", []).run(["$templateCache", function($templateCache) {
+  $templateCache.put("account/checkout/order-summary.tpl.html",
+    "<h2>Order Summary</h2>\n" +
     "\n" +
-    "	<form name=\"checkoutForm\" stripe-form=\"stripeCallback\" ng-submit=\"onSubmit()\" data-abide>\n" +
-    "\n" +
-    "		<div ng-if=\"processing\" us-spinner></div>\n" +
-    "\n" +
-    "		<fieldset>\n" +
-    "			<legend>Shipping Information</legend>\n" +
-    "\n" +
-    "			<div class=\"row\">\n" +
-    "\n" +
-    "				<label class=\"large-12 columns\">Name\n" +
-    "					<input ng-model=\"name\" type=\"text\" placeholder=\"Name\">\n" +
-    "				</label>\n" +
-    "\n" +
-    "				<label class=\"large-12 columns\">Address\n" +
-    "					<input ng-model=\"address\" type=\"text\" placeholder=\"Address\">\n" +
-    "				</label>\n" +
-    "			</div>\n" +
-    "		</fieldset>\n" +
-    "\n" +
-    "		<fieldset>\n" +
-    "			<legend>Payment Information</legend>\n" +
-    "\n" +
-    "			<div class=\"row\">\n" +
-    "				<div class=\"large-6 columns\" ng-class=\"{error: checkoutForm.number.$invalid}\">\n" +
-    "					<label>Card Information\n" +
-    "						<input ng-model=\"number\" name=\"number\" payments-format=\"card\" payments-validate=\"card\"\n" +
-    "						placeholder=\"Card Number\" type=\"text\"/>\n" +
-    "					</label>\n" +
-    "					<small class=\"error\">Invalid card number</small>\n" +
-    "				</div>\n" +
-    "				<div class=\"large-3 columns\" ng-class=\"{error: checkoutForm.expiry.$invalid}\">\n" +
-    "					<label>Expiry\n" +
-    "						<input ng-model=\"expiry\" name=\"expiry\" payments-format=\"expiry\" payments-validate=\"expiry\"\n" +
-    "						placeholder=\"Expiry\" type=\"text\"/>\n" +
-    "					</label>\n" +
-    "					<small class=\"error\">Invalid date.</small>\n" +
-    "				</div>\n" +
-    "				<div class=\"large-3 columns\" ng-class=\"{error: checkoutForm.cvc.$invalid}\">\n" +
-    "					<label>CVC\n" +
-    "						<input ng-model=\"cvc\" name=\"cvc\" payments-format=\"cvc\" payments-validate=\"cvc\"\n" +
-    "						placeholder=\"CVC\" type=\"text\"/>\n" +
-    "					</label>\n" +
-    "					<small class=\"error\">Invalid CVC.</small>\n" +
-    "				</div>\n" +
-    "\n" +
-    "				<div class=\"large-12 columns\">\n" +
-    "					<strong>\n" +
-    "						Amount to pay: {{totalAmount}}$\n" +
-    "					</strong>\n" +
-    "				</div>\n" +
-    "			</div>\n" +
-    "		</fieldset>\n" +
-    "\n" +
-    "		<alert ng-if=\"stripeError\" type=\"'alert'\" close=\"hideAlerts()\">\n" +
-    "			Stripe returned an error: {{stripeError}}\n" +
-    "		</alert>\n" +
-    "\n" +
-    "		<alert ng-if=\"stripeToken\" close=\"hideAlerts()\">\n" +
-    "			Stripe successfully acquired! Token: {{stripeToken}}\n" +
-    "		</alert>\n" +
-    "\n" +
-    "		<div class=\"clearfix\">\n" +
-    "			<div class=\"right\">\n" +
-    "				<button class=\"cancel\" ng-click=\"$dismiss();\">Cancel</button>\n" +
-    "				<button type=\"submit\" ng-disabled=\"checkoutForm.$invalid\">Place Order</button>\n" +
-    "			</div>\n" +
-    "		</div>\n" +
-    "\n" +
-    "	</form>\n" +
-    "\n" +
-    "	<input type=\"text\" name=\"addressLine1\" ng-model=\"addressDetail.addressLine1\" required>\n" +
-    "	<div class=\"form-group\">\n" +
-    "		<button type=\"button\" class=\"btn btn-primary btn-signup\" ng-click=\"submit()\">Add Order</button>\n" +
-    "	</div>\n" +
-    "\n" +
-    "	</div>\n" +
-    "\n" +
-    "");
-}]);
-
-angular.module("account/checkout/checkoutCredit.tpl.html", []).run(["$templateCache", function($templateCache) {
-  $templateCache.put("account/checkout/checkoutCredit.tpl.html",
-    "");
-}]);
-
-angular.module("account/checkout/checkoutFinal.tpl.html", []).run(["$templateCache", function($templateCache) {
-  $templateCache.put("account/checkout/checkoutFinal.tpl.html",
-    "");
+    "<button ng-click=\"returnHome()\">Return Home</button>");
 }]);
 
 angular.module("account/purchaseHistory/purchaseHistory.tpl.html", []).run(["$templateCache", function($templateCache) {

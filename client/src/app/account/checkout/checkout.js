@@ -25,6 +25,29 @@ angular.module('account.checkout').config(['$routeProvider', 'securityAuthorizat
           return promise;
         }]
       }
+    })
+  .when('/account/checkout/summary', {
+    templateUrl: 'account/checkout/order-summary.tpl.html',
+    controller: 'CheckoutLoggedInCtrl',
+    title: 'Order Summary',
+    resolve: {
+      accountDetails: ['$q', '$location', 'securityAuthorization', 'accountResource' ,function($q, $location, securityAuthorization, accountResource){
+          //get account details only for verified-user, otherwise redirect to /account/verification
+          var redirectUrl;
+          var promise = securityAuthorization.requireVerifiedUser()
+          .then(accountResource.getAccountDetails, function(reason){
+              //rejected either user is unverified or un-authenticated
+              redirectUrl = reason === 'unverified-client'? '/account/verification': '/login';
+              return $q.reject();
+            })
+          .catch(function(){
+            redirectUrl = redirectUrl || '/account';
+            $location.path(redirectUrl);
+            return $q.reject();
+          });
+          return promise;
+        }]
+      }
     });
 }]);
 angular.module('account.checkout').controller('CheckoutLoggedInCtrl', [ '$scope', '$location', '$log', 'security', 'utility', 'accountResource', 'accountDetails', 'SOCIAL', 'cartService',
@@ -36,20 +59,22 @@ angular.module('account.checkout').controller('CheckoutLoggedInCtrl', [ '$scope'
     $scope.cart =  cartService;
     $scope.billingChecked = false;
 
-    $scope.productinfo = $scope.cart.getCartProducts();
+    $scope.c = $scope.cart.getCartProducts();
 
     console.log($scope.c);
+    $scope.productinfo = [];
 
-    $scope.stripeSubmit = function(status, response){
-      if(response.error) {
-          // there was an error. Fix it.
-        } else {
-          // got stripe token, now charge it or smt
-          token = response.id;
-          $scope.submitAddress();
-        }
-      }
 
+    for(var i = 0; i<$scope.c.length; i++){
+        console.log($scope.c[i]);
+
+        var v = {
+          product: $scope.c[i].product,
+          quantity: $scope.c[i].quantity
+        };
+
+        $scope.productinfo.push(v);
+    }
 
     //mailing address
     if(address==null){
@@ -109,10 +134,6 @@ angular.module('account.checkout').controller('CheckoutLoggedInCtrl', [ '$scope'
       }
     }
 
-    $scope.test = function(){
-      console.log("hello");
-    }
-
     $scope.purchaseInformation = {
       orderNumber: 22,
       product: $scope.productinfo,
@@ -129,6 +150,14 @@ angular.module('account.checkout').controller('CheckoutLoggedInCtrl', [ '$scope'
       }
     };
 
+    $scope.stripeSubmit = function(status, response){
+      if(response.error) {
+          // error
+        } else {
+          token = response.id;
+          $scope.submitAddress();
+        }
+      }
 
     $scope.submitAddress = function(){
 
@@ -166,11 +195,11 @@ angular.module('account.checkout').controller('CheckoutLoggedInCtrl', [ '$scope'
       $scope.alerts.purchasehistory = [];
       restResource.newPurchase($scope.purchaseInformation).then(function(data){
         if(data.success){
-          console.log("hi");
           $scope.alerts.purchasehistory.push({
             type: 'success',
             msg: 'User identity is updated.'
           });
+          $location.path('/account/checkout/summary');
         }else{
           //error due to server side validation
           $scope.errfor = data.errfor;
@@ -195,40 +224,14 @@ angular.module('account.checkout').controller('CheckoutLoggedInCtrl', [ '$scope'
       detail: [], address: [], pass: []
     };
     
-
-    // $scope.onSubmit = function () {
-    //   $scope.processing = true;
-    // };
-
-    // $scope.stripeCallback = function (code, result) {
-    //   $scope.processing = false;
-    //   $scope.hideAlerts();
-    //   if (result.error) {
-    //     $scope.stripeError = result.error.message;
-    //   } else {
-    //     $scope.stripeToken = result.id;
-    //   }
-    // };
+    $scope.returnHome = function(){
+      $location.path('/');
+    }
 
     $scope.hideAlerts = function () {
       $scope.stripeError = null;
       $scope.stripeToken = null;
     };
-
-    // $scope.submit = function(){
-    //   restResource.newAddress($scope.addressDetail).then(function(result){
-    //     if(result.success){
-    //       console.log(result.account);
-    //     }else{
-    //       //error due to server side validation
-    //       angular.forEach(result.errors, function(err, index){
-    //         console.log(err);
-    //       });
-    //     }
-    //   }), function(x){
-    //     console.log(x);
-    //   }
-    // };
 
     var acc = document.getElementsByClassName("accordion");
     var i;
