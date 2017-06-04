@@ -4,7 +4,8 @@ exports = module.exports = function(app, mongoose) {
   var viewSchema = new mongoose.Schema({
     date: { type: Date, default: Date.now },
     homePageViews: { type: Number },
-    cartViews: { type: Number }
+    cartViews: { type: Number },
+    apiCalls: { type: Number }
   });
   viewSchema.index({ page: 1 });
   viewSchema.index({ hour: 1 });

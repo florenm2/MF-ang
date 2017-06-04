@@ -273,6 +273,11 @@ exports = module.exports = function(app, passport) {
   //admin > pricing
   app.get('/admin/pricing', useAngular);
 
+
+  //PUBLIC API -- for external sources to get product information
+  app.get('/public/getProducts', products.getAllProductsPublic);
+  app.get('/public/getProducts/:type', products.getAllProductsFilteredPublic);
+
   //other routes not found nor begin with /api is handled by Angular
   app.all(/^(?!\/api).*$/, useAngular);
 

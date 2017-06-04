@@ -91,19 +91,10 @@ app.utility.sendmail = require('./util/sendmail');
 app.utility.slugify = require('./util/slugify');
 app.utility.workflow = require('./util/workflow');
 
-//setup webhooks
-app.post('/stripe-webhook', function(request, response){
-  console.log(request.body)
-  if (request.body.type === 'charge.succeeded') {
-    console.log(request.body.data.object);
-    emitter.emit('chargeSucceeded', request.body.data.object);
-  }
-  response.send('OK');
-});
-
-process.on('uncaughtException', function (err) {
-    console.log(err);
-}); 
+// Useful for debugging
+// process.on('uncaughtException', function (err) {
+//     console.log(err);
+// }); 
 
 app.server.listen(app.config.port, function(){
 });

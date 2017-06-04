@@ -1,21 +1,9 @@
 'use strict';
-// public api
+
 var product = {
   find: function(req, res, next){
-    //req.query.pivot = req.query.pivot ? req.query.pivot : '';
-    //req.query.name = req.query.name ? req.query.name : '';
-    // req.query.limit = req.query.limit ? parseInt(req.query.limit, null) : 20;
-    // req.query.page = req.query.page ? parseInt(req.query.page, null) : 1;
-    // req.query.sort = req.query.sort ? req.query.sort : '_id';
 
     var filters = {};
-    // if (req.query.pivot) {
-    //   filters.pivot = new RegExp('^.*?'+ req.query.pivot +'.*$', 'i');
-    // }
-
-    // if (req.query.name) {
-    //   filters.name = new RegExp('^.*?'+ req.query.name +'.*$', 'i');
-    // }
 
     req.app.db.models.Product.pagedFind({
       filters: filters,
@@ -101,33 +89,9 @@ var product = {
         workflow.outcome.errors.push('You may not update statuses.');
         return workflow.emit('response');
       }
-
-      // workflow.emit('addPriceHistory');
       workflow.emit('patchProduct');
     });
 
-    // workflow.on('addPriceHistory', function() {
-    //   var fieldsToAdd = {
-    //     priceHistory:
-    //     {
-    //        date:  req.body.date,
-    //        oldPrice: req.body.oldPrice,
-    //        newPrice:    req.body.price
-    //     }
-    //   };
-
-    //   var options = { new: true };
-
-    //   req.app.db.models.Product.findByIdAndUpdate(req.params.id, {$addToSet: fieldsToAdd}, options, function(err, product) {
-    //     if (err) {
-    //       return workflow.emit('exception', err);
-    //     }
-    //     workflow.outcome.product = product;
-    //     return workflow.emit('response');
-    //   });
-
-    //   workflow.emit('patchProduct');
-    // });
 
     workflow.on('patchProduct', function() {
       var fieldsToSet = {

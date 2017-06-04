@@ -15,13 +15,16 @@ angular.module('services.accountResource', ['security.service']).factory('accoun
  
   var resource = {};
   resource.getProductList = function() {
-    return $http.get('/api/getProducts').then(processResponse, processError);
+    return $http.get(baseUrl + '/getProducts').then(processResponse, processError);
   };
   resource.addHomePageView = function() {
-    return $http.post('/api/addHomePageView').then(processResponse, processError);
+    return $http.post(baseUrl + '/addHomePageView').then(processResponse, processError);
   };
   resource.addCartView = function() {
-    return $http.post('/api/addCartView/').then(processResponse, processError);
+    return $http.post(baseUrl + '/addCartView/').then(processResponse, processError);
+  };
+  resource.addAPICall = function() {
+    return $http.post(baseUrl + '/addAPICall/').then(processResponse, processError);
   };
   resource.sendMessage = function(data){
     return $http.post(baseUrl + '/sendMessage', data).then(processResponse, processError);
@@ -75,17 +78,6 @@ angular.module('services.accountResource', ['security.service']).factory('accoun
         return data;
       });
   };
-
-  resource.tryWebhook = function(token){
-      $http.post("/my/webhook/url", function(request, response) {
-      // Retrieve the request's body and parse it as JSON
-      var event_json = JSON.parse(request.body);
-
-      // Do something with event_json
-
-      response.send(200);
-    });
-  };
-
+  
   return resource;
 }]);
