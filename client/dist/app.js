@@ -3411,8 +3411,6 @@ angular.module('admin.activity').controller('ActivityCtrl', ['$scope', '$log', '
 
 
          });
-         console.log($scope.homeViewMonth);
-         console.log($scope.cartViewMonth);
 
           var currentDate = new Date();
           var currentYear = currentDate.getFullYear();
@@ -4827,7 +4825,7 @@ angular.module('admin.categories', [
   'admin.categories.index',
   'admin.categories.detail'
 ]);
-angular.module('admin.developers', ['ngRoute', 'security.authorization', 'services.adminResource', 'angular.morris']);
+angular.module('admin.developers', ['ngRoute', 'security.authorization', 'services.adminResource', 'angular.morris', 'chart.js']);
 angular.module('admin.developers').config(['$routeProvider', function($routeProvider){
   $routeProvider
   .when('/admin/developers', {
@@ -4884,6 +4882,19 @@ angular.module('admin.developers').controller('DevCtrl', ['$scope', '$log', 'sta
       $scope.apiMonth = [0,0,0,0,0,0,0,0,0,0,0,0];
       $scope.api30Day = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
 
+      $scope.labelDay = [];
+
+      for(var i = 29; i>=0; i--){
+        if(((i-4)%5)==0){
+          var dlabel = Date.today().add(-i).days().toString('MMM dS');
+
+          $scope.labelDay.push(dlabel);
+        } else {
+          $scope.labelDay.push('');
+        }
+
+      }
+      
       var currentDate = new Date();
       var currentYear = currentDate.getFullYear();
       var cutOff = Date.today().add(-30).days();
@@ -4923,6 +4934,24 @@ angular.module('admin.developers').controller('DevCtrl', ['$scope', '$log', 'sta
         $scope.apiYear[n]+=call.apiCalls;
       }
 
+    };
+
+
+    $scope.optionsViewsDayTotal = {
+      scales: {
+        yAxes: [
+        {
+          id: 'y-axis-1',
+          type: 'linear',
+          scaleLabel: {
+            display: true,
+            labelString: 'Total Views'
+          },
+          display: true,
+          position: 'left'
+        }
+        ]
+      }
     };
 
 
@@ -5972,17 +6001,23 @@ angular.module('app').run(['$location', '$window', '$rootScope', 'security', 'ac
   // (in case they are still logged in from a previous session)
   security.requestCurrentUser();
 
+  // $rootScope.$on('$stateChangeSuccess', function() {
+  //   document.body.scrollTop = document.documentElement.scrollTop = 0;
+  // });
+
   $rootScope.$on('$routeChangeStart', function(e, toState) {
-      if($location.url() == '/'){
-        accountResource.addHomePageView();
-      }
-      if($location.path() == '/pricing/checkout'){
-        accountResource.addCartView();
-      }
-      if($location.path() == '/account/checkout'){
-        accountResource.addCartView();
-      }
-    });
+    if($location.url() == '/'){
+      accountResource.addHomePageView();
+    }
+    if($location.path() == '/pricing/checkout'){
+      accountResource.addCartView();
+    }
+    if($location.path() == '/account/checkout'){
+      accountResource.addCartView();
+    }
+
+    document.body.scrollTop = document.documentElement.scrollTop = 0;
+  });
 
   // add a listener to $routeChangeSuccess
   $rootScope.$on('$routeChangeSuccess', function (event, current, previous) {
@@ -9977,23 +10012,12 @@ angular.module("admin/developers/developers.tpl.html", []).run(["$templateCache"
     "                    <i class=\"fa fa-bar-chart-o fa-fw\"></i> 30 Day API Calculations\n" +
     "                </div>\n" +
     "                <div class=\"panel-body\">\n" +
-    "                    <div\n" +
-    "                    area-chart\n" +
-    "                    area-data='[\n" +
-    "                    { y: \"2006\", a: 100},\n" +
-    "                    { y: \"2007\", a: 75},\n" +
-    "                    { y: \"2008\", a: 50},\n" +
-    "                    { y: \"2009\", a: 75},\n" +
-    "                    { y: \"2010\", a: 50},\n" +
-    "                    { y: \"2011\", a: 75},\n" +
-    "                    { y: \"2012\", a: 100}\n" +
-    "                    ]'\n" +
-    "                    area-xkey='y'\n" +
-    "                    area-ykeys='[\"a\"]'\n" +
-    "                    area-labels='[\"Month\"]'\n" +
-    "                    line-colors='[\"#89b4f9\"]'>\n" +
-    "                </div>\n" +
+    "                    <canvas id=\"line\" class=\"chart chart-line\" chart-data=\"api30Day\"\n" +
+    "                    chart-labels=\"labelDay\" chart-options=\"optionsViewsDayTotal\"\n" +
+    "                    chart-click=\"onClick\">\n" +
+    "                </canvas>\n" +
     "            </div>\n" +
+    "        </div>\n" +
     "        </div>\n" +
     "        <div class=\"panel panel-default\">\n" +
     "            <div class=\"panel-heading\">\n" +

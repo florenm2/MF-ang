@@ -2098,23 +2098,12 @@ angular.module("admin/developers/developers.tpl.html", []).run(["$templateCache"
     "                    <i class=\"fa fa-bar-chart-o fa-fw\"></i> 30 Day API Calculations\n" +
     "                </div>\n" +
     "                <div class=\"panel-body\">\n" +
-    "                    <div\n" +
-    "                    area-chart\n" +
-    "                    area-data='[\n" +
-    "                    { y: \"2006\", a: 100},\n" +
-    "                    { y: \"2007\", a: 75},\n" +
-    "                    { y: \"2008\", a: 50},\n" +
-    "                    { y: \"2009\", a: 75},\n" +
-    "                    { y: \"2010\", a: 50},\n" +
-    "                    { y: \"2011\", a: 75},\n" +
-    "                    { y: \"2012\", a: 100}\n" +
-    "                    ]'\n" +
-    "                    area-xkey='y'\n" +
-    "                    area-ykeys='[\"a\"]'\n" +
-    "                    area-labels='[\"Month\"]'\n" +
-    "                    line-colors='[\"#89b4f9\"]'>\n" +
-    "                </div>\n" +
+    "                    <canvas id=\"line\" class=\"chart chart-line\" chart-data=\"api30Day\"\n" +
+    "                    chart-labels=\"labelDay\" chart-options=\"optionsViewsDayTotal\"\n" +
+    "                    chart-click=\"onClick\">\n" +
+    "                </canvas>\n" +
     "            </div>\n" +
+    "        </div>\n" +
     "        </div>\n" +
     "        <div class=\"panel panel-default\">\n" +
     "            <div class=\"panel-heading\">\n" +

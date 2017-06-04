@@ -56,17 +56,23 @@ angular.module('app').run(['$location', '$window', '$rootScope', 'security', 'ac
   // (in case they are still logged in from a previous session)
   security.requestCurrentUser();
 
+  // $rootScope.$on('$stateChangeSuccess', function() {
+  //   document.body.scrollTop = document.documentElement.scrollTop = 0;
+  // });
+
   $rootScope.$on('$routeChangeStart', function(e, toState) {
-      if($location.url() == '/'){
-        accountResource.addHomePageView();
-      }
-      if($location.path() == '/pricing/checkout'){
-        accountResource.addCartView();
-      }
-      if($location.path() == '/account/checkout'){
-        accountResource.addCartView();
-      }
-    });
+    if($location.url() == '/'){
+      accountResource.addHomePageView();
+    }
+    if($location.path() == '/pricing/checkout'){
+      accountResource.addCartView();
+    }
+    if($location.path() == '/account/checkout'){
+      accountResource.addCartView();
+    }
+
+    document.body.scrollTop = document.documentElement.scrollTop = 0;
+  });
 
   // add a listener to $routeChangeSuccess
   $rootScope.$on('$routeChangeSuccess', function (event, current, previous) {

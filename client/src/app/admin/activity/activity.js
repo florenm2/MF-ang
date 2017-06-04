@@ -244,8 +244,6 @@ angular.module('admin.activity').controller('ActivityCtrl', ['$scope', '$log', '
 
 
          });
-         console.log($scope.homeViewMonth);
-         console.log($scope.cartViewMonth);
 
           var currentDate = new Date();
           var currentYear = currentDate.getFullYear();

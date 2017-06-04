@@ -14,23 +14,12 @@
                     <i class="fa fa-bar-chart-o fa-fw"></i> 30 Day API Calculations
                 </div>
                 <div class="panel-body">
-                    <div
-                    area-chart
-                    area-data='[
-                    { y: "2006", a: 100},
-                    { y: "2007", a: 75},
-                    { y: "2008", a: 50},
-                    { y: "2009", a: 75},
-                    { y: "2010", a: 50},
-                    { y: "2011", a: 75},
-                    { y: "2012", a: 100}
-                    ]'
-                    area-xkey='y'
-                    area-ykeys='["a"]'
-                    area-labels='["Month"]'
-                    line-colors='["#89b4f9"]'>
-                </div>
+                    <canvas id="line" class="chart chart-line" chart-data="api30Day"
+                    chart-labels="labelDay" chart-options="optionsViewsDayTotal"
+                    chart-click="onClick">
+                </canvas>
             </div>
+        </div>
         </div>
         <div class="panel panel-default">
             <div class="panel-heading">

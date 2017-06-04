@@ -1,4 +1,4 @@
-angular.module('admin.developers', ['ngRoute', 'security.authorization', 'services.adminResource', 'angular.morris']);
+angular.module('admin.developers', ['ngRoute', 'security.authorization', 'services.adminResource', 'angular.morris', 'chart.js']);
 angular.module('admin.developers').config(['$routeProvider', function($routeProvider){
   $routeProvider
   .when('/admin/developers', {
@@ -55,6 +55,19 @@ angular.module('admin.developers').controller('DevCtrl', ['$scope', '$log', 'sta
       $scope.apiMonth = [0,0,0,0,0,0,0,0,0,0,0,0];
       $scope.api30Day = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
 
+      $scope.labelDay = [];
+
+      for(var i = 29; i>=0; i--){
+        if(((i-4)%5)==0){
+          var dlabel = Date.today().add(-i).days().toString('MMM dS');
+
+          $scope.labelDay.push(dlabel);
+        } else {
+          $scope.labelDay.push('');
+        }
+
+      }
+      
       var currentDate = new Date();
       var currentYear = currentDate.getFullYear();
       var cutOff = Date.today().add(-30).days();
@@ -94,6 +107,24 @@ angular.module('admin.developers').controller('DevCtrl', ['$scope', '$log', 'sta
         $scope.apiYear[n]+=call.apiCalls;
       }
 
+    };
+
+
+    $scope.optionsViewsDayTotal = {
+      scales: {
+        yAxes: [
+        {
+          id: 'y-axis-1',
+          type: 'linear',
+          scaleLabel: {
+            display: true,
+            labelString: 'Total Views'
+          },
+          display: true,
+          position: 'left'
+        }
+        ]
+      }
     };
 
 
