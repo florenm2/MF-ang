@@ -202,4 +202,12 @@ div.paneling {
   transition: max-height 0.2s ease-out;
 }
 
+.update-price {
+  color: #0645AD;
+  cursor: pointer;
+}
+.update-price:hover {
+  text-decoration: underline;
+}
+
 /*# sourceMappingURL=custom.css.map */

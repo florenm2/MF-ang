@@ -8818,98 +8818,99 @@ angular.module("admin/Pricing/admin-pricing-modal.tpl.html", []).run(["$template
 angular.module("admin/Pricing/admin-pricing.tpl.html", []).run(["$templateCache", function($templateCache) {
   $templateCache.put("admin/Pricing/admin-pricing.tpl.html",
     "<div id=\"page-wrapper\">\n" +
-    "    <div class=\"row\">\n" +
-    "        <div class=\"col-lg-10\">\n" +
-    "            <h1> Pricing</h1>\n" +
-    "            <br>\n" +
-    "            \n" +
-    "            <h2>Smart Box</h2>\n" +
-    "            <div table-layout=\"fixed\" style=\"padding-left: 3em\">\n" +
-    "                <table style=\"width:100%\">\n" +
-    "                  <tr ng-repeat=\"product in products| filter:{type:'SmartBox'}\">\n" +
-    "                    <td width=\"33%\">{{product.title}}</td>\n" +
-    "                    <td width=\"33%\">${{product.price}} ea</td>\n" +
-    "                    <td width=\"33%\" ng-click=\"updateModal(product)\">Update Price</td>\n" +
-    "                    <!-- <td><a ng-href=\"/admin/users/{{user._id}}\">Edit</a></td> -->\n" +
+    "  <div class=\"row\">\n" +
+    "    <div class=\"col-lg-10\">\n" +
+    "      <h1> Pricing</h1>\n" +
+    "      <br>\n" +
     "\n" +
-    "                </tr>\n" +
-    "            </table>\n" +
-    "        </div>\n" +
+    "      <h2>Smart Box</h2>\n" +
+    "      <div table-layout=\"fixed\" style=\"padding-left: 3em\">\n" +
+    "        <table style=\"width:100%\">\n" +
+    "          <tr ng-repeat=\"product in products| filter:{type:'SmartBox'}\">\n" +
+    "            <td width=\"33%\">{{product.title}}</td>\n" +
+    "            <td width=\"33%\">${{product.price}} ea</td>\n" +
+    "            <td class=\"update-price\" style=\"cursor: pointer;\" width=\"33%\"><a ng-click=\"updateModal(product)\">Update Price</a></td>\n" +
+    "            <!-- <td width=\"33%\" ng-click=\"updateModal(product)\" style=\"cursor: pointer; color: #0645AD; hover:text-decoration: underline;\"\">Update Price</td> -->\n" +
+    "            <!-- <td><a ng-href=\"/admin/users/{{user._id}}\">Edit</a></td> -->\n" +
     "\n" +
-    "        <h2>Cabling</h2>\n" +
-    "        <div table-layout=\"fixed\" style=\"padding-left: 3em\">\n" +
-    "            <table style=\"width:100%\">\n" +
-    "              <tr ng-repeat=\"product in products| filter:{type:'Cabling'}\">\n" +
-    "                <td width=\"33%\">{{product.title}}</td>\n" +
-    "                <td width=\"33%\">${{product.price}} ea</td>\n" +
-    "                <td width=\"33%\" ng-click=\"updateModal(product)\">Update Price</td>\n" +
-    "                \n" +
-    "            </tr>\n" +
+    "          </tr>\n" +
     "        </table>\n" +
-    "    </div>\n" +
+    "      </div>\n" +
+    "\n" +
+    "      <h2>Cabling</h2>\n" +
+    "      <div table-layout=\"fixed\" style=\"padding-left: 3em\">\n" +
+    "        <table style=\"width:100%\">\n" +
+    "          <tr ng-repeat=\"product in products| filter:{type:'Cabling'}\">\n" +
+    "            <td width=\"33%\">{{product.title}}</td>\n" +
+    "            <td width=\"33%\">${{product.price}} ea</td>\n" +
+    "            <td class=\"update-price\" style=\"cursor: pointer;\" width=\"33%\"><a ng-click=\"updateModal(product)\">Update Price</a></td>\n" +
+    "            <!-- <td width=\"33%\" ng-click=\"updateModal(product)\">Update Price</td> -->\n" +
+    "\n" +
+    "          </tr>\n" +
+    "        </table>\n" +
+    "      </div>\n" +
     "\n" +
     "\n" +
-    "    <h2>Connectors</h2>\n" +
-    "    <div table-layout=\"fixed\" style=\"padding-left: 3em\">\n" +
+    "      <h2>Connectors</h2>\n" +
+    "      <div table-layout=\"fixed\" style=\"padding-left: 3em\">\n" +
     "        <table style=\"width:100%\">\n" +
     "          <tr ng-repeat=\"product in products| filter:{type:'Adapter'}\">\n" +
     "            <td width=\"33%\">{{product.title}}</td>\n" +
     "            <td width=\"33%\">${{product.price}} ea</td>\n" +
-    "            <td width=\"33%\" ng-click=\"updateModal(product)\">Update Price</td>\n" +
+    "            <td class=\"update-price\" style=\"cursor: pointer;\" width=\"33%\"><a ng-click=\"updateModal(product)\">Update Price</a></td>\n" +
+    "            <!-- <td width=\"33%\" ng-click=\"updateModal(product)\">Update Price</td> -->\n" +
     "\n" +
+    "          </tr>\n" +
+    "        </table>\n" +
+    "      </div>\n" +
+    "\n" +
+    "    </div>\n" +
+    "  </div>\n" +
+    "\n" +
+    "  <br>\n" +
+    "  <br>\n" +
+    "  <br>\n" +
+    "  <h2>Change History</h2>\n" +
+    "\n" +
+    "  <br>\n" +
+    "\n" +
+    "  <div>\n" +
+    "    <table width=\"100%\" class=\"table\">\n" +
+    "      <thead>\n" +
+    "        <tr>\n" +
+    "          <th>Item</th>\n" +
+    "          <th>Date</th>\n" +
+    "          <th>New Price</th>\n" +
+    "          <th>Old Price</th>\n" +
     "        </tr>\n" +
-    "    </table>\n" +
-    "</div>\n" +
+    "      </thead>\n" +
     "\n" +
-    "</div>\n" +
-    "</div>\n" +
+    "      <tbody>\n" +
     "\n" +
-    "<br>\n" +
-    "<br>\n" +
-    "<br>\n" +
-    "<h2>Change History</h2>\n" +
-    "\n" +
-    "<br>\n" +
-    "\n" +
-    "<div class=\"panel panel-default\">\n" +
-    "    <div class=\"panel-body\">\n" +
-    "        <table width=\"100%\" class=\"table\">\n" +
-    "            <thead>\n" +
-    "                <tr>\n" +
-    "                    <th>Item</th>\n" +
-    "                    <th>Date</th>\n" +
-    "                    <th>New Price</th>\n" +
-    "                    <th>Old Price</th>\n" +
-    "                </tr>\n" +
-    "            </thead>\n" +
-    "\n" +
-    "            <tbody>\n" +
-    "\n" +
-    "\n" +
-    "                <tr ng-repeat=\"product in products | orderBy:'title'\">\n" +
-    "                  <td>{{product.title}}</td>\n" +
-    "                  <td>\n" +
-    "                    <ul style=\"list-style: none; list-style-position:inside; margin:0; padding:0;\">\n" +
-    "                        <li ng-repeat=\"record in product.priceHistory\">\n" +
-    "                          <span>{{record.date | date:\"MM/dd/yyyy\"}}</span>\n" +
-    "                      </li>\n" +
-    "                  </ul>\n" +
-    "              </td>\n" +
-    "              <td>\n" +
-    "                  <ul style=\"list-style: none; list-style-position:inside; margin:0; padding:0;\">\n" +
-    "                    <li ng-repeat=\"record in product.priceHistory\">\n" +
-    "                      <span>${{record.newPrice}}</span>\n" +
-    "                  </li>\n" +
-    "              </ul>\n" +
+    "        <tr ng-repeat=\"product in products | orderBy:'title'\">\n" +
+    "          <td>{{product.title}}</td>\n" +
+    "          <td>\n" +
+    "            <ul style=\"list-style: none; list-style-position:inside; margin:0; padding:0;\">\n" +
+    "              <li ng-repeat=\"record in product.priceHistory\">\n" +
+    "                <span>{{record.date | date:\"MM/dd/yyyy\"}}</span>\n" +
+    "              </li>\n" +
+    "            </ul>\n" +
     "          </td>\n" +
     "          <td>\n" +
-    "              <ul style=\"list-style: none; list-style-position:inside; margin:0; padding:0;\">\n" +
-    "                <li ng-repeat=\"record in product.priceHistory\">\n" +
-    "                  <span>${{record.oldPrice}}</span>\n" +
+    "            <ul style=\"list-style: none; list-style-position:inside; margin:0; padding:0;\">\n" +
+    "              <li ng-repeat=\"record in product.priceHistory\">\n" +
+    "                <span>${{record.newPrice}}</span>\n" +
     "              </li>\n" +
-    "          </ul>\n" +
-    "      </td>\n" +
-    "  </tr>\n" +
+    "            </ul>\n" +
+    "          </td>\n" +
+    "          <td>\n" +
+    "            <ul style=\"list-style: none; list-style-position:inside; margin:0; padding:0;\">\n" +
+    "              <li ng-repeat=\"record in product.priceHistory\">\n" +
+    "                <span>${{record.oldPrice}}</span>\n" +
+    "              </li>\n" +
+    "            </ul>\n" +
+    "          </td>\n" +
+    "        </tr>\n" +
     "\n" +
     "\n" +
     "\n" +
@@ -8918,7 +8919,7 @@ angular.module("admin/Pricing/admin-pricing.tpl.html", []).run(["$templateCache"
     "                    <td> Item</td>\n" +
     "                    <td> New Price </td>\n" +
     "                    <td> Old Price </td>\n" +
-    "                </tr> -->\n" +
+    "                  </tr> -->\n" +
     "\n" +
     "<!-- \n" +
     "                                \n" +
@@ -8934,18 +8935,14 @@ angular.module("admin/Pricing/admin-pricing.tpl.html", []).run(["$templateCache"
     "                                </tr>\n" +
     "                                <tr ng-show=\"phList.length === 0\">\n" +
     "                                    <td colspan=\"5\">no documents matched</td>\n" +
-    "                                </tr> -->\n" +
+    "                                  </tr> -->\n" +
     "\n" +
-    "                            </tbody>\n" +
+    "      </tbody>\n" +
     "\n" +
-    "                        </table>\n" +
+    "    </table>\n" +
+    "  </div>\n" +
     "\n" +
-    "                    </div>\n" +
-    "                </div>\n" +
-    "\n" +
-    "\n" +
-    "\n" +
-    "            </div>");
+    "</div>");
 }]);
 
 angular.module("admin/Sales/admin-sales.tpl.html", []).run(["$templateCache", function($templateCache) {
@@ -8956,67 +8953,46 @@ angular.module("admin/Sales/admin-sales.tpl.html", []).run(["$templateCache", fu
     "        <br> \n" +
     "\n" +
     "        <div id=\"stats\" class=\"container\" style=\"height: 180px;\">\n" +
-    "        <div style='float:left;width:50%'>\n" +
-    "            <h4>Lifetime</h4>\n" +
-    "            <div style=\"padding-left: 3em\">\n" +
-    "                <p>Number of Purchases: {{tallyOverall}}</p>\n" +
-    "                <p>Total Revenue: ${{totalOverall}}</p>\n" +
-    "                <p>Average Purchase Size: ${{averageOverall | number:2}}</p>\n" +
+    "            <div style='float:left;width:50%'>\n" +
+    "                <h4>Lifetime</h4>\n" +
+    "                <div style=\"padding-left: 3em\">\n" +
+    "                    <p>Number of Purchases: {{tallyOverall}}</p>\n" +
+    "                    <p>Total Revenue: ${{totalOverall}}</p>\n" +
+    "                    <p>Average Purchase Size: ${{averageOverall | number:2}}</p>\n" +
+    "                </div>\n" +
+    "            </div>\n" +
+    "\n" +
+    "            <div style='float:right;width:50%'>\n" +
+    "                <h4>Last 30 Days</h4>\n" +
+    "                <div style=\"padding-left: 3em\">\n" +
+    "                    <p>Number of Purchases: {{tally30Days}}</p>\n" +
+    "                    <p>Total Revenue: ${{total30Days}}</p>\n" +
+    "                    <p>Average Purchase Size: ${{average30Days | number:2}}</p>\n" +
+    "                </div>\n" +
     "            </div>\n" +
     "        </div>\n" +
-    "        \n" +
-    "        <div style='float:right;width:50%'>\n" +
-    "            <h4>Last 30 Days</h4>\n" +
-    "            <div style=\"padding-left: 3em\">\n" +
-    "                <p>Number of Purchases: {{tally30Days}}</p>\n" +
-    "                <p>Total Revenue: ${{total30Days}}</p>\n" +
-    "                <p>Average Purchase Size: ${{average30Days | number:2}}</p>\n" +
-    "            </div>\n" +
-    "        </div>\n" +
-    "        </div>\n" +
     "\n" +
-    "\n" +
-    "        <div class=\"panel panel-default\" padding-top=\"-50px\">\n" +
-    "            <div class=\"panel-heading\">\n" +
-    "                Monthly\n" +
-    "            </div>\n" +
-    "            <div class=\"panel-body\">\n" +
-    "                <canvas id=\"line\" class=\"chart chart-line\" chart-data=\"totalDay\"\n" +
-    "                chart-labels=\"labelDay\" chart-legend=\"true\" chart-options=\"optionsDayTotal\"\n" +
-    "                chart-click=\"onClick\">\n" +
-    "            </canvas>\n" +
-    "        </div>\n" +
-    "    </div>\n" +
-    "\n" +
-    "    <br>         \n" +
-    "    <div class=\"panel panel-default\" >\n" +
-    "        <div class=\"panel-heading\">\n" +
-    "            Yearly Sales\n" +
+    "        <div>\n" +
+    "            <h4>Monthly</h4>\n" +
+    "            <br>\n" +
+    "            <canvas id=\"line\" class=\"chart chart-line\" chart-data=\"totalDay\" chart-labels=\"labelDay\" chart-legend=\"true\" chart-options=\"optionsDayTotal\"\n" +
+    "            chart-click=\"onClick\">></canvas>\n" +
     "        </div>\n" +
     "        <br>\n" +
-    "        <div class=\"panel-body\">\n" +
-    "            <canvas class=\"chart chart-bar\" chart-options=\"optionsMonthTotal\" chart-data=\"totalMonth\" chart-labels=\"labels\" chart-colors=\"xcolors\" chart-legend=\"true\" chart-click=\"onClick\" chart-dataset-override=\"datasetOverride1\">\n" +
-    "            </canvas>\n" +
-    "\n" +
+    "        <div>\n" +
+    "            <h4>Yearly Sales</h4>\n" +
+    "            <br>\n" +
+    "            <canvas class=\"chart chart-bar\" chart-options=\"optionsMonthTotal\" chart-data=\"totalMonth\" chart-labels=\"labels\" chart-colors=\"xcolors\" chart-legend=\"true\" chart-click=\"onClick\" chart-dataset-override=\"datasetOverride1\"></canvas>\n" +
     "        </div>\n" +
-    "\n" +
-    "    </div>\n" +
-    "\n" +
-    "    <br> \n" +
-    "    <br> \n" +
-    "\n" +
-    "    <div class=\"panel panel-default\">\n" +
-    "        <div class=\"panel-heading\">\n" +
-    "            Sales Size and Quantity\n" +
-    "        </div>\n" +
-    "        <div class=\"panel-body\">\n" +
+    "        <br>\n" +
+    "        <br>\n" +
+    "        <div>\n" +
+    "            <h4>Sales Size and Quantity</h4>\n" +
     "            <canvas id=\"line\" class=\"chart chart-line\" chart-legend=\"true\" chart-data=\"sizeQuantityData\"\n" +
     "            chart-labels=\"labels\" chart-series=\"series\" chart-options=\"sizeQuantityOptions\"\n" +
-    "            chart-dataset-override=\"datasetOverride\" chart-click=\"onClick\">\n" +
-    "        </canvas>\n" +
+    "            chart-dataset-override=\"datasetOverride\" chart-click=\"onClick\"></canvas>\n" +
+    "        </div>\n" +
     "    </div>\n" +
-    "</div> \n" +
-    "</div>\n" +
     "</div>");
 }]);
 
@@ -9232,10 +9208,52 @@ angular.module("admin/activity/activity.tpl.html", []).run(["$templateCache", fu
   $templateCache.put("admin/activity/activity.tpl.html",
     "<div id=\"page-wrapper\">\n" +
     "    <div ng-show=\"isSet(1)\">\n" +
-    "     <div class=\"row\">\n" +
-    "        <div class=\"col-lg-12\">\n" +
-    "            <h1>Activity this Month</h1>\n" +
+    "        <div class=\"row\">\n" +
+    "            <div class=\"col-lg-12\">\n" +
+    "                <h1>Activity this Month</h1>\n" +
+    "                <br>\n" +
+    "                <div class=\"row\">\n" +
+    "                    <ul class=\"nav nav-tabs\">\n" +
+    "                        <li ng-class=\"{ active: isSet(1) }\">\n" +
+    "                            <a href ng-click=\"setTab(1)\">Month</a>\n" +
+    "                        </li>\n" +
+    "                        <li ng-class=\"{ active: isSet(2) }\">\n" +
+    "                            <a href ng-click=\"setTab(2)\">Year</a>\n" +
+    "                        </li>\n" +
+    "                    </ul>\n" +
+    "                </div>\n" +
+    "                <br>\n" +
+    "                <div>\n" +
+    "                    <h4>Past 30 Day Sales</h4>\n" +
+    "                    <br>\n" +
+    "                    <canvas id=\"line\" class=\"chart chart-line\" chart-data=\"totalDay\" chart-labels=\"labelDay\" chart-options=\"optionsSalesDayTotal\" \n" +
+    "                    chart-click=\"onClick\"></canvas>\n" +
+    "                </div>\n" +
+    "                <br>\n" +
+    "                <div>\n" +
+    "                    <h4>Home Page Views</h4>\n" +
+    "                    <br>\n" +
+    "                    <canvas id=\"line\" class=\"chart chart-line\" chart-data=\"homeView30Day\" chart-labels=\"labelDay\" chart-options=\"optionsViewsDayTotal\" \n" +
+    "                    chart-click=\"onClick\"></canvas>\n" +
+    "                </div>\n" +
+    "                <div>\n" +
+    "                    <h4>Cart Page Views</h4>\n" +
+    "                    <br>\n" +
+    "                    <canvas id=\"line\" class=\"chart chart-line\" chart-data=\"cartView30Day\" chart-labels=\"labelDay\" chart-options=\"optionsViewsDayTotal\" \n" +
+    "                    chart-click=\"onClick\"></canvas>\n" +
+    "                </div>\n" +
+    "                <br>\n" +
+    "            </div>\n" +
+    "        </div>\n" +
+    "    </div>\n" +
+    "\n" +
+    "\n" +
+    "    <div ng-show=\"isSet(2)\">\n" +
+    "      <div class=\"row\">\n" +
+    "        <div class=\"col-lg-12 col-md-12 col-sm-12\">\n" +
+    "            <h1>Activity this Year</h1>\n" +
     "            <br>\n" +
+    "\n" +
     "            <div class=\"row\">\n" +
     "                <ul class=\"nav nav-tabs\">\n" +
     "                    <li ng-class=\"{ active: isSet(1) }\">\n" +
@@ -9246,116 +9264,29 @@ angular.module("admin/activity/activity.tpl.html", []).run(["$templateCache", fu
     "                    </li>\n" +
     "                </ul>\n" +
     "            </div>\n" +
-    "\n" +
-    "            <br> \n" +
-    "            <br>         \n" +
-    "            <div class=\"panel panel-default\">\n" +
-    "                <div class=\"panel-heading\">\n" +
-    "                    Past 30 Day Sales\n" +
-    "                </div>\n" +
-    "                <div class=\"panel-body\">\n" +
-    "                    <canvas id=\"line\" class=\"chart chart-line\" chart-data=\"totalDay\"\n" +
-    "                    chart-labels=\"labelDay\" chart-options=\"optionsSalesDayTotal\"\n" +
-    "                    chart-click=\"onClick\">\n" +
-    "                </canvas>\n" +
-    "            </div>\n" +
-    "        </div>\n" +
-    "\n" +
-    "        <br>\n" +
-    "        <br>\n" +
-    "\n" +
-    "        <br>\n" +
-    "\n" +
-    "\n" +
-    "        <div class=\"panel panel-default\">\n" +
-    "                <div class=\"panel-heading\">\n" +
-    "                    Home Page Views\n" +
-    "                </div>\n" +
-    "                <div class=\"panel-body\">\n" +
-    "                    <canvas id=\"line\" class=\"chart chart-line\" chart-data=\"homeView30Day\" chart-labels=\"labelDay\" chart-options=\"optionsViewsDayTotal\" chart-click=\"onClick\">\n" +
-    "                </canvas>\n" +
-    "            </div>\n" +
-    "        </div>\n" +
-    "\n" +
-    "\n" +
-    "\n" +
-    "        <div class=\"panel panel-default\">\n" +
-    "                <div class=\"panel-heading\">\n" +
-    "                    Cart Page Views\n" +
-    "                </div>\n" +
-    "                <div class=\"panel-body\">\n" +
-    "                    <canvas id=\"line\" class=\"chart chart-line\" chart-data=\"cartView30Day\" chart-labels=\"labelDay\" chart-options=\"optionsViewsDayTotal\" chart-click=\"onClick\">\n" +
-    "                </canvas>\n" +
-    "            </div>\n" +
-    "        </div>\n" +
-    "\n" +
-    "<br>\n" +
-    "\n" +
-    "</div>\n" +
-    "</div>\n" +
-    "</div>\n" +
-    "\n" +
-    "\n" +
-    "<div ng-show=\"isSet(2)\">\n" +
-    "  <div class=\"row\">\n" +
-    "    <div class=\"col-lg-12 col-md-12 col-sm-12\">\n" +
-    "        <h1>Activity this Year</h1>\n" +
-    "        <br>\n" +
-    "\n" +
-    "        <div class=\"row\">\n" +
-    "            <ul class=\"nav nav-tabs\">\n" +
-    "                <li ng-class=\"{ active: isSet(1) }\">\n" +
-    "                    <a href ng-click=\"setTab(1)\">Month</a>\n" +
-    "                </li>\n" +
-    "                <li ng-class=\"{ active: isSet(2) }\">\n" +
-    "                    <a href ng-click=\"setTab(2)\">Year</a>\n" +
-    "                </li>\n" +
-    "            </ul>\n" +
-    "        </div>\n" +
-    "        <br>\n" +
-    "        <br>\n" +
-    "        <br>\n" +
-    "\n" +
-    "        <p> Resize Bug</p>\n" +
-    "        <div class=\"panel panel-default\">\n" +
-    "            <div class=\"panel-heading\">\n" +
-    "                Sales this Year\n" +
+    "            <br>\n" +
+    "            <div>\n" +
+    "                <h4>Sales this Year</h4>\n" +
+    "                <br>\n" +
+    "                <canvas id=\"line\" class=\"chart chart-bar\" chart-type=\"bar\" chart-options=\"optionsMonthTotal\" chart-data=\"totalMonth\" chart-labels=\"labels\" \n" +
+    "                chart-legend=\"true\" chart-click=\"onClick\"></canvas>\n" +
     "            </div>\n" +
     "            <br>\n" +
-    "            <div class=\"panel-body\">\n" +
-    "                <canvas id=\"line\" class=\"chart chart-bar\" chart-type=\"bar\" chart-options=\"optionsMonthTotal\" chart-data=\"totalMonth\" chart-labels=\"labels\" chart-legend=\"true\" chart-click=\"onClick\">\n" +
-    "                </canvas>\n" +
+    "            <div>\n" +
+    "                <h4>Home Page Views</h4>\n" +
+    "                <br>\n" +
+    "                <canvas id=\"line\" class=\"chart chart-line\" chart-data=\"homeViewMonth\" chart-labels=\"labels\" chart-options=\"optionsMonthViews\" \n" +
+    "                chart-click=\"onClick\"></canvas>\n" +
+    "            </div>\n" +
+    "            <br>\n" +
+    "            <div>\n" +
+    "                <h4>Cart Page Views</h4>\n" +
+    "                <br>\n" +
+    "                <canvas id=\"line\" class=\"chart chart-line\" chart-data=\"cartViewMonth\" chart-labels=\"labels\" chart-options=\"optionsMonthViews\" \n" +
+    "                chart-click=\"onClick\"></canvas>\n" +
     "            </div>\n" +
     "        </div>\n" +
-    "        <br>\n" +
-    "        <br>\n" +
-    "\n" +
-    "        <div class=\"panel panel-default\">\n" +
-    "                <div class=\"panel-heading\">\n" +
-    "                    Home Page Views\n" +
-    "                </div>\n" +
-    "                <div class=\"panel-body\">\n" +
-    "                    <canvas id=\"line\" class=\"chart chart-line\" chart-data=\"homeViewMonth\" chart-labels=\"labels\" chart-options=\"optionsMonthViews\" chart-click=\"onClick\">\n" +
-    "                </canvas>\n" +
-    "            </div>\n" +
-    "        </div>\n" +
-    "\n" +
-    "\n" +
-    "\n" +
-    "        <div class=\"panel panel-default\">\n" +
-    "                <div class=\"panel-heading\">\n" +
-    "                    Cart Page Views\n" +
-    "                </div>\n" +
-    "                <div class=\"panel-body\">\n" +
-    "                    <canvas id=\"line\" class=\"chart chart-line\" chart-data=\"cartViewMonth\" chart-labels=\"labels\" chart-options=\"optionsMonthViews\" chart-click=\"onClick\">\n" +
-    "                </canvas>\n" +
-    "            </div>\n" +
-    "        </div>\n" +
-    "\n" +
-    "\n" +
-    "\n" +
-    "</div>\n" +
-    "</div>\n" +
+    "    </div>\n" +
     "</div>");
 }]);
 
@@ -9591,85 +9522,131 @@ angular.module("admin/admin-groups/admin-groups.tpl.html", []).run(["$templateCa
 angular.module("admin/admin.tpl.html", []).run(["$templateCache", function($templateCache) {
   $templateCache.put("admin/admin.tpl.html",
     "<div id=\"page-wrapper\">\n" +
-    "    \n" +
+    "\n" +
     "    <div class=\"row\">\n" +
     "        <div class=\"col-lg-12\">\n" +
-    "         <h1>Dashboard</h1>\n" +
-    "         <br>\n" +
+    "            <h1>Dashboard</h1>\n" +
+    "            <br>\n" +
+    "            <div>\n" +
+    "                <h4>Home Page Views</h4>\n" +
+    "                <br>\n" +
+    "                <canvas id=\"line\" class=\"chart chart-line\" chart-data=\"homeView30Day\" chart-labels=\"labelDay\" chart-options=\"optionsViewsDayTotal\" chart-click=\"onClick\">\n" +
+    "            </div>\n" +
+    "            <br>\n" +
+    "            <div>\n" +
+    "                <h4>Shopping Cart Views</h4>\n" +
+    "                <br>\n" +
+    "                <canvas id=\"line\" class=\"chart chart-line\" chart-data=\"cartView30Day\" chart-labels=\"labelDay\" chart-options=\"optionsViewsDayTotal\" chart-click=\"onClick\">\n" +
+    "            </div>\n" +
+    "            <br>\n" +
+    "            <div>\n" +
+    "                <h4>Recent Purchases</h4>\n" +
+    "                <br>\n" +
+    "                <div class=\"table table-striped\">\n" +
+    "                        <a href=\"#\" class=\"list-group-item\">\n" +
+    "                            <i class=\"fa fa-shopping-cart fa-fw\"></i> New Order Placed\n" +
+    "                            <span class=\"pull-right text-muted small\"><em>4 minutes ago</em>\n" +
+    "                            </span>\n" +
+    "                        </a>\n" +
+    "                        <a href=\"#\" class=\"list-group-item\">\n" +
+    "                            <i class=\"fa fa-shopping-cart fa-fw\"></i> New Order Placed\n" +
+    "                            <span class=\"pull-right text-muted small\"><em>12 minutes ago</em>\n" +
+    "                            </span>\n" +
+    "                        </a>\n" +
+    "                        <a href=\"#\" class=\"list-group-item\">\n" +
+    "                            <i class=\"fa fa-money fa-fw\"></i> Payment Received\n" +
+    "                            <span class=\"pull-right text-muted small\"><em>27 minutes ago</em>\n" +
+    "                            </span>\n" +
+    "                        </a>\n" +
+    "                        <a href=\"#\" class=\"list-group-item\">\n" +
+    "                            <i class=\"fa fa-shopping-cart fa-fw\"></i> New Order Placed\n" +
+    "                            <span class=\"pull-right text-muted small\"><em>43 minutes ago</em>\n" +
+    "                            </span>\n" +
+    "                        </a>\n" +
+    "                        <a href=\"#\" class=\"list-group-item\">\n" +
+    "                            <i class=\"fa fa-money fa-fw\"></i> Payment Received\n" +
+    "                            <span class=\"pull-right text-muted small\"><em>11:32 AM</em>\n" +
+    "                            </span>\n" +
+    "                        </a>\n" +
+    "                        <a href=\"#\" class=\"list-group-item\">\n" +
+    "                            <i class=\"fa fa-shopping-cart fa-fw\"></i> New Order Placed\n" +
+    "                            <span class=\"pull-right text-muted small\"><em>11:13 AM</em>\n" +
+    "                            </span>\n" +
+    "                        </a>\n" +
+    "                        <a href=\"#\" class=\"list-group-item\">\n" +
+    "                            <i class=\"fa fa-shopping-cart fa-fw\"></i> New Order Placed\n" +
+    "                            <span class=\"pull-right text-muted small\"><em>10:57 AM</em>\n" +
+    "                            </span>\n" +
+    "                        </a>\n" +
+    "                        <a href=\"#\" class=\"list-group-item\">\n" +
+    "                            <i class=\"fa fa-shopping-cart fa-fw\"></i> New Order Placed\n" +
+    "                            <span class=\"pull-right text-muted small\"><em>9:49 AM</em>\n" +
+    "                            </span>\n" +
+    "                        </a>\n" +
+    "                        <a href=\"#\" class=\"list-group-item\">\n" +
+    "                            <i class=\"fa fa-money fa-fw\"></i> Payment Received\n" +
+    "                            <span class=\"pull-right text-muted small\"><em>Yesterday</em>\n" +
+    "                            </span>\n" +
+    "                        </a>\n" +
+    "                    </div>\n" +
+    "            </div>\n" +
+    "            <br>\n" +
     "            <div class=\"panel panel-default\">\n" +
     "                <div class=\"panel-heading\">\n" +
-    "                    <i class=\"fa fa-bar-chart-o fa-fw\"></i> Home Page Views\n" +
+    "                    <i class=\"fa fa-bell fa-fw\"></i> Recent Purchases\n" +
     "                </div>\n" +
     "                <div class=\"panel-body\">\n" +
-    "                    <canvas id=\"line\" class=\"chart chart-line\" chart-data=\"homeView30Day\" chart-labels=\"labelDay\" chart-options=\"optionsViewsDayTotal\" chart-click=\"onClick\">\n" +
-    "                </canvas>\n" +
-    "            </div>\n" +
-    "        </div>\n" +
-    "        <div class=\"panel panel-default\">\n" +
-    "            <div class=\"panel-heading\">\n" +
-    "                <i class=\"fa fa-bar-chart-o fa-fw\"></i> Shopping Cart Views\n" +
-    "            </div>\n" +
-    "            <div class=\"panel-body\">\n" +
-    "                <canvas id=\"line\" class=\"chart chart-line\" chart-data=\"cartView30Day\" chart-labels=\"labelDay\" chart-options=\"optionsViewsDayTotal\" chart-click=\"onClick\">\n" +
-    "            </canvas>\n" +
-    "        </div>\n" +
-    "    </div>\n" +
-    "        <div class=\"panel panel-default\">\n" +
-    "            <div class=\"panel-heading\">\n" +
-    "            <i class=\"fa fa-bell fa-fw\"></i> Recent Purchases\n" +
-    "            </div>\n" +
-    "            <div class=\"panel-body\">\n" +
-    "                <div class=\"list-group\">\n" +
-    "                    <a href=\"#\" class=\"list-group-item\">\n" +
-    "                        <i class=\"fa fa-shopping-cart fa-fw\"></i> New Order Placed\n" +
-    "                        <span class=\"pull-right text-muted small\"><em>4 minutes ago</em>\n" +
-    "                        </span>\n" +
-    "                    </a>\n" +
-    "                    <a href=\"#\" class=\"list-group-item\">\n" +
-    "                        <i class=\"fa fa-shopping-cart fa-fw\"></i> New Order Placed\n" +
-    "                        <span class=\"pull-right text-muted small\"><em>12 minutes ago</em>\n" +
-    "                        </span>\n" +
-    "                    </a>\n" +
-    "                    <a href=\"#\" class=\"list-group-item\">\n" +
-    "                        <i class=\"fa fa-money fa-fw\"></i> Payment Received\n" +
-    "                        <span class=\"pull-right text-muted small\"><em>27 minutes ago</em>\n" +
-    "                        </span>\n" +
-    "                    </a>\n" +
-    "                    <a href=\"#\" class=\"list-group-item\">\n" +
-    "                        <i class=\"fa fa-shopping-cart fa-fw\"></i> New Order Placed\n" +
-    "                        <span class=\"pull-right text-muted small\"><em>43 minutes ago</em>\n" +
-    "                        </span>\n" +
-    "                    </a>\n" +
-    "                    <a href=\"#\" class=\"list-group-item\">\n" +
-    "                        <i class=\"fa fa-money fa-fw\"></i> Payment Received\n" +
-    "                        <span class=\"pull-right text-muted small\"><em>11:32 AM</em>\n" +
-    "                        </span>\n" +
-    "                    </a>\n" +
-    "                    <a href=\"#\" class=\"list-group-item\">\n" +
-    "                        <i class=\"fa fa-shopping-cart fa-fw\"></i> New Order Placed\n" +
-    "                        <span class=\"pull-right text-muted small\"><em>11:13 AM</em>\n" +
-    "                        </span>\n" +
-    "                    </a>\n" +
-    "                    <a href=\"#\" class=\"list-group-item\">\n" +
-    "                        <i class=\"fa fa-shopping-cart fa-fw\"></i> New Order Placed\n" +
-    "                        <span class=\"pull-right text-muted small\"><em>10:57 AM</em>\n" +
-    "                        </span>\n" +
-    "                    </a>\n" +
-    "                    <a href=\"#\" class=\"list-group-item\">\n" +
-    "                        <i class=\"fa fa-shopping-cart fa-fw\"></i> New Order Placed\n" +
-    "                        <span class=\"pull-right text-muted small\"><em>9:49 AM</em>\n" +
-    "                        </span>\n" +
-    "                    </a>\n" +
-    "                    <a href=\"#\" class=\"list-group-item\">\n" +
-    "                        <i class=\"fa fa-money fa-fw\"></i> Payment Received\n" +
-    "                        <span class=\"pull-right text-muted small\"><em>Yesterday</em>\n" +
-    "                        </span>\n" +
-    "                    </a>\n" +
+    "                    <div class=\"list-group\">\n" +
+    "                        <a href=\"#\" class=\"list-group-item\">\n" +
+    "                            <i class=\"fa fa-shopping-cart fa-fw\"></i> New Order Placed\n" +
+    "                            <span class=\"pull-right text-muted small\"><em>4 minutes ago</em>\n" +
+    "                            </span>\n" +
+    "                        </a>\n" +
+    "                        <a href=\"#\" class=\"list-group-item\">\n" +
+    "                            <i class=\"fa fa-shopping-cart fa-fw\"></i> New Order Placed\n" +
+    "                            <span class=\"pull-right text-muted small\"><em>12 minutes ago</em>\n" +
+    "                            </span>\n" +
+    "                        </a>\n" +
+    "                        <a href=\"#\" class=\"list-group-item\">\n" +
+    "                            <i class=\"fa fa-money fa-fw\"></i> Payment Received\n" +
+    "                            <span class=\"pull-right text-muted small\"><em>27 minutes ago</em>\n" +
+    "                            </span>\n" +
+    "                        </a>\n" +
+    "                        <a href=\"#\" class=\"list-group-item\">\n" +
+    "                            <i class=\"fa fa-shopping-cart fa-fw\"></i> New Order Placed\n" +
+    "                            <span class=\"pull-right text-muted small\"><em>43 minutes ago</em>\n" +
+    "                            </span>\n" +
+    "                        </a>\n" +
+    "                        <a href=\"#\" class=\"list-group-item\">\n" +
+    "                            <i class=\"fa fa-money fa-fw\"></i> Payment Received\n" +
+    "                            <span class=\"pull-right text-muted small\"><em>11:32 AM</em>\n" +
+    "                            </span>\n" +
+    "                        </a>\n" +
+    "                        <a href=\"#\" class=\"list-group-item\">\n" +
+    "                            <i class=\"fa fa-shopping-cart fa-fw\"></i> New Order Placed\n" +
+    "                            <span class=\"pull-right text-muted small\"><em>11:13 AM</em>\n" +
+    "                            </span>\n" +
+    "                        </a>\n" +
+    "                        <a href=\"#\" class=\"list-group-item\">\n" +
+    "                            <i class=\"fa fa-shopping-cart fa-fw\"></i> New Order Placed\n" +
+    "                            <span class=\"pull-right text-muted small\"><em>10:57 AM</em>\n" +
+    "                            </span>\n" +
+    "                        </a>\n" +
+    "                        <a href=\"#\" class=\"list-group-item\">\n" +
+    "                            <i class=\"fa fa-shopping-cart fa-fw\"></i> New Order Placed\n" +
+    "                            <span class=\"pull-right text-muted small\"><em>9:49 AM</em>\n" +
+    "                            </span>\n" +
+    "                        </a>\n" +
+    "                        <a href=\"#\" class=\"list-group-item\">\n" +
+    "                            <i class=\"fa fa-money fa-fw\"></i> Payment Received\n" +
+    "                            <span class=\"pull-right text-muted small\"><em>Yesterday</em>\n" +
+    "                            </span>\n" +
+    "                        </a>\n" +
+    "                    </div>\n" +
     "                </div>\n" +
     "            </div>\n" +
+    "        </div>\n" +
     "    </div>\n" +
-    "</div>\n" +
-    "</div>\n" +
     "</div>\n" +
     "");
 }]);
@@ -9999,151 +9976,149 @@ angular.module("admin/developers/developers.tpl.html", []).run(["$templateCache"
     "<div id=\"page-wrapper\">\n" +
     "    <div class=\"row\">\n" +
     "        <div class=\"col-lg-12\">\n" +
-    "        <h1>API/Developers</h1>\n" +
-    "        <p style=\"padding-left: 1.8em\">Number of Developers: 8</p>\n" +
-    "        <div>\n" +
-    "            <p class=\"pull-right\" style=\"padding-right: 3.8em\">API Calls Last Month: 18<br>API Calls Last Year: 180</p>\n" +
-    "        </div>\n" +
-    "        <br>\n" +
-    "        <br>\n" +
-    "        <br>\n" +
-    "            <div class=\"panel panel-default\">\n" +
-    "                <div class=\"panel-heading\">\n" +
-    "                    <i class=\"fa fa-bar-chart-o fa-fw\"></i> 30 Day API Calculations\n" +
+    "            <h1>API/Developers</h1>\n" +
+    "            <p style=\"padding-left: 1.8em\">Number of Developers: 8</p>\n" +
+    "            <div>\n" +
+    "                <p class=\"pull-right\" style=\"padding-right: 3.8em\">API Calls Last Month: 18<br>API Calls Last Year: 180</p>\n" +
+    "            </div>\n" +
+    "            <br>\n" +
+    "            <br>\n" +
+    "            <div>\n" +
+    "                <h4>30 Day API Calculations</h4>\n" +
+    "                <br>\n" +
+    "                <div\n" +
+    "                    area-chart\n" +
+    "                    area-data='[\n" +
+    "                    { y: \"2006\", a: 100},\n" +
+    "                    { y: \"2007\", a: 75},\n" +
+    "                    { y: \"2008\", a: 50},\n" +
+    "                    { y: \"2009\", a: 75},\n" +
+    "                    { y: \"2010\", a: 50},\n" +
+    "                    { y: \"2011\", a: 75},\n" +
+    "                    { y: \"2012\", a: 100}\n" +
+    "                    ]'\n" +
+    "                    area-xkey='y'\n" +
+    "                    area-ykeys='[\"a\"]'\n" +
+    "                    area-labels='[\"Month\"]'\n" +
+    "                    line-colors='[\"#89b4f9\"]'>\n" +
     "                </div>\n" +
-    "                <div class=\"panel-body\">\n" +
-    "                    <canvas id=\"line\" class=\"chart chart-line\" chart-data=\"api30Day\"\n" +
-    "                    chart-labels=\"labelDay\" chart-options=\"optionsViewsDayTotal\"\n" +
-    "                    chart-click=\"onClick\">\n" +
-    "                </canvas>\n" +
     "            </div>\n" +
-    "        </div>\n" +
-    "        </div>\n" +
-    "        <div class=\"panel panel-default\">\n" +
-    "            <div class=\"panel-heading\">\n" +
-    "                <i class=\"fa fa-bar-chart-o fa-fw\"></i> 12 Month API Calls\n" +
-    "            </div>\n" +
-    "            <div class=\"panel-body\">\n" +
+    "            <br>\n" +
+    "            <br>\n" +
+    "            <div>\n" +
+    "                <h4>12 Month API Calls</h4>\n" +
+    "                <br>\n" +
     "                <div bar-chart bar-data='[\n" +
-    "                { y: \"2009\", a: 75,  b: 65 },\n" +
-    "                { y: \"2010\", a: 50,  b: 40 },\n" +
-    "                { y: \"2011\", a: 75,  b: 65 },\n" +
-    "                { y: \"2012\", a: 100, b: 90 }\n" +
-    "                ]' bar-x='y' bar-y='[\"a\", \"b\"]' bar-labels='[\"Year\", \"Month\"]' bar-colors='[\"#89b4f9\", \"#5f7dae\"]'>\n" +
+    "                    { y: \"2009\", a: 75,  b: 65 },\n" +
+    "                    { y: \"2010\", a: 50,  b: 40 },\n" +
+    "                    { y: \"2011\", a: 75,  b: 65 },\n" +
+    "                    { y: \"2012\", a: 100, b: 90 }\n" +
+    "                    ]' bar-x='y' bar-y='[\"a\", \"b\"]' bar-labels='[\"Year\", \"Month\"]' bar-colors='[\"#89b4f9\", \"#5f7dae\"]'>\n" +
+    "                </div>\n" +
     "            </div>\n" +
     "        </div>\n" +
     "    </div>\n" +
-    "</div>\n" +
-    "</div>\n" +
-    "\n" +
-    "<div class=\"panel panel-default\">\n" +
-    "    <div class=\"panel-body\">\n" +
-    "        <div class=\"table-responsive\">\n" +
-    "            <table class=\"table table-striped\">\n" +
-    "                <thead>\n" +
-    "                    <tr>\n" +
-    "                        <th>ID</th>\n" +
-    "                        <th>Name</th>\n" +
-    "                        <th>Company</th>\n" +
-    "                        <th>Number of API Calls</th>\n" +
-    "                    </tr>\n" +
-    "                </thead>\n" +
-    "                <tbody>\n" +
-    "                    <tr>\n" +
-    "                        <td>12</td>\n" +
-    "                        <td>Website</td>\n" +
-    "                        <td>Company One</td>\n" +
-    "                        <td>22</td>\n" +
-    "                    </tr>\n" +
-    "                    <tr>\n" +
-    "                        <td>23</td>\n" +
-    "                        <td>Website</td>\n" +
-    "                        <td>Company One</td>\n" +
-    "                        <td>12</td>\n" +
-    "                    </tr>\n" +
-    "                    <tr>\n" +
-    "                        <td>31</td>\n" +
-    "                        <td>Website</td>\n" +
-    "                        <td>Company Two</td>\n" +
-    "                        <td>5</td>\n" +
-    "                    </tr>\n" +
-    "                </tbody>\n" +
-    "            </table>\n" +
-    "        </div>\n" +
+    "    <br>\n" +
+    "    <br>\n" +
+    "    <div class=\"table-responsive\">\n" +
+    "        <table class=\"table table-striped\">\n" +
+    "            <thead>\n" +
+    "                <tr>\n" +
+    "                    <th>ID</th>\n" +
+    "                    <th>Name</th>\n" +
+    "                    <th>Company</th>\n" +
+    "                    <th>Number of API Calls</th>\n" +
+    "                </tr>\n" +
+    "            </thead>\n" +
+    "            <tbody>\n" +
+    "                <tr>\n" +
+    "                    <td>12</td>\n" +
+    "                    <td>Website</td>\n" +
+    "                    <td>Company One</td>\n" +
+    "                    <td>22</td>\n" +
+    "                </tr>\n" +
+    "                <tr>\n" +
+    "                    <td>23</td>\n" +
+    "                    <td>Website</td>\n" +
+    "                    <td>Company One</td>\n" +
+    "                    <td>12</td>\n" +
+    "                </tr>\n" +
+    "                <tr>\n" +
+    "                    <td>31</td>\n" +
+    "                    <td>Website</td>\n" +
+    "                    <td>Company Two</td>\n" +
+    "                    <td>5</td>\n" +
+    "                </tr>\n" +
+    "            </tbody>\n" +
+    "        </table>\n" +
     "    </div>\n" +
-    "</div>\n" +
-    "\n" +
     "</div>");
 }]);
 
 angular.module("admin/purchase-history/admin-purchase-histories.tpl.html", []).run(["$templateCache", function($templateCache) {
   $templateCache.put("admin/purchase-history/admin-purchase-histories.tpl.html",
     "<div id=\"page-wrapper\">\n" +
-    "        <div class=\"row\">\n" +
-    "            <div class=\"col-lg-12\">\n" +
-    "                <h1>Purchase History</h1>\n" +
-    "                <br>\n" +
-    "                <div class=\"sidebar-search\" style=\"width: 30%;\">\n" +
-    "                    <div class=\"input-group custom-search-form\">\n" +
-    "                        <input name=\"orderNumber\" type=\"text\" class=\"form-control\" ng-model=\"filters.orderNumber\" ng-model-options=\"{ debounce: 500 }\" ng-change=\"filtersUpdated()\" placeholder=\"Search\">\n" +
-    "                        <div class=\"input-group-btn\">\n" +
-    "                            <button class=\"btn btn-default\" type=\"button\">\n" +
-    "                                <i class=\"fa fa-search\"></i>\n" +
-    "                            </button>\n" +
-    "                        </div>\n" +
-    "                    </div>\n" +
-    "                </div>\n" +
-    "                <br>\n" +
-    "                <div class=\"panel panel-default\">\n" +
-    "                    <div class=\"panel-heading\">\n" +
-    "                        Purchase History\n" +
-    "                    </div>\n" +
-    "                    <div class=\"panel-body\">\n" +
-    "                        <table class=\"table table-striped\">\n" +
-    "                            <thead>\n" +
-    "                                <tr>\n" +
-    "                                    <th>Date</th>\n" +
-    "                                    <th>Company</th>\n" +
-    "                                    <th>Customer</th>\n" +
-    "                                    <th>Customer ID</th>\n" +
-    "                                    <th>Shipping State</th>\n" +
-    "                                    <th>Purchase Amount</th>\n" +
-    "                                    <th>Transaction ID</th>\n" +
-    "                                </tr>\n" +
-    "                            </thead>\n" +
-    "                            <tbody>\n" +
-    "                                <!-- <tr ng-repeat=\"user in users\" ng-click=\"goToUser();\"> -->\n" +
-    "                                <tr ng-repeat=\"ph in phList\" ng-click=\"goToPH();\">\n" +
-    "                                    <!-- <td><a class=\"btn btn-default btn-sm\" ng-href=\"/admin/users/{{user._id}}\">Edit</a></td> -->\n" +
-    "                                    <td>{{ph.orderDate | date:\"MM/dd/yyyy\"}}</td>\n" +
-    "                                    <td ng-bind=\"ph.company\"></td>\n" +
-    "                                    <td ng-bind=\"ph.user.name\"></td>\n" +
-    "                                    <td ng-bind=\"ph.user._id\"></td>\n" +
-    "                                    <td></td>\n" +
-    "                                    <td>${{ph.cost.total}}</td>\n" +
-    "                                    <td ng-bind=\"ph.orderNumber\"></td>\n" +
-    "                                </tr>\n" +
-    "                                <tr ng-show=\"phList.length === 0\">\n" +
-    "                                    <td colspan=\"5\">no documents matched</td>\n" +
-    "                                </tr>\n" +
-    "                            </tbody>\n" +
-    "                        </table>\n" +
-    "                        <div class=\"well\" ng-if=\"pages.total > 1\">\n" +
-    "                            <div class=\"btn-group pull-left\">\n" +
-    "                                <button disabled class=\"btn btn-default\">Page {{pages.current}} of {{pages.total}}</button>\n" +
-    "                                <button disabled class=\"btn btn-default\">Rows {{items.begin}} - {{items.end}} of {{items.total}}</button>\n" +
-    "                            </div>\n" +
-    "                            <div class=\"btn-group pull-right\">\n" +
-    "                                <button class=\"btn btn-default\" ng-class=\"{disabled: !pages.hasPrev}\" ng-click=\"prev()\">Prev</button>\n" +
-    "                                <button class=\"btn btn-default\" ng-class=\"{disabled: !pages.hasNext}\" ng-click=\"next()\"> Next</button>\n" +
-    "                            </div>\n" +
-    "                            <div class=\"clearfix\"></div>\n" +
-    "                            </div>\n" +
+    "    <div class=\"row\">\n" +
+    "        <div class=\"col-lg-12\">\n" +
+    "            <h1>Purchase History</h1>\n" +
+    "            <br>\n" +
+    "            <div class=\"sidebar-search\" style=\"width: 30%;\">\n" +
+    "                <div class=\"input-group custom-search-form\">\n" +
+    "                    <input name=\"orderNumber\" type=\"text\" class=\"form-control\" ng-model=\"filters.orderNumber\" ng-model-options=\"{ debounce: 500 }\" ng-change=\"filtersUpdated()\" placeholder=\"Search\">\n" +
+    "                    <div class=\"input-group-btn\">\n" +
+    "                        <button class=\"btn btn-default\" type=\"button\">\n" +
+    "                            <i class=\"fa fa-search\"></i>\n" +
+    "                        </button>\n" +
     "                    </div>\n" +
     "                </div>\n" +
     "            </div>\n" +
+    "            <br>\n" +
+    "            <div>\n" +
+    "                <h4>Purchase Histroy</h4>\n" +
+    "                <br>\n" +
+    "                <table class=\"table table-striped\">\n" +
+    "                    <thead>\n" +
+    "                        <tr>\n" +
+    "                            <th>Date</th>\n" +
+    "                            <th>Company</th>\n" +
+    "                            <th>Customer</th>\n" +
+    "                            <th>Customer ID</th>\n" +
+    "                            <th>Shipping State</th>\n" +
+    "                            <th>Purchase Amount</th>\n" +
+    "                            <th>Transaction ID</th>\n" +
+    "                        </tr>\n" +
+    "                    </thead>\n" +
+    "                    <tbody>\n" +
+    "                        <!-- <tr ng-repeat=\"user in users\" ng-click=\"goToUser();\"> -->\n" +
+    "                        <tr ng-repeat=\"ph in phList\" ng-click=\"goToPH();\">\n" +
+    "                            <!-- <td><a class=\"btn btn-default btn-sm\" ng-href=\"/admin/users/{{user._id}}\">Edit</a></td> -->\n" +
+    "                            <td>{{ph.orderDate | date:\"MM/dd/yyyy\"}}</td>\n" +
+    "                            <td ng-bind=\"ph.company\"></td>\n" +
+    "                            <td ng-bind=\"ph.user.name\"></td>\n" +
+    "                            <td ng-bind=\"ph.user._id\"></td>\n" +
+    "                            <td></td>\n" +
+    "                            <td>${{ph.cost.total}}</td>\n" +
+    "                            <td ng-bind=\"ph.orderNumber\"></td>\n" +
+    "                        </tr>\n" +
+    "                        <tr ng-show=\"phList.length === 0\">\n" +
+    "                            <td colspan=\"5\">no documents matched</td>\n" +
+    "                        </tr>\n" +
+    "                    </tbody>\n" +
+    "                </table>\n" +
+    "                <div class=\"well\" ng-if=\"pages.total > 1\">\n" +
+    "                    <div class=\"btn-group pull-left\">\n" +
+    "                        <button disabled class=\"btn btn-default\">Page {{pages.current}} of {{pages.total}}</button>\n" +
+    "                        <button disabled class=\"btn btn-default\">Rows {{items.begin}} - {{items.end}} of {{items.total}}</button>\n" +
+    "                    </div>\n" +
+    "                    <div class=\"btn-group pull-right\">\n" +
+    "                        <button class=\"btn btn-default\" ng-class=\"{disabled: !pages.hasPrev}\" ng-click=\"prev()\">Prev</button>\n" +
+    "                        <button class=\"btn btn-default\" ng-class=\"{disabled: !pages.hasNext}\" ng-click=\"next()\"> Next</button>\n" +
+    "                    </div>\n" +
+    "                    <div class=\"clearfix\"></div>\n" +
+    "                </div>\n" +
+    "            </div>\n" +
     "        </div>\n" +
-    "  \n" +
+    "    </div>\n" +
     "</div>\n" +
     "");
 }]);
@@ -10954,58 +10929,44 @@ angular.module("admin/users/admin-users.tpl.html", []).run(["$templateCache", fu
     "                <br>\n" +
     "                <br>\n" +
     "                <br>\n" +
-    "                <div class=\"panel panel-default\">\n" +
-    "                    <div class=\"panel-heading\">\n" +
-    "                        User Information\n" +
-    "                    </div>\n" +
-    "                    <div class=\"panel-body\">\n" +
-    "                        <table class=\"table table-striped\">\n" +
-    "                            <thead>\n" +
-    "                                <tr>\n" +
-    "                                    <th>Username</th>\n" +
-    "                                    <th>Name</th>\n" +
-    "                                    <th>Company</th>\n" +
-    "                                    <th>Number of Purchases</th>\n" +
-    "                                    <th>Total Purchase Amount</th>\n" +
-    "                                    \n" +
-    "                                </tr>\n" +
-    "                            </thead>\n" +
-    "                            <tbody>\n" +
-    "                                <!-- <tr ng-repeat=\"account in accounts\" ng-click=\"goToAccount();\"> -->\n" +
-    "                                <tr ng-repeat=\"account in accounts\" ng-click=\"accountPurchases();\">\n" +
-    "                                    <td ng-bind=\"account.user.name\"></td>\n" +
-    "                                    <td ng-bind=\"account.name.full\"></td>\n" +
-    "                                    <td ng-bind=\"account.company\"></td>\n" +
-    "                                    <td class=\"stretch\" ng-bind=\"account.purchaseHistoryLog.length\"></td>\n" +
-    "                                    <td ng-bind=\"account.purchaseAmount\"></td>\n" +
-    "                                    \n" +
-    "                                </tr>\n" +
-    "                                <tr ng-show=\"users.length === 0\">\n" +
-    "                                    <td colspan=\"5\">no documents matched</td>\n" +
-    "                                </tr>\n" +
-    "                            </tbody>\n" +
-    "                        </table>\n" +
-    "       <!--      \n" +
-    "                    <tr ng-repeat=\"account in accounts\">\n" +
-    "                        <td class=\"stretch\"><span class=\"badge badge-clear pull-right\" ng-bind=\"formatTime(account.userCreated.time, 'old')\"></span>{{account.name.full}}</td>\n" +
-    "                        <td class=\"nowrap\" ng-bind=\"account.phone\"></td>\n" +
-    "                        <td class=\"nowrap\">\n" +
-    "                            <div ng-bind=\"account.status.name\"></div>\n" +
-    "                            <div ng-bind=\"formatTime(account.status.userCreated.time)\"></div>\n" +
-    "                        </td>\n" +
-    "                    </tr>\n" +
-    " -->\n" +
-    "                        <div class=\"well\" ng-if=\"pages.total > 1\">\n" +
-    "                            <div class=\"btn-group pull-left\">\n" +
-    "                                <button disabled class=\"btn btn-default\">Page {{pages.current}} of {{pages.total}}</button>\n" +
-    "                                <button disabled class=\"btn btn-default\">Rows {{items.begin}} - {{items.end}} of {{items.total}}</button>\n" +
-    "                            </div>\n" +
-    "                            <div class=\"btn-group pull-right\">\n" +
-    "                                <button class=\"btn btn-default\" ng-class=\"{disabled: !pages.hasPrev}\" ng-click=\"prev()\">Prev</button>\n" +
-    "                                <button class=\"btn btn-default\" ng-class=\"{disabled: !pages.hasNext}\" ng-click=\"next()\"> Next</button>\n" +
-    "                            </div>\n" +
-    "                                <div class=\"clearfix\"></div>\n" +
-    "                            </div>\n" +
+    "                <div>\n" +
+    "                    <h4>User Information</h4>\n" +
+    "                    <br>\n" +
+    "                    <table class=\"table table-striped\">\n" +
+    "                        <thead>\n" +
+    "                            <tr>\n" +
+    "                                <th>Username</th>\n" +
+    "                                <th>Name</th>\n" +
+    "                                <th>Company</th>\n" +
+    "                                <th>Number of Purchases</th>\n" +
+    "                                <th>Total Purchase Amount</th>\n" +
+    "                                \n" +
+    "                            </tr>\n" +
+    "                        </thead>\n" +
+    "                        <tbody>\n" +
+    "                            <!-- <tr ng-repeat=\"account in accounts\" ng-click=\"goToAccount();\"> -->\n" +
+    "                            <tr ng-repeat=\"account in accounts\" ng-click=\"accountPurchases();\">\n" +
+    "                                <td ng-bind=\"account.user.name\"></td>\n" +
+    "                                <td ng-bind=\"account.name.full\"></td>\n" +
+    "                                <td ng-bind=\"account.company\"></td>\n" +
+    "                                <td class=\"stretch\" ng-bind=\"account.purchaseHistoryLog.length\"></td>\n" +
+    "                                <td ng-bind=\"account.purchaseAmount\"></td>\n" +
+    "                            </tr>\n" +
+    "                            <tr ng-show=\"users.length === 0\">\n" +
+    "                                <td colspan=\"5\">no documents matched</td>\n" +
+    "                            </tr>\n" +
+    "                        </tbody>\n" +
+    "                    </table>\n" +
+    "                    <div class=\"well\" ng-if=\"pages.total > 1\">\n" +
+    "                        <div class=\"btn-group pull-left\">\n" +
+    "                            <button disabled class=\"btn btn-default\">Page {{pages.current}} of {{pages.total}}</button>\n" +
+    "                            <button disabled class=\"btn btn-default\">Rows {{items.begin}} - {{items.end}} of {{items.total}}</button>\n" +
+    "                        </div>\n" +
+    "                        <div class=\"btn-group pull-right\">\n" +
+    "                            <button class=\"btn btn-default\" ng-class=\"{disabled: !pages.hasPrev}\" ng-click=\"prev()\">Prev</button>\n" +
+    "                            <button class=\"btn btn-default\" ng-class=\"{disabled: !pages.hasNext}\" ng-click=\"next()\"> Next</button>\n" +
+    "                        </div>\n" +
+    "                        <div class=\"clearfix\"></div>\n" +
     "                    </div>\n" +
     "                </div>\n" +
     "            </div>\n" +
