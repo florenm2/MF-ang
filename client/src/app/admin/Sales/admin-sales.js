@@ -67,17 +67,6 @@ angular.module('admin.sales').config(['$routeProvider', function($routeProvider)
 }]);
 angular.module('admin.sales').controller('SalesCtrl', ['$scope', '$log', 'stats', 'tally', 'phList', 'adminResource',
   function($scope, $log, stats, tally, phData, adminResource){
-    $scope.user = {
-      users: stats['User'],
-      accounts: stats['Account'],
-      admins: stats['Admin'],
-      groups: stats['AdminGroup']
-    };
-    $scope.pivoted = {
-      categories: stats['Category'],
-      statuses: stats['Status']
-    };
-
     
     var deserializeData = function(phData, tally){
       $scope.items = phData.items;

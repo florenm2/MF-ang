@@ -31,7 +31,6 @@ app.db.once('open', function () {
 
 });
 
-
 //config data models
 require('./models')(app, mongoose);
 
@@ -71,6 +70,7 @@ app.use(function(req, res, next) {
 
 //global locals
 app.locals.projectName = app.config.projectName;
+app.locals.companyName = app.config.companyName;
 app.locals.copyrightYear = new Date().getFullYear();
 app.locals.copyrightName = app.config.companyName;
 app.locals.cacheBreaker = 'br34k-01';

@@ -126,17 +126,4 @@ angular.module('admin.developers').controller('DevCtrl', ['$scope', '$log', 'sta
         ]
       }
     };
-
-
-
-  // $scope.user = {
-  //   users: stats['User'],
-  //   accounts: stats['Account'],
-  //   admins: stats['Admin'],
-  //   groups: stats['AdminGroup']
-  // };
-  // $scope.pivoted = {
-  //   categories: stats['Category'],
-  //   statuses: stats['Status']
-  // };
 }]);

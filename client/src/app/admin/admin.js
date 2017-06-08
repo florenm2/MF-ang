@@ -47,18 +47,19 @@ angular.module('admin.index').config(['$routeProvider', function($routeProvider)
 }]);
 angular.module('admin.index').controller('AdminCtrl', ['$scope', '$log', 'stats', 'viewCount',
   function($scope, $log, stats, viewCount){
-    // $scope.user = {
-    //   users: stats['User'],
-    //   accounts: stats['Account'],
-    //   admins: stats['Admin'],
-    //   groups: stats['AdminGroup']
-    // };
-    // $scope.pivoted = {
-    //   categories: stats['Category'],
-    //   statuses: stats['Status']
-    // };
 
-
+    // html2canvas(document.getElementById('exportthis'), {
+    //         onrendered: function (canvas) {
+    //             var data = canvas.toDataURL();
+    //             var docDefinition = {
+    //                 content: [{
+    //                     image: data,
+    //                     width: 500,
+    //                 }]
+    //             };
+    //             pdfMake.createPdf(docDefinition).download("Test.pdf");
+    //         }
+    //     });
 
     var viewData = function(viewCount){
          $scope.viewDataDates = []; 

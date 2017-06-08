@@ -15,7 +15,6 @@ var adminPH = require('./service/admin/purchase-history');
 var adminProduct = require('./service/admin/product');
 var adminGroup = require('./service/admin/admin-group');
 var adminStatus = require('./service/admin/status');
-var adminCategory = require('./service/admin/category');
 
 
 function useAngular(req, res, next){
@@ -27,8 +26,6 @@ function apiEnsureAuthenticated(req, res, next){
     return next();
   }
   res.set('X-Auth-Required', 'true');
-  //no need to store the originalUrl in session: caller knows the return url
-  //req.session.returnUrl = req.originalUrl;
   res.status(401).send({errors: ['authentication required']});
 }
 
@@ -176,13 +173,6 @@ exports = module.exports = function(app, passport) {
   app.put('/api/admin/statuses/:id', adminStatus.update);
   app.delete('/api/admin/statuses/:id', adminStatus.delete);
 
-  //admin > categories
-  app.get('/api/admin/categories', adminCategory.find);
-  app.post('/api/admin/categories', adminCategory.create);
-  app.get('/api/admin/categories/:id', adminCategory.read);
-  app.put('/api/admin/categories/:id', adminCategory.update);
-  app.delete('/api/admin/categories/:id', adminCategory.delete);
-
   //admin > search
   app.get('/api/admin/search', admin.search);
 
@@ -256,10 +246,6 @@ exports = module.exports = function(app, passport) {
   //admin > statuses
   app.get('/admin/statuses', useAngular);
   app.get('/admin/statuses/:id', useAngular);
-
-  //admin > categories
-  app.get('/admin/categories', useAngular);
-  app.get('/admin/categories/:id', useAngular);
 
   //admin > developers
   app.get('/admin/developers', useAngular);

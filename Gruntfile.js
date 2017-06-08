@@ -197,6 +197,18 @@ module.exports = function(grunt) {
           {
             expand: true, cwd: 'client/bower_components/angular-messages/',
             src: ['angular-messages.js'], dest: '<%= distdir %>/vendor/'
+          },
+          {
+            expand: true, cwd: 'client/bower_components/build/html2canvas/',
+            src: ['html2canvas.js'], dest: '<%= distdir %>/vendor/'
+          },
+          {
+            expand: true, cwd: 'client/bower_components/build/pdfmake/',
+            src: ['pdfmake.js'], dest: '<%= distdir %>/vendor/'
+          },
+          {
+            expand: true, cwd: 'client/bower_components/build/pdfmake/',
+            src: ['vfs_fonts.js'], dest: '<%= distdir %>/vendor/'
           }
         ]
       },

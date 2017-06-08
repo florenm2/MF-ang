@@ -2465,17 +2465,6 @@ angular.module('admin.sales').config(['$routeProvider', function($routeProvider)
 }]);
 angular.module('admin.sales').controller('SalesCtrl', ['$scope', '$log', 'stats', 'tally', 'phList', 'adminResource',
   function($scope, $log, stats, tally, phData, adminResource){
-    $scope.user = {
-      users: stats['User'],
-      accounts: stats['Account'],
-      admins: stats['Admin'],
-      groups: stats['AdminGroup']
-    };
-    $scope.pivoted = {
-      categories: stats['Category'],
-      statuses: stats['Status']
-    };
-
     
     var deserializeData = function(phData, tally){
       $scope.items = phData.items;
@@ -4197,18 +4186,19 @@ angular.module('admin.index').config(['$routeProvider', function($routeProvider)
 }]);
 angular.module('admin.index').controller('AdminCtrl', ['$scope', '$log', 'stats', 'viewCount',
   function($scope, $log, stats, viewCount){
-    // $scope.user = {
-    //   users: stats['User'],
-    //   accounts: stats['Account'],
-    //   admins: stats['Admin'],
-    //   groups: stats['AdminGroup']
-    // };
-    // $scope.pivoted = {
-    //   categories: stats['Category'],
-    //   statuses: stats['Status']
-    // };
 
-
+    // html2canvas(document.getElementById('exportthis'), {
+    //         onrendered: function (canvas) {
+    //             var data = canvas.toDataURL();
+    //             var docDefinition = {
+    //                 content: [{
+    //                     image: data,
+    //                     width: 500,
+    //                 }]
+    //             };
+    //             pdfMake.createPdf(docDefinition).download("Test.pdf");
+    //         }
+    //     });
 
     var viewData = function(viewCount){
          $scope.viewDataDates = []; 
@@ -4620,211 +4610,6 @@ angular.module('admin.administrators', [
   'admin.administrators.index',
   'admin.administrators.detail'
 ]);
-angular.module('admin.categories.index', ['ngRoute', 'security.authorization', 'services.utility', 'services.adminResource']);
-angular.module('admin.categories.index').config(['$routeProvider', function($routeProvider){
-  $routeProvider
-    .when('/admin/categories', {
-      templateUrl: 'admin/categories/admin-categories.tpl.html',
-      controller: 'CategoriesIndexCtrl',
-      title: 'Manage Categories',
-      resolve: {
-        categories: ['$q', '$location', '$log', 'securityAuthorization', 'adminResource', function($q, $location, $log, securityAuthorization, adminResource){
-          //get app stats only for admin-user, otherwise redirect to /account
-          var redirectUrl;
-          var promise = securityAuthorization.requireAdminUser()
-            .then(function(){
-              //handles url with query(search) parameter
-              return adminResource.findCategories($location.search());
-            }, function(reason){
-              //rejected either user is un-authorized or un-authenticated
-              redirectUrl = reason === 'unauthorized-client'? '/account': '/login';
-              return $q.reject();
-            })
-            .catch(function(){
-              redirectUrl = redirectUrl || '/account';
-              $location.search({});
-              $location.path(redirectUrl);
-              return $q.reject();
-            });
-          return promise;
-        }]
-      },
-      reloadOnSearch: false
-    });
-}]);
-angular.module('admin.categories.index').controller('CategoriesIndexCtrl', ['$scope', '$route', '$location', '$log', 'utility', 'adminResource', 'categories',
-  function($scope, $route, $location, $log, utility, adminResource, data){
-    // local var
-    var deserializeData = function(data){
-      $scope.items = data.items;
-      $scope.pages = data.pages;
-      $scope.filters = data.filters;
-      $scope.categories = data.data;
-    };
-
-    var fetchCategories = function(){
-      adminResource.findCategories($scope.filters).then(function(data){
-        deserializeData(data);
-
-        //update url in browser addr bar
-        $location.search($scope.filters);
-      }, function(e){
-        $log.error(e);
-      });
-    };
-
-    // $scope methods
-    $scope.canSave = utility.canSave;
-    $scope.filtersUpdated = function(){
-      //reset pagination after filter(s) is updated
-      $scope.filters.page = undefined;
-      fetchCategories();
-    };
-    $scope.prev = function(){
-      $scope.filters.page = $scope.pages.prev;
-      fetchCategories();
-    };
-    $scope.next = function(){
-      $scope.filters.page = $scope.pages.next;
-      fetchCategories();
-    };
-    $scope.addCategory = function(){
-      adminResource.addCategory($scope.add).then(function(data){
-        $scope.add = {};
-        if(data.success){
-          $route.reload();
-        }else if (data.errors && data.errors.length > 0){
-          alert(data.errors[0]);
-        }else {
-          alert('unknown error.');
-        }
-      }, function(e){
-        $scope.add = {};
-        $log.error(e);
-      });
-    };
-
-    // $scope vars
-    //select elements and their associating options
-    $scope.sorts = [
-      {label: "id \u25B2", value: "_id"},
-      {label: "id \u25BC", value: "-_id"},
-      {label: "name \u25B2", value: "name"},
-      {label: "name \u25BC", value: "-name"}
-    ];
-    $scope.limits = [
-      {label: "10 items", value: 10},
-      {label: "20 items", value: 20},
-      {label: "50 items", value: 50},
-      {label: "100 items", value: 100}
-    ];
-
-    //initialize $scope variables
-    deserializeData(data);
-  }
-]);
-angular.module('admin.categories.detail', ['ngRoute', 'security.authorization', 'services.utility', 'services.adminResource', 'ui.bootstrap']);
-angular.module('admin.categories.detail').config(['$routeProvider', function($routeProvider){
-  $routeProvider
-    .when('/admin/categories/:id', {
-      templateUrl: 'admin/categories/admin-category.tpl.html',
-      controller: 'AdminCategoriesDetailCtrl',
-      title: 'Categories / Details',
-      resolve: {
-        category: ['$q', '$route', '$location', 'securityAuthorization', 'adminResource', function($q, $route, $location, securityAuthorization, adminResource){
-          //get app stats only for admin-user, otherwise redirect to /account
-          var redirectUrl;
-          var promise = securityAuthorization.requireAdminUser()
-            .then(function(){
-              var id = $route.current.params.id || '';
-              if(id){
-                return adminResource.findCategory(id);
-              }else{
-                redirectUrl = '/admin/categories';
-                return $q.reject();
-              }
-            }, function(reason){
-              //rejected either user is un-authorized or un-authenticated
-              redirectUrl = reason === 'unauthorized-client'? '/account': '/login';
-              return $q.reject();
-            })
-            .catch(function(){
-              redirectUrl = redirectUrl || '/account';
-              $location.path(redirectUrl);
-              return $q.reject();
-            });
-          return promise;
-        }]
-      }
-    });
-}]);
-angular.module('admin.categories.detail').controller('AdminCategoriesDetailCtrl', ['$scope', '$route', '$location', '$log', 'utility', 'adminResource', 'category',
-  function($scope, $route, $location, $log, utility, adminResource, data) {
-    // local vars
-    var deserializeData = function(data){
-      $scope.category = data;
-    };
-    var closeAlert = function(alert, ind){
-      alert.splice(ind, 1);
-    };
-    //$scope vars
-    $scope.detailAlerts = [];
-    $scope.deleteAlerts = [];
-    $scope.canSave = utility.canSave;
-    $scope.hasError = utility.hasError;
-    $scope.showError = utility.showError;
-    $scope.closeDetailAlert = function(ind){
-      closeAlert($scope.detailAlerts, ind);
-    };
-    $scope.closeDeleteAlert = function(ind){
-      closeAlert($scope.deleteAlerts, ind);
-    };
-    $scope.update = function(){
-      $scope.detailAlerts = [];
-      var data = {
-        name: $scope.category.name,
-        pivot: $scope.category.pivot
-      };
-      adminResource.updateCategory($scope.category._id, data).then(function(result){
-        if(result.success){
-          deserializeData(result.category);
-          $scope.detailAlerts.push({ type: 'info', msg: 'Changes have been saved.'});
-        }else{
-          angular.forEach(result.errors, function(err, index){
-            $scope.detailAlerts.push({ type: 'danger', msg: err });
-          });
-        }
-      }, function(x){
-        $scope.detailAlerts.push({ type: 'danger', msg: 'Error updating category: ' + x });
-      });
-    };
-    $scope.deleteCategory = function(){
-      $scope.deleteAlerts =[];
-      if(confirm('Are you sure?')){
-        adminResource.deleteCategory($scope.category._id).then(function(result){
-          if(result.success){
-            //redirect to admin categories index page
-            $location.path('/admin/categories');
-          }else{
-            //error due to server side validation
-            angular.forEach(result.errors, function(err, index){
-              $scope.deleteAlerts.push({ type: 'danger', msg: err});
-            });
-          }
-        }, function(x){
-          $scope.deleteAlerts.push({ type: 'danger', msg: 'Error deleting category: ' + x });
-        });
-      }
-    };
-
-    //initialize
-    deserializeData(data);
-  }
-]);
-angular.module('admin.categories', [
-  'admin.categories.index',
-  'admin.categories.detail'
-]);
 angular.module('admin.developers', ['ngRoute', 'security.authorization', 'services.adminResource', 'angular.morris', 'chart.js']);
 angular.module('admin.developers').config(['$routeProvider', function($routeProvider){
   $routeProvider
@@ -4953,19 +4738,6 @@ angular.module('admin.developers').controller('DevCtrl', ['$scope', '$log', 'sta
         ]
       }
     };
-
-
-
-  // $scope.user = {
-  //   users: stats['User'],
-  //   accounts: stats['Account'],
-  //   admins: stats['Admin'],
-  //   groups: stats['AdminGroup']
-  // };
-  // $scope.pivoted = {
-  //   categories: stats['Category'],
-  //   statuses: stats['Status']
-  // };
 }]);
 angular.module('admin', [
   'admin.index',
@@ -4975,7 +4747,6 @@ angular.module('admin', [
   'admin.administrators',
   'admin.admin-groups',
   'admin.statuses',
-  'admin.categories',
   'admin.sales',
   'admin.purchase-history',
   'admin.developers',
@@ -7912,7 +7683,7 @@ angular.module('signup').controller('SignupCtrl', [ '$scope', '$location', '$log
       security.signup($scope.user).then(signupSuccess, signupError);
     };
   }]);
-angular.module('templates.app', ['404.tpl.html', 'about.tpl.html', 'account/account.tpl.html', 'account/checkout/checkout.tpl.html', 'account/checkout/order-summary.tpl.html', 'account/purchaseHistory/purchaseHistory.tpl.html', 'account/purchaseHistory/purchaseHistoryOne.tpl.html', 'account/settings/account-settings.tpl.html', 'account/verification/account-verification.tpl.html', 'admin/Pricing/admin-pricing-modal.tpl.html', 'admin/Pricing/admin-pricing.tpl.html', 'admin/Sales/admin-sales.tpl.html', 'admin/accounts/admin-account.tpl.html', 'admin/accounts/admin-accounts.tpl.html', 'admin/activity/activity.tpl.html', 'admin/admin-account-settings/admin-account-settings.tpl.html', 'admin/admin-groups/admin-group.tpl.html', 'admin/admin-groups/admin-groups.tpl.html', 'admin/admin.tpl.html', 'admin/administrators/admin-administrator.tpl.html', 'admin/administrators/admin-administrators.tpl.html', 'admin/categories/admin-categories.tpl.html', 'admin/categories/admin-category.tpl.html', 'admin/developers/developers.tpl.html', 'admin/purchase-history/admin-purchase-histories.tpl.html', 'admin/purchase-history/admin-purchase-histories2.tpl.html', 'admin/purchase-history/admin-purchase-history.tpl.html', 'admin/statuses/admin-status.tpl.html', 'admin/statuses/admin-statuses.tpl.html', 'admin/users/admin-user.tpl.html', 'admin/users/admin-users.tpl.html', 'contact.tpl.html', 'footer.tpl.html', 'header.tpl.html', 'login/forgot/login-forgot.tpl.html', 'login/login.tpl.html', 'login/reset/login-reset.tpl.html', 'main.tpl.html', 'pricing/checkout/checkout.tpl.html', 'pricing/information-modal.tpl.html', 'pricing/information/information.tpl.html', 'pricing/login-modal.tpl.html', 'pricing/login-modal2.tpl.html', 'pricing/panel-modal.tpl.html', 'pricing/pricing.tpl.html', 'sidebar.tpl.html', 'signup/signup.tpl.html', 'specs.tpl.html']);
+angular.module('templates.app', ['404.tpl.html', 'about.tpl.html', 'account/account.tpl.html', 'account/checkout/checkout.tpl.html', 'account/checkout/order-summary.tpl.html', 'account/purchaseHistory/purchaseHistory.tpl.html', 'account/purchaseHistory/purchaseHistoryOne.tpl.html', 'account/settings/account-settings.tpl.html', 'account/verification/account-verification.tpl.html', 'admin/Pricing/admin-pricing-modal.tpl.html', 'admin/Pricing/admin-pricing.tpl.html', 'admin/Sales/admin-sales.tpl.html', 'admin/accounts/admin-account.tpl.html', 'admin/accounts/admin-accounts.tpl.html', 'admin/activity/activity.tpl.html', 'admin/admin-account-settings/admin-account-settings.tpl.html', 'admin/admin-groups/admin-group.tpl.html', 'admin/admin-groups/admin-groups.tpl.html', 'admin/admin.tpl.html', 'admin/administrators/admin-administrator.tpl.html', 'admin/administrators/admin-administrators.tpl.html', 'admin/developers/developers.tpl.html', 'admin/purchase-history/admin-purchase-histories.tpl.html', 'admin/purchase-history/admin-purchase-histories2.tpl.html', 'admin/purchase-history/admin-purchase-history.tpl.html', 'admin/statuses/admin-status.tpl.html', 'admin/statuses/admin-statuses.tpl.html', 'admin/users/admin-user.tpl.html', 'admin/users/admin-users.tpl.html', 'contact.tpl.html', 'footer.tpl.html', 'header.tpl.html', 'login/forgot/login-forgot.tpl.html', 'login/login.tpl.html', 'login/reset/login-reset.tpl.html', 'main.tpl.html', 'pricing/checkout/checkout.tpl.html', 'pricing/information-modal.tpl.html', 'pricing/information/information.tpl.html', 'pricing/login-modal.tpl.html', 'pricing/login-modal2.tpl.html', 'pricing/panel-modal.tpl.html', 'pricing/pricing.tpl.html', 'sidebar.tpl.html', 'signup/signup.tpl.html', 'specs.tpl.html']);
 
 angular.module("404.tpl.html", []).run(["$templateCache", function($templateCache) {
   $templateCache.put("404.tpl.html",
@@ -9847,126 +9618,6 @@ angular.module("admin/administrators/admin-administrators.tpl.html", []).run(["$
     "            </div>\n" +
     "            <div class=\"clearfix\"></div>\n" +
     "        </div>\n" +
-    "    </div>\n" +
-    "</div>");
-}]);
-
-angular.module("admin/categories/admin-categories.tpl.html", []).run(["$templateCache", function($templateCache) {
-  $templateCache.put("admin/categories/admin-categories.tpl.html",
-    "<div class=\"row\" id=\"admin-categories-index\">\n" +
-    "    <div class=\"col-xs-12\">\n" +
-    "        <div class=\"page-header\">\n" +
-    "            <form class=\"form-inline pull-right\" name=\"addCategoryForm\">\n" +
-    "                <div class=\"input-group\">\n" +
-    "                    <input name=\"pivot\" type=\"text\" placeholder=\"pivot\" class=\"form-control\" ng-model=\"add.pivot\" required>\n" +
-    "                    <input name=\"name\" type=\"text\" placeholder=\"name\" class=\"form-control\" ng-model=\"add.name\" required>\n" +
-    "                    <button type=\"button\" class=\"btn btn-primary\" ng-disabled=\"!canSave(addCategoryForm)\" ng-click=\"addCategory()\">Add New</button>\n" +
-    "                </div>\n" +
-    "            </form>\n" +
-    "            <h1>Categories</h1>\n" +
-    "        </div>\n" +
-    "        <form class=\"filters\">\n" +
-    "            <div class=\"row\">\n" +
-    "                <div class=\"col-sm-3\">\n" +
-    "                    <label>Pivot Search</label>\n" +
-    "                    <input name=\"pivot\" type=\"text\" class=\"form-control\" ng-model=\"filters.pivot\" ng-model-options=\"{ debounce: 500 }\" ng-change=\"filtersUpdated()\">\n" +
-    "                </div>\n" +
-    "                <div class=\"col-sm-3\">\n" +
-    "                    <label>Name Search</label>\n" +
-    "                    <input name=\"name\" type=\"text\" class=\"form-control\" ng-model=\"filters.name\" ng-model-options=\"{ debounce: 500 }\" ng-change=\"filtersUpdated()\">\n" +
-    "                </div>\n" +
-    "                <div class=\"col-sm-3\">\n" +
-    "                    <label>Sort By</label>\n" +
-    "                    <select name=\"sort\" class=\"form-control\" ng-model=\"filters.sort\" ng-model-options=\"{ debounce: 500 }\" ng-options=\"sort.value as sort.label for sort in sorts\" ng-change=\"filtersUpdated()\">\n" +
-    "                        <!--<option value=\"_id\">id &#9650;</option>-->\n" +
-    "                        <!--<option value=\"-_id\">id &#9660;</option>-->\n" +
-    "                        <!--<option value=\"name\">name &#9650;</option>-->\n" +
-    "                        <!--<option value=\"-name\">name &#9660;</option>-->\n" +
-    "                    </select>\n" +
-    "                </div>\n" +
-    "                <div class=\"col-sm-3\">\n" +
-    "                    <label>Limit</label>\n" +
-    "                    <select name=\"limit\" class=\"form-control\" ng-model=\"filters.limit\" ng-model-options=\"{ debounce: 500 }\" ng-options=\"limit.value as limit.label for limit in limits\" ng-change=\"filtersUpdated()\">\n" +
-    "                        <!--<option value=\"10\">10 items</option>-->\n" +
-    "                        <!--<option value=\"20\" selected=\"selected\">20 items</option>-->\n" +
-    "                        <!--<option value=\"50\">50 items</option>-->\n" +
-    "                        <!--<option value=\"100\">100 items</option>-->\n" +
-    "                    </select>\n" +
-    "                </div>\n" +
-    "            </div>\n" +
-    "        </form>\n" +
-    "        <table class=\"table table-striped\">\n" +
-    "            <thead>\n" +
-    "            <tr>\n" +
-    "                <th></th>\n" +
-    "                <th>pivot</th>\n" +
-    "                <th class=\"stretch\">name</th>\n" +
-    "                <th>id</th>\n" +
-    "            </tr>\n" +
-    "            </thead>\n" +
-    "            <tbody>\n" +
-    "            <tr ng-repeat=\"category in categories\">\n" +
-    "                <td><a class=\"btn btn-default btn-sm\" ng-href=\"/admin/categories/{{category._id}}\">Edit</a></td>\n" +
-    "                <td ng-bind=\"category.pivot\"></td>\n" +
-    "                <td ng-bind=\"category.name\"></td>\n" +
-    "                <td class=\"nowrap\" ng-bind=\"category._id\"></td>\n" +
-    "            </tr>\n" +
-    "            <tr ng-show=\"categories.length === 0\">\n" +
-    "                <td colspan=\"4\">no documents matched</td>\n" +
-    "            </tr>\n" +
-    "            </tbody>\n" +
-    "        </table>\n" +
-    "        <div class=\"well\" ng-if=\"pages.total > 1\">\n" +
-    "            <div class=\"btn-group pull-left\">\n" +
-    "                <button disabled class=\"btn btn-default\">Page {{pages.current}} of {{pages.total}}</button>\n" +
-    "                <button disabled class=\"btn btn-default\">Rows {{items.begin}} - {{items.end}} of {{items.total}}</button>\n" +
-    "            </div>\n" +
-    "            <div class=\"btn-group pull-right\">\n" +
-    "                <button class=\"btn btn-default\" ng-class=\"{disabled: !pages.hasPrev}\" ng-click=\"prev()\">Prev</button>\n" +
-    "                <button class=\"btn btn-default\" ng-class=\"{disabled: !pages.hasNext}\" ng-click=\"next()\"> Next</button>\n" +
-    "            </div>\n" +
-    "            <div class=\"clearfix\"></div>\n" +
-    "        </div>\n" +
-    "    </div>\n" +
-    "</div>");
-}]);
-
-angular.module("admin/categories/admin-category.tpl.html", []).run(["$templateCache", function($templateCache) {
-  $templateCache.put("admin/categories/admin-category.tpl.html",
-    "<div class=\"row\">\n" +
-    "    <div class=\"col-xs-12\">\n" +
-    "        <div class=\"page-header\">\n" +
-    "            <h1><a href=\"/admin/categories\">Categories</a> / {{category.name}}</h1>\n" +
-    "        </div>\n" +
-    "        <form name=\"detailForm\"><fieldset>\n" +
-    "            <legend>Details</legend>\n" +
-    "            <alert ng-repeat=\"alert in detailAlerts\" type=\"{{alert.type}}\" close=\"closeDetailAlert($index)\">{{alert.msg}}</alert>\n" +
-    "            <div class=\"form-group\" ng-class=\"{'has-error': hasError(detailForm.pivot)}\">\n" +
-    "                <label class=\"control-label\" for=\"pivot\">pivot:</label>\n" +
-    "                <input type=\"text\" name=\"pivot\" id=\"pivot\" class=\"form-control\" ng-model=\"category.pivot\" required>\n" +
-    "                <span class=\"help-block\" ng-show=\"showError(detailForm.pivot, 'required')\">This field is required</span>\n" +
-    "            </div>\n" +
-    "            <div class=\"form-group\" ng-class=\"{'has-error': hasError(detailForm.name)}\">\n" +
-    "                <label class=\"control-label\" for=\"name\">Name:</label>\n" +
-    "                <input type=\"text\" name=\"name\" id=\"name\" class=\"form-control\" ng-model=\"category.name\" required>\n" +
-    "                <span class=\"help-block\" ng-show=\"showError(detailForm.name, 'required')\">This field is required</span>\n" +
-    "            </div>\n" +
-    "            <div class=\"form-group\">\n" +
-    "                <button type=\"button\" class=\"btn btn-primary\" ng-disabled=\"!canSave(detailForm)\" ng-click=\"update()\">Update</button>\n" +
-    "            </div>\n" +
-    "        </fieldset></form>\n" +
-    "        <form name=\"deleteForm\"><fieldset>\n" +
-    "            <legend>Danger Zone</legend>\n" +
-    "            <alert ng-repeat=\"alert in deleteAlerts\" type=\"{{alert.type}}\" close=\"closeDeleteAlert($index)\">{{alert.msg}}</alert>\n" +
-    "            <div class=\"form-group\">\n" +
-    "                <span class=\"help-block\">\n" +
-    "                    <span class=\"label label-danger\">If you do this, it cannot be undone.</span>&nbsp;<span class=\"text-muted\">You may also create orphaned document relationships too.</span>\n" +
-    "                </span>\n" +
-    "            </div>\n" +
-    "            <div class=\"form-group\">\n" +
-    "                <button type=\"button\" class=\"btn btn-danger btn-delete\" ng-click=\"deleteCategory()\">Delete</button>\n" +
-    "            </div>\n" +
-    "        </fieldset></form>\n" +
     "    </div>\n" +
     "</div>");
 }]);
