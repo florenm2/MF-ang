@@ -64,22 +64,6 @@ angular.module('account.checkout').controller('CheckoutLoggedInCtrl', [ '$scope'
     console.log($scope.c);
     $scope.productinfo = [];
 
-
-
-    $scope.click = function() {
-      //    console.log("button clicked");
-      //  $scope.order.showPopupAddedToCart = !$scope.order.showPopupAddedToCart;
-      var doc = new jsPDF();
-      doc.text(20, 20, 'Hello world!');
-
-      var pdfBase64 = doc.output('datauristring');
-
-     // adminResource.sendConfirmationEmail();
-
-   }
-
-
-
    for(var i = 0; i<$scope.c.length; i++){
     console.log($scope.c[i]);
 
@@ -249,8 +233,6 @@ angular.module('account.checkout').controller('CheckoutLoggedInCtrl', [ '$scope'
             //$scope.purchaseInformation.pdf = pdfBase64;
           }
         });
-
-        
 
         
 

@@ -1543,22 +1543,6 @@ angular.module('account.checkout').controller('CheckoutLoggedInCtrl', [ '$scope'
     console.log($scope.c);
     $scope.productinfo = [];
 
-
-
-    $scope.click = function() {
-      //    console.log("button clicked");
-      //  $scope.order.showPopupAddedToCart = !$scope.order.showPopupAddedToCart;
-      var doc = new jsPDF();
-      doc.text(20, 20, 'Hello world!');
-
-      var pdfBase64 = doc.output('datauristring');
-
-     // adminResource.sendConfirmationEmail();
-
-   }
-
-
-
    for(var i = 0; i<$scope.c.length; i++){
     console.log($scope.c[i]);
 
@@ -1728,8 +1712,6 @@ angular.module('account.checkout').controller('CheckoutLoggedInCtrl', [ '$scope'
             //$scope.purchaseInformation.pdf = pdfBase64;
           }
         });
-
-        
 
         
 
@@ -6528,48 +6510,225 @@ angular.module('pricing.checkout').config(['$routeProvider', function($routeProv
 }]);
 angular.module('pricing.checkout').controller('CheckoutCtrl', ['$scope','$routeParams', 'cartService', function ($scope, $routeParams, cartService) {
 
-		var totalAmount = cartService.getCartPrice;
+	$scope.cart = cartService;
+	var totalAmount = cartService.getCartPrice;
+	var address =  accountDetails.mailingAddress;
+	$scope.billingChecked = false;
+	$scope.c = $scope.cart.getCartProducts();
 
-		$scope.cart = cartService;
+	console.log($scope.c);
 
-		$scope.onSubmit = function () {
-			$scope.processing = true;
+	$scope.productinfo = [];
+
+
+	for(var i = 0; i<$scope.c.length; i++){
+		console.log($scope.c[i]);
+
+		var v = {
+			product: $scope.c[i].product,
+			quantity: $scope.c[i].quantity
 		};
 
-		$scope.stripeCallback = function (code, result) {
-			$scope.processing = false;
-			$scope.hideAlerts();
-			if (result.error) {
-				$scope.stripeError = result.error.message;
+		$scope.productinfo.push(v);
+	}
+
+
+
+	//mailing address
+    if(address==null){
+      $scope.mailingAddress =
+      {
+        name : {
+          first: "",
+          last: ""
+        },
+        company : "",
+        addressLine1 : "",
+        addressLine2 : "",
+        city : "",
+        state : "",
+        zip : "",
+        country : "",
+        type : 'mailing'
+      };
+    } else {
+      $scope.mailingAddress =
+      {
+        name : {
+          first: account.name.first,
+          last: account.name.last
+        },
+        company : account.company,
+        addressLine1 : address.addressLine1,
+        addressLine2 : address.addressLine2,
+        city : address.city,
+        state : address.state,
+        zip : address.zip,
+        country : address.country,
+        type : 'mailing'
+      };
+    }
+
+    //billing address
+    $scope.checkBillAddress = function(){
+      if($scope.billingChecked){
+        $scope.billingAddress = $scope.mailingAddress;
+      } else {
+        $scope.billingAddress =
+        {
+          name : {
+            first: "",
+            last: ""
+          },
+          company : "",
+          addressLine1 : "",
+          addressLine2 : "",
+          city : "",
+          state : "",
+          zip : "",
+          country : "",
+          type : 'billing'
+        };
+      }
+    }
+
+    $scope.purchaseInformation = {
+      orderNumber: 22,
+      product: $scope.productinfo,
+      //billingAddress: $scope.billingAddress,
+      //mailingAddress: $scope.mailingAddress,
+      orderDate: new Date(),
+      company: $scope.mailingAddress.company,
+      //paymentMethod: req.body.paymentMethod,
+      cost: {
+        raw: $scope.cart.getCartPrice,
+        //shipping: req.body.cost.shipping,
+        //tax: req.body.cost.tax,
+        total: $scope.cart.getCartPrice
+      }
+    };
+
+
+    $scope.stripeSubmit = function(status, response){
+      if(response.error) {
+          // error
+        } else {
+        	console.log("success");
+          token = response.id;
+          //$scope.submitAddress();
+        }
+      }
+
+
+
+
+    //   $scope.submitAddress = function(){
+
+    //     $scope.alerts.address = [];
+    //     restResource.setMailingAddress($scope.mailingAddress).then(function(data){
+    //       if(data.success){
+    //         $scope.alerts.address.push({
+    //           type: 'success',
+    //           msg: 'User identity is updated.'
+    //         });
+    //         $scope.submitPurchaseHistory();
+    //       }else{
+    //       //error due to server side validation
+    //       $scope.errfor = data.errfor;
+    //       angular.forEach(data.errfor, function(err, field){
+    //         $scope.addressForm[field].$setValidity('server', false);
+    //       });
+    //       angular.forEach(data.errors, function(err, index){
+    //         $scope.alerts.address.push({
+    //           type: 'danger',
+    //           msg: err
+    //         });
+    //       });
+    //     }
+    //   }, function(x){
+    //     $scope.alerts.address.push({
+    //       type: 'danger',
+    //       msg: 'Error updating user identity: ' + x
+    //     });
+    //   });
+    //   };
+
+    //   $scope.submitPurchaseHistory = function(){
+    //     $scope.alerts.purchasehistory = [];
+    //     restResource.newGuestPurchase($scope.purchaseInformation).then(function(data){
+    //       if(data.success){
+    //         $scope.alerts.purchasehistory.push({
+    //           type: 'success',
+    //           msg: 'User identity is updated.'
+    //         });
+    //         $location.path('/account/checkout/summary');
+    //       }else{
+    //       //error due to server side validation
+    //       $scope.errfor = data.errfor;
+    //       angular.forEach(data.errors, function(err, index){
+    //         $scope.alerts.address.push({
+    //           type: 'danger',
+    //           msg: err
+    //         });
+    //       });
+    //     }
+    //   }, function(x){
+    //     $scope.alerts.address.push({
+    //       type: 'danger',
+    //       msg: 'Error updating user identity: ' + x
+    //     });
+    //   });
+    //   };
+
+
+    //  $scope.errfor = {}; //for identity server-side validation
+    //  $scope.alerts = {
+    //   detail: [], address: [], pass: []
+    // };
+
+
+
+
+
+	$scope.hideAlerts = function () {
+		$scope.stripeError = null;
+		$scope.stripeToken = null;
+	};
+
+	var acc = document.getElementsByClassName("panel-heading");
+	var paneling = document.getElementsByClassName("panel-body");
+
+	var i;
+
+	for (i = 0; i < acc.length; i++) {
+		acc[i].onclick = function() {
+			this.classList.toggle("active");
+			var pan = paneling[i];
+			if (pan.style.maxHeight){
+				pan.style.maxHeight = null;
 			} else {
-				$scope.stripeToken = result.id;
-			}
-		};
-
-		$scope.hideAlerts = function () {
-			$scope.stripeError = null;
-			$scope.stripeToken = null;
-		};
-
-		var acc = document.getElementsByClassName("panel-heading");
-		var paneling = document.getElementsByClassName("panel-body");
-		
-		var i;
-
-		for (i = 0; i < acc.length; i++) {
-			acc[i].onclick = function() {
-				this.classList.toggle("active");
-				var pan = paneling[i];
-				if (pan.style.maxHeight){
-					pan.style.maxHeight = null;
-				} else {
-					pan.style.maxHeight = pan.scrollHeight + "px";
-				} 
-			}
+				pan.style.maxHeight = pan.scrollHeight + "px";
+			} 
 		}
+	}
 
 
-	}]);
+
+	// $scope.onSubmit = function () {
+	// 	$scope.processing = true;
+	// };
+
+	// $scope.stripeCallback = function (code, result) {
+	// 	$scope.processing = false;
+	// 	$scope.hideAlerts();
+	// 	if (result.error) {
+	// 		$scope.stripeError = result.error.message;
+	// 	} else {
+	// 		$scope.stripeToken = result.id;
+	// 	}
+	// };
+
+}]);
 angular.module('pricing', [
   'pricing.index',
   'pricing.checkout',
