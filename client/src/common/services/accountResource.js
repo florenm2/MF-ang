@@ -12,7 +12,7 @@ angular.module('services.accountResource', ['security.service']).factory('accoun
     return $q.reject(msg.join(' '));
   };
   // public api
- 
+
   var resource = {};
   resource.getProductList = function() {
     return $http.get(baseUrl + '/getProducts').then(processResponse, processError);
@@ -36,10 +36,10 @@ angular.module('services.accountResource', ['security.service']).factory('accoun
     return $http.put(baseUrl + '/account/settings', data).then(processResponse, processError);
   };
   resource.getOnePurchaseHistory = function(){
-      return $http.get(baseUrl + '/account/getOnePurchaseHistory').then(processResponse, processError);
+    return $http.get(baseUrl + '/account/getOnePurchaseHistory').then(processResponse, processError);
   };
   resource.getPurchaseHistoryLog = function(){
-      return $http.get(baseUrl + '/account/getPurchaseHistoryLog').then(processResponse, processError);
+    return $http.get(baseUrl + '/account/getPurchaseHistoryLog').then(processResponse, processError);
   };
 
   resource.newPurchase = function(data){
@@ -67,10 +67,11 @@ angular.module('services.accountResource', ['security.service']).factory('accoun
     return $http.get(baseUrl + '/account/verification').then(processResponse, processError);
   };
 
+  
   resource.verifyAccount = function(token){
     return $http.get(baseUrl + '/account/verification/' + token)
-      .then(processResponse, processError)
-      .then(function(data){
+    .then(processResponse, processError)
+    .then(function(data){
         //this saves us another round trip to backend to retrieve the latest currentUser obj
         if(data.success && data.user){
           security.setCurrentUser(data.user);

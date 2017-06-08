@@ -13,7 +13,8 @@ var config = require('./config'),
     passport = require('passport'),
     mongoose = require('mongoose'),
     helmet = require('helmet'),
-    csrf = require('csurf');
+    csrf = require('csurf'),
+    emailjs = require('emailjs/email');
 
 //create express app
 var app = express();

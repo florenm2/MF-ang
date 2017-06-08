@@ -857,7 +857,7 @@ angular.module('services.accountResource', ['security.service']).factory('accoun
     return $q.reject(msg.join(' '));
   };
   // public api
- 
+
   var resource = {};
   resource.getProductList = function() {
     return $http.get(baseUrl + '/getProducts').then(processResponse, processError);
@@ -881,10 +881,10 @@ angular.module('services.accountResource', ['security.service']).factory('accoun
     return $http.put(baseUrl + '/account/settings', data).then(processResponse, processError);
   };
   resource.getOnePurchaseHistory = function(){
-      return $http.get(baseUrl + '/account/getOnePurchaseHistory').then(processResponse, processError);
+    return $http.get(baseUrl + '/account/getOnePurchaseHistory').then(processResponse, processError);
   };
   resource.getPurchaseHistoryLog = function(){
-      return $http.get(baseUrl + '/account/getPurchaseHistoryLog').then(processResponse, processError);
+    return $http.get(baseUrl + '/account/getPurchaseHistoryLog').then(processResponse, processError);
   };
 
   resource.newPurchase = function(data){
@@ -912,10 +912,11 @@ angular.module('services.accountResource', ['security.service']).factory('accoun
     return $http.get(baseUrl + '/account/verification').then(processResponse, processError);
   };
 
+  
   resource.verifyAccount = function(token){
     return $http.get(baseUrl + '/account/verification/' + token)
-      .then(processResponse, processError)
-      .then(function(data){
+    .then(processResponse, processError)
+    .then(function(data){
         //this saves us another round trip to backend to retrieve the latest currentUser obj
         if(data.success && data.user){
           security.setCurrentUser(data.user);
@@ -1218,7 +1219,6 @@ angular.module('services.adminResource', []).factory('adminResource', ['$http', 
     var url = adminCategoriesUrl + '/' + _id;
     return $http.delete(url).then(processResponse, processError);
   };
-
   // ----- views api -----
   resource.getRecentViewCount = function() {
     var url = baseUrl + '/getRecentViewCount';
@@ -1544,16 +1544,31 @@ angular.module('account.checkout').controller('CheckoutLoggedInCtrl', [ '$scope'
     $scope.productinfo = [];
 
 
-    for(var i = 0; i<$scope.c.length; i++){
-        console.log($scope.c[i]);
 
-        var v = {
-          product: $scope.c[i].product,
-          quantity: $scope.c[i].quantity
-        };
+    $scope.click = function() {
+      //    console.log("button clicked");
+      //  $scope.order.showPopupAddedToCart = !$scope.order.showPopupAddedToCart;
+      var doc = new jsPDF();
+      doc.text(20, 20, 'Hello world!');
 
-        $scope.productinfo.push(v);
-    }
+      var pdfBase64 = doc.output('datauristring');
+
+     // adminResource.sendConfirmationEmail();
+
+   }
+
+
+
+   for(var i = 0; i<$scope.c.length; i++){
+    console.log($scope.c[i]);
+
+    var v = {
+      product: $scope.c[i].product,
+      quantity: $scope.c[i].quantity
+    };
+
+    $scope.productinfo.push(v);
+  }
 
     //mailing address
     if(address==null){
@@ -1589,7 +1604,7 @@ angular.module('account.checkout').controller('CheckoutLoggedInCtrl', [ '$scope'
         type : 'mailing'
       };
     }
-  
+
     //billing address
     $scope.checkBillAddress = function(){
       if($scope.billingChecked){
@@ -1638,17 +1653,17 @@ angular.module('account.checkout').controller('CheckoutLoggedInCtrl', [ '$scope'
         }
       }
 
-    $scope.submitAddress = function(){
+      $scope.submitAddress = function(){
 
-      $scope.alerts.address = [];
-      restResource.setMailingAddress($scope.mailingAddress).then(function(data){
-        if(data.success){
-          $scope.alerts.address.push({
-            type: 'success',
-            msg: 'User identity is updated.'
-          });
-          $scope.submitPurchaseHistory();
-        }else{
+        $scope.alerts.address = [];
+        restResource.setMailingAddress($scope.mailingAddress).then(function(data){
+          if(data.success){
+            $scope.alerts.address.push({
+              type: 'success',
+              msg: 'User identity is updated.'
+            });
+            $scope.submitPurchaseHistory();
+          }else{
           //error due to server side validation
           $scope.errfor = data.errfor;
           angular.forEach(data.errfor, function(err, field){
@@ -1667,19 +1682,68 @@ angular.module('account.checkout').controller('CheckoutLoggedInCtrl', [ '$scope'
           msg: 'Error updating user identity: ' + x
         });
       });
-    };
+      };
 
-    $scope.submitPurchaseHistory = function(){
+      $scope.submitPurchaseHistory = function(){
 
-      $scope.alerts.purchasehistory = [];
-      restResource.newPurchase($scope.purchaseInformation).then(function(data){
-        if(data.success){
-          $scope.alerts.purchasehistory.push({
-            type: 'success',
-            msg: 'User identity is updated.'
-          });
-          $location.path('/account/checkout/summary');
-        }else{
+
+        // html2canvas($("#canvas"), {
+        //   onrendered: function(canvas) {         
+        //     var imgData = canvas.toDataURL(
+        //       'image/png');              
+        //     var doc = new jsPDF('p', 'mm');
+        //     doc.addImage(imgData, 'PNG', 10, 10);
+        //         //doc.save('sample-file.pdf');
+        //         $scope.purchaseInformation.pdf = doc;
+        //       }
+        //     });
+
+        html2canvas(document.getElementById('exportthis'), {
+          onrendered: function (canvas) {
+            // var data = canvas.toDataURL('image/png');
+            // var docDefinition = {
+            //   content: [{
+            //     image: data,
+            //     width: 500,
+            //   }]
+            // };
+            // var doc = new jsPDF();
+            // doc.addImage(docDefinition, 'PNG', 15, 40, 180, 160);
+
+            // var pdfBase64 = doc.output('datauristring');
+
+            var pdf = new jsPDF();
+            pdf.addImage(canvas.toDataURL("image/jpeg"),"JPEG",20,20);
+            var pdf_img = pdf.output("datauristring");
+            $scope.purchaseInformation.pdf = pdf_img.replace("data:application/pdf;base64,", "");
+
+            console.log($scope.purchaseInformation.pdf)
+            console.log(pdf_img)
+
+
+
+            //data:application/pdf;base64,JVBERi0xLjMKMyAwIG9iago8PC9UeXBlIC9QYWdlCi9QYXJ…UgMjEKL1Jvb3QgMjAgMCBSCi9JbmZvIDE5IDAgUgo+PgpzdGFydHhyZWYKMzY2MwolJUVPRg==
+
+
+            //$scope.purchaseInformation.pdf = pdfBase64;
+          }
+        });
+
+        
+
+        
+
+        console.log($scope.purchaseInformation);
+
+        $scope.alerts.purchasehistory = [];
+        restResource.newPurchase($scope.purchaseInformation).then(function(data){
+          if(data.success){
+            $scope.alerts.purchasehistory.push({
+              type: 'success',
+              msg: 'User identity is updated.'
+            });
+            $location.path('/account/checkout/summary');
+          }else{
           //error due to server side validation
           $scope.errfor = data.errfor;
           angular.forEach(data.errors, function(err, index){
@@ -1695,7 +1759,7 @@ angular.module('account.checkout').controller('CheckoutLoggedInCtrl', [ '$scope'
           msg: 'Error updating user identity: ' + x
         });
       });
-    };
+      };
 
 
      $scope.errfor = {}; //for identity server-side validation
@@ -1712,7 +1776,7 @@ angular.module('account.checkout').controller('CheckoutLoggedInCtrl', [ '$scope'
       $scope.stripeToken = null;
     };
 
-    var acc = document.getElementsByClassName("accordion");
+    var acc = document.getElementsByClassName("panel-heading");
     var i;
 
     for (i = 0; i < acc.length; i++) {
@@ -4184,8 +4248,8 @@ angular.module('admin.index').config(['$routeProvider', function($routeProvider)
       }
     })
 }]);
-angular.module('admin.index').controller('AdminCtrl', ['$scope', '$log', 'stats', 'viewCount',
-  function($scope, $log, stats, viewCount){
+angular.module('admin.index').controller('AdminCtrl', ['$scope', '$log', 'stats', 'viewCount', 'adminResource',
+  function($scope, $log, stats, viewCount, adminResource){
 
     // html2canvas(document.getElementById('exportthis'), {
     //         onrendered: function (canvas) {
@@ -4199,6 +4263,42 @@ angular.module('admin.index').controller('AdminCtrl', ['$scope', '$log', 'stats'
     //             pdfMake.createPdf(docDefinition).download("Test.pdf");
     //         }
     //     });
+
+    $scope.click = function() {
+      //    console.log("button clicked");
+      //  $scope.order.showPopupAddedToCart = !$scope.order.showPopupAddedToCart;
+      var doc = new jsPDF();
+      doc.text(20, 20, 'Hello world!');
+
+      var pdfBase64 = doc.output('datauristring');
+
+     // adminResource.sendConfirmationEmail();
+
+
+      // var emailjs = require('emailjs/email');
+      // var emailer = emailjs.server.connect( req.app.config.smtp.credentials );
+      // emailer.send({
+      //   from: req.app.config.smtp.from.name +' <'+ req.app.config.smtp.from.address +'>',
+      //   to: 'florenm2@miamioh.edu',
+      //   subject: 'subject',
+      //   text: 'hello',
+      //  // attachment: attachments
+      // }, function(err, message) {
+      //   if (err) {
+      //     options.error('Email failed to send. '+ err);
+      //     return;
+      //   }
+      //   else {
+      //     options.success(message);
+      //     return;
+      //   }
+      // })
+
+
+      // Save the PDF
+      //doc.save('Test.pdf');
+
+    };
 
     var viewData = function(viewCount){
          $scope.viewDataDates = []; 
@@ -6417,18 +6517,17 @@ angular.module('login.social.google').config(['$routeProvider', function($routeP
 
 Stripe.setPublishableKey('pk_test_1Ol0KXlUc2OASvEVg1JwhHp2');
 
-angular.module('pricing.checkout', ['ngRoute', 'angularPayments', 'services.cart']);
+angular.module('pricing.checkout', ['ngRoute', 'angularPayments', 'services.cart', 'ui.bootstrap']);
 angular.module('pricing.checkout').config(['$routeProvider', function($routeProvider){
-  $routeProvider
-    .when('/pricing/checkout', {
-      templateUrl: 'pricing/checkout/checkout.tpl.html',
-      controller: 'CheckoutCtrl',
-      title: 'Checkout'
-    });
+	$routeProvider
+	.when('/pricing/checkout', {
+		templateUrl: 'pricing/checkout/checkout.tpl.html',
+		controller: 'CheckoutCtrl',
+		title: 'Checkout'
+	});
 }]);
 angular.module('pricing.checkout').controller('CheckoutCtrl', ['$scope','$routeParams', 'cartService', function ($scope, $routeParams, cartService) {
-		
-		//var totalAmount = $routeParams.totalAmount;
+
 		var totalAmount = cartService.getCartPrice;
 
 		$scope.cart = cartService;
@@ -6451,6 +6550,25 @@ angular.module('pricing.checkout').controller('CheckoutCtrl', ['$scope','$routeP
 			$scope.stripeError = null;
 			$scope.stripeToken = null;
 		};
+
+		var acc = document.getElementsByClassName("panel-heading");
+		var paneling = document.getElementsByClassName("panel-body");
+		
+		var i;
+
+		for (i = 0; i < acc.length; i++) {
+			acc[i].onclick = function() {
+				this.classList.toggle("active");
+				var pan = paneling[i];
+				if (pan.style.maxHeight){
+					pan.style.maxHeight = null;
+				} else {
+					pan.style.maxHeight = pan.scrollHeight + "px";
+				} 
+			}
+		}
+
+
 	}]);
 angular.module('pricing', [
   'pricing.index',
@@ -7867,236 +7985,297 @@ angular.module("account/checkout/checkout.tpl.html", []).run(["$templateCache", 
     "\n" +
     "		<div class=\"row\">\n" +
     "			<div class=\"col-md-9\">\n" +
-    "				<button class=\"accordion active\">Shipping Address</button>\n" +
-    "				<div class=\"paneling\" style='max-height: 100%;'>\n" +
+    "				<div class=\"panel-group\" id=\"accordion\">\n" +
+    "					<div class=\"panel panel-default\">\n" +
+    "						<div class=\"panel-heading active\">\n" +
+    "							<h4 class=\"panel-title\">\n" +
+    "								<a class=\"accordion\">\n" +
+    "									Shipping Address\n" +
+    "								</a>\n" +
+    "							</h4>\n" +
+    "						</div>\n" +
+    "						<!-- <button class=\"accordion active\">Shipping Address</button> -->\n" +
+    "						<div class=\"paneling\" style='max-height: 100%;'>\n" +
+    "							<div id=\"collapseOne\" class=\"accordion-body\">\n" +
+    "								<div class=\"panel-body\">\n" +
+    "\n" +
+    "									<br>\n" +
+    "									<form id=\"frmShippingAddress\">\n" +
+    "										<div class=\"row\">\n" +
+    "											<div class=\"form-group\">\n" +
+    "												<div class=\"col-md-6\">\n" +
+    "													<label>First Name</label>\n" +
+    "													<input type=\"text\" name=\"firstnameMailing\" ng-model=\"mailingAddress.name.first\" class=\"form-control\">\n" +
+    "												</div>\n" +
+    "												<div class=\"col-md-6\">\n" +
+    "													<label>Last Name</label>\n" +
+    "													<input type=\"text\" name=\"lastnameMailing\" ng-model=\"mailingAddress.name.last\"  class=\"form-control\">\n" +
+    "												</div>\n" +
+    "											</div>\n" +
+    "										</div>\n" +
+    "										<div class=\"row\">\n" +
+    "											<div class=\"form-group\">\n" +
+    "												<div class=\"col-md-12\">\n" +
+    "													<label>Company Name</label>\n" +
+    "													<input type=\"text\" name=\"companyMailing\" ng-model=\"mailingAddress.company\" class=\"form-control\">\n" +
+    "												</div>\n" +
+    "											</div>\n" +
+    "										</div>\n" +
+    "										<div class=\"row\">\n" +
+    "											<div class=\"form-group\">\n" +
+    "												<div class=\"col-md-12\">\n" +
+    "													<label class=\"control-label\">Address Line 1</label>\n" +
+    "													<input type=\"text\" class=\"form-control\" name=\"addressLine1Mailing\" ng-model=\"mailingAddress.addressLine1\">\n" +
+    "												</div>\n" +
+    "											</div>\n" +
+    "										</div>\n" +
+    "										<div class=\"row\">\n" +
+    "											<div class=\"form-group\">\n" +
+    "												<div class=\"col-md-12\">\n" +
+    "													<label class=\"control-label\">Address Line 2</label>\n" +
+    "													<input type=\"text\" class=\"form-control\" name=\"addressLine2Mailing\" ng-model=\"mailingAddress.addressLine2\">\n" +
+    "												</div>\n" +
+    "											</div>\n" +
+    "										</div>\n" +
+    "										<div class=\"row\">\n" +
+    "											<div class=\"form-group\">\n" +
+    "												<div class=\"col-md-6\">\n" +
+    "													<label>City </label>\n" +
+    "													<input type=\"text\" name=\"cityMailing\" ng-model=\"mailingAddress.city\" class=\"form-control\">\n" +
+    "												</div>\n" +
+    "												<div class=\"col-md-6\">\n" +
+    "													<label>State </label>\n" +
+    "													<input type=\"text\" name=\"stateMailing\" ng-model=\"mailingAddress.state\" class=\"form-control\">\n" +
+    "												</div>\n" +
+    "											</div>\n" +
+    "										</div>\n" +
+    "										<div class=\"row\">\n" +
+    "											<div class=\"form-group\">\n" +
+    "												<div class=\"col-md-6\">\n" +
+    "													<label>Zip Code</label>\n" +
+    "													<input type=\"text\" name=\"zipMailing\" ng-model=\"mailingAddress.zip\" class=\"form-control\">\n" +
+    "												</div>\n" +
+    "												<div class=\"col-md-6\">\n" +
+    "													<label>Country</label>\n" +
+    "													<input type=\"text\" name=\"countryMailing\" ng-model=\"mailingAddress.country\" class=\"form-control\">\n" +
+    "												</div>\n" +
+    "											</div>\n" +
+    "										</div>\n" +
+    "									</form>\n" +
+    "								</div>\n" +
+    "							</div>\n" +
+    "						</div>\n" +
+    "					</div>\n" +
+    "\n" +
     "					<br>\n" +
-    "					<form id=\"frmShippingAddress\">\n" +
-    "						<div class=\"row\">\n" +
-    "							<div class=\"form-group\">\n" +
-    "								<div class=\"col-md-6\">\n" +
-    "									<label>First Name</label>\n" +
-    "									<input type=\"text\" name=\"firstnameMailing\" ng-model=\"mailingAddress.name.first\" class=\"form-control\">\n" +
-    "								</div>\n" +
-    "								<div class=\"col-md-6\">\n" +
-    "									<label>Last Name</label>\n" +
-    "									<input type=\"text\" name=\"lastnameMailing\" ng-model=\"mailingAddress.name.last\"  class=\"form-control\">\n" +
+    "\n" +
+    "					<div class=\"panel panel-default\">\n" +
+    "						<div class=\"panel-heading\">\n" +
+    "							<h4 class=\"panel-title\">\n" +
+    "								<a class=\"accordion\">\n" +
+    "									Billing Address\n" +
+    "								</a>\n" +
+    "							</h4>\n" +
+    "						</div>\n" +
+    "						<div class=\"paneling\">\n" +
+    "							<div id=\"collapseOne\" class=\"accordion-body\">\n" +
+    "								<div class=\"panel-body\">\n" +
+    "									<br>\n" +
+    "									<form id=\"frmBillingAddress\">\n" +
+    "										<div class=\"row\">\n" +
+    "											<div class=\"col-md-12\">\n" +
+    "												<span class=\"remember-box checkbox\">\n" +
+    "													<label>\n" +
+    "														<input type=\"checkbox\" ng-click=\"checkBillAddress()\" ng-Model=\"billingChecked\">Use shipping address?\n" +
+    "													</label>\n" +
+    "												</span>\n" +
+    "											</div>\n" +
+    "										</div>\n" +
+    "										<div class=\"row\">\n" +
+    "											<div class=\"form-group\">\n" +
+    "												<div class=\"col-md-6\">\n" +
+    "													<label>First Name</label>\n" +
+    "													<input type=\"text\" name=\"firstnamebilling\" ng-model=\"billingAddress.name.first\" class=\"form-control\">\n" +
+    "												</div>\n" +
+    "												<div class=\"col-md-6\">\n" +
+    "													<label>Last Name</label>\n" +
+    "													<input type=\"text\" name=\"lastnamebilling\" ng-model=\"billingAddress.name.last\"  class=\"form-control\">\n" +
+    "												</div>\n" +
+    "											</div>\n" +
+    "										</div>\n" +
+    "										<div class=\"row\">\n" +
+    "											<div class=\"form-group\">\n" +
+    "												<div class=\"col-md-12\">\n" +
+    "													<label>Company Name</label>\n" +
+    "													<input type=\"text\" name=\"companybilling\" ng-model=\"billingAddress.company\" class=\"form-control\">\n" +
+    "												</div>\n" +
+    "											</div>\n" +
+    "										</div>\n" +
+    "										<div class=\"row\">\n" +
+    "											<div class=\"form-group\">\n" +
+    "												<div class=\"col-md-12\">\n" +
+    "													<label class=\"control-label\">Address Line 1</label>\n" +
+    "													<input type=\"text\" class=\"form-control\" name=\"addressLine1billing\" ng-model=\"billingAddress.addressLine1\">\n" +
+    "												</div>\n" +
+    "											</div>\n" +
+    "										</div>\n" +
+    "										<div class=\"row\">\n" +
+    "											<div class=\"form-group\">\n" +
+    "												<div class=\"col-md-12\">\n" +
+    "													<label class=\"control-label\">Address Line 2</label>\n" +
+    "													<input type=\"text\" class=\"form-control\" name=\"addressLine2billing\" ng-model=\"billingAddress.addressLine2\">\n" +
+    "												</div>\n" +
+    "											</div>\n" +
+    "										</div>\n" +
+    "										<div class=\"row\">\n" +
+    "											<div class=\"form-group\">\n" +
+    "												<div class=\"col-md-12\">\n" +
+    "													<label>City </label>\n" +
+    "													<input type=\"text\" name=\"citybilling\" ng-model=\"billingAddress.city\" class=\"form-control\">\n" +
+    "												</div>\n" +
+    "												<div class=\"col-md-12\">\n" +
+    "													<label>State </label>\n" +
+    "													<input type=\"text\" name=\"statebilling\" ng-model=\"billingAddress.state\" class=\"form-control\">\n" +
+    "												</div>\n" +
+    "											</div>\n" +
+    "										</div>\n" +
+    "										<div class=\"row\">\n" +
+    "											<div class=\"form-group\">\n" +
+    "												<div class=\"col-md-12\">\n" +
+    "													<label>Zip Code</label>\n" +
+    "													<input type=\"text\" name=\"zipbilling\" ng-model=\"billingAddress.zip\" class=\"form-control\">\n" +
+    "												</div>\n" +
+    "												<div class=\"col-md-12\">\n" +
+    "													<label>Country</label>\n" +
+    "													<input type=\"text\" name=\"countrybilling\" ng-model=\"billingAddress.country\" class=\"form-control\">\n" +
+    "												</div>\n" +
+    "											</div>\n" +
+    "										</div>\n" +
+    "									</form>\n" +
     "								</div>\n" +
     "							</div>\n" +
     "						</div>\n" +
-    "						<div class=\"row\">\n" +
-    "							<div class=\"form-group\">\n" +
-    "								<div class=\"col-md-12\">\n" +
-    "									<label>Company Name</label>\n" +
-    "									<input type=\"text\" name=\"companyMailing\" ng-model=\"mailingAddress.company\" class=\"form-control\">\n" +
+    "					</div>\n" +
+    "\n" +
+    "					<br>\n" +
+    "					<form stripe-form=\"stripeSubmit\" name=\"paymentinfo\">\n" +
+    "						<div class=\"panel-group\" id=\"accordion\">\n" +
+    "							<div class=\"panel panel-default\">\n" +
+    "								<div class=\"panel-heading active\">\n" +
+    "									<h4 class=\"panel-title\">\n" +
+    "										<a class=\"accordion\">\n" +
+    "											Payment Method\n" +
+    "										</a>\n" +
+    "									</h4>\n" +
+    "								</div>\n" +
+    "								<div class=\"paneling\">\n" +
+    "									<div id=\"collapseOne\" class=\"accordion-body\">\n" +
+    "										<div class=\"panel-body\">\n" +
+    "											<br>\n" +
+    "\n" +
+    "											<div class=\"row\">\n" +
+    "												<div class=\"form-group\">\n" +
+    "													<div class=\"col-md-6\">\n" +
+    "														<label for=\"\">Card number</label>\n" +
+    "														<input type=\"text\" class=\"form-control\" ng-model=\"number\" payments-validate=\"card\" payments-format=\"card\" payments-type-model=\"type\" ng-class=\"myForm.number.$card.type\"/>\n" +
+    "													</div>\n" +
+    "													<div class=\"col-md-6\">\n" +
+    "														<label for=\"\">Name on card </label>\n" +
+    "														<input type=\"text\" ng-model=\"name\" class=\"form-control\">\n" +
+    "													</div>\n" +
+    "												</div>\n" +
+    "												<div class=\"form-group\">\n" +
+    "													<div class=\"col-md-6\">\n" +
+    "														<label for=\"\">Expiration Date</label>\n" +
+    "														<input type=\"text\" class=\"form-control\" ng-model=\"expiry\" payments-validate=\"expiry\" payments-format=\"expiry\" />\n" +
+    "													</div>\n" +
+    "													<div class=\"col-md-6\">\n" +
+    "														<label for=\"\">CVC</label>\n" +
+    "														<input type=\"text\" class=\"form-control\" ng-model=\"cvc\" payments-validate=\"cvc\" payments-format=\"cvc\" payments-type-model=\"type\"/>\n" +
+    "													</div>\n" +
+    "												</div>\n" +
+    "											</div>\n" +
+    "										</div>\n" +
+    "									</div>\n" +
     "								</div>\n" +
     "							</div>\n" +
-    "						</div>\n" +
-    "						<div class=\"row\">\n" +
-    "							<div class=\"form-group\">\n" +
-    "								<div class=\"col-md-12\">\n" +
-    "									<label class=\"control-label\">Address Line 1</label>\n" +
-    "									<input type=\"text\" class=\"form-control\" name=\"addressLine1Mailing\" ng-model=\"mailingAddress.addressLine1\">\n" +
+    "							<br>\n" +
+    "\n" +
+    "\n" +
+    "							<div class=\"panel panel-default\">\n" +
+    "								<div class=\"panel-heading active\">\n" +
+    "									<h4 class=\"panel-title\">\n" +
+    "										<a class=\"accordion\">\n" +
+    "											Order Review\n" +
+    "										</a>\n" +
+    "									</h4>\n" +
+    "								</div>\n" +
+    "								<div class=\"paneling\">\n" +
+    "									<div id=\"collapseOne\" class=\"accordion-body\">\n" +
+    "										<div class=\"panel-body\">\n" +
+    "											<table class=\"shop_table cart\">\n" +
+    "												<thead>\n" +
+    "													<tr>\n" +
+    "														<th class=\"product-thumbnail\">\n" +
+    "															&nbsp;\n" +
+    "														</th>\n" +
+    "														<th class=\"product-name\">\n" +
+    "															Product\n" +
+    "														</th>\n" +
+    "														<th class=\"product-price\">\n" +
+    "															Price\n" +
+    "														</th>\n" +
+    "														<th class=\"product-quantity\">\n" +
+    "															Quantity\n" +
+    "														</th>\n" +
+    "														<th class=\"product-subtotal\">\n" +
+    "															Total\n" +
+    "														</th>\n" +
+    "													</tr>\n" +
+    "												</thead>\n" +
+    "												<tbody>\n" +
+    "\n" +
+    "													<tr ng-repeat=\"item in cart\" class=\"cart_table_item\">\n" +
+    "														<td class=\"product-thumbnail\">\n" +
+    "															<img ng-src=\"{{item.imagePath}}\" alt=\"{{item.title}}\">\n" +
+    "														</td>\n" +
+    "														<td class=\"product-name\">\n" +
+    "															{{item.title}}\n" +
+    "														</td>\n" +
+    "														<td class=\"product-price\">\n" +
+    "															${{item.price}}\n" +
+    "														</td>\n" +
+    "														<td class=\"product-quantity\">\n" +
+    "															{{item.quantity}}\n" +
+    "														</td>\n" +
+    "														<td class=\"product-subtotal\">\n" +
+    "															${{cart.getProductPrice(item)}}\n" +
+    "														</td>\n" +
+    "													</tr>\n" +
+    "												</tbody>\n" +
+    "											</table>\n" +
+    "										</div>\n" +
+    "\n" +
+    "									</div>\n" +
     "								</div>\n" +
     "							</div>\n" +
-    "						</div>\n" +
-    "						<div class=\"row\">\n" +
-    "							<div class=\"form-group\">\n" +
-    "								<div class=\"col-md-12\">\n" +
-    "									<label class=\"control-label\">Address Line 2</label>\n" +
-    "									<input type=\"text\" class=\"form-control\" name=\"addressLine2Mailing\" ng-model=\"mailingAddress.addressLine2\">\n" +
-    "								</div>\n" +
+    "\n" +
+    "							<div class=\"actions-continue\">\n" +
+    "								<input type=\"submit\" value=\"Place Order\" name=\"proceed\" class=\"btn btn-lg btn-primary mt-xl\">\n" +
     "							</div>\n" +
-    "						</div>\n" +
-    "						<div class=\"row\">\n" +
-    "							<div class=\"form-group\">\n" +
-    "								<div class=\"col-md-6\">\n" +
-    "									<label>City </label>\n" +
-    "									<input type=\"text\" name=\"cityMailing\" ng-model=\"mailingAddress.city\" class=\"form-control\">\n" +
-    "								</div>\n" +
-    "								<div class=\"col-md-6\">\n" +
-    "									<label>State </label>\n" +
-    "									<input type=\"text\" name=\"stateMailing\" ng-model=\"mailingAddress.state\" class=\"form-control\">\n" +
-    "								</div>\n" +
-    "							</div>\n" +
-    "						</div>\n" +
-    "						<div class=\"row\">\n" +
-    "							<div class=\"form-group\">\n" +
-    "								<div class=\"col-md-6\">\n" +
-    "									<label>Zip Code</label>\n" +
-    "									<input type=\"text\" name=\"zipMailing\" ng-model=\"mailingAddress.zip\" class=\"form-control\">\n" +
-    "								</div>\n" +
-    "								<div class=\"col-md-6\">\n" +
-    "									<label>Country</label>\n" +
-    "									<input type=\"text\" name=\"countryMailing\" ng-model=\"mailingAddress.country\" class=\"form-control\">\n" +
-    "								</div>\n" +
-    "							</div>\n" +
-    "						</div>\n" +
-    "					</form>\n" +
+    "\n" +
+    "\n" +
+    "\n" +
+    "\n" +
+    "						</form>\n" +
+    "\n" +
+    "					</div>\n" +
     "				</div>\n" +
-    "				<br>\n" +
-    "\n" +
-    "				<button class=\"accordion\">Billing Address</button>\n" +
-    "				<div class=\"paneling\">\n" +
-    "					<br>\n" +
-    "					<form id=\"frmBillingAddress\">\n" +
-    "						<div class=\"row\">\n" +
-    "							<div class=\"col-md-12\">\n" +
-    "								<span class=\"remember-box checkbox\">\n" +
-    "									<label>\n" +
-    "										<input type=\"checkbox\" ng-click=\"checkBillAddress()\" ng-Model=\"billingChecked\">Use shipping address?\n" +
-    "									</label>\n" +
-    "								</span>\n" +
-    "							</div>\n" +
-    "						</div>\n" +
-    "						<div class=\"row\">\n" +
-    "							<div class=\"form-group\">\n" +
-    "								<div class=\"col-md-6\">\n" +
-    "									<label>First Name</label>\n" +
-    "									<input type=\"text\" name=\"firstnamebilling\" ng-model=\"billingAddress.name.first\" class=\"form-control\">\n" +
-    "								</div>\n" +
-    "								<div class=\"col-md-6\">\n" +
-    "									<label>Last Name</label>\n" +
-    "									<input type=\"text\" name=\"lastnamebilling\" ng-model=\"billingAddress.name.last\"  class=\"form-control\">\n" +
-    "								</div>\n" +
-    "							</div>\n" +
-    "						</div>\n" +
-    "						<div class=\"row\">\n" +
-    "							<div class=\"form-group\">\n" +
-    "								<div class=\"col-md-12\">\n" +
-    "									<label>Company Name</label>\n" +
-    "									<input type=\"text\" name=\"companybilling\" ng-model=\"billingAddress.company\" class=\"form-control\">\n" +
-    "								</div>\n" +
-    "							</div>\n" +
-    "						</div>\n" +
-    "						<div class=\"row\">\n" +
-    "							<div class=\"form-group\">\n" +
-    "								<div class=\"col-md-12\">\n" +
-    "									<label class=\"control-label\">Address Line 1</label>\n" +
-    "									<input type=\"text\" class=\"form-control\" name=\"addressLine1billing\" ng-model=\"billingAddress.addressLine1\">\n" +
-    "								</div>\n" +
-    "							</div>\n" +
-    "						</div>\n" +
-    "						<div class=\"row\">\n" +
-    "							<div class=\"form-group\">\n" +
-    "								<div class=\"col-md-12\">\n" +
-    "									<label class=\"control-label\">Address Line 2</label>\n" +
-    "									<input type=\"text\" class=\"form-control\" name=\"addressLine2billing\" ng-model=\"billingAddress.addressLine2\">\n" +
-    "								</div>\n" +
-    "							</div>\n" +
-    "						</div>\n" +
-    "						<div class=\"row\">\n" +
-    "							<div class=\"form-group\">\n" +
-    "								<div class=\"col-md-12\">\n" +
-    "									<label>City </label>\n" +
-    "									<input type=\"text\" name=\"citybilling\" ng-model=\"billingAddress.city\" class=\"form-control\">\n" +
-    "								</div>\n" +
-    "								<div class=\"col-md-12\">\n" +
-    "									<label>State </label>\n" +
-    "									<input type=\"text\" name=\"statebilling\" ng-model=\"billingAddress.state\" class=\"form-control\">\n" +
-    "								</div>\n" +
-    "							</div>\n" +
-    "						</div>\n" +
-    "						<div class=\"row\">\n" +
-    "							<div class=\"form-group\">\n" +
-    "								<div class=\"col-md-12\">\n" +
-    "									<label>Zip Code</label>\n" +
-    "									<input type=\"text\" name=\"zipbilling\" ng-model=\"billingAddress.zip\" class=\"form-control\">\n" +
-    "								</div>\n" +
-    "								<div class=\"col-md-12\">\n" +
-    "									<label>Country</label>\n" +
-    "									<input type=\"text\" name=\"countrybilling\" ng-model=\"billingAddress.country\" class=\"form-control\">\n" +
-    "								</div>\n" +
-    "							</div>\n" +
-    "						</div>\n" +
-    "					</form>\n" +
-    "				</div>\n" +
-    "				<br>\n" +
-    "				<form stripe-form=\"stripeSubmit\" name=\"paymentinfo\">\n" +
-    "					<button class=\"accordion\">Payment Method</button>\n" +
-    "					<div class=\"paneling\">\n" +
-    "						<br>\n" +
-    "\n" +
-    "						<div class=\"row\">\n" +
-    "							<div class=\"form-group\">\n" +
-    "								<div class=\"col-md-6\">\n" +
-    "									<label for=\"\">Card number</label>\n" +
-    "									<input type=\"text\" class=\"form-control\" ng-model=\"number\" payments-validate=\"card\" payments-format=\"card\" payments-type-model=\"type\" ng-class=\"myForm.number.$card.type\"/>\n" +
-    "								</div>\n" +
-    "								<div class=\"col-md-6\">\n" +
-    "									<label for=\"\">Name on card </label>\n" +
-    "									<input type=\"text\" ng-model=\"name\" class=\"form-control\">\n" +
-    "								</div>\n" +
-    "							</div>\n" +
-    "							<div class=\"form-group\">\n" +
-    "								<div class=\"col-md-6\">\n" +
-    "									<label for=\"\">Expiration Date</label>\n" +
-    "									<input type=\"text\" class=\"form-control\" ng-model=\"expiry\" payments-validate=\"expiry\" payments-format=\"expiry\" />\n" +
-    "								</div>\n" +
-    "								<div class=\"col-md-6\">\n" +
-    "									<label for=\"\">CVC</label>\n" +
-    "									<input type=\"text\" class=\"form-control\" ng-model=\"cvc\" payments-validate=\"cvc\" payments-format=\"cvc\" payments-type-model=\"type\"/>\n" +
-    "								</div>\n" +
-    "							</div>\n" +
-    "						</div>\n" +
-    "					</div>\n" +
-    "					<br>\n" +
-    "\n" +
-    "\n" +
-    "					<button class=\"accordion\">Order Review</button>\n" +
-    "					<div class=\"paneling\">\n" +
-    "						<table class=\"shop_table cart\">\n" +
-    "							<thead>\n" +
-    "								<tr>\n" +
-    "									<th class=\"product-thumbnail\">\n" +
-    "										&nbsp;\n" +
-    "									</th>\n" +
-    "									<th class=\"product-name\">\n" +
-    "										Product\n" +
-    "									</th>\n" +
-    "									<th class=\"product-price\">\n" +
-    "										Price\n" +
-    "									</th>\n" +
-    "									<th class=\"product-quantity\">\n" +
-    "										Quantity\n" +
-    "									</th>\n" +
-    "									<th class=\"product-subtotal\">\n" +
-    "										Total\n" +
-    "									</th>\n" +
-    "								</tr>\n" +
-    "							</thead>\n" +
-    "							<tbody>\n" +
-    "\n" +
-    "								<tr ng-repeat=\"item in cart\" class=\"cart_table_item\">\n" +
-    "									<td class=\"product-thumbnail\">\n" +
-    "										<img ng-src=\"{{item.imagePath}}\" alt=\"{{item.title}}\">\n" +
-    "									</td>\n" +
-    "									<td class=\"product-name\">\n" +
-    "										{{item.title}}\n" +
-    "									</td>\n" +
-    "									<td class=\"product-price\">\n" +
-    "										${{item.price}}\n" +
-    "									</td>\n" +
-    "									<td class=\"product-quantity\">\n" +
-    "										{{item.quantity}}\n" +
-    "									</td>\n" +
-    "									<td class=\"product-subtotal\">\n" +
-    "										${{cart.getProductPrice(item)}}\n" +
-    "									</td>\n" +
-    "								</tr>\n" +
-    "							</tbody>\n" +
-    "						</table>\n" +
-    "					</div>\n" +
-    "\n" +
-    "\n" +
-    "\n" +
-    "					<div class=\"actions-continue\">\n" +
-    "						<input type=\"submit\" value=\"Place Order\" name=\"proceed\" class=\"btn btn-lg btn-primary mt-xl\">\n" +
-    "					</div>\n" +
-    "\n" +
-    "				</form>\n" +
-    "\n" +
     "			</div>\n" +
-    "			<div class=\"col-md-3\">\n" +
+    "\n" +
+    "\n" +
+    "\n" +
+    "			<div id=\"exportthis\" class=\"col-md-3\">\n" +
     "				<h4 class=\"heading-primary\">Cart Totals</h4>\n" +
     "				<table class=\"cart-totals\">\n" +
     "					<tbody>\n" +
@@ -8128,11 +8307,8 @@ angular.module("account/checkout/checkout.tpl.html", []).run(["$templateCache", 
     "				</table>\n" +
     "			</div>\n" +
     "		</div>\n" +
-    "\n" +
     "	</div>\n" +
     "\n" +
-    "	\n" +
-    "</div>\n" +
     "");
 }]);
 
@@ -8234,9 +8410,6 @@ angular.module("account/checkout/order-summary.tpl.html", []).run(["$templateCac
     "                        <label class=\"control-label\" for=\"full\">###############</label>\n" +
     "                    </div>\n" +
     "                    <legend> </legend>\n" +
-    "                    <div class=\"col-md-5\">\n" +
-    "                        <label class=\"control-label\" for=\"full\">Tracking Number: </label>\n" +
-    "                    </div>\n" +
     "                    <div class=\"col-md-7\" style=\"float: right; text-align: right;\">\n" +
     "                        <label class=\"control-label\" for=\"full\">########</label>\n" +
     "                    </div>\n" +

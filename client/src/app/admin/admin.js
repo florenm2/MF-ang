@@ -45,8 +45,8 @@ angular.module('admin.index').config(['$routeProvider', function($routeProvider)
       }
     })
 }]);
-angular.module('admin.index').controller('AdminCtrl', ['$scope', '$log', 'stats', 'viewCount',
-  function($scope, $log, stats, viewCount){
+angular.module('admin.index').controller('AdminCtrl', ['$scope', '$log', 'stats', 'viewCount', 'adminResource',
+  function($scope, $log, stats, viewCount, adminResource){
 
     // html2canvas(document.getElementById('exportthis'), {
     //         onrendered: function (canvas) {
@@ -60,6 +60,42 @@ angular.module('admin.index').controller('AdminCtrl', ['$scope', '$log', 'stats'
     //             pdfMake.createPdf(docDefinition).download("Test.pdf");
     //         }
     //     });
+
+    $scope.click = function() {
+      //    console.log("button clicked");
+      //  $scope.order.showPopupAddedToCart = !$scope.order.showPopupAddedToCart;
+      var doc = new jsPDF();
+      doc.text(20, 20, 'Hello world!');
+
+      var pdfBase64 = doc.output('datauristring');
+
+     // adminResource.sendConfirmationEmail();
+
+
+      // var emailjs = require('emailjs/email');
+      // var emailer = emailjs.server.connect( req.app.config.smtp.credentials );
+      // emailer.send({
+      //   from: req.app.config.smtp.from.name +' <'+ req.app.config.smtp.from.address +'>',
+      //   to: 'florenm2@miamioh.edu',
+      //   subject: 'subject',
+      //   text: 'hello',
+      //  // attachment: attachments
+      // }, function(err, message) {
+      //   if (err) {
+      //     options.error('Email failed to send. '+ err);
+      //     return;
+      //   }
+      //   else {
+      //     options.success(message);
+      //     return;
+      //   }
+      // })
+
+
+      // Save the PDF
+      //doc.save('Test.pdf');
+
+    };
 
     var viewData = function(viewCount){
          $scope.viewDataDates = []; 

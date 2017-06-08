@@ -84,6 +84,8 @@ exports = module.exports = function(app, passport) {
   app.post('/api/account/verification', account.resendVerification);
   app.get('/api/account/verification/:token/', account.verify);
 
+  app.post('/api/account/confirmation/', account.sendConfirmationEmail);
+
   app.all('/api/account/settings*', apiEnsureVerifiedAccount);
 
   app.get('/api/account/settings', account.getAccountDetails);

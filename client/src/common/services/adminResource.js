@@ -289,7 +289,6 @@ angular.module('services.adminResource', []).factory('adminResource', ['$http', 
     var url = adminCategoriesUrl + '/' + _id;
     return $http.delete(url).then(processResponse, processError);
   };
-
   // ----- views api -----
   resource.getRecentViewCount = function() {
     var url = baseUrl + '/getRecentViewCount';

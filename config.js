@@ -24,11 +24,17 @@ exports.smtp = {
     address: process.env.SMTP_FROM_ADDRESS || 'safeconnectcontact@gmail.com'
   },
   credentials: {
-    user: 'safeconnectcontact@gmail.com',
-    password: 'GZZR0FuUZ2me',
+    user: 'florenm2@miamioh.edu',
+    password: 'fZg4BQAdgF0J',
     host: 'mail.smtp2go.com',
     ssl: true
   }
+  // credentials: {
+  //   user: 'safeconnectcontact@gmail.com',
+  //   password: 'GZZR0FuUZ2me',
+  //   host: 'mail.smtp2go.com',
+  //   ssl: true
+  // }
 };
 exports.oauth = {
   twitter: {

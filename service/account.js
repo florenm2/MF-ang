@@ -122,7 +122,7 @@ var account = {
     };
 
     var getPHData = function(callback) {
-    
+      
       req.app.db.models.PurchaseHistory.find({"account.id": req.user.roles.account.id }, 'orderDate orderNumber account.name cost').exec(function(err, purchasehistory) {
         if (err) {
           callback(err, null);
@@ -184,12 +184,12 @@ var account = {
         phone: req.body.phone,
         zip: req.body.zip,
         search: [
-          req.body.first,
-          req.body.middle,
-          req.body.last,
-          req.body.company,
-          req.body.phone,
-          req.body.zip
+        req.body.first,
+        req.body.middle,
+        req.body.last,
+        req.body.company,
+        req.body.phone,
+        req.body.zip
         ]
       };
       var options = { select: 'name company phone zip' };
@@ -266,8 +266,8 @@ var account = {
         username: req.body.username,
         email: req.body.email.toLowerCase(),
         search: [
-          req.body.username,
-          req.body.email
+        req.body.username,
+        req.body.email
         ]
       };
       var options = { select: 'username email twitter.id github.id facebook.id google.id' };
@@ -335,6 +335,24 @@ var account = {
     });
 
     workflow.emit('validate');
+  },
+  sendConfirmationEmail : function(req, res, options) {
+    req.app.utility.sendmail(req, res, {
+      from: req.app.config.smtp.from.name +' <'+ req.app.config.smtp.from.address +'>',
+      to: options.email,
+      subject: 'req.app.config.companyName',
+      text: 'hello',
+    // attachments: 'req.body',
+    locals: {
+      companyName: req.app.config.companyName
+    },
+    success: function() {
+      options.onSuccess();
+    },
+    error: function(err) {
+      options.onError(err);
+    }
+  });
   },
   password: function(req, res, next){
     var workflow = req.app.utility.workflow(req, res);

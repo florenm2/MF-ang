@@ -65,16 +65,31 @@ angular.module('account.checkout').controller('CheckoutLoggedInCtrl', [ '$scope'
     $scope.productinfo = [];
 
 
-    for(var i = 0; i<$scope.c.length; i++){
-        console.log($scope.c[i]);
 
-        var v = {
-          product: $scope.c[i].product,
-          quantity: $scope.c[i].quantity
-        };
+    $scope.click = function() {
+      //    console.log("button clicked");
+      //  $scope.order.showPopupAddedToCart = !$scope.order.showPopupAddedToCart;
+      var doc = new jsPDF();
+      doc.text(20, 20, 'Hello world!');
 
-        $scope.productinfo.push(v);
-    }
+      var pdfBase64 = doc.output('datauristring');
+
+     // adminResource.sendConfirmationEmail();
+
+   }
+
+
+
+   for(var i = 0; i<$scope.c.length; i++){
+    console.log($scope.c[i]);
+
+    var v = {
+      product: $scope.c[i].product,
+      quantity: $scope.c[i].quantity
+    };
+
+    $scope.productinfo.push(v);
+  }
 
     //mailing address
     if(address==null){
@@ -110,7 +125,7 @@ angular.module('account.checkout').controller('CheckoutLoggedInCtrl', [ '$scope'
         type : 'mailing'
       };
     }
-  
+
     //billing address
     $scope.checkBillAddress = function(){
       if($scope.billingChecked){
@@ -159,17 +174,17 @@ angular.module('account.checkout').controller('CheckoutLoggedInCtrl', [ '$scope'
         }
       }
 
-    $scope.submitAddress = function(){
+      $scope.submitAddress = function(){
 
-      $scope.alerts.address = [];
-      restResource.setMailingAddress($scope.mailingAddress).then(function(data){
-        if(data.success){
-          $scope.alerts.address.push({
-            type: 'success',
-            msg: 'User identity is updated.'
-          });
-          $scope.submitPurchaseHistory();
-        }else{
+        $scope.alerts.address = [];
+        restResource.setMailingAddress($scope.mailingAddress).then(function(data){
+          if(data.success){
+            $scope.alerts.address.push({
+              type: 'success',
+              msg: 'User identity is updated.'
+            });
+            $scope.submitPurchaseHistory();
+          }else{
           //error due to server side validation
           $scope.errfor = data.errfor;
           angular.forEach(data.errfor, function(err, field){
@@ -188,19 +203,68 @@ angular.module('account.checkout').controller('CheckoutLoggedInCtrl', [ '$scope'
           msg: 'Error updating user identity: ' + x
         });
       });
-    };
+      };
 
-    $scope.submitPurchaseHistory = function(){
+      $scope.submitPurchaseHistory = function(){
 
-      $scope.alerts.purchasehistory = [];
-      restResource.newPurchase($scope.purchaseInformation).then(function(data){
-        if(data.success){
-          $scope.alerts.purchasehistory.push({
-            type: 'success',
-            msg: 'User identity is updated.'
-          });
-          $location.path('/account/checkout/summary');
-        }else{
+
+        // html2canvas($("#canvas"), {
+        //   onrendered: function(canvas) {         
+        //     var imgData = canvas.toDataURL(
+        //       'image/png');              
+        //     var doc = new jsPDF('p', 'mm');
+        //     doc.addImage(imgData, 'PNG', 10, 10);
+        //         //doc.save('sample-file.pdf');
+        //         $scope.purchaseInformation.pdf = doc;
+        //       }
+        //     });
+
+        html2canvas(document.getElementById('exportthis'), {
+          onrendered: function (canvas) {
+            // var data = canvas.toDataURL('image/png');
+            // var docDefinition = {
+            //   content: [{
+            //     image: data,
+            //     width: 500,
+            //   }]
+            // };
+            // var doc = new jsPDF();
+            // doc.addImage(docDefinition, 'PNG', 15, 40, 180, 160);
+
+            // var pdfBase64 = doc.output('datauristring');
+
+            var pdf = new jsPDF();
+            pdf.addImage(canvas.toDataURL("image/jpeg"),"JPEG",20,20);
+            var pdf_img = pdf.output("datauristring");
+            $scope.purchaseInformation.pdf = pdf_img.replace("data:application/pdf;base64,", "");
+
+            console.log($scope.purchaseInformation.pdf)
+            console.log(pdf_img)
+
+
+
+            //data:application/pdf;base64,JVBERi0xLjMKMyAwIG9iago8PC9UeXBlIC9QYWdlCi9QYXJ…UgMjEKL1Jvb3QgMjAgMCBSCi9JbmZvIDE5IDAgUgo+PgpzdGFydHhyZWYKMzY2MwolJUVPRg==
+
+
+            //$scope.purchaseInformation.pdf = pdfBase64;
+          }
+        });
+
+        
+
+        
+
+        console.log($scope.purchaseInformation);
+
+        $scope.alerts.purchasehistory = [];
+        restResource.newPurchase($scope.purchaseInformation).then(function(data){
+          if(data.success){
+            $scope.alerts.purchasehistory.push({
+              type: 'success',
+              msg: 'User identity is updated.'
+            });
+            $location.path('/account/checkout/summary');
+          }else{
           //error due to server side validation
           $scope.errfor = data.errfor;
           angular.forEach(data.errors, function(err, index){
@@ -216,7 +280,7 @@ angular.module('account.checkout').controller('CheckoutLoggedInCtrl', [ '$scope'
           msg: 'Error updating user identity: ' + x
         });
       });
-    };
+      };
 
 
      $scope.errfor = {}; //for identity server-side validation
@@ -233,7 +297,7 @@ angular.module('account.checkout').controller('CheckoutLoggedInCtrl', [ '$scope'
       $scope.stripeToken = null;
     };
 
-    var acc = document.getElementsByClassName("accordion");
+    var acc = document.getElementsByClassName("panel-heading");
     var i;
 
     for (i = 0; i < acc.length; i++) {
