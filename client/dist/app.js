@@ -8138,7 +8138,147 @@ angular.module("account/checkout/checkout.tpl.html", []).run(["$templateCache", 
 
 angular.module("account/checkout/order-summary.tpl.html", []).run(["$templateCache", function($templateCache) {
   $templateCache.put("account/checkout/order-summary.tpl.html",
-    "<h2>Order Summary</h2>\n" +
+    "<div role=\"main\" class=\"main\">\n" +
+    "\n" +
+    "    <div class=\"\" >\n" +
+    "\n" +
+    "        <div class=\"container\">\n" +
+    "            <!-- Section Title -->\n" +
+    "            <div class=\"section-title\">\n" +
+    "                <h1 class=\"heading-font heading-tertiary spacing-top-md spacing-bot-sm\">Thank you for your order!</h1>\n" +
+    "                <br>\n" +
+    "                <h1 class=\"heading-font heading-tertiary spacing-top-md spacing-bot-sm\">Order Summary</h1>\n" +
+    "                <br>\n" +
+    "            </div>              \n" +
+    "            \n" +
+    "            \n" +
+    "            <div class=\"row\">\n" +
+    "                <div class=\"col-md-8\">\n" +
+    "                    <legend>Order Contents</legend>\n" +
+    "                    <div class=\"col-md-3\">\n" +
+    "                        <label class=\"control-label\" for=\"full\">Product: </label>\n" +
+    "                    </div>\n" +
+    "                    <div class=\"col-md-9\">\n" +
+    "                        <label class=\"control-label\" for=\"full\">###############</label>\n" +
+    "                    </div>\n" +
+    "                    <div class=\"col-md-3\">\n" +
+    "                        <label class=\"control-label\" for=\"full\">Price: </label>\n" +
+    "                    </div>\n" +
+    "                    <div class=\"col-md-9\">\n" +
+    "                        <label class=\"control-label\" for=\"full\">###############</label>\n" +
+    "                    </div>\n" +
+    "                    <div class=\"col-md-3\">\n" +
+    "                        <label class=\"control-label\" for=\"full\">Quantity: </label>\n" +
+    "                    </div>\n" +
+    "                    <div class=\"col-md-9\">\n" +
+    "                        <label class=\"control-label\" for=\"full\">###############</label>\n" +
+    "                    </div>\n" +
+    "                    <div class=\"col-md-3\">\n" +
+    "                        <label class=\"control-label\" for=\"full\">Subtotal: </label>\n" +
+    "                    </div>\n" +
+    "                    <div class=\"col-md-9\">\n" +
+    "                        <label class=\"control-label\" for=\"full\">###############</label>\n" +
+    "                    </div>\n" +
+    "                    <div>\n" +
+    "                        <br>\n" +
+    "                        <br>\n" +
+    "                        <br>\n" +
+    "                        <br>\n" +
+    "                        <br>\n" +
+    "                        <br>\n" +
+    "                    </div>\n" +
+    "                    <legend>Shipping and Payment</legend>\n" +
+    "                    <div class=\"col-md-3\">\n" +
+    "                        <label class=\"control-label\" for=\"full\">Shipping Address: </label>\n" +
+    "                    </div>\n" +
+    "                    <div class=\"col-md-9\">\n" +
+    "                        <label class=\"control-label\" for=\"full\">###############</label>\n" +
+    "                    </div>\n" +
+    "                    <div class=\"col-md-3\">\n" +
+    "                        <label class=\"control-label\" for=\"full\">Billing Address: </label>\n" +
+    "                    </div>\n" +
+    "                    <div class=\"col-md-9\">\n" +
+    "                        <label class=\"control-label\" for=\"full\">###############</label>\n" +
+    "                    </div>\n" +
+    "                    <div class=\"col-md-3\">\n" +
+    "                        <label class=\"control-label\" for=\"full\">Payment Method: </label>\n" +
+    "                    </div>\n" +
+    "                    <div class=\"col-md-9\">\n" +
+    "                        <label class=\"control-label\" for=\"full\">###############</label>\n" +
+    "                    </div>\n" +
+    "                    <div class=\"col-md-3\">\n" +
+    "                        <label class=\"control-label\" for=\"full\">Shipping Speed: </label>\n" +
+    "                    </div>\n" +
+    "                    <div class=\"col-md-9\">\n" +
+    "                        <label class=\"control-label\" for=\"full\">###############</label>\n" +
+    "                    </div>\n" +
+    "                </div>\n" +
+    "                <div class=\"col-md-4\">\n" +
+    "                    <legend>Order Details</legend>\n" +
+    "                    <div class=\"col-md-5\">\n" +
+    "                        <label class=\"control-label\" for=\"full\">Order Number: </label>\n" +
+    "                    </div>\n" +
+    "                    <div class=\"col-md-7\" style=\"float: right; text-align: right;\">\n" +
+    "                        <label class=\"control-label\" for=\"full\">###############</label>\n" +
+    "                    </div>\n" +
+    "                    <div class=\"col-md-5\">\n" +
+    "                        <label class=\"control-label\" for=\"full\">Order Date: </label>\n" +
+    "                    </div>\n" +
+    "                    <div class=\"col-md-7\" style=\"float: right; text-align: right;\">\n" +
+    "                        <label class=\"control-label\" for=\"full\">##/##/####</label>\n" +
+    "                    </div>\n" +
+    "                    <div class=\"col-md-5\">\n" +
+    "                        <label class=\"control-label\" for=\"full\">Order Status: </label>\n" +
+    "                    </div>\n" +
+    "                    <div class=\"col-md-7\" style=\"float: right; text-align: right;\">\n" +
+    "                        <label class=\"control-label\" for=\"full\">###############</label>\n" +
+    "                    </div>\n" +
+    "                    <legend> </legend>\n" +
+    "                    <div class=\"col-md-5\">\n" +
+    "                        <label class=\"control-label\" for=\"full\">Tracking Number: </label>\n" +
+    "                    </div>\n" +
+    "                    <div class=\"col-md-7\" style=\"float: right; text-align: right;\">\n" +
+    "                        <label class=\"control-label\" for=\"full\">########</label>\n" +
+    "                    </div>\n" +
+    "                    <legend></legend>\n" +
+    "                    <div class=\"col-md-5\">\n" +
+    "                        <label class=\"control-label\" for=\"full\">Subtotal: </label>\n" +
+    "                    </div>\n" +
+    "                    <div class=\"col-md-7\" style=\"float: right; text-align: right;\">\n" +
+    "                        <label class=\"control-label\" for=\"full\">###.##</label>\n" +
+    "                    </div>\n" +
+    "                    <div class=\"col-md-5\">\n" +
+    "                        <label class=\"control-label\" for=\"full\">Shipping: </label>\n" +
+    "                    </div>\n" +
+    "                    <div class=\"col-md-7\" style=\"float: right; text-align: right;\">\n" +
+    "                        <label class=\"control-label\" for=\"full\">##.##</label>\n" +
+    "                    </div>\n" +
+    "                    <div class=\"col-md-5\">\n" +
+    "                        <label class=\"control-label\" for=\"full\">Tax: </label>\n" +
+    "                    </div>\n" +
+    "                    <div class=\"col-md-7\" style=\"float: right; text-align: right;\">\n" +
+    "                        <label class=\"control-label\" for=\"full\">##.##</label>\n" +
+    "                    </div>\n" +
+    "                    <legend> </legend>\n" +
+    "                    <div class=\"col-md-5\">\n" +
+    "                        <label class=\"control-label\" for=\"full\">Total: </label>\n" +
+    "                    </div>\n" +
+    "                    <div class=\"col-md-7\" style=\"float: right; text-align: right;\">\n" +
+    "                        <label class=\"control-label\" for=\"full\">###.##</label>\n" +
+    "                    </div>\n" +
+    "                </div>\n" +
+    "            </div>\n" +
+    "        </div>\n" +
+    "    </div>\n" +
+    "</div>\n" +
+    "\n" +
+    "\n" +
+    "\n" +
+    "\n" +
+    "\n" +
+    "\n" +
+    "\n" +
+    "\n" +
     "\n" +
     "<button ng-click=\"returnHome()\">Return Home</button>");
 }]);
@@ -8386,18 +8526,18 @@ angular.module("account/settings/account-settings.tpl.html", []).run(["$template
     "            <legend>Shipping Information</legend>\n" +
     "            <div class=\"row\">\n" +
     "                <div class=\"col-md-1\">\n" +
-    "                <!-- MAKE THIS NUMBER MOTHER FUCKING CHANGE WHEN THERE ARE MORE ADDRESSES -->\n" +
+    "                    <!-- MAKE THIS NUMBER MOTHER FUCKING CHANGE WHEN THERE ARE MORE ADDRESSES -->\n" +
     "                    <span>1)</span>\n" +
     "                </div>\n" +
-    "            <div class=\"col-md-11\">\n" +
-    "                <div class=\"row\">\n" +
-    "                    <div class=\"col-md-2\">\n" +
-    "                        <label class=\"control-label\" for=\"full\">Full Name:</label>\n" +
-    "                    </div>\n" +
+    "                <div class=\"col-md-11\">\n" +
+    "                    <div class=\"row\">\n" +
+    "                        <div class=\"col-md-2\">\n" +
+    "                            <label class=\"control-label\" for=\"full\">Full Name:</label>\n" +
+    "                        </div>\n" +
     "\n" +
     "                    <!--        PUT PROPER ALERT HERE\n" +
     "                    <alert ng-repeat=\"alert in alerts.detail\" type=\"{{alert.type}}\" close=\"closeAlert('detail', $index)\">{{alert.msg}}</alert>\n" +
-    "                     -->\n" +
+    "                    -->\n" +
     "\n" +
     "                    <div class=\"col-md-6 form-group\" ng-class=\"{'has-error': hasError(shipinfoForm.full)}\" style=\"width: 47%;\">\n" +
     "                        <input type=\"text\" name=\"full\" id=\"full\" class=\"form-control\" ng-model=\"userDetail.full\" required>\n" +
@@ -8449,7 +8589,7 @@ angular.module("account/settings/account-settings.tpl.html", []).run(["$template
     "                </div>\n" +
     "                <div class=\"col-md-3 form-group\" style=\"float: right;\">\n" +
     "\n" +
-    "                <!-- MAKE CLICKING THIS TEXT CREATE ANOTHER MOTHER FUCKING ADDRESS -->\n" +
+    "                    <!-- MAKE CLICKING THIS TEXT CREATE ANOTHER MOTHER FUCKING ADDRESS -->\n" +
     "\n" +
     "                    <span><a id=\"panel_view\" href ng-click=\"panelModal()\">Add Another Address</a></span>\n" +
     "                </div>\n" +
@@ -8461,18 +8601,18 @@ angular.module("account/settings/account-settings.tpl.html", []).run(["$template
     "            <legend>Billing Information</legend>\n" +
     "            <div class=\"row\">\n" +
     "                <div class=\"col-md-1\">\n" +
-    "                <!-- MAKE THIS NUMBER MOTHER FUCKING CHANGE WHEN THERE ARE MORE ADDRESSES -->\n" +
+    "                    <!-- MAKE THIS NUMBER MOTHER FUCKING CHANGE WHEN THERE ARE MORE ADDRESSES -->\n" +
     "                    <span>1)</span>\n" +
     "                </div>\n" +
-    "            <div class=\"col-md-11\">\n" +
-    "                <div class=\"row\">\n" +
-    "                    <div class=\"col-md-2\">\n" +
-    "                        <label class=\"control-label\" for=\"full\">Full Name:</label>\n" +
-    "                    </div>\n" +
+    "                <div class=\"col-md-11\">\n" +
+    "                    <div class=\"row\">\n" +
+    "                        <div class=\"col-md-2\">\n" +
+    "                            <label class=\"control-label\" for=\"full\">Full Name:</label>\n" +
+    "                        </div>\n" +
     "\n" +
-    "                    <!--        PUT PROPER ALERT HERE\n" +
-    "                    <alert ng-repeat=\"alert in alerts.detail\" type=\"{{alert.type}}\" close=\"closeAlert('detail', $index)\">{{alert.msg}}</alert>\n" +
-    "                     -->\n" +
+    "                        <!--        PUT PROPER ALERT HERE\n" +
+    "                        <alert ng-repeat=\"alert in alerts.detail\" type=\"{{alert.type}}\" close=\"closeAlert('detail', $index)\">{{alert.msg}}</alert>\n" +
+    "                    -->\n" +
     "\n" +
     "                    <div class=\"col-md-6 form-group\" ng-class=\"{'has-error': hasError(billinfoForm.full)}\" style=\"width: 47%;\">\n" +
     "                        <input type=\"text\" name=\"full\" id=\"full\" class=\"form-control\" ng-model=\"userDetail.full\" required>\n" +
@@ -8524,7 +8664,7 @@ angular.module("account/settings/account-settings.tpl.html", []).run(["$template
     "                </div>\n" +
     "                <div class=\"col-md-3 form-group\" style=\"float: right;\">\n" +
     "\n" +
-    "                <!-- MAKE CLICKING THIS TEXT CREATE ANOTHER MOTHER FUCKING ADDRESS -->\n" +
+    "                    <!-- MAKE CLICKING THIS TEXT CREATE ANOTHER MOTHER FUCKING ADDRESS -->\n" +
     "\n" +
     "                    <span><a id=\"panel_view\" href ng-click=\"panelModal()\">Add Another Address</a></span>\n" +
     "                </div>\n" +
