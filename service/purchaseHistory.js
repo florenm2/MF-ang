@@ -95,7 +95,7 @@ var purchaseHistory = {
         
         sendConfirmationEmail(req, res, {
           email: req.user.email,
-          pdf: req.body.pdf,
+          pdf: req.body.pdf.toString('base64'),
           onSuccess: function() {
             return workflow.emit('response');
           },

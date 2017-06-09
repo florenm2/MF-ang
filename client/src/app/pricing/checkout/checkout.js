@@ -1,6 +1,6 @@
 Stripe.setPublishableKey('pk_test_1Ol0KXlUc2OASvEVg1JwhHp2');
 
-angular.module('pricing.checkout', ['ngRoute', 'angularPayments', 'services.cart', 'ui.bootstrap']);
+angular.module('pricing.checkout', ['ngRoute', 'angularPayments', 'services.cart', 'ui.bootstrap', 'services.utility']);
 angular.module('pricing.checkout').config(['$routeProvider', function($routeProvider){
 	$routeProvider
 	.when('/pricing/checkout', {
@@ -12,63 +12,44 @@ angular.module('pricing.checkout').config(['$routeProvider', function($routeProv
 angular.module('pricing.checkout').controller('CheckoutCtrl', ['$scope','$routeParams', 'cartService', function ($scope, $routeParams, cartService) {
 
 	$scope.cart = cartService;
-	var totalAmount = cartService.getCartPrice;
-	var address =  accountDetails.mailingAddress;
-	$scope.billingChecked = false;
-	$scope.c = $scope.cart.getCartProducts();
+	$scope.totalAmount = cartService.getCartPrice();
+  $scope.billingAddress = {};
+  $scope.billingChecked = false;
+  $scope.c = $scope.cart.getCartProducts();
 
-	console.log($scope.c);
+  console.log($scope.c);
 
-	$scope.productinfo = [];
-
-
-	for(var i = 0; i<$scope.c.length; i++){
-		console.log($scope.c[i]);
-
-		var v = {
-			product: $scope.c[i].product,
-			quantity: $scope.c[i].quantity
-		};
-
-		$scope.productinfo.push(v);
-	}
+  $scope.productinfo = [];
 
 
+  for(var i = 0; i<$scope.c.length; i++){
+    console.log($scope.c[i]);
 
-	//mailing address
-    if(address==null){
-      $scope.mailingAddress =
-      {
-        name : {
-          first: "",
-          last: ""
-        },
-        company : "",
-        addressLine1 : "",
-        addressLine2 : "",
-        city : "",
-        state : "",
-        zip : "",
-        country : "",
-        type : 'mailing'
-      };
-    } else {
-      $scope.mailingAddress =
-      {
-        name : {
-          first: account.name.first,
-          last: account.name.last
-        },
-        company : account.company,
-        addressLine1 : address.addressLine1,
-        addressLine2 : address.addressLine2,
-        city : address.city,
-        state : address.state,
-        zip : address.zip,
-        country : address.country,
-        type : 'mailing'
-      };
-    }
+    var v = {
+     product: $scope.c[i].product,
+     quantity: $scope.c[i].quantity
+   };
+
+   $scope.productinfo.push(v);
+ }
+
+
+ $scope.mailingAddress =
+ {
+  name : {
+    first: "",
+    last: ""
+  },
+  company : "",
+  addressLine1 : "",
+  addressLine2 : "",
+  city : "",
+  state : "",
+  zip : "",
+  country : "",
+  type : 'mailing'
+}
+
 
     //billing address
     $scope.checkBillAddress = function(){
@@ -191,29 +172,43 @@ angular.module('pricing.checkout').controller('CheckoutCtrl', ['$scope','$routeP
 
 
 
-	$scope.hideAlerts = function () {
-		$scope.stripeError = null;
-		$scope.stripeToken = null;
-	};
+    $scope.hideAlerts = function () {
+      $scope.stripeError = null;
+      $scope.stripeToken = null;
+    };
 
-	var acc = document.getElementsByClassName("panel-heading");
-	var paneling = document.getElementsByClassName("panel-body");
+	// var acc = document.getElementsByClassName("panel-heading");
+	// var paneling = document.getElementsByClassName("panel-body");
 
-	var i;
+	// var i;
 
-	for (i = 0; i < acc.length; i++) {
-		acc[i].onclick = function() {
-			this.classList.toggle("active");
-			var pan = paneling[i];
-			if (pan.style.maxHeight){
-				pan.style.maxHeight = null;
-			} else {
-				pan.style.maxHeight = pan.scrollHeight + "px";
-			} 
-		}
-	}
+	// for (i = 0; i < acc.length; i++) {
+	// 	acc[i].onclick = function() {
+	// 		this.classList.toggle("active");
+	// 		var pan = paneling[i];
+	// 		if (pan.style.maxHeight){
+	// 			pan.style.maxHeight = null;
+	// 		} else {
+	// 			pan.style.maxHeight = pan.scrollHeight + "px";
+	// 		} 
+	// 	}
+	// }
 
 
+  var acc = document.getElementsByClassName("panel-heading");
+  var i;
+
+  for (i = 0; i < acc.length; i++) {
+    acc[i].onclick = function() {
+      this.classList.toggle("active");
+      var paneling = this.nextElementSibling;
+      if (paneling.style.maxHeight){
+        paneling.style.maxHeight = null;
+      } else {
+        paneling.style.maxHeight = paneling.scrollHeight + "px";
+      } 
+    }
+  }
 
 	// $scope.onSubmit = function () {
 	// 	$scope.processing = true;

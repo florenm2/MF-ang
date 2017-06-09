@@ -203,7 +203,7 @@ angular.module('account.checkout').controller('CheckoutLoggedInCtrl', [ '$scope'
         //       }
         //     });
 
-        html2canvas(document.getElementById('exportthis'), {
+        html2canvas(document.getElementById('confirmation-email'), {
           onrendered: function (canvas) {
             // var data = canvas.toDataURL('image/png');
             // var docDefinition = {
@@ -269,10 +269,6 @@ angular.module('account.checkout').controller('CheckoutLoggedInCtrl', [ '$scope'
      $scope.alerts = {
       detail: [], address: [], pass: []
     };
-    
-    $scope.returnHome = function(){
-      $location.path('/');
-    }
 
     $scope.hideAlerts = function () {
       $scope.stripeError = null;

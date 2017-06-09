@@ -460,12 +460,7 @@ angular.module("account/checkout/checkout.tpl.html", []).run(["$templateCache", 
     "							<div class=\"actions-continue\">\n" +
     "								<input type=\"submit\" value=\"Place Order\" name=\"proceed\" class=\"btn btn-lg btn-primary mt-xl\">\n" +
     "							</div>\n" +
-    "\n" +
-    "\n" +
-    "\n" +
-    "\n" +
     "						</form>\n" +
-    "\n" +
     "					</div>\n" +
     "				</div>\n" +
     "			</div>\n" +
@@ -511,12 +506,116 @@ angular.module("account/checkout/checkout.tpl.html", []).run(["$templateCache", 
 
 angular.module("account/checkout/order-summary.tpl.html", []).run(["$templateCache", function($templateCache) {
   $templateCache.put("account/checkout/order-summary.tpl.html",
+    "<div class=\"main shop\">\n" +
+    "<div id= \"confirmation-email\" class=\"col-md-9\">\n" +
+    "  <div class=\"container\">\n" +
+    "    <div class=\"section-title\">\n" +
+    "        <h2 class=\"heading-font heading-tertiary spacing-top-md\">Thank you for your order!</h2>\n" +
+    "        <br>\n" +
+    "        <h4 class=\"mb-none preheading-font spacing-bot-sm\">Order Summary</h4>\n" +
+    "        <br>\n" +
+    "    </div>  \n" +
+    "\n" +
+    "\n" +
+    "    <div class=\"accordion-body\" align=\"center\">\n" +
+    "        <div class=\"panel-body\">\n" +
+    "            <table class=\"shop_table cart\">\n" +
+    "                <thead>\n" +
+    "                    <tr>\n" +
+    "                        <th class=\"product-thumbnail\">\n" +
+    "                            &nbsp;\n" +
+    "                        </th>\n" +
+    "                        <th class=\"product-name\">\n" +
+    "                            Product\n" +
+    "                        </th>\n" +
+    "                        <th class=\"product-price\">\n" +
+    "                            Price\n" +
+    "                        </th>\n" +
+    "                        <th>\n" +
+    "                        </th>\n" +
+    "                        <th class=\"product-quantity\">\n" +
+    "                            Quantity\n" +
+    "                        </th>\n" +
+    "                        <th class=\"product-subtotal\">\n" +
+    "                            Total\n" +
+    "                        </th>\n" +
+    "                    </tr>\n" +
+    "                </thead>\n" +
+    "                <tbody ng-if=\"cart.length\">\n" +
+    "                    <tr class=\"cart_table_item\" ng-repeat=\"product in cart | filter: greaterThan('quantity', 0)\">\n" +
+    "                        <td class=\"product-thumbnail\">\n" +
+    "                            <a><img width=\"100\" height=\"100\" alt=\"\" class=\"img-responsive\" ng-src=\"{{product.imagePath}}\">\n" +
+    "                            </a>\n" +
+    "                        </td>\n" +
+    "                        <td class=\"product-name\">\n" +
+    "                            <a href=\"shop-product-sidebar.html\">{{product.title}}</a>\n" +
+    "                        </td>\n" +
+    "                        <td class=\"product-price\">\n" +
+    "                            <span class=\"amount\">${{product.price}}</span>\n" +
+    "                        </td>\n" +
+    "                        <td>\n" +
+    "                            &nbsp;\n" +
+    "                        </td>\n" +
+    "                        <td class=\"product-quantity\">\n" +
+    "                            <span>{{product.quantity}}</span>\n" +
+    "                        </td>\n" +
+    "                        <td class=\"product-subtotal\">\n" +
+    "                            <span class=\"amount\">${{getProductPrice(product)}}</span>\n" +
+    "                        </td>\n" +
+    "                    </tr>\n" +
+    "                </tbody>\n" +
+    "            </table>\n" +
+    "\n" +
+    "\n" +
+    "            <br>\n" +
+    "            <br>\n" +
+    "            <br>\n" +
+    "\n" +
+    "            <div style=\"width:50%; float:left;\">\n" +
+    "                <br>\n" +
+    "                <table class=\"cart-totals\">\n" +
+    "                    <tbody >\n" +
+    "                        <tr class=\"cart-subtotal\">\n" +
+    "                            <th>\n" +
+    "                                <strong>Subtotal</strong>\n" +
+    "                            </th>\n" +
+    "                            <td>\n" +
+    "                                <strong>${{getCartPrice()}}</strong>\n" +
+    "                            </td>\n" +
+    "                        </tr>\n" +
+    "                        <tr class=\"shipping\">\n" +
+    "                            <th>\n" +
+    "                                Shipping\n" +
+    "                            </th>\n" +
+    "                            <td>\n" +
+    "                                Free Shipping<input type=\"hidden\" value=\"free_shipping\" id=\"shipping_method\" name=\"shipping_method\">\n" +
+    "                            </td>\n" +
+    "                        </tr>\n" +
+    "                        <tr class=\"total\">\n" +
+    "                            <th>\n" +
+    "                                <strong>Order Total</strong>\n" +
+    "                            </th>\n" +
+    "                            <td>\n" +
+    "                                <strong><span class=\"amount\">${{getCartPrice()}}</span></strong>\n" +
+    "                            </td>\n" +
+    "                        </tr>\n" +
+    "                    </tbody>\n" +
+    "                </table>\n" +
+    "            </div>\n" +
+    "        </div>\n" +
+    "    </div>\n" +
+    "</div>\n" +
+    "</div>\n" +
+    "</div>\n" +
+    "\n" +
+    "\n" +
+    "\n" +
+    "<!-- \n" +
     "<div role=\"main\" class=\"main\">\n" +
     "\n" +
     "    <div class=\"\" >\n" +
     "\n" +
     "        <div class=\"container\">\n" +
-    "            <!-- Section Title -->\n" +
     "            <div class=\"section-title\">\n" +
     "                <h1 class=\"heading-font heading-tertiary spacing-top-md spacing-bot-sm\">Thank you for your order!</h1>\n" +
     "                <br>\n" +
@@ -650,7 +749,7 @@ angular.module("account/checkout/order-summary.tpl.html", []).run(["$templateCac
     "\n" +
     "\n" +
     "\n" +
-    "<button ng-click=\"returnHome()\">Return Home</button>");
+    "<button ng-click=\"returnHome()\">Return Home</button> -->");
 }]);
 
 angular.module("account/purchaseHistory/purchaseHistory.tpl.html", []).run(["$templateCache", function($templateCache) {
@@ -1254,21 +1353,22 @@ angular.module("admin/Sales/admin-sales.tpl.html", []).run(["$templateCache", fu
     "        </div>\n" +
     "\n" +
     "        <div>\n" +
-    "            <h4>Monthly</h4>\n" +
+    "            <h4 class=\"spacing-top-lg spacing-bot-md\" style=\"padding-left:15px\">Monthly</h4>\n" +
     "            <br>\n" +
     "            <canvas id=\"line\" class=\"chart chart-line\" chart-data=\"totalDay\" chart-labels=\"labelDay\" chart-legend=\"true\" chart-options=\"optionsDayTotal\"\n" +
     "            chart-click=\"onClick\">></canvas>\n" +
     "        </div>\n" +
     "        <br>\n" +
+    "        <br>\n" +
     "        <div>\n" +
-    "            <h4>Yearly Sales</h4>\n" +
+    "            <h4 class=\"spacing-top-lg spacing-bot-md\" style=\"padding-left:15px\">Yearly Sales</h4>\n" +
     "            <br>\n" +
     "            <canvas class=\"chart chart-bar\" chart-options=\"optionsMonthTotal\" chart-data=\"totalMonth\" chart-labels=\"labels\" chart-colors=\"xcolors\" chart-legend=\"true\" chart-click=\"onClick\" chart-dataset-override=\"datasetOverride1\"></canvas>\n" +
     "        </div>\n" +
     "        <br>\n" +
     "        <br>\n" +
     "        <div>\n" +
-    "            <h4>Sales Size and Quantity</h4>\n" +
+    "            <h4 class=\"spacing-top-lg spacing-bot-md\" style=\"padding-left:15px\">Sales Size and Quantity</h4>\n" +
     "            <canvas id=\"line\" class=\"chart chart-line\" chart-legend=\"true\" chart-data=\"sizeQuantityData\"\n" +
     "            chart-labels=\"labels\" chart-series=\"series\" chart-options=\"sizeQuantityOptions\"\n" +
     "            chart-dataset-override=\"datasetOverride\" chart-click=\"onClick\"></canvas>\n" +
@@ -1505,25 +1605,27 @@ angular.module("admin/activity/activity.tpl.html", []).run(["$templateCache", fu
     "                </div>\n" +
     "                <br>\n" +
     "                <div>\n" +
-    "                    <h4>Past 30 Day Sales</h4>\n" +
+    "                    <h4 class=\"spacing-top-lg spacing-bot-md\" style=\"padding-left:15px\">Past 30 Day Sales</h4>\n" +
     "                    <br>\n" +
     "                    <canvas id=\"line\" class=\"chart chart-line\" chart-data=\"totalDay\" chart-labels=\"labelDay\" chart-options=\"optionsSalesDayTotal\" \n" +
     "                    chart-click=\"onClick\"></canvas>\n" +
     "                </div>\n" +
     "                <br>\n" +
+    "                <br>\n" +
     "                <div>\n" +
-    "                    <h4>Home Page Views</h4>\n" +
+    "                    <h4 class=\"spacing-top-lg spacing-bot-md\" style=\"padding-left:15px\">Home Page Views</h4>\n" +
     "                    <br>\n" +
     "                    <canvas id=\"line\" class=\"chart chart-line\" chart-data=\"homeView30Day\" chart-labels=\"labelDay\" chart-options=\"optionsViewsDayTotal\" \n" +
     "                    chart-click=\"onClick\"></canvas>\n" +
     "                </div>\n" +
+    "                <br>\n" +
+    "                <br>\n" +
     "                <div>\n" +
-    "                    <h4>Cart Page Views</h4>\n" +
+    "                    <h4 class=\"spacing-top-lg spacing-bot-md\" style=\"padding-left:15px\">Cart Page Views</h4>\n" +
     "                    <br>\n" +
     "                    <canvas id=\"line\" class=\"chart chart-line\" chart-data=\"cartView30Day\" chart-labels=\"labelDay\" chart-options=\"optionsViewsDayTotal\" \n" +
     "                    chart-click=\"onClick\"></canvas>\n" +
     "                </div>\n" +
-    "                <br>\n" +
     "            </div>\n" +
     "        </div>\n" +
     "    </div>\n" +
@@ -1534,7 +1636,6 @@ angular.module("admin/activity/activity.tpl.html", []).run(["$templateCache", fu
     "        <div class=\"col-lg-12 col-md-12 col-sm-12\">\n" +
     "            <h1>Activity this Year</h1>\n" +
     "            <br>\n" +
-    "\n" +
     "            <div class=\"row\">\n" +
     "                <ul class=\"nav nav-tabs\">\n" +
     "                    <li ng-class=\"{ active: isSet(1) }\">\n" +
@@ -1546,22 +1647,25 @@ angular.module("admin/activity/activity.tpl.html", []).run(["$templateCache", fu
     "                </ul>\n" +
     "            </div>\n" +
     "            <br>\n" +
+    "            <br>\n" +
     "            <div>\n" +
-    "                <h4>Sales this Year</h4>\n" +
+    "                <h4 class=\"spacing-top-lg spacing-bot-md\" style=\"padding-left:15px\">Sales this Year</h4>\n" +
     "                <br>\n" +
     "                <canvas id=\"line\" class=\"chart chart-bar\" chart-type=\"bar\" chart-options=\"optionsMonthTotal\" chart-data=\"totalMonth\" chart-labels=\"labels\" \n" +
     "                chart-legend=\"true\" chart-click=\"onClick\"></canvas>\n" +
     "            </div>\n" +
     "            <br>\n" +
+    "            <br>\n" +
     "            <div>\n" +
-    "                <h4>Home Page Views</h4>\n" +
+    "                <h4 class=\"spacing-top-lg spacing-bot-md\" style=\"padding-left:15px\">Home Page Views</h4>\n" +
     "                <br>\n" +
     "                <canvas id=\"line\" class=\"chart chart-line\" chart-data=\"homeViewMonth\" chart-labels=\"labels\" chart-options=\"optionsMonthViews\" \n" +
     "                chart-click=\"onClick\"></canvas>\n" +
     "            </div>\n" +
     "            <br>\n" +
+    "            <br>\n" +
     "            <div>\n" +
-    "                <h4>Cart Page Views</h4>\n" +
+    "                <h4 class=\"spacing-top-lg spacing-bot-md\" style=\"padding-left:15px\">Cart Page Views</h4>\n" +
     "                <br>\n" +
     "                <canvas id=\"line\" class=\"chart chart-line\" chart-data=\"cartViewMonth\" chart-labels=\"labels\" chart-options=\"optionsMonthViews\" \n" +
     "                chart-click=\"onClick\"></canvas>\n" +
@@ -1809,126 +1913,71 @@ angular.module("admin/admin.tpl.html", []).run(["$templateCache", function($temp
     "            <h1>Dashboard</h1>\n" +
     "            <br>\n" +
     "            <div>\n" +
-    "                <h4>Home Page Views</h4>\n" +
+    "                <h4 class=\"spacing-top-lg spacing-bot-md\" style=\"padding-left:15px\">Home Page Views</h4>\n" +
     "                <br>\n" +
     "                <canvas id=\"line\" class=\"chart chart-line\" chart-data=\"homeView30Day\" chart-labels=\"labelDay\" chart-options=\"optionsViewsDayTotal\" chart-click=\"onClick\">\n" +
-    "            </div>\n" +
-    "            <br>\n" +
-    "            <div>\n" +
-    "                <h4>Shopping Cart Views</h4>\n" +
-    "                <br>\n" +
-    "                <canvas id=\"line\" class=\"chart chart-line\" chart-data=\"cartView30Day\" chart-labels=\"labelDay\" chart-options=\"optionsViewsDayTotal\" chart-click=\"onClick\">\n" +
-    "            </div>\n" +
-    "            <br>\n" +
-    "            <div>\n" +
-    "                <h4>Recent Purchases</h4>\n" +
-    "                <br>\n" +
-    "                <div class=\"table table-striped\">\n" +
-    "                        <a href=\"#\" class=\"list-group-item\">\n" +
-    "                            <i class=\"fa fa-shopping-cart fa-fw\"></i> New Order Placed\n" +
-    "                            <span class=\"pull-right text-muted small\"><em>4 minutes ago</em>\n" +
-    "                            </span>\n" +
-    "                        </a>\n" +
-    "                        <a href=\"#\" class=\"list-group-item\">\n" +
-    "                            <i class=\"fa fa-shopping-cart fa-fw\"></i> New Order Placed\n" +
-    "                            <span class=\"pull-right text-muted small\"><em>12 minutes ago</em>\n" +
-    "                            </span>\n" +
-    "                        </a>\n" +
-    "                        <a href=\"#\" class=\"list-group-item\">\n" +
-    "                            <i class=\"fa fa-money fa-fw\"></i> Payment Received\n" +
-    "                            <span class=\"pull-right text-muted small\"><em>27 minutes ago</em>\n" +
-    "                            </span>\n" +
-    "                        </a>\n" +
-    "                        <a href=\"#\" class=\"list-group-item\">\n" +
-    "                            <i class=\"fa fa-shopping-cart fa-fw\"></i> New Order Placed\n" +
-    "                            <span class=\"pull-right text-muted small\"><em>43 minutes ago</em>\n" +
-    "                            </span>\n" +
-    "                        </a>\n" +
-    "                        <a href=\"#\" class=\"list-group-item\">\n" +
-    "                            <i class=\"fa fa-money fa-fw\"></i> Payment Received\n" +
-    "                            <span class=\"pull-right text-muted small\"><em>11:32 AM</em>\n" +
-    "                            </span>\n" +
-    "                        </a>\n" +
-    "                        <a href=\"#\" class=\"list-group-item\">\n" +
-    "                            <i class=\"fa fa-shopping-cart fa-fw\"></i> New Order Placed\n" +
-    "                            <span class=\"pull-right text-muted small\"><em>11:13 AM</em>\n" +
-    "                            </span>\n" +
-    "                        </a>\n" +
-    "                        <a href=\"#\" class=\"list-group-item\">\n" +
-    "                            <i class=\"fa fa-shopping-cart fa-fw\"></i> New Order Placed\n" +
-    "                            <span class=\"pull-right text-muted small\"><em>10:57 AM</em>\n" +
-    "                            </span>\n" +
-    "                        </a>\n" +
-    "                        <a href=\"#\" class=\"list-group-item\">\n" +
-    "                            <i class=\"fa fa-shopping-cart fa-fw\"></i> New Order Placed\n" +
-    "                            <span class=\"pull-right text-muted small\"><em>9:49 AM</em>\n" +
-    "                            </span>\n" +
-    "                        </a>\n" +
-    "                        <a href=\"#\" class=\"list-group-item\">\n" +
-    "                            <i class=\"fa fa-money fa-fw\"></i> Payment Received\n" +
-    "                            <span class=\"pull-right text-muted small\"><em>Yesterday</em>\n" +
-    "                            </span>\n" +
-    "                        </a>\n" +
-    "                    </div>\n" +
-    "            </div>\n" +
-    "            <br>\n" +
-    "            <div class=\"panel panel-default\">\n" +
-    "                <div class=\"panel-heading\">\n" +
-    "                    <i class=\"fa fa-bell fa-fw\"></i> Recent Purchases\n" +
     "                </div>\n" +
-    "                <div class=\"panel-body\">\n" +
-    "                    <div class=\"list-group\">\n" +
-    "                        <a href=\"#\" class=\"list-group-item\">\n" +
-    "                            <i class=\"fa fa-shopping-cart fa-fw\"></i> New Order Placed\n" +
-    "                            <span class=\"pull-right text-muted small\"><em>4 minutes ago</em>\n" +
-    "                            </span>\n" +
-    "                        </a>\n" +
-    "                        <a href=\"#\" class=\"list-group-item\">\n" +
-    "                            <i class=\"fa fa-shopping-cart fa-fw\"></i> New Order Placed\n" +
-    "                            <span class=\"pull-right text-muted small\"><em>12 minutes ago</em>\n" +
-    "                            </span>\n" +
-    "                        </a>\n" +
-    "                        <a href=\"#\" class=\"list-group-item\">\n" +
-    "                            <i class=\"fa fa-money fa-fw\"></i> Payment Received\n" +
-    "                            <span class=\"pull-right text-muted small\"><em>27 minutes ago</em>\n" +
-    "                            </span>\n" +
-    "                        </a>\n" +
-    "                        <a href=\"#\" class=\"list-group-item\">\n" +
-    "                            <i class=\"fa fa-shopping-cart fa-fw\"></i> New Order Placed\n" +
-    "                            <span class=\"pull-right text-muted small\"><em>43 minutes ago</em>\n" +
-    "                            </span>\n" +
-    "                        </a>\n" +
-    "                        <a href=\"#\" class=\"list-group-item\">\n" +
-    "                            <i class=\"fa fa-money fa-fw\"></i> Payment Received\n" +
-    "                            <span class=\"pull-right text-muted small\"><em>11:32 AM</em>\n" +
-    "                            </span>\n" +
-    "                        </a>\n" +
-    "                        <a href=\"#\" class=\"list-group-item\">\n" +
-    "                            <i class=\"fa fa-shopping-cart fa-fw\"></i> New Order Placed\n" +
-    "                            <span class=\"pull-right text-muted small\"><em>11:13 AM</em>\n" +
-    "                            </span>\n" +
-    "                        </a>\n" +
-    "                        <a href=\"#\" class=\"list-group-item\">\n" +
-    "                            <i class=\"fa fa-shopping-cart fa-fw\"></i> New Order Placed\n" +
-    "                            <span class=\"pull-right text-muted small\"><em>10:57 AM</em>\n" +
-    "                            </span>\n" +
-    "                        </a>\n" +
-    "                        <a href=\"#\" class=\"list-group-item\">\n" +
-    "                            <i class=\"fa fa-shopping-cart fa-fw\"></i> New Order Placed\n" +
-    "                            <span class=\"pull-right text-muted small\"><em>9:49 AM</em>\n" +
-    "                            </span>\n" +
-    "                        </a>\n" +
-    "                        <a href=\"#\" class=\"list-group-item\">\n" +
-    "                            <i class=\"fa fa-money fa-fw\"></i> Payment Received\n" +
-    "                            <span class=\"pull-right text-muted small\"><em>Yesterday</em>\n" +
-    "                            </span>\n" +
-    "                        </a>\n" +
+    "                <br>\n" +
+    "                <div>\n" +
+    "                    <h4 class=\"spacing-top-lg spacing-bot-md\" style=\"padding-left:15px\">Shopping Cart Views</h4>\n" +
+    "                    <br>\n" +
+    "                    <canvas id=\"line\" class=\"chart chart-line\" chart-data=\"cartView30Day\" chart-labels=\"labelDay\" chart-options=\"optionsViewsDayTotal\" chart-click=\"onClick\">\n" +
+    "                    </div>\n" +
+    "                    <br>\n" +
+    "                    <div>\n" +
+    "                    <h4 class=\"spacing-top-lg spacing-bot-md\" style=\"padding-left:10px\">Recent Purchases</h4>\n" +
+    "                        <br>\n" +
+    "                        <div class=\"table table-striped\">\n" +
+    "                            <a href=\"#\" class=\"list-group-item\">\n" +
+    "                                <i class=\"fa fa-shopping-cart fa-fw\"></i> New Order Placed\n" +
+    "                                <span class=\"pull-right text-muted small\"><em>4 minutes ago</em>\n" +
+    "                                </span>\n" +
+    "                            </a>\n" +
+    "                            <a href=\"#\" class=\"list-group-item\">\n" +
+    "                                <i class=\"fa fa-shopping-cart fa-fw\"></i> New Order Placed\n" +
+    "                                <span class=\"pull-right text-muted small\"><em>12 minutes ago</em>\n" +
+    "                                </span>\n" +
+    "                            </a>\n" +
+    "                            <a href=\"#\" class=\"list-group-item\">\n" +
+    "                                <i class=\"fa fa-money fa-fw\"></i> Payment Received\n" +
+    "                                <span class=\"pull-right text-muted small\"><em>27 minutes ago</em>\n" +
+    "                                </span>\n" +
+    "                            </a>\n" +
+    "                            <a href=\"#\" class=\"list-group-item\">\n" +
+    "                                <i class=\"fa fa-shopping-cart fa-fw\"></i> New Order Placed\n" +
+    "                                <span class=\"pull-right text-muted small\"><em>43 minutes ago</em>\n" +
+    "                                </span>\n" +
+    "                            </a>\n" +
+    "                            <a href=\"#\" class=\"list-group-item\">\n" +
+    "                                <i class=\"fa fa-money fa-fw\"></i> Payment Received\n" +
+    "                                <span class=\"pull-right text-muted small\"><em>11:32 AM</em>\n" +
+    "                                </span>\n" +
+    "                            </a>\n" +
+    "                            <a href=\"#\" class=\"list-group-item\">\n" +
+    "                                <i class=\"fa fa-shopping-cart fa-fw\"></i> New Order Placed\n" +
+    "                                <span class=\"pull-right text-muted small\"><em>11:13 AM</em>\n" +
+    "                                </span>\n" +
+    "                            </a>\n" +
+    "                            <a href=\"#\" class=\"list-group-item\">\n" +
+    "                                <i class=\"fa fa-shopping-cart fa-fw\"></i> New Order Placed\n" +
+    "                                <span class=\"pull-right text-muted small\"><em>10:57 AM</em>\n" +
+    "                                </span>\n" +
+    "                            </a>\n" +
+    "                            <a href=\"#\" class=\"list-group-item\">\n" +
+    "                                <i class=\"fa fa-shopping-cart fa-fw\"></i> New Order Placed\n" +
+    "                                <span class=\"pull-right text-muted small\"><em>9:49 AM</em>\n" +
+    "                                </span>\n" +
+    "                            </a>\n" +
+    "                            <a href=\"#\" class=\"list-group-item\">\n" +
+    "                                <i class=\"fa fa-money fa-fw\"></i> Payment Received\n" +
+    "                                <span class=\"pull-right text-muted small\"><em>Yesterday</em>\n" +
+    "                                </span>\n" +
+    "                            </a>\n" +
+    "                        </div>\n" +
     "                    </div>\n" +
     "                </div>\n" +
     "            </div>\n" +
     "        </div>\n" +
-    "    </div>\n" +
-    "</div>\n" +
     "");
 }]);
 
@@ -2221,9 +2270,9 @@ angular.module("admin/purchase-history/admin-purchase-histories.tpl.html", []).r
     "<div id=\"page-wrapper\">\n" +
     "    <div class=\"row\">\n" +
     "        <div class=\"col-lg-12\">\n" +
-    "            <h1>Purchase History</h1>\n" +
+    "            <h1 class=\"spacing-bot-lg\">Purchase History</h1>\n" +
     "            <br>\n" +
-    "            <div class=\"sidebar-search\" style=\"width: 30%;\">\n" +
+    "            <div class=\"sidebar-search spacing-bot-lg\" style=\"width: 30%; float:right;\">\n" +
     "                <div class=\"input-group custom-search-form\">\n" +
     "                    <input name=\"orderNumber\" type=\"text\" class=\"form-control\" ng-model=\"filters.orderNumber\" ng-model-options=\"{ debounce: 500 }\" ng-change=\"filtersUpdated()\" placeholder=\"Search\">\n" +
     "                    <div class=\"input-group-btn\">\n" +
@@ -2235,8 +2284,7 @@ angular.module("admin/purchase-history/admin-purchase-histories.tpl.html", []).r
     "            </div>\n" +
     "            <br>\n" +
     "            <div>\n" +
-    "                <h4>Purchase Histroy</h4>\n" +
-    "                <br>\n" +
+    "            <br>\n" +
     "                <table class=\"table table-striped\">\n" +
     "                    <thead>\n" +
     "                        <tr>\n" +
@@ -3076,7 +3124,7 @@ angular.module("admin/users/admin-users.tpl.html", []).run(["$templateCache", fu
     "            <div class=\"col-lg-12\">\n" +
     "                <h1>Customer Information</h1>\n" +
     "                <br>\n" +
-    "                <p>Number of Customer Accounts: {{numberOfCustomers}}</p>\n" +
+    "                <p style=\"padding-left:15px\">Number of Customer Accounts: {{numberOfCustomers}}</p>\n" +
     "                <div class=\"sidebar-search\" style=\"width: 30%;float:right\">\n" +
     "                    <div class=\"input-group custom-search-form\">\n" +
     "                        <input name=\"username\" type=\"text\" class=\"form-control\" ng-model=\"filters.username\" ng-model-options=\"{ debounce: 500 }\" ng-change=\"filtersUpdated()\" placeholder=\"Search...\">\n" +
@@ -3251,7 +3299,7 @@ angular.module("header.tpl.html", []).run(["$templateCache", function($templateC
     "<div ng-controller=\"HeaderCtrl\">\n" +
     "    <header hl-sticky=\"\">\n" +
     "    <div id=\"header\" class=\"header-narrow\" ng-if=\"!isAdmin()\">\n" +
-    "        <div class=\"header-body\">\n" +
+    "        <div class=\"header-body\"  style=\"color:#ffffff\">\n" +
     "            <div class=\"header-container container\">\n" +
     "                <div class=\"header-row\">\n" +
     "                    <div class=\"header-column\">\n" +
@@ -3522,6 +3570,88 @@ angular.module("pricing/checkout/checkout.tpl.html", []).run(["$templateCache", 
     "			<div class=\"col-md-9\">\n" +
     "				<div class=\"panel-group\" id=\"accordion\">\n" +
     "					<div class=\"panel panel-default\">\n" +
+    "						<div class=\"panel-heading active\">\n" +
+    "							<h4 class=\"panel-title\">\n" +
+    "								<a class=\"accordion\">\n" +
+    "									Shipping Address\n" +
+    "								</a>\n" +
+    "							</h4>\n" +
+    "						</div>\n" +
+    "						<div class=\"paneling\" style='max-height: 100%;'>\n" +
+    "							<div id=\"collapseOne\" class=\"accordion-body\">\n" +
+    "								<div class=\"panel-body\">\n" +
+    "\n" +
+    "									<br>\n" +
+    "									<form id=\"frmShippingAddress\">\n" +
+    "										<div class=\"row\">\n" +
+    "											<div class=\"form-group\">\n" +
+    "												<div class=\"col-md-6\">\n" +
+    "													<label>First Name</label>\n" +
+    "													<input type=\"text\" name=\"firstnameMailing\" ng-model=\"mailingAddress.name.first\" class=\"form-control\">\n" +
+    "												</div>\n" +
+    "												<div class=\"col-md-6\">\n" +
+    "													<label>Last Name</label>\n" +
+    "													<input type=\"text\" name=\"lastnameMailing\" ng-model=\"mailingAddress.name.last\"  class=\"form-control\">\n" +
+    "												</div>\n" +
+    "											</div>\n" +
+    "										</div>\n" +
+    "										<div class=\"row\">\n" +
+    "											<div class=\"form-group\">\n" +
+    "												<div class=\"col-md-12\">\n" +
+    "													<label>Company Name</label>\n" +
+    "													<input type=\"text\" name=\"companyMailing\" ng-model=\"mailingAddress.company\" class=\"form-control\">\n" +
+    "												</div>\n" +
+    "											</div>\n" +
+    "										</div>\n" +
+    "										<div class=\"row\">\n" +
+    "											<div class=\"form-group\">\n" +
+    "												<div class=\"col-md-12\">\n" +
+    "													<label class=\"control-label\">Address Line 1</label>\n" +
+    "													<input type=\"text\" class=\"form-control\" name=\"addressLine1Mailing\" ng-model=\"mailingAddress.addressLine1\">\n" +
+    "												</div>\n" +
+    "											</div>\n" +
+    "										</div>\n" +
+    "										<div class=\"row\">\n" +
+    "											<div class=\"form-group\">\n" +
+    "												<div class=\"col-md-12\">\n" +
+    "													<label class=\"control-label\">Address Line 2</label>\n" +
+    "													<input type=\"text\" class=\"form-control\" name=\"addressLine2Mailing\" ng-model=\"mailingAddress.addressLine2\">\n" +
+    "												</div>\n" +
+    "											</div>\n" +
+    "										</div>\n" +
+    "										<div class=\"row\">\n" +
+    "											<div class=\"form-group\">\n" +
+    "												<div class=\"col-md-6\">\n" +
+    "													<label>City </label>\n" +
+    "													<input type=\"text\" name=\"cityMailing\" ng-model=\"mailingAddress.city\" class=\"form-control\">\n" +
+    "												</div>\n" +
+    "												<div class=\"col-md-6\">\n" +
+    "													<label>State </label>\n" +
+    "													<input type=\"text\" name=\"stateMailing\" ng-model=\"mailingAddress.state\" class=\"form-control\">\n" +
+    "												</div>\n" +
+    "											</div>\n" +
+    "										</div>\n" +
+    "										<div class=\"row\">\n" +
+    "											<div class=\"form-group\">\n" +
+    "												<div class=\"col-md-6\">\n" +
+    "													<label>Zip Code</label>\n" +
+    "													<input type=\"text\" name=\"zipMailing\" ng-model=\"mailingAddress.zip\" class=\"form-control\">\n" +
+    "												</div>\n" +
+    "												<div class=\"col-md-6\">\n" +
+    "													<label>Country</label>\n" +
+    "													<input type=\"text\" name=\"countryMailing\" ng-model=\"mailingAddress.country\" class=\"form-control\">\n" +
+    "												</div>\n" +
+    "											</div>\n" +
+    "										</div>\n" +
+    "									</form>\n" +
+    "								</div>\n" +
+    "							</div>\n" +
+    "						</div>\n" +
+    "					</div>\n" +
+    "\n" +
+    "					<br>\n" +
+    "\n" +
+    "					<div class=\"panel panel-default\">\n" +
     "						<div class=\"panel-heading\">\n" +
     "							<h4 class=\"panel-title\">\n" +
     "								<a class=\"accordion\">\n" +
@@ -3529,229 +3659,205 @@ angular.module("pricing/checkout/checkout.tpl.html", []).run(["$templateCache", 
     "								</a>\n" +
     "							</h4>\n" +
     "						</div>\n" +
-    "						<div id=\"collapseOne\" class=\"accordion-body\">\n" +
-    "							<div class=\"panel-body\">\n" +
-    "								<form action=\"/\" id=\"frmBillingAddress\" method=\"post\">\n" +
-    "									<div class=\"row\">\n" +
-    "										<div class=\"form-group\">\n" +
+    "						<div class=\"paneling\">\n" +
+    "							<div id=\"collapseOne\" class=\"accordion-body\">\n" +
+    "								<div class=\"panel-body\">\n" +
+    "									<br>\n" +
+    "									<form id=\"frmBillingAddress\">\n" +
+    "										<div class=\"row\">\n" +
     "											<div class=\"col-md-12\">\n" +
-    "												<label>Country</label>\n" +
-    "												<select class=\"form-control\">\n" +
-    "													<option value=\"\">Select a country</option>\n" +
-    "												</select>\n" +
+    "												<span class=\"remember-box checkbox\">\n" +
+    "													<label>\n" +
+    "														<input type=\"checkbox\" ng-click=\"checkBillAddress()\" ng-Model=\"billingChecked\">Use shipping address?\n" +
+    "													</label>\n" +
+    "												</span>\n" +
     "											</div>\n" +
     "										</div>\n" +
-    "									</div>\n" +
-    "									<div class=\"row\">\n" +
-    "										<div class=\"form-group\">\n" +
-    "											<div class=\"col-md-6\">\n" +
-    "												<label>First Name</label>\n" +
-    "												<input type=\"text\" value=\"\" class=\"form-control\">\n" +
-    "											</div>\n" +
-    "											<div class=\"col-md-6\">\n" +
-    "												<label>Last Name</label>\n" +
-    "												<input type=\"text\" value=\"\" class=\"form-control\">\n" +
-    "											</div>\n" +
-    "										</div>\n" +
-    "									</div>\n" +
-    "									<div class=\"row\">\n" +
-    "										<div class=\"form-group\">\n" +
-    "											<div class=\"col-md-12\">\n" +
-    "												<label>Company Name</label>\n" +
-    "												<input type=\"text\" value=\"\" class=\"form-control\">\n" +
+    "										<div class=\"row\">\n" +
+    "											<div class=\"form-group\">\n" +
+    "												<div class=\"col-md-6\">\n" +
+    "													<label>First Name</label>\n" +
+    "													<input type=\"text\" name=\"firstnamebilling\" ng-model=\"billingAddress.name.first\" class=\"form-control\">\n" +
+    "												</div>\n" +
+    "												<div class=\"col-md-6\">\n" +
+    "													<label>Last Name</label>\n" +
+    "													<input type=\"text\" name=\"lastnamebilling\" ng-model=\"billingAddress.name.last\"  class=\"form-control\">\n" +
+    "												</div>\n" +
     "											</div>\n" +
     "										</div>\n" +
-    "									</div>\n" +
-    "									<div class=\"row\">\n" +
-    "										<div class=\"form-group\">\n" +
-    "											<div class=\"col-md-12\">\n" +
-    "												<label>Address </label>\n" +
-    "												<input type=\"text\" value=\"\" class=\"form-control\">\n" +
+    "										<div class=\"row\">\n" +
+    "											<div class=\"form-group\">\n" +
+    "												<div class=\"col-md-12\">\n" +
+    "													<label>Company Name</label>\n" +
+    "													<input type=\"text\" name=\"companybilling\" ng-model=\"billingAddress.company\" class=\"form-control\">\n" +
+    "												</div>\n" +
     "											</div>\n" +
     "										</div>\n" +
-    "									</div>\n" +
-    "									<div class=\"row\">\n" +
-    "										<div class=\"form-group\">\n" +
-    "											<div class=\"col-md-12\">\n" +
-    "												<label>City </label>\n" +
-    "												<input type=\"text\" value=\"\" class=\"form-control\">\n" +
+    "										<div class=\"row\">\n" +
+    "											<div class=\"form-group\">\n" +
+    "												<div class=\"col-md-12\">\n" +
+    "													<label class=\"control-label\">Address Line 1</label>\n" +
+    "													<input type=\"text\" class=\"form-control\" name=\"addressLine1billing\" ng-model=\"billingAddress.addressLine1\">\n" +
+    "												</div>\n" +
     "											</div>\n" +
     "										</div>\n" +
-    "									</div>\n" +
-    "								</form>\n" +
+    "										<div class=\"row\">\n" +
+    "											<div class=\"form-group\">\n" +
+    "												<div class=\"col-md-12\">\n" +
+    "													<label class=\"control-label\">Address Line 2</label>\n" +
+    "													<input type=\"text\" class=\"form-control\" name=\"addressLine2billing\" ng-model=\"billingAddress.addressLine2\">\n" +
+    "												</div>\n" +
+    "											</div>\n" +
+    "										</div>\n" +
+    "										<div class=\"row\">\n" +
+    "											<div class=\"form-group\">\n" +
+    "												<div class=\"col-md-12\">\n" +
+    "													<label>City </label>\n" +
+    "													<input type=\"text\" name=\"citybilling\" ng-model=\"billingAddress.city\" class=\"form-control\">\n" +
+    "												</div>\n" +
+    "												<div class=\"col-md-12\">\n" +
+    "													<label>State </label>\n" +
+    "													<input type=\"text\" name=\"statebilling\" ng-model=\"billingAddress.state\" class=\"form-control\">\n" +
+    "												</div>\n" +
+    "											</div>\n" +
+    "										</div>\n" +
+    "										<div class=\"row\">\n" +
+    "											<div class=\"form-group\">\n" +
+    "												<div class=\"col-md-12\">\n" +
+    "													<label>Zip Code</label>\n" +
+    "													<input type=\"text\" name=\"zipbilling\" ng-model=\"billingAddress.zip\" class=\"form-control\">\n" +
+    "												</div>\n" +
+    "												<div class=\"col-md-12\">\n" +
+    "													<label>Country</label>\n" +
+    "													<input type=\"text\" name=\"countrybilling\" ng-model=\"billingAddress.country\" class=\"form-control\">\n" +
+    "												</div>\n" +
+    "											</div>\n" +
+    "										</div>\n" +
+    "									</form>\n" +
+    "								</div>\n" +
     "							</div>\n" +
     "						</div>\n" +
     "					</div>\n" +
+    "\n" +
     "					<br>\n" +
-    "					<div class=\"panel panel-default\">\n" +
-    "						<div class=\"panel-heading\">\n" +
-    "							<h4 class=\"panel-title\">\n" +
-    "								<a class=\"accordion\">\n" +
-    "									Shipping Address\n" +
-    "								</a>\n" +
-    "							</h4>\n" +
-    "						</div>\n" +
-    "						<div id=\"collapseTwo\" class=\"accordion-body\">\n" +
-    "							<div class=\"panel-body\">\n" +
-    "								<form action=\"/\" id=\"frmShippingAddress\" method=\"post\">\n" +
-    "									<div class=\"row\">\n" +
-    "										<div class=\"col-md-12\">\n" +
-    "											<span class=\"remember-box checkbox\">\n" +
-    "												<label>\n" +
-    "													<input type=\"checkbox\" checked=\"checked\">Ship to billing address?\n" +
-    "												</label>\n" +
-    "											</span>\n" +
-    "										</div>\n" +
-    "									</div>\n" +
-    "									<div class=\"row\">\n" +
-    "										<div class=\"form-group\">\n" +
-    "											<div class=\"col-md-12\">\n" +
-    "												<label>Country</label>\n" +
-    "												<select class=\"form-control\">\n" +
-    "													<option value=\"\">Select a country</option>\n" +
-    "												</select>\n" +
+    "					<form stripe-form=\"stripeSubmit\" name=\"paymentinfo\">\n" +
+    "						<div class=\"panel-group\" id=\"accordion\">\n" +
+    "							<div class=\"panel panel-default\">\n" +
+    "								<div class=\"panel-heading active\">\n" +
+    "									<h4 class=\"panel-title\">\n" +
+    "										<a class=\"accordion\">\n" +
+    "											Payment Method\n" +
+    "										</a>\n" +
+    "									</h4>\n" +
+    "								</div>\n" +
+    "								<div class=\"paneling\">\n" +
+    "									<div id=\"collapseOne\" class=\"accordion-body\">\n" +
+    "										<div class=\"panel-body\">\n" +
+    "											<br>\n" +
+    "\n" +
+    "											<div class=\"row\">\n" +
+    "												<div class=\"form-group\">\n" +
+    "													<div class=\"col-md-6\">\n" +
+    "														<label for=\"\">Card number</label>\n" +
+    "														<input type=\"text\" class=\"form-control\" ng-model=\"number\" payments-validate=\"card\" payments-format=\"card\" payments-type-model=\"type\" ng-class=\"myForm.number.$card.type\"/>\n" +
+    "													</div>\n" +
+    "													<div class=\"col-md-6\">\n" +
+    "														<label for=\"\">Name on card </label>\n" +
+    "														<input type=\"text\" ng-model=\"name\" class=\"form-control\">\n" +
+    "													</div>\n" +
+    "												</div>\n" +
+    "												<div class=\"form-group\">\n" +
+    "													<div class=\"col-md-6\">\n" +
+    "														<label for=\"\">Expiration Date</label>\n" +
+    "														<input type=\"text\" class=\"form-control\" ng-model=\"expiry\" payments-validate=\"expiry\" payments-format=\"expiry\" />\n" +
+    "													</div>\n" +
+    "													<div class=\"col-md-6\">\n" +
+    "														<label for=\"\">CVC</label>\n" +
+    "														<input type=\"text\" class=\"form-control\" ng-model=\"cvc\" payments-validate=\"cvc\" payments-format=\"cvc\" payments-type-model=\"type\"/>\n" +
+    "													</div>\n" +
+    "												</div>\n" +
     "											</div>\n" +
     "										</div>\n" +
     "									</div>\n" +
-    "									<div class=\"row\">\n" +
-    "										<div class=\"form-group\">\n" +
-    "											<div class=\"col-md-6\">\n" +
-    "												<label>First Name</label>\n" +
-    "												<input type=\"text\" value=\"\" class=\"form-control\">\n" +
-    "											</div>\n" +
-    "											<div class=\"col-md-6\">\n" +
-    "												<label>Last Name</label>\n" +
-    "												<input type=\"text\" value=\"\" class=\"form-control\">\n" +
-    "											</div>\n" +
-    "										</div>\n" +
-    "									</div>\n" +
-    "									<div class=\"row\">\n" +
-    "										<div class=\"form-group\">\n" +
-    "											<div class=\"col-md-12\">\n" +
-    "												<label>Company Name</label>\n" +
-    "												<input type=\"text\" value=\"\" class=\"form-control\">\n" +
-    "											</div>\n" +
-    "										</div>\n" +
-    "									</div>\n" +
-    "									<div class=\"row\">\n" +
-    "										<div class=\"form-group\">\n" +
-    "											<div class=\"col-md-12\">\n" +
-    "												<label>Address </label>\n" +
-    "												<input type=\"text\" value=\"\" class=\"form-control\">\n" +
-    "											</div>\n" +
-    "										</div>\n" +
-    "									</div>\n" +
-    "									<div class=\"row\">\n" +
-    "										<div class=\"form-group\">\n" +
-    "											<div class=\"col-md-12\">\n" +
-    "												<label>City </label>\n" +
-    "												<input type=\"text\" value=\"\" class=\"form-control\">\n" +
-    "											</div>\n" +
-    "										</div>\n" +
-    "									</div>\n" +
-    "								</form>\n" +
+    "								</div>\n" +
     "							</div>\n" +
-    "						</div>\n" +
-    "					</div>\n" +
-    "					<br>\n" +
-    "					<div class=\"panel panel-default\">\n" +
-    "						<div class=\"panel-heading\">\n" +
-    "							<h4 class=\"panel-title\">\n" +
-    "								<a class=\"accordion\">\n" +
-    "									Review & Payment\n" +
-    "								</a>\n" +
-    "							</h4>\n" +
-    "						</div>\n" +
-    "						<div id=\"collapseThree\" class=\"accordion-body\">\n" +
-    "							<div class=\"panel-body\">\n" +
-    "								<table class=\"shop_table cart\">\n" +
-    "									<thead>\n" +
-    "										<tr>\n" +
-    "											<th class=\"product-thumbnail\">\n" +
-    "												&nbsp;\n" +
-    "											</th>\n" +
-    "											<th class=\"product-name\">\n" +
-    "												Product\n" +
-    "											</th>\n" +
-    "											<th class=\"product-price\">\n" +
-    "												Price\n" +
-    "											</th>\n" +
-    "											<th class=\"product-quantity\">\n" +
-    "												Quantity\n" +
-    "											</th>\n" +
-    "											<th class=\"product-subtotal\">\n" +
-    "												Total\n" +
-    "											</th>\n" +
-    "										</tr>\n" +
-    "									</thead>\n" +
-    "									<tbody>\n" +
-    "			\n" +
-    "										<tr ng-repeat=\"item in cart\" class=\"cart_table_item\">\n" +
-    "											<td class=\"product-thumbnail\">\n" +
-    "												<img ng-src=\"{{item.imagePath}}\" alt=\"{{item.title}}\">\n" +
-    "											</td>\n" +
-    "											<td class=\"product-name\">\n" +
-    "												{{item.title}}\n" +
-    "											</td>\n" +
-    "											<td class=\"product-price\">\n" +
-    "												${{item.price}}\n" +
-    "											</td>\n" +
-    "											<td class=\"product-quantity\">\n" +
-    "												{{item.quantity}}\n" +
-    "											</td>\n" +
-    "											<td class=\"product-subtotal\">\n" +
-    "												${{cart.getProductPrice(item)}}\n" +
-    "											</td>\n" +
-    "										</tr>\n" +
-    "									</tbody>\n" +
-    "								</table>\n" +
+    "							<br>\n" +
     "\n" +
-    "								<h4 class=\"heading-primary\">Cart Totals</h4>\n" +
-    "								<table class=\"cart-totals\">\n" +
-    "									<tbody>\n" +
-    "										<tr class=\"cart-subtotal\">\n" +
-    "											<th>\n" +
-    "												<strong>Cart Subtotal</strong>\n" +
-    "											</th>\n" +
-    "											<td>\n" +
-    "												<strong><span class=\"amount\">${{cart.getCartPrice()}}</span></strong>\n" +
-    "											</td>\n" +
-    "										</tr>\n" +
-    "										<tr class=\"shipping\">\n" +
-    "											<th>\n" +
-    "												Shipping\n" +
-    "											</th>\n" +
-    "											<td>\n" +
-    "												Free Shipping<input type=\"hidden\" value=\"free_shipping\" id=\"shipping_method\" name=\"shipping_method\">\n" +
-    "											</td>\n" +
-    "										</tr>\n" +
-    "										<tr class=\"total\">\n" +
-    "											<th>\n" +
-    "												<strong>Order Total</strong>\n" +
-    "											</th>\n" +
-    "											<td>\n" +
-    "												<strong><span class=\"amount\">${{cart.getCartPrice()}}</span></strong>\n" +
-    "											</td>\n" +
-    "										</tr>\n" +
-    "									</tbody>\n" +
-    "								</table>\n" +
     "\n" +
-    "								<hr class=\"tall\">\n" +
+    "							<div class=\"panel panel-default\">\n" +
+    "								<div class=\"panel-heading active\">\n" +
+    "									<h4 class=\"panel-title\">\n" +
+    "										<a class=\"accordion\">\n" +
+    "											Order Review\n" +
+    "										</a>\n" +
+    "									</h4>\n" +
+    "								</div>\n" +
+    "								<div class=\"paneling\">\n" +
+    "									<div id=\"collapseOne\" class=\"accordion-body\">\n" +
+    "										<div class=\"panel-body\">\n" +
+    "											<table class=\"shop_table cart\">\n" +
+    "												<thead>\n" +
+    "													<tr>\n" +
+    "														<th class=\"product-thumbnail\">\n" +
+    "															&nbsp;\n" +
+    "														</th>\n" +
+    "														<th class=\"product-name\">\n" +
+    "															Product\n" +
+    "														</th>\n" +
+    "														<th class=\"product-price\">\n" +
+    "															Price\n" +
+    "														</th>\n" +
+    "														<th class=\"product-quantity\">\n" +
+    "															Quantity\n" +
+    "														</th>\n" +
+    "														<th class=\"product-subtotal\">\n" +
+    "															Total\n" +
+    "														</th>\n" +
+    "													</tr>\n" +
+    "												</thead>\n" +
+    "												<tbody>\n" +
     "\n" +
-    "								<h4 class=\"heading-primary\">Payment</h4>\n" +
+    "													<tr ng-repeat=\"item in cart\" class=\"cart_table_item\">\n" +
+    "														<td class=\"product-thumbnail\">\n" +
+    "															<img ng-src=\"{{item.imagePath}}\" alt=\"{{item.title}}\">\n" +
+    "														</td>\n" +
+    "														<td class=\"product-name\">\n" +
+    "															{{item.title}}\n" +
+    "														</td>\n" +
+    "														<td class=\"product-price\">\n" +
+    "															${{item.price}}\n" +
+    "														</td>\n" +
+    "														<td class=\"product-quantity\">\n" +
+    "															{{item.quantity}}\n" +
+    "														</td>\n" +
+    "														<td class=\"product-subtotal\">\n" +
+    "															${{cart.getProductPrice(item)}}\n" +
+    "														</td>\n" +
+    "													</tr>\n" +
+    "												</tbody>\n" +
+    "											</table>\n" +
+    "										</div>\n" +
     "\n" +
-    "								\n" +
+    "									</div>\n" +
+    "								</div>\n" +
     "							</div>\n" +
-    "						</div>\n" +
+    "\n" +
+    "							<div class=\"actions-continue\">\n" +
+    "								<input type=\"submit\" value=\"Place Order\" name=\"proceed\" class=\"btn btn-lg btn-primary mt-xl\">\n" +
+    "							</div>\n" +
+    "\n" +
+    "\n" +
+    "\n" +
+    "\n" +
+    "						</form>\n" +
+    "\n" +
     "					</div>\n" +
     "				</div>\n" +
-    "\n" +
-    "				<div class=\"actions-continue\">\n" +
-    "					<input type=\"submit\" value=\"Place Order\" name=\"proceed\" class=\"btn btn-lg btn-primary mt-xl\">\n" +
-    "				</div>\n" +
-    "\n" +
     "			</div>\n" +
-    "			<div class=\"col-md-3\">\n" +
+    "\n" +
+    "\n" +
+    "\n" +
+    "			<div id=\"exportthis\" class=\"col-md-3\">\n" +
     "				<h4 class=\"heading-primary\">Cart Totals</h4>\n" +
     "				<table class=\"cart-totals\">\n" +
     "					<tbody>\n" +
@@ -3770,7 +3876,7 @@ angular.module("pricing/checkout/checkout.tpl.html", []).run(["$templateCache", 
     "							<td>\n" +
     "								Free Shipping<input type=\"hidden\" value=\"free_shipping\" id=\"shipping_method\" name=\"shipping_method\">\n" +
     "							</td>\n" +
-    "						</tr>\n" +
+    "						</tr>	\n" +
     "						<tr class=\"total\">\n" +
     "							<th>\n" +
     "								<strong>Order Total</strong>\n" +
@@ -3783,59 +3889,9 @@ angular.module("pricing/checkout/checkout.tpl.html", []).run(["$templateCache", 
     "				</table>\n" +
     "			</div>\n" +
     "		</div>\n" +
-    "\n" +
     "	</div>\n" +
     "\n" +
-    "</div>\n" +
-    "\n" +
-    "\n" +
-    "<!-- <div class=\"container\">\n" +
-    "\n" +
-    "	<div class=\"spacing-top-md spacing-bot-neg\">\n" +
-    "		<div class=\"row spacing-top-neg\">\n" +
-    "			<h1 class=\"mb-none\"><strong>Checkout</strong></h1>\n" +
-    "		</div>\n" +
-    "	</div>\n" +
-    "	<br>\n" +
-    "\n" +
-    "\n" +
-    "	<form name=\"checkoutForm\" stripe-form=\"stripeCallback\" ng-submit=\"onSubmit()\" data-abide>\n" +
-    "\n" +
-    "		<div ng-if=\"processing\" us-spinner></div>\n" +
-    "\n" +
-    "		<div class=\"row\">\n" +
-    "			<div class=\"col-lg-10\">\n" +
-    "				<legend>1. Contact Information</legend>\n" +
-    "				<alert ng-repeat=\"alert in alerts.detail\" type=\"{{alert.type}}\" close=\"closeAlert('detail', $index)\">{{alert.msg}}</alert>\n" +
-    "				<div class=\"form-group\" ng-class=\"{'has-error': hasError(detailForm.first)}\">\n" +
-    "					<label class=\"control-label\" for=\"first\">First Name: </label>\n" +
-    "					<input type=\"text\" name=\"first\" id=\"first\" class=\"form-control\" ng-model=\"userDetail.first\" required>\n" +
-    "					<span class=\"help-block\" ng-show=\"showError(detailForm.first, 'required')\">This field is required</span>\n" +
-    "				</div>\n" +
-    "				<div class=\"form-group\" ng-class=\"{'has-error': hasError(detailForm.last)}\">\n" +
-    "					<label class=\"control-label\" for=\"last\">Last Name:</label>\n" +
-    "					<input type=\"text\" name=\"last\" id=\"last\" class=\"form-control\" ng-model=\"userDetail.last\" required>\n" +
-    "					<span class=\"help-block\" ng-show=\"showError(detailForm.last, 'required')\">This field is required</span>\n" +
-    "				</div>\n" +
-    "				<div class=\"form-group\" ng-class=\"{'has-error': hasError(detailForm.company)}\">\n" +
-    "					<label class=\"control-label\" for=\"company\">Company Name:</label>\n" +
-    "					<input type=\"text\" name=\"company\" id=\"company\" class=\"form-control\" ng-model=\"userDetail.company\">\n" +
-    "				</div>\n" +
-    "				<div class=\"form-group\" ng-class=\"{'has-error': hasError(detailForm.phone)}\">\n" +
-    "					<label class=\"control-label\" for=\"phone\">Phone:</label>\n" +
-    "					<input type=\"text\" name=\"phone\" id=\"phone\" class=\"form-control\" ng-model=\"userDetail.phone\">\n" +
-    "				</div>\n" +
-    "				<div class=\"form-group\" ng-class=\"{'has-error': hasError(detailForm.zip)}\">\n" +
-    "					<label class=\"control-label\" for=\"zip\">Zip:</label>\n" +
-    "					<input type=\"text\" name=\"zip\" id=\"zip\" class=\"form-control\" ng-model=\"userDetail.zip\">\n" +
-    "				</div>\n" +
-    "				<div class=\"form-group\">\n" +
-    "					<button type=\"button\" class=\"btn btn-primary btn-update\" ng-disabled=\"!canSave(detailForm)\" ng-click=\"submit(detailForm)\">Next</button>\n" +
-    "				</div>\n" +
-    "			</form>\n" +
-    "		</div>\n" +
-    "\n" +
-    " -->");
+    "");
 }]);
 
 angular.module("pricing/information-modal.tpl.html", []).run(["$templateCache", function($templateCache) {
@@ -4320,8 +4376,8 @@ angular.module("pricing/pricing.tpl.html", []).run(["$templateCache", function($
     "\n" +
     "				<div class=\"row\">\n" +
     "					<ul class=\"products product-thumb-info-list\">\n" +
-    "						<li class=\"col-md-3 col-sm-6 col-xs-12 product\" ng-repeat=\"product in products | filter:{type:'Cabling'}\"\">\n" +
-    "							<span class=\"product-thumb-info\">\n" +
+    "						<li class=\"col-md-4 col-sm-6 col-xs-12 product\" ng-repeat=\"product in products | filter:{type:'Cabling'}\"\">\n" +
+    "							<span style=\"width:75%; height:75%;\" class=\"product-thumb-info\">\n" +
     "								<span class=\"product-thumb-info\">\n" +
     "									<a href=\"\" class=\"add-to-cart-product\">\n" +
     "										<span><i class=\"fa fa-shopping-cart\"></i>\n" +

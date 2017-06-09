@@ -14,6 +14,88 @@
 			<div class="col-md-9">
 				<div class="panel-group" id="accordion">
 					<div class="panel panel-default">
+						<div class="panel-heading active">
+							<h4 class="panel-title">
+								<a class="accordion">
+									Shipping Address
+								</a>
+							</h4>
+						</div>
+						<div class="paneling" style='max-height: 100%;'>
+							<div id="collapseOne" class="accordion-body">
+								<div class="panel-body">
+
+									<br>
+									<form id="frmShippingAddress">
+										<div class="row">
+											<div class="form-group">
+												<div class="col-md-6">
+													<label>First Name</label>
+													<input type="text" name="firstnameMailing" ng-model="mailingAddress.name.first" class="form-control">
+												</div>
+												<div class="col-md-6">
+													<label>Last Name</label>
+													<input type="text" name="lastnameMailing" ng-model="mailingAddress.name.last"  class="form-control">
+												</div>
+											</div>
+										</div>
+										<div class="row">
+											<div class="form-group">
+												<div class="col-md-12">
+													<label>Company Name</label>
+													<input type="text" name="companyMailing" ng-model="mailingAddress.company" class="form-control">
+												</div>
+											</div>
+										</div>
+										<div class="row">
+											<div class="form-group">
+												<div class="col-md-12">
+													<label class="control-label">Address Line 1</label>
+													<input type="text" class="form-control" name="addressLine1Mailing" ng-model="mailingAddress.addressLine1">
+												</div>
+											</div>
+										</div>
+										<div class="row">
+											<div class="form-group">
+												<div class="col-md-12">
+													<label class="control-label">Address Line 2</label>
+													<input type="text" class="form-control" name="addressLine2Mailing" ng-model="mailingAddress.addressLine2">
+												</div>
+											</div>
+										</div>
+										<div class="row">
+											<div class="form-group">
+												<div class="col-md-6">
+													<label>City </label>
+													<input type="text" name="cityMailing" ng-model="mailingAddress.city" class="form-control">
+												</div>
+												<div class="col-md-6">
+													<label>State </label>
+													<input type="text" name="stateMailing" ng-model="mailingAddress.state" class="form-control">
+												</div>
+											</div>
+										</div>
+										<div class="row">
+											<div class="form-group">
+												<div class="col-md-6">
+													<label>Zip Code</label>
+													<input type="text" name="zipMailing" ng-model="mailingAddress.zip" class="form-control">
+												</div>
+												<div class="col-md-6">
+													<label>Country</label>
+													<input type="text" name="countryMailing" ng-model="mailingAddress.country" class="form-control">
+												</div>
+											</div>
+										</div>
+									</form>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<br>
+
+					<div class="panel panel-default">
 						<div class="panel-heading">
 							<h4 class="panel-title">
 								<a class="accordion">
@@ -21,229 +103,205 @@
 								</a>
 							</h4>
 						</div>
-						<div id="collapseOne" class="accordion-body">
-							<div class="panel-body">
-								<form action="/" id="frmBillingAddress" method="post">
-									<div class="row">
-										<div class="form-group">
+						<div class="paneling">
+							<div id="collapseOne" class="accordion-body">
+								<div class="panel-body">
+									<br>
+									<form id="frmBillingAddress">
+										<div class="row">
 											<div class="col-md-12">
-												<label>Country</label>
-												<select class="form-control">
-													<option value="">Select a country</option>
-												</select>
+												<span class="remember-box checkbox">
+													<label>
+														<input type="checkbox" ng-click="checkBillAddress()" ng-Model="billingChecked">Use shipping address?
+													</label>
+												</span>
 											</div>
 										</div>
-									</div>
-									<div class="row">
-										<div class="form-group">
-											<div class="col-md-6">
-												<label>First Name</label>
-												<input type="text" value="" class="form-control">
-											</div>
-											<div class="col-md-6">
-												<label>Last Name</label>
-												<input type="text" value="" class="form-control">
-											</div>
-										</div>
-									</div>
-									<div class="row">
-										<div class="form-group">
-											<div class="col-md-12">
-												<label>Company Name</label>
-												<input type="text" value="" class="form-control">
+										<div class="row">
+											<div class="form-group">
+												<div class="col-md-6">
+													<label>First Name</label>
+													<input type="text" name="firstnamebilling" ng-model="billingAddress.name.first" class="form-control">
+												</div>
+												<div class="col-md-6">
+													<label>Last Name</label>
+													<input type="text" name="lastnamebilling" ng-model="billingAddress.name.last"  class="form-control">
+												</div>
 											</div>
 										</div>
-									</div>
-									<div class="row">
-										<div class="form-group">
-											<div class="col-md-12">
-												<label>Address </label>
-												<input type="text" value="" class="form-control">
+										<div class="row">
+											<div class="form-group">
+												<div class="col-md-12">
+													<label>Company Name</label>
+													<input type="text" name="companybilling" ng-model="billingAddress.company" class="form-control">
+												</div>
 											</div>
 										</div>
-									</div>
-									<div class="row">
-										<div class="form-group">
-											<div class="col-md-12">
-												<label>City </label>
-												<input type="text" value="" class="form-control">
+										<div class="row">
+											<div class="form-group">
+												<div class="col-md-12">
+													<label class="control-label">Address Line 1</label>
+													<input type="text" class="form-control" name="addressLine1billing" ng-model="billingAddress.addressLine1">
+												</div>
 											</div>
 										</div>
-									</div>
-								</form>
+										<div class="row">
+											<div class="form-group">
+												<div class="col-md-12">
+													<label class="control-label">Address Line 2</label>
+													<input type="text" class="form-control" name="addressLine2billing" ng-model="billingAddress.addressLine2">
+												</div>
+											</div>
+										</div>
+										<div class="row">
+											<div class="form-group">
+												<div class="col-md-12">
+													<label>City </label>
+													<input type="text" name="citybilling" ng-model="billingAddress.city" class="form-control">
+												</div>
+												<div class="col-md-12">
+													<label>State </label>
+													<input type="text" name="statebilling" ng-model="billingAddress.state" class="form-control">
+												</div>
+											</div>
+										</div>
+										<div class="row">
+											<div class="form-group">
+												<div class="col-md-12">
+													<label>Zip Code</label>
+													<input type="text" name="zipbilling" ng-model="billingAddress.zip" class="form-control">
+												</div>
+												<div class="col-md-12">
+													<label>Country</label>
+													<input type="text" name="countrybilling" ng-model="billingAddress.country" class="form-control">
+												</div>
+											</div>
+										</div>
+									</form>
+								</div>
 							</div>
 						</div>
 					</div>
+
 					<br>
-					<div class="panel panel-default">
-						<div class="panel-heading">
-							<h4 class="panel-title">
-								<a class="accordion">
-									Shipping Address
-								</a>
-							</h4>
-						</div>
-						<div id="collapseTwo" class="accordion-body">
-							<div class="panel-body">
-								<form action="/" id="frmShippingAddress" method="post">
-									<div class="row">
-										<div class="col-md-12">
-											<span class="remember-box checkbox">
-												<label>
-													<input type="checkbox" checked="checked">Ship to billing address?
-												</label>
-											</span>
-										</div>
-									</div>
-									<div class="row">
-										<div class="form-group">
-											<div class="col-md-12">
-												<label>Country</label>
-												<select class="form-control">
-													<option value="">Select a country</option>
-												</select>
+					<form stripe-form="stripeSubmit" name="paymentinfo">
+						<div class="panel-group" id="accordion">
+							<div class="panel panel-default">
+								<div class="panel-heading active">
+									<h4 class="panel-title">
+										<a class="accordion">
+											Payment Method
+										</a>
+									</h4>
+								</div>
+								<div class="paneling">
+									<div id="collapseOne" class="accordion-body">
+										<div class="panel-body">
+											<br>
+
+											<div class="row">
+												<div class="form-group">
+													<div class="col-md-6">
+														<label for="">Card number</label>
+														<input type="text" class="form-control" ng-model="number" payments-validate="card" payments-format="card" payments-type-model="type" ng-class="myForm.number.$card.type"/>
+													</div>
+													<div class="col-md-6">
+														<label for="">Name on card </label>
+														<input type="text" ng-model="name" class="form-control">
+													</div>
+												</div>
+												<div class="form-group">
+													<div class="col-md-6">
+														<label for="">Expiration Date</label>
+														<input type="text" class="form-control" ng-model="expiry" payments-validate="expiry" payments-format="expiry" />
+													</div>
+													<div class="col-md-6">
+														<label for="">CVC</label>
+														<input type="text" class="form-control" ng-model="cvc" payments-validate="cvc" payments-format="cvc" payments-type-model="type"/>
+													</div>
+												</div>
 											</div>
 										</div>
 									</div>
-									<div class="row">
-										<div class="form-group">
-											<div class="col-md-6">
-												<label>First Name</label>
-												<input type="text" value="" class="form-control">
-											</div>
-											<div class="col-md-6">
-												<label>Last Name</label>
-												<input type="text" value="" class="form-control">
-											</div>
-										</div>
-									</div>
-									<div class="row">
-										<div class="form-group">
-											<div class="col-md-12">
-												<label>Company Name</label>
-												<input type="text" value="" class="form-control">
-											</div>
-										</div>
-									</div>
-									<div class="row">
-										<div class="form-group">
-											<div class="col-md-12">
-												<label>Address </label>
-												<input type="text" value="" class="form-control">
-											</div>
-										</div>
-									</div>
-									<div class="row">
-										<div class="form-group">
-											<div class="col-md-12">
-												<label>City </label>
-												<input type="text" value="" class="form-control">
-											</div>
-										</div>
-									</div>
-								</form>
+								</div>
 							</div>
-						</div>
-					</div>
-					<br>
-					<div class="panel panel-default">
-						<div class="panel-heading">
-							<h4 class="panel-title">
-								<a class="accordion">
-									Review & Payment
-								</a>
-							</h4>
-						</div>
-						<div id="collapseThree" class="accordion-body">
-							<div class="panel-body">
-								<table class="shop_table cart">
-									<thead>
-										<tr>
-											<th class="product-thumbnail">
-												&nbsp;
-											</th>
-											<th class="product-name">
-												Product
-											</th>
-											<th class="product-price">
-												Price
-											</th>
-											<th class="product-quantity">
-												Quantity
-											</th>
-											<th class="product-subtotal">
-												Total
-											</th>
-										</tr>
-									</thead>
-									<tbody>
-			
-										<tr ng-repeat="item in cart" class="cart_table_item">
-											<td class="product-thumbnail">
-												<img ng-src="{{item.imagePath}}" alt="{{item.title}}">
-											</td>
-											<td class="product-name">
-												{{item.title}}
-											</td>
-											<td class="product-price">
-												${{item.price}}
-											</td>
-											<td class="product-quantity">
-												{{item.quantity}}
-											</td>
-											<td class="product-subtotal">
-												${{cart.getProductPrice(item)}}
-											</td>
-										</tr>
-									</tbody>
-								</table>
+							<br>
 
-								<h4 class="heading-primary">Cart Totals</h4>
-								<table class="cart-totals">
-									<tbody>
-										<tr class="cart-subtotal">
-											<th>
-												<strong>Cart Subtotal</strong>
-											</th>
-											<td>
-												<strong><span class="amount">${{cart.getCartPrice()}}</span></strong>
-											</td>
-										</tr>
-										<tr class="shipping">
-											<th>
-												Shipping
-											</th>
-											<td>
-												Free Shipping<input type="hidden" value="free_shipping" id="shipping_method" name="shipping_method">
-											</td>
-										</tr>
-										<tr class="total">
-											<th>
-												<strong>Order Total</strong>
-											</th>
-											<td>
-												<strong><span class="amount">${{cart.getCartPrice()}}</span></strong>
-											</td>
-										</tr>
-									</tbody>
-								</table>
 
-								<hr class="tall">
+							<div class="panel panel-default">
+								<div class="panel-heading active">
+									<h4 class="panel-title">
+										<a class="accordion">
+											Order Review
+										</a>
+									</h4>
+								</div>
+								<div class="paneling">
+									<div id="collapseOne" class="accordion-body">
+										<div class="panel-body">
+											<table class="shop_table cart">
+												<thead>
+													<tr>
+														<th class="product-thumbnail">
+															&nbsp;
+														</th>
+														<th class="product-name">
+															Product
+														</th>
+														<th class="product-price">
+															Price
+														</th>
+														<th class="product-quantity">
+															Quantity
+														</th>
+														<th class="product-subtotal">
+															Total
+														</th>
+													</tr>
+												</thead>
+												<tbody>
 
-								<h4 class="heading-primary">Payment</h4>
+													<tr ng-repeat="item in cart" class="cart_table_item">
+														<td class="product-thumbnail">
+															<img ng-src="{{item.imagePath}}" alt="{{item.title}}">
+														</td>
+														<td class="product-name">
+															{{item.title}}
+														</td>
+														<td class="product-price">
+															${{item.price}}
+														</td>
+														<td class="product-quantity">
+															{{item.quantity}}
+														</td>
+														<td class="product-subtotal">
+															${{cart.getProductPrice(item)}}
+														</td>
+													</tr>
+												</tbody>
+											</table>
+										</div>
 
-								
+									</div>
+								</div>
 							</div>
-						</div>
+
+							<div class="actions-continue">
+								<input type="submit" value="Place Order" name="proceed" class="btn btn-lg btn-primary mt-xl">
+							</div>
+
+
+
+
+						</form>
+
 					</div>
 				</div>
-
-				<div class="actions-continue">
-					<input type="submit" value="Place Order" name="proceed" class="btn btn-lg btn-primary mt-xl">
-				</div>
-
 			</div>
-			<div class="col-md-3">
+
+
+
+			<div id="exportthis" class="col-md-3">
 				<h4 class="heading-primary">Cart Totals</h4>
 				<table class="cart-totals">
 					<tbody>
@@ -262,7 +320,7 @@
 							<td>
 								Free Shipping<input type="hidden" value="free_shipping" id="shipping_method" name="shipping_method">
 							</td>
-						</tr>
+						</tr>	
 						<tr class="total">
 							<th>
 								<strong>Order Total</strong>
@@ -275,56 +333,5 @@
 				</table>
 			</div>
 		</div>
-
 	</div>
 
-</div>
-
-
-<!-- <div class="container">
-
-	<div class="spacing-top-md spacing-bot-neg">
-		<div class="row spacing-top-neg">
-			<h1 class="mb-none"><strong>Checkout</strong></h1>
-		</div>
-	</div>
-	<br>
-
-
-	<form name="checkoutForm" stripe-form="stripeCallback" ng-submit="onSubmit()" data-abide>
-
-		<div ng-if="processing" us-spinner></div>
-
-		<div class="row">
-			<div class="col-lg-10">
-				<legend>1. Contact Information</legend>
-				<alert ng-repeat="alert in alerts.detail" type="{{alert.type}}" close="closeAlert('detail', $index)">{{alert.msg}}</alert>
-				<div class="form-group" ng-class="{'has-error': hasError(detailForm.first)}">
-					<label class="control-label" for="first">First Name: </label>
-					<input type="text" name="first" id="first" class="form-control" ng-model="userDetail.first" required>
-					<span class="help-block" ng-show="showError(detailForm.first, 'required')">This field is required</span>
-				</div>
-				<div class="form-group" ng-class="{'has-error': hasError(detailForm.last)}">
-					<label class="control-label" for="last">Last Name:</label>
-					<input type="text" name="last" id="last" class="form-control" ng-model="userDetail.last" required>
-					<span class="help-block" ng-show="showError(detailForm.last, 'required')">This field is required</span>
-				</div>
-				<div class="form-group" ng-class="{'has-error': hasError(detailForm.company)}">
-					<label class="control-label" for="company">Company Name:</label>
-					<input type="text" name="company" id="company" class="form-control" ng-model="userDetail.company">
-				</div>
-				<div class="form-group" ng-class="{'has-error': hasError(detailForm.phone)}">
-					<label class="control-label" for="phone">Phone:</label>
-					<input type="text" name="phone" id="phone" class="form-control" ng-model="userDetail.phone">
-				</div>
-				<div class="form-group" ng-class="{'has-error': hasError(detailForm.zip)}">
-					<label class="control-label" for="zip">Zip:</label>
-					<input type="text" name="zip" id="zip" class="form-control" ng-model="userDetail.zip">
-				</div>
-				<div class="form-group">
-					<button type="button" class="btn btn-primary btn-update" ng-disabled="!canSave(detailForm)" ng-click="submit(detailForm)">Next</button>
-				</div>
-			</form>
-		</div>
-
- -->

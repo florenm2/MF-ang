@@ -1,10 +1,113 @@
+<div class="main shop">
+<div id= "confirmation-email" class="col-md-9">
+  <div class="container">
+    <div class="section-title">
+        <h2 class="heading-font heading-tertiary spacing-top-md">Thank you for your order!</h2>
+        <br>
+        <h4 class="mb-none preheading-font spacing-bot-sm">Order Summary</h4>
+        <br>
+    </div>  
 
+
+    <div class="accordion-body" align="center">
+        <div class="panel-body">
+            <table class="shop_table cart">
+                <thead>
+                    <tr>
+                        <th class="product-thumbnail">
+                            &nbsp;
+                        </th>
+                        <th class="product-name">
+                            Product
+                        </th>
+                        <th class="product-price">
+                            Price
+                        </th>
+                        <th>
+                        </th>
+                        <th class="product-quantity">
+                            Quantity
+                        </th>
+                        <th class="product-subtotal">
+                            Total
+                        </th>
+                    </tr>
+                </thead>
+                <tbody ng-if="cart.length">
+                    <tr class="cart_table_item" ng-repeat="product in cart | filter: greaterThan('quantity', 0)">
+                        <td class="product-thumbnail">
+                            <a><img width="100" height="100" alt="" class="img-responsive" ng-src="{{product.imagePath}}">
+                            </a>
+                        </td>
+                        <td class="product-name">
+                            <a href="shop-product-sidebar.html">{{product.title}}</a>
+                        </td>
+                        <td class="product-price">
+                            <span class="amount">${{product.price}}</span>
+                        </td>
+                        <td>
+                            &nbsp;
+                        </td>
+                        <td class="product-quantity">
+                            <span>{{product.quantity}}</span>
+                        </td>
+                        <td class="product-subtotal">
+                            <span class="amount">${{getProductPrice(product)}}</span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+
+            <br>
+            <br>
+            <br>
+
+            <div style="width:50%; float:left;">
+                <br>
+                <table class="cart-totals">
+                    <tbody >
+                        <tr class="cart-subtotal">
+                            <th>
+                                <strong>Subtotal</strong>
+                            </th>
+                            <td>
+                                <strong>${{getCartPrice()}}</strong>
+                            </td>
+                        </tr>
+                        <tr class="shipping">
+                            <th>
+                                Shipping
+                            </th>
+                            <td>
+                                Free Shipping<input type="hidden" value="free_shipping" id="shipping_method" name="shipping_method">
+                            </td>
+                        </tr>
+                        <tr class="total">
+                            <th>
+                                <strong>Order Total</strong>
+                            </th>
+                            <td>
+                                <strong><span class="amount">${{getCartPrice()}}</span></strong>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+</div>
+
+
+
+<!-- 
 <div role="main" class="main">
 
     <div class="" >
 
         <div class="container">
-            <!-- Section Title -->
             <div class="section-title">
                 <h1 class="heading-font heading-tertiary spacing-top-md spacing-bot-sm">Thank you for your order!</h1>
                 <br>
@@ -138,4 +241,4 @@
 
 
 
-<button ng-click="returnHome()">Return Home</button>
+<button ng-click="returnHome()">Return Home</button> -->
