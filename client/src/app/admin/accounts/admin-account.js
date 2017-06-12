@@ -13,7 +13,7 @@ angular.module('admin.accounts.detail').config(['$routeProvider', function($rout
             .then(function(){
               var id = $route.current.params.id || '';
               if(id){
-                return adminResource.findAccount(id);
+                return adminResource.findAllAccountInfo(id);
               }else{
                 redirectUrl = '/admin/accounts';
                 return $q.reject();
@@ -35,21 +35,63 @@ angular.module('admin.accounts.detail').config(['$routeProvider', function($rout
 }]);
 angular.module('admin.accounts.detail').controller('AccountsDetailCtrl', ['$scope', '$route', '$location', 'utility', 'adminResource', 'account',
   function($scope, $route, $location, utility, adminResource, data) {
+    $scope.contactEditorEnabled = false;
+    $scope.identityEditorEnabled = $scope.passwordEditorEnabled = false;
+    $scope.addressEditorEnabled = $scope.billingAddressEditorEnabled = false;
+
+
     // local vars
     var deserializeData = function(data){
-      $scope.statuses = data.statuses;
+      $scope.purchases = data.purchases;
+      $scope.address = data.address;
+
       deserializeAccount(data.record);
     };
     var deserializeAccount = function(account){
       $scope.account = account;
-      $scope.selectedStatus = {
-        "_id": account.status.id,
-        "name": account.status.name
-      };
+      
     };
+
+    $scope.toggleIdentityEditor = function() {
+      if($scope.identityEditorEnabled == false){
+        $scope.identityEditorEnabled = true;
+      } else {
+        $scope.identityEditorEnabled = false;
+      }
+    };
+
+    $scope.toggleContactEditor = function() {
+      if($scope.contactEditorEnabled == false){
+        $scope.contactEditorEnabled = true;
+      } else {
+        $scope.contactEditorEnabled = false;
+      }
+    };
+
+
+    //mailing address
+    $scope.toggleAddressEditor = function() {
+      if($scope.addressEditorEnabled == false){
+        $scope.addressEditorEnabled = true;
+      } else {
+        $scope.addressEditorEnabled = false;
+      }
+    };
+
+    $scope.toggleBillingAddressEditor = function() {
+      if($scope.billingAddressEditorEnabled == false){
+        $scope.billingAddressEditorEnabled = true;
+      } else {
+        $scope.billingAddressEditorEnabled = false;
+      }
+    };
+
+
     var closeAlert = function(alert, ind){
       alert.splice(ind, 1);
     };
+
+    console.log(data);
 
     // $scope vars
     $scope.contactAlerts = [];

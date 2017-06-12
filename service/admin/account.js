@@ -141,6 +141,53 @@ var account = {
     require('async').parallel([getStatusOptions, getRecord], asyncFinally);
   },
 
+  readAllCollections: function(req, res, next){
+    var outcome = {};
+
+    var getPurchaseHistory = function(callback) {
+      req.app.db.models.PurchaseHistory.find({"account.id": req.params.id}, 'orderNumber product orderDate cost company paymentMethod user account').exec(function(err, ph) {
+        if (err) {
+          return callback(err, null);
+        }
+
+        outcome.purchases = ph;
+        return callback(null, 'done');
+      });
+    };
+
+    var getRecord = function(callback) {
+      req.app.db.models.Account.findById(req.params.id).exec(function(err, record) {
+        if (err) {
+          return callback(err, null);
+        }
+
+        outcome.record = record;
+        return callback(null, 'done');
+      });
+    };
+
+    var getAddressInfo = function(callback) {
+      req.app.db.models.Address.find({"account.id" : req.params.id}, 'type addressLine1 addressLine2 city state zip country company phone').exec(function(err, address) {
+        if (err) {
+          return callback(err, null);
+        }
+
+        outcome.address = address;
+        return callback(null, 'done');
+      });
+    };
+
+    var asyncFinally = function(err, results) {
+      if (err) {
+        return next(err);
+      }
+
+      res.status(200).json(outcome);
+    };
+
+    require('async').parallel([getPurchaseHistory, getRecord, getAddressInfo], asyncFinally);
+  },
+
   update: function(req, res, next){
     var workflow = req.app.utility.workflow(req, res);
 

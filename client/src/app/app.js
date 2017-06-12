@@ -4,6 +4,7 @@ angular.module('app', [
   'base',
   'signup',
   'login',
+  'adminlogin',
   'account',
   'admin',
   'services.i18nNotifications',
@@ -14,7 +15,8 @@ angular.module('app', [
   'templates.common',
   'pricing',
   'hl.sticky',
-  'ui.bootstrap'
+  'ui.bootstrap',
+  'ngMaterial'
   ]);
 
 angular.module('app').config(['$httpProvider', 'XSRF_COOKIE_NAME', function($httpProvider, XSRF_COOKIE_NAME){

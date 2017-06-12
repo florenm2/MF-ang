@@ -145,6 +145,7 @@ exports = module.exports = function(app, passport) {
   app.get('/api/admin/accounts', adminAccount.find);
   app.post('/api/admin/accounts', adminAccount.create);
   app.get('/api/admin/accounts/:id', adminAccount.read);
+  app.get('/api/admin/accounts/info/:id', adminAccount.readAllCollections);
   app.put('/api/admin/accounts/:id', adminAccount.update);
   app.put('/api/admin/accounts/:id/user', adminAccount.linkUser);
   app.delete('/api/admin/accounts/:id/user', adminAccount.unlinkUser);
@@ -228,6 +229,9 @@ exports = module.exports = function(app, passport) {
   
   //admin
   app.get('/admin', useAngular);
+  app.get('/admin/login', useAngular);
+  app.get('/admin/login/reset', useAngular);
+  app.get('/admin/login/forgot', useAngular);
 
   //admin > users
   app.get('/admin/users', useAngular);
@@ -261,6 +265,8 @@ exports = module.exports = function(app, passport) {
   //admin > pricing
   app.get('/admin/pricing', useAngular);
 
+  //admin > custom reports
+  app.get('/admin/custom-reports', useAngular);
 
   //PUBLIC API -- for external sources to get product information
   app.get('/public/getProducts', products.getAllProductsPublic);

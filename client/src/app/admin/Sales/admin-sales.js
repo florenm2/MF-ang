@@ -279,6 +279,7 @@ angular.module('admin.sales').controller('SalesCtrl', ['$scope', '$log', 'stats'
             min: 0,
             stepSize: 1
           },
+          barShowStroke : false,
           scaleLabel: {
             display: true,
             labelString: 'Number of Sales'
@@ -302,6 +303,7 @@ angular.module('admin.sales').controller('SalesCtrl', ['$scope', '$log', 'stats'
             min: 0,
             stepSize: 1000
           },
+          barStrokeWidth:0,
           scaleLabel: {
             display: true,
             labelString: 'Total Sales'
@@ -323,8 +325,11 @@ angular.module('admin.sales').controller('SalesCtrl', ['$scope', '$log', 'stats'
           ticks: {
             suggestedMax: 10,
             min: 0,
-            stepSize: 1
+            stepSize: 1,
+            beginAtZero: false
           },
+          barStrokeWidth:0,
+          barShowStroke : false,
           scaleLabel: {
             display: true,
             labelString: 'Number of Sales'
@@ -345,9 +350,12 @@ angular.module('admin.sales').controller('SalesCtrl', ['$scope', '$log', 'stats'
           scaleSteps : 1,
           ticks: {
             suggestedMax: 1000,
-            min: 0,
-            stepSize: 200
+            min: 5,
+            stepSize: 200,
+            beginAtZero: false
           },
+          barStrokeWidth:0,
+          barShowStroke : false,
           scaleLabel: {
             display: true,
             labelString: 'Total Sales',

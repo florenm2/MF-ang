@@ -95,6 +95,11 @@ angular.module('security.service', [
       //openLoginDialog();
     },
 
+    showAdminLogin: function() {
+      redirect('/admin/login');
+      //openLoginDialog();
+    },
+
     socialDisconnect: function(provider){
       var url = '/api/account/settings/' + provider.toLowerCase() + '/disconnect';
       return $http.get(url).then(function(res){ return res.data; });

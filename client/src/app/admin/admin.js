@@ -1,4 +1,4 @@
-angular.module('admin.index', ['ngRoute', 'security.authorization', 'services.adminResource', 'angular.morris', 'chart.js']);
+angular.module('admin.index', ['ngRoute', 'security.authorization', 'services.adminResource', 'angular.morris', 'chart.js', 'ngMaterial']);
 angular.module('admin.index').config(['$routeProvider', function($routeProvider){
   $routeProvider
     .when('/admin', {
@@ -12,11 +12,11 @@ angular.module('admin.index').config(['$routeProvider', function($routeProvider)
           var promise = securityAuthorization.requireAdminUser()
             .then(adminResource.getStats, function(reason){
               //rejected either user is un-authorized or un-authenticated
-              redirectUrl = reason === 'unauthorized-client'? '/account': '/login';
+              redirectUrl = reason === 'unauthorized-client'? '/account/settings': '/admin/login';
               return $q.reject();
             })
             .catch(function(){
-              redirectUrl = redirectUrl || '/account';
+              redirectUrl = redirectUrl || '/account/settings';
               $location.path(redirectUrl);
               return $q.reject();
             });
@@ -45,57 +45,8 @@ angular.module('admin.index').config(['$routeProvider', function($routeProvider)
       }
     })
 }]);
-angular.module('admin.index').controller('AdminCtrl', ['$scope', '$log', 'stats', 'viewCount', 'adminResource',
-  function($scope, $log, stats, viewCount, adminResource){
-
-    // html2canvas(document.getElementById('exportthis'), {
-    //         onrendered: function (canvas) {
-    //             var data = canvas.toDataURL();
-    //             var docDefinition = {
-    //                 content: [{
-    //                     image: data,
-    //                     width: 500,
-    //                 }]
-    //             };
-    //             pdfMake.createPdf(docDefinition).download("Test.pdf");
-    //         }
-    //     });
-
-    $scope.click = function() {
-      //    console.log("button clicked");
-      //  $scope.order.showPopupAddedToCart = !$scope.order.showPopupAddedToCart;
-      var doc = new jsPDF();
-      doc.text(20, 20, 'Hello world!');
-
-      var pdfBase64 = doc.output('datauristring');
-
-     // adminResource.sendConfirmationEmail();
-
-
-      // var emailjs = require('emailjs/email');
-      // var emailer = emailjs.server.connect( req.app.config.smtp.credentials );
-      // emailer.send({
-      //   from: req.app.config.smtp.from.name +' <'+ req.app.config.smtp.from.address +'>',
-      //   to: 'florenm2@miamioh.edu',
-      //   subject: 'subject',
-      //   text: 'hello',
-      //  // attachment: attachments
-      // }, function(err, message) {
-      //   if (err) {
-      //     options.error('Email failed to send. '+ err);
-      //     return;
-      //   }
-      //   else {
-      //     options.success(message);
-      //     return;
-      //   }
-      // })
-
-
-      // Save the PDF
-      //doc.save('Test.pdf');
-
-    };
+angular.module('admin.index').controller('AdminCtrl', ['$scope', '$log', 'stats', 'viewCount', 'adminResource', '$mdSidenav',
+  function($scope, $log, stats, viewCount, adminResource, $mdSidenav){
 
     var viewData = function(viewCount){
          $scope.viewDataDates = []; 
@@ -121,8 +72,18 @@ angular.module('admin.index').controller('AdminCtrl', ['$scope', '$log', 'stats'
 
          angular.forEach(viewCount, function(view, key) {
             $scope.viewDataDates.push(view.date);
-            $scope.homeViewCounts.push(view.homePageViews);
-            $scope.cartViewCounts.push(view.cartViews);
+
+            if(typeof view.homePageViews == 'undefined' || view.homePageViews==null){
+                $scope.homeViewCounts.push(0);
+            } else {
+              $scope.homeViewCounts.push(view.homePageViews);
+            }
+            
+            if(typeof view.cartViews == 'undefined' || view.cartViews == null){
+              $scope.cartViewCounts.push(0);
+            } else {
+              $scope.cartViewCounts.push(view.cartViews);
+            }
 
             var currentDate = new Date(view.date);
 
@@ -130,8 +91,8 @@ angular.module('admin.index').controller('AdminCtrl', ['$scope', '$log', 'stats'
             var n = ts.days - 1;
             if(n > 0 && n < 30){
               var f = 30-n;
-              $scope.homeView30Day[n]+=view.homePageViews;
-              $scope.cartView30Day[n]+=view.cartViews;
+              $scope.homeView30Day[n]+=view.homePageViews || 0;
+              $scope.cartView30Day[n]+=view.cartViews || 0;
             }
            
          });

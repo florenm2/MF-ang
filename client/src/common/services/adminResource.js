@@ -86,6 +86,10 @@ angular.module('services.adminResource', []).factory('adminResource', ['$http', 
     var url = accountUrl + '/' + _id;
     return $http.get(url).then(processResponse, processError);
   };
+  resource.findAllAccountInfo = function(_id){
+    var url = accountUrl + '/info/' + _id;
+    return $http.get(url).then(processResponse, processError);
+  };
   resource.updateAccount = function(_id, data){
     var url = accountUrl + '/' + _id;
     return $http.put(url, data).then(processResponse, processError);

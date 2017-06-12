@@ -188,11 +188,11 @@ module.exports = function(grunt) {
           },
           {
             expand: true, cwd: 'client/bower_components/angular-aria/',
-            src: ['angular-aria.js'], dest: '<%= distdir %>/vendor/'
+            src: ['angular-aria.min.js'], dest: '<%= distdir %>/vendor/'
           },
           {
             expand: true, cwd: 'client/bower_components/angular-material/',
-            src: ['angular-material.js'], dest: '<%= distdir %>/vendor/'
+            src: ['angular-material.min.js'], dest: '<%= distdir %>/vendor/'
           },
           {
             expand: true, cwd: 'client/bower_components/angular-messages/',
@@ -217,6 +217,30 @@ module.exports = function(grunt) {
           {
             expand: true, cwd: 'client/bower_components/jspdf/dist/',
             src: ['jspdf.min.js'], dest: '<%= distdir %>/vendor/'
+          },
+          {
+            expand: true, cwd: 'client/bower_components/angular-messages/',
+            src: ['angular-messages.min.js'], dest: '<%= distdir %>/vendor/'
+          },
+          {
+            expand: true, cwd: 'client/bower_components/jspdf-autotable/dist/',
+            src: ['jspdf.plugin.autotable.js'], dest: '<%= distdir %>/vendor/'
+          },
+          {
+            expand: true, cwd: 'client/bower_components/jspdf-autotable/dist/',
+            src: ['jspdf.plugin.autotable.js'], dest: '<%= distdir %>/vendor/'
+          },
+          {
+            expand: true, cwd: 'client/bower_components/datatables.net/js/',
+            src: ['jquery.dataTables.js'], dest: '<%= distdir %>/vendor/'
+          },
+          {
+            expand: true, cwd: 'client/bower_components/datatables.net/js/',
+            src: ['dataTables.buttons.js'], dest: '<%= distdir %>/vendor/'
+          },
+          {
+            expand: true, cwd: 'client/src/vendor/DataTables/',
+            src: ['datatables.min.js'], dest: '<%= distdir %>/vendor/'
           }
         ]
       },
@@ -320,7 +344,23 @@ module.exports = function(grunt) {
           },
           {
             expand: true, cwd: 'client/bower_components/angular-material/',
-            src: ['angular-material.css'], dest: '<%= distdir %>/css/'
+            src: ['angular-material.min.css'], dest: '<%= distdir %>/css/'
+          },
+          {
+            expand: true, cwd: 'client/src/assets/js/tables/',
+            src: ['examples.datatables.tabletools.js'], dest: '<%= distdir %>/js/'
+          },
+          {
+            expand: true, cwd: 'client/bower_components/datatables.net-buttons-dt/css/',
+            src: ['jquery.dataTables.js'], dest: '<%= distdir %>/css/'
+          },
+          {
+            expand: true, cwd: 'client/bower_components/datatables.net-dt/css/',
+            src: ['jquery.dataTables.css'], dest: '<%= distdir %>/css/'
+          },
+          {
+            expand: true, cwd: 'client/src/vendor/DataTables/',
+            src: ['datatables.min.css'], dest: '<%= distdir %>/css/'
           }
         ]
       },

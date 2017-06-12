@@ -10,5 +10,6 @@ angular.module('admin', [
   'admin.purchase-history',
   'admin.developers',
   'admin.admin-account-settings',
-  'admin.pricing'
+  'admin.pricing',
+  'admin.custom-reports'
 ]);

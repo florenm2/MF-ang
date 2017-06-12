@@ -34,13 +34,20 @@
                         </thead>
                         <tbody>
                             <!-- <tr ng-repeat="account in accounts" ng-click="goToAccount();"> -->
-                            <tr ng-repeat="account in accounts" ng-click="accountPurchases();">
+                            <!-- <tr ng-repeat="account in accounts" ng-click="goToUser();">
                                 <td ng-bind="account.user.name"></td>
                                 <td ng-bind="account.name.full"></td>
                                 <td ng-bind="account.company"></td>
                                 <td class="stretch" ng-bind="account.purchaseHistoryLog.length"></td>
                                 <td ng-bind="account.purchaseAmount"></td>
-                            </tr>
+                            </tr> -->
+                            <tr ng-repeat="user in users" ng-click="goToUser();">
+                                    <!-- <td><a class="btn btn-default btn-sm" ng-href="/admin/users/{{user._id}}">Edit</a></td> -->
+                                    <td ng-bind="user.username"></td>
+                                    <td ng-bind="user.email"></td>
+                                    <td ng-bind="user.isActive"></td>
+                                    <td ng-bind="user._id"></td>
+                                </tr>
                             <tr ng-show="users.length === 0">
                                 <td colspan="5">no documents matched</td>
                             </tr>

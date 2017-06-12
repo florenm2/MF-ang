@@ -68,7 +68,14 @@ var purchaseHistory = {
           shipping: req.body.cost.shipping,
           tax: req.body.cost.tax,
           total: req.body.cost.total
-        }
+        },
+        search: [
+          req.body.orderNumber,
+          req.body.orderDate,
+          req.body.company,
+          req.body.paymentMethod,
+          req.user.roles.account.name
+        ]
       };
       req.app.db.models.PurchaseHistory.create(fieldsToSet, function(err, ph) {
         if (err) {
@@ -138,7 +145,14 @@ var purchaseHistory = {
           shipping: req.body.cost.shipping,
           tax: req.body.cost.tax,
           total: req.body.cost.total
-        }
+        },
+        search: [
+          req.body.orderNumber,
+          req.body.orderDate,
+          req.body.company,
+          req.body.paymentMethod,
+          req.user.roles.account.name
+        ]
       };
       var options = { select: 'company' , upsert: true };
 

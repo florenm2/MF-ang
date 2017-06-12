@@ -1,4 +1,4 @@
-angular.module('base',['ngRoute', 'security', 'services.utility', 'services.accountResource', 'services.adminResource', 'ui.bootstrap', 'ngMap']);
+angular.module('base',['ngRoute', 'security', 'services.utility', 'services.accountResource', 'services.adminResource', 'ui.bootstrap', 'ngMap', 'ngMaterial']);
 angular.module('base').controller('HeaderCtrl', ['$scope', '$location', 'security', 'accountResource',
   function ($scope, $location, security, restResource) {
     $scope.isAuthenticated = function(){
@@ -25,8 +25,8 @@ angular.module('base').controller('HeaderCtrl', ['$scope', '$location', 'securit
     };
   }
 ]);
-angular.module('base').controller('SidebarCtrl', ['$scope', '$location', 'security', 'accountResource',
-  function ($scope, $location, security, restResource) {
+angular.module('base').controller('SidebarCtrl', ['$scope', '$location', 'security', 'accountResource', '$mdSidenav',
+  function ($scope, $location, security, restResource, $mdSidenav) {
     $scope.isAuthenticated = function(){
       return security.isAuthenticated();
     };
@@ -42,6 +42,9 @@ angular.module('base').controller('SidebarCtrl', ['$scope', '$location', 'securi
     };
     $scope.isActive = function(viewLocation){
       return $location.path() === viewLocation;
+    };
+    $scope.toggleSidenav = function(menuId) {
+      $mdSidenav(menuId).toggle();
     };
   }
 ]);

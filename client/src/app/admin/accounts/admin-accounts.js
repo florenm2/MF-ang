@@ -33,6 +33,7 @@ angular.module('admin.accounts.index').config(['$routeProvider', function($route
 angular.module('admin.accounts.index').controller('AccountsIndexCtrl', ['$scope', '$route', '$location', '$log', 'utility', 'adminResource', 'accounts',
   function($scope, $route, $location, $log, utility, adminResource, data){
     // local var
+    console.log(data);
     var deserializeData = function(data){
       var results = data.results;
       $scope.statuses = data.statuses;
@@ -105,6 +106,15 @@ angular.module('admin.accounts.index').controller('AccountsIndexCtrl', ['$scope'
       {label: "50 items", value: 50},
       {label: "100 items", value: 100}
     ];
+
+    $scope.goToAccount = function() {
+        $scope.selected = this.account;
+        $location.path('/admin/accounts/' + $scope.selected._id);
+        //ng-href="/admin/accounts/{{account._id}}"
+    };
+
+    
+
 
     //initialize $scope variables
     deserializeData(data);

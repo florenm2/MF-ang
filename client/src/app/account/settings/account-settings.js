@@ -1,25 +1,25 @@
 angular.module('account.settings', ['config', 'account.settings.social', 'security.service', 'security.authorization', 'services.accountResource', 'services.utility', 'ui.bootstrap', 'directives.serverError']);
 angular.module('account.settings').config(['$routeProvider', 'securityAuthorizationProvider', function($routeProvider){
   $routeProvider
-    .when('/account/settings', {
-      templateUrl: 'account/settings/account-settings.tpl.html',
-      controller: 'AccountSettingsCtrl',
-      title: 'Account Settings',
-      resolve: {
-        accountDetails: ['$q', '$location', 'securityAuthorization', 'accountResource' ,function($q, $location, securityAuthorization, accountResource){
+  .when('/account/settings', {
+    templateUrl: 'account/settings/account-settings.tpl.html',
+    controller: 'AccountSettingsCtrl',
+    title: 'Account Settings',
+    resolve: {
+      accountDetails: ['$q', '$location', 'securityAuthorization', 'accountResource' ,function($q, $location, securityAuthorization, accountResource){
           //get account details only for verified-user, otherwise redirect to /account/verification
           var redirectUrl;
           var promise = securityAuthorization.requireVerifiedUser()
-            .then(accountResource.getAccountDetails, function(reason){
+          .then(accountResource.getAccountDetails, function(reason){
               //rejected either user is unverified or un-authenticated
               redirectUrl = reason === 'unverified-client'? '/account/verification': '/login';
               return $q.reject();
             })
-            .catch(function(){
-              redirectUrl = redirectUrl || '/account';
-              $location.path(redirectUrl);
-              return $q.reject();
-            });
+          .catch(function(){
+            redirectUrl = redirectUrl || '/account';
+            $location.path(redirectUrl);
+            return $q.reject();
+          });
           return promise;
         }]
       }
@@ -30,7 +30,53 @@ angular.module('account.settings').controller('AccountSettingsCtrl', [ '$scope',
     //local vars
     var account = accountDetails.account;
     var user = accountDetails.user;
+
+    $scope.identityEditorEnabled = $scope.contactEditorEnabled = $scope.passwordEditorEnabled = false;
+    $scope.addressEditorEnabled = $scope.billingAddressEditorEnabled = false;
+
+    $scope.toggleIdentityEditor = function() {
+      if($scope.identityEditorEnabled == false){
+        $scope.identityEditorEnabled = true;
+      } else {
+        $scope.identityEditorEnabled = false;
+      }
+    };
+
+    $scope.toggleContactEditor = function() {
+      if($scope.contactEditorEnabled == false){
+        $scope.contactEditorEnabled = true;
+      } else {
+        $scope.contactEditorEnabled = false;
+      }
+    };
+
+    $scope.togglePasswordEditor = function() {
+      if($scope.passwordEditorEnabled == false){
+        $scope.passwordEditorEnabled = true;
+      } else {
+        $scope.passwordEditorEnabled = false;
+      }
+    };
+
+    //mailing address
+    $scope.toggleAddressEditor = function() {
+      if($scope.addressEditorEnabled == false){
+        $scope.addressEditorEnabled = true;
+      } else {
+        $scope.addressEditorEnabled = false;
+      }
+    };
+
+    $scope.toggleBillingAddressEditor = function() {
+      if($scope.billingAddressEditorEnabled == false){
+        $scope.billingAddressEditorEnabled = true;
+      } else {
+        $scope.billingAddressEditorEnabled = false;
+      }
+    };
+
     var submitDetailForm = function(){
+      $scope.toggleContactEditor();
       $scope.alerts.detail = [];
       restResource.setAccountDetails($scope.userDetail).then(function(data){
         if(data.success){
@@ -55,6 +101,7 @@ angular.module('account.settings').controller('AccountSettingsCtrl', [ '$scope',
     };
 
     var submitIdentityForm = function(){
+      $scope.toggleIdentityEditor();
       $scope.alerts.identity = [];
       restResource.setIdentity($scope.user).then(function(data){
         if(data.success){
@@ -84,6 +131,7 @@ angular.module('account.settings').controller('AccountSettingsCtrl', [ '$scope',
     };
 
     var submitPasswordForm = function(){
+      $scope.togglePasswordEditor();
       $scope.alerts.pass = [];
       restResource.setPassword($scope.pass).then(function(data){
         $scope.pass = {};
@@ -191,16 +239,16 @@ angular.module('account.settings').controller('AccountSettingsCtrl', [ '$scope',
     $scope.submit = function(ngFormCtrl){
       switch (ngFormCtrl.$name){
         case 'detailForm':
-          submitDetailForm();
-          break;
+        submitDetailForm();
+        break;
         case 'identityForm':
-          submitIdentityForm();
-          break;
+        submitIdentityForm();
+        break;
         case 'passwordForm':
-          submitPasswordForm();
-          break;
+        submitPasswordForm();
+        break;
         default:
-          return;
+        return;
       }
     };
     $scope.disconnect = function(provider){
@@ -210,4 +258,4 @@ angular.module('account.settings').controller('AccountSettingsCtrl', [ '$scope',
     };
     $scope.usstates = ["AK","AL","AR","AZ","CA","CO","CT","DC","DE","FL","GA","GU","HI","IA","ID", "IL","IN","KS","KY","LA","MA","MD","ME","MH","MI","MN","MO","MS","MT","NC","ND","NE","NH","NJ","NM","NV","NY", "OH","OK","OR","PA","PR","PW","RI","SC","SD","TN","TX","UT","VA","VI","VT","WA","WI","WV","WY"];
   }
-]);
+  ]);

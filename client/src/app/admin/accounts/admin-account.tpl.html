@@ -1,4 +1,379 @@
-<div class="row">
+<div id="page-wrapper">
+    <div class="row">   
+        <h1 class="heading-font heading-tertiary spacing-top-md spacing-bot-md" ng-bind="account.name.full"></h1>
+            <h4 class="subheading-font heading-secondary italic spacing-top-sm spacing-bot-md"><a ng-href="/admin/accounts">Return to All Accounts</a></h4>
+
+
+        <div class="container" style="height: 180px;">
+            <div style='float:left;width:50%'>
+                <div style="padding-left: 3em">
+                    <p>Name: {{account.name.full}}</p>
+                    <p>Company: {{account.company}}</p>
+                </div>
+            </div>
+
+            <div style='float:right;width:50%'>
+                <div style="padding-left: 3em">
+                    <p>Number of Purchases: {{account.purchases.length}}</p>
+                    <p>Total Amount Purchased: $</p>
+                </div>
+            </div>
+        </div>
+
+        <h2>Purchases</h2>
+        <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Orden Number</th>
+                        <th>Purchase Amount</th>
+                        <!-- <th>Number of Purchases</th>
+                        <th>Total Purchase Amount</th> -->
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="purchase in purchases" ng-click="goToAccount();">
+                        <td class="nowrap" ng-bind="purchase.orderDate"></td>
+                        <td class="nowrap" ng-bind="purchase.orderNumber"></td>
+                        <td class="nowrap" ng-bind="purchase.cost.raw"></td>
+                        <!-- <td class="nowrap" ng-bind="account.purchaseHistoryLog.length"></td>
+                        <td class="nowrap"></td> -->
+                    </tr>
+                    <tr ng-show="accounts.length === 0">
+                        <td colspan="4">no documents matched</td>
+                    </tr>
+                </tbody>
+            </table>
+
+
+            <br>
+
+            <h2>Addresses</h2>
+            <div ng-repeat="add in address">
+            <form name="billinfoForm">
+            <div class="row">
+                <div class="col-md-11">
+                    <div class="row">
+                        <div class="col-md-2">
+                            <label class="control-label" for="address">Address Line 1: </label>
+                        </div>
+                        <div ng-hide="billingAddressEditorEnabled">
+                            {{add.addressLine1}}
+                        </div>
+                        <div ng-show="billingAddressEditorEnabled">
+                            <div class="col-md-6 form-group" ng-class="{'has-error': hasError(billinfoForm.addressLine1)}" style="width: 47%;">
+                                <input type="text" name="address" id="address" class="form-control" ng-model="add.address">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-2">
+                            <label class="control-label" for="address2">Address Line 2: </label>
+                        </div>
+                        <div ng-hide="billingAddressEditorEnabled">
+                            {{add.addressLine2}}
+                        </div>
+                        <div ng-show="billingAddressEditorEnabled">
+                            <div class="col-md-6 form-group" ng-class="{'has-error': hasError(billinfoForm.addressLine2)}" style="width: 47%;">
+                                <input type="text" name="address2" id="address2" class="form-control" ng-model="add.address2">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-2">
+                            <label class="control-label" for="city">City</label>
+                        </div>
+                        <div ng-hide="billingAddressEditorEnabled">
+                            {{add.city}}
+                        </div>
+                        <div ng-show="billingAddressEditorEnabled">
+                            <div class="col-md-3 form-group" ng-class="{'has-error': hasError(billinfoForm.city)}">
+                                <input type="text" name="city" id="city" class="form-control" ng-model="add.city">
+                            </div>
+                        </div>
+                        <div class="col-md-1">
+                            <label class="control-label" for="usstate">State</label>
+                        </div>
+                        <div ng-hide="billingAddressEditorEnabled">
+                            {{add.state}}
+                        </div>
+                        <div ng-show="billingAddressEditorEnabled">
+                            <div class="col-md-2 form-group" ng-class="{'has-error': hasError(billinfoForm.usstate)}" style="width: 13.5%;">
+                                <select name="usstate" class="form-control" ng-model="add.state" ng-change="filtersUpdated()">
+                                    <option ng-repeat="x in usstates">{{x}}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-1">
+                            <label class="control-label" for="zip">Zip</label>
+                        </div>
+                        <div ng-hide="billingAddressEditorEnabled">
+                            {{add.zip}}
+                        </div>
+                        <div ng-show="billingAddressEditorEnabled">
+                            <div class="col-md-2 form-group" ng-class="{'has-error': hasError(billinfoForm.zip)}">
+                                <input type="text" name="zip" id="zip" class="form-control" ng-model="add.zip">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div ng-show="billingAddressEditorEnabled" class="form-group col-md-6" style="float: right; width: 45%;">
+                        <button type="button" class="btn btn-primary btn-update"  ng-click="submit(billinfoForm)">Update</button>
+                    </div>
+                    <div ng-hide="billingAddressEditorEnabled" class="form-group col-md-6" style="float: right; width: 45%;">
+                        <button type="button" class="btn btn-primary btn-update" ng-click="toggleBillingAddressEditor()">Edit</button>
+                    </div>
+                    <div class="col-md-3 form-group" style="float: right;">
+
+                        <!-- MAKE CLICKING THIS TEXT CREATE ANOTHER ADDRESS -->
+
+                        <span><a id="panel_view" href ng-click="panelModal()">Add Another Address</a></span>
+                    </div>
+                </div>
+            </form>
+            </div>
+
+
+
+            <h2>Shipping Information</h2>
+
+
+
+
+
+    </div>
+</div>
+
+
+
+
+
+<!-- <div id="page-wrapper">
+    <div class="row">
+        <div class="col-xs-12">
+            <h1 class="heading-font heading-tertiary spacing-top-md spacing-bot-md" ng-bind="account.name.full"></h1>
+            <h4 class="subheading-font heading-secondary italic spacing-top-sm spacing-bot-md"><a ng-href="/admin/accounts">Return to All Accounts</a></h4>
+
+            <div class="row">
+                <div class="col-md-2">
+                    <label class="control-label" for="username">Username:</label>
+                </div>
+                <div ng-hide="identityEditorEnabled">
+                  {{account.user.name}}
+              </div>
+              <div ng-show="identityEditorEnabled">
+                <div class="col-md-6 form-group" ng-class="{'has-error': hasError(identityForm.username)}">
+                    <input type="text" name="username" id="username" class="form-control" ng-model="user.username" required server-error>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-2">
+                <label class="control-label" for="email">Email:</label>
+            </div>
+            <div ng-hide="identityEditorEnabled">
+                {{user.email}}
+            </div>
+            <div ng-show="identityEditorEnabled">
+                <div class="col-md-6 form-group" ng-class="{'has-error': hasError(identityForm.email)}">
+                    <input type="email" name="email" id="email" class="form-control" ng-model="user.email" required server-error>
+                    <span class="help-block" ng-show="showError(identityForm.email, 'email')">Please enter a valid email</span>
+                    <span class="help-block" ng-show="showError(identityForm.email, 'server')">{{errfor.email}}</span>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-2">
+                <label class="control-label" for="first">First Name:</label>
+            </div>
+            <div ng-hide="contactEditorEnabled">
+                {{account.name.first}}
+            </div>
+            <div ng-show="contactEditorEnabled">
+                <div class="col-md-6 form-group" ng-class="{'has-error': hasError(detailForm.first)}">
+                    <input type="text" name="first" id="first" class="form-control" ng-model="account.name.first" required>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-2">
+                <label class="control-label" for="first">Middle Name:</label>
+            </div>
+            <div ng-hide="contactEditorEnabled">
+                {{account.name.middle}}
+            </div>
+            <div ng-show="contactEditorEnabled">
+                <div class="col-md-6 form-group" ng-class="{'has-error': hasError(detailForm.first)}">
+                    <input type="text" name="first" id="first" class="form-control" ng-model="account.name.middle" required>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-2">
+                <label class="control-label" for="last">Last Name:</label>
+            </div>
+            <div ng-hide="contactEditorEnabled">
+                {{account.name.last}}
+            </div>
+            <div ng-show="contactEditorEnabled">
+                <div class="col-md-6 form-group" ng-class="{'has-error': hasError(detailForm.last)}">
+                    <input type="text" name="last" id="last" class="form-control" ng-model="account.name.last" required>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-2">
+                <label class="control-label" for="company">Company Name:</label>
+            </div>
+            <div ng-hide="contactEditorEnabled">
+                {{account.name.company}}
+            </div>
+            <div ng-show="contactEditorEnabled">
+                <div class="col-md-6 form-group" ng-class="{'has-error': hasError(detailForm.company)}">
+                    <input type="text" name="company" id="company" class="form-control" ng-model="account.name.company">
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-2">
+                <label class="control-label" for="phone">Phone:</label>
+            </div>
+            <div ng-hide="contactEditorEnabled">
+                {{account.name.phone}}
+            </div>
+            <div ng-show="contactEditorEnabled">
+                <div class="col-md-6 form-group" ng-class="{'has-error': hasError(detailForm.phone)}">
+                    <input type="text" name="phone" id="phone" class="form-control" ng-model="account.name.phone">
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+-->
+
+
+
+
+
+<!-- <div id="page-wrapper">
+    <div class="row" id="admin-users-detail">
+        <div class="col-xs-12">
+            <div>
+                <h1><a ng-href="/admin/users">Users</a> / {{user.username}}</h1>
+            </div>
+            <form name="identityForm"><fieldset>
+                <legend>Identity</legend>
+                <alert ng-repeat="alert in identityAlerts" type="{{alert.type}}" close="closeIdentityAlert($index)">{{alert.msg}}</alert>
+                <div class="form-group" ng-class="{'has-error': hasError(identityForm.isActive)}">
+                    <label class="control-label" for="isActive">Is Active:</label>
+                    <select name="isActive" id="isActive" class="form-control" ng-model="user.isActive" ng-options="active for active in isActives" server-error></select>
+                    <span class="help-block" ng-show="showError(identityForm.isActive, 'server')">{{errfor.isActive}}</span>
+                </div>
+                <div class="form-group" ng-class="{'has-error': hasError(identityForm.username)}">
+                    <label class="control-label" for="username">Username:</label>
+                    <input type="text" name="username" id="username" class="form-control" ng-model="user.username" required server-error>
+                    <span class="help-block" ng-show="showError(identityForm.username, 'required')">This field is required</span>
+                    <span class="help-block" ng-show="showError(identityForm.username, 'server')">{{errfor.username}}</span>
+                </div>
+                <div class="form-group" ng-class="{'has-error': hasError(identityForm.email)}">
+                    <label class="control-label" for="email">Email:</label>
+                    <input type="email" name="email" id="email" class="form-control" ng-model="user.email" required server-error>
+                    <span class="help-block" ng-show="showError(identityForm.email, 'required')">This field is required</span>
+                    <span class="help-block" ng-show="showError(identityForm.email, 'email')">Please enter a valid email</span>
+                    <span class="help-block" ng-show="showError(identityForm.email, 'server')">{{errfor.email}}</span>
+                </div>
+                <div class="form-group">
+                    <button type="button" class="btn btn-primary" ng-disabled="!canSave(identityForm)" ng-click="updateIdentity()">Update</button>
+                </div>
+            </fieldset></form>
+            <form name="roleForm"><fieldset>
+                <legend>Roles</legend>
+                <alert ng-repeat="alert in roleAlerts" type="{{alert.type}}" close="closeRoleAlert($index)">{{alert.msg}}</alert>
+                <div class="form-group" ng-class="{'has-error': roleForm.newAdminId && hasError(roleForm.newAdminId)}">
+                    <label class="control-label">Admin:</label>
+                     show this div if there is an admin linked to this user 
+                    <div class="input-group" ng-show="user.roles && user.roles.admin">
+                        <input type="text" name="adminId" class="form-control" ng-model="user.roles.admin.name.full" disabled>
+                        <div class="input-group-btn" >
+                            <button type="button" class="btn btn-warning" ng-click="unlinkAdmin()">Unlink</button>
+                            <a type="button" class="btn btn-default" ng-href="/admin/administrators/{{user.roles.admin._id}}">Open</a>
+                        </div>
+                    </div>
+                    show this div if there isn't an admin linked to this user 
+                    <div class="input-group" ng-if="!(user.roles && user.roles.admin)">
+                        <input type="text" name="newAdminId" placeholder="enter admin id" class="form-control" ng-model="role.newAdminId" required>
+                        <div class="input-group-btn">
+                            <button type="button" class="btn btn-success" ng-disabled="!(roleForm.newAdminId.$dirty && roleForm.newAdminId.$valid)" ng-click="linkAdmin()">Link</button>
+                        </div>
+                    </div>
+                    <span class="help-block" ng-if="!(user.roles && user.roles.admin)" ng-show="showError(roleForm.newAdminId, 'required')">This field is required</span>
+                </div>
+                <div class="form-group" ng-class="{'has-error': roleForm.newAccountId && hasError(roleForm.newAccountId)}">
+                    <label class="control-label">Account:</label>
+                    show this div if there is an account linked to this user 
+                    <div class="input-group" ng-show="user.roles && user.roles.account">
+                        <input type="text" name="accountId" class="form-control" ng-model="user.roles.account.name.full" disabled>
+                        <div class="input-group-btn">
+                            <button type="button" class="btn btn-warning" ng-click="unlinkAccount()">Unlink</button>
+                            <a type="button" class="btn btn-default" ng-href="/admin/accounts/{{user.roles.account._id}}">Open</a>
+                        </div>
+                    </div>
+                    show this div if there isn't an account linked to this user 
+                    <div class="input-group" ng-if="!(user.roles && user.roles.account)">
+                        <input type="text" name="newAccountId" placeholder="enter account id" class="form-control" ng-model="role.newAccountId" required>
+                        <div class="input-group-btn">
+                            <button type="button" class="btn btn-success" ng-disabled="!(roleForm.newAccountId.$dirty && roleForm.newAccountId.$valid)" ng-click="linkAccount()">Link</button>
+                        </div>
+                    </div>
+                    <span class="help-block" ng-if="!(user.roles && user.roles.account)" ng-show="showError(roleForm.newAccountId, 'required')">This field is required</span>
+                </div>
+            </fieldset></form>
+            <form name="passwordForm"><fieldset>
+                <legend>Set Password</legend>
+                <alert ng-repeat="alert in passwordAlerts" type="{{alert.type}}" close="closePasswordAlert($index)">{{alert.msg}}</alert>
+                <div class="form-group" ng-class="{'has-error': hasError(passwordForm.password)}">
+                    <label class="control-label" for="password">New Password:</label>
+                    <input type="password" name="password" id="password" class="form-control" ng-model="pass.newPassword" required>
+                    <span class="help-block" ng-show="showError(passwordForm.password, 'required')">This field is required</span>
+                </div>
+                <div class="form-group" ng-class="{'has-error': hasError(passwordForm.confirm)}">
+                    <label class="control-label" for="confirm">Confirm Password:</label>
+                    <input type="password" name="confirm" id="confirm" class="form-control" ng-model="pass.confirm" required>
+                    <span class="help-block" ng-show="showError(passwordForm.confirm, 'required')">This field is required</span>
+                </div>
+                <div class="form-group">
+                    <button type="button" class="btn btn-primary" ng-disabled="!canSave(passwordForm)" ng-click="setPassword()">Set Password</button>
+                </div>
+            </fieldset></form>
+            <form name="deleteForm"><fieldset>
+                <alert ng-repeat="alert in deleteAlerts" type="{{alert.type}}" close="closeDeleteAlert($index)">{{alert.msg}}</alert>
+                <div class="form-group">
+                    <span class="help-block">
+                        <span class="label label-danger">If you do this, it cannot be undone.</span>
+                    </span>
+                </div>
+                <div class="form-group">
+                    <button type="button" class="btn btn-danger" ng-click="deleteUser()">Delete</button>
+                </div>
+            </fieldset></form>
+        </div>
+    </div>
+</div>
+-->
+
+
+
+
+
+
+
+
+<!-- <div class="row">
     <div class="col-xs-12">
         <div class="page-header">
             <h1><a ng-href="/admin/accounts">Accounts</a> / {{account.name.full}}</h1>
@@ -45,7 +420,6 @@
             <alert ng-repeat="alert in loginAlerts" type="{{alert.type}}" close="closeLoginAlert($index)">{{alert.msg}}</alert>
             <div class="form-group" ng-class="{'has-error': loginForm.newUsername && hasError(loginForm.newUsername)}">
                 <label class="control-label">Username:</label>
-                <!-- show this div if there is an user linked to this account -->
                 <div class="input-group" ng-show="account.user && account.user.name">
                     <input type="text" name="username" class="form-control" ng-model="account.user.name" disabled>
                     <div class="input-group-btn" >
@@ -53,7 +427,6 @@
                         <a type="button" class="btn btn-default" ng-href="/admin/users/{{account.user.id}}">Open</a>
                     </div>
                 </div>
-                <!-- show this div if there isn't an user linked to this account -->
                 <div class="input-group" ng-if="!(account.user && account.user.name)">
                     <input type="text" name="newUsername" placeholder="enter a username" class="form-control" ng-model="account.newUsername" required>
                     <div class="input-group-btn">
@@ -83,7 +456,7 @@
                 <alert ng-repeat="alert in statusAlerts" type="{{alert.type}}" close="closeStatusAlert($index)">{{alert.msg}}</alert>
                 <div class="input-group">
                     <select name="statusSelect" class="form-control" ng-model="selectedStatus" ng-options="status.name for status in statuses track by status._id">
-                        <option value="">-- choose --</option>
+                        <option value=""> choose </option>
                     </select>
                     <div class="input-group-btn">
                         <button class="btn btn-default" ng-click="changeStatus()">Change</button>
@@ -115,4 +488,4 @@
             </div>
         </fieldset>
     </div>
-</div>
+</div> -->

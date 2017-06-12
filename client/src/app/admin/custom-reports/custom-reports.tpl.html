@@ -1,0 +1,25 @@
+
+<h2>Basic with Table Tools</h2>
+</header>
+<div class="panel-body">
+	<table table-directive class="hover stripe dtable" mb-none"" id="user_table">
+		<thead>
+			<tr>
+				<th>Username</th>
+				<th>Name</th>
+				<th>Company</th>
+				<th>Number of Purchases</th>
+				<th>Total Purchase Amount</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr ng-repeat="account in accounts" ng-click="goToAccount();">
+				<td class="nowrap" ng-bind="account.user.name"></td>
+				<td class="nowrap" ng-bind="account.name.full"></td>
+				<td class="nowrap" ng-bind="account.company"></td>
+				<td class="nowrap" ng-bind="account.purchaseHistoryLog.length"></td>
+				<td class="nowrap"></td>
+			</tr>
+		</tbody>
+	</table>
+</div>

@@ -1,32 +1,32 @@
 angular.module('admin.activity', ['ngRoute', 'security.authorization', 'services.adminResource', 'angular.morris', 'chart.js']);
 angular.module('admin.activity').config(['$routeProvider', function($routeProvider){
   $routeProvider
-    .when('/admin/activity', {
-      templateUrl: 'admin/activity/activity.tpl.html',
-      controller: 'ActivityCtrl',
-      title: 'Activity',
-      resolve: {
-        stats: ['$q', '$location', 'securityAuthorization', 'adminResource', function($q, $location, securityAuthorization, adminResource){
+  .when('/admin/activity', {
+    templateUrl: 'admin/activity/activity.tpl.html',
+    controller: 'ActivityCtrl',
+    title: 'Activity',
+    resolve: {
+      stats: ['$q', '$location', 'securityAuthorization', 'adminResource', function($q, $location, securityAuthorization, adminResource){
           //get app stats only for admin-user, otherwise redirect to /account
           var redirectUrl;
           var promise = securityAuthorization.requireAdminUser()
-            .then(adminResource.getStats, function(reason){
+          .then(adminResource.getStats, function(reason){
               //rejected either user is un-authorized or un-authenticated
               redirectUrl = reason === 'unauthorized-client'? '/account': '/login';
               return $q.reject();
             })
-            .catch(function(){
-              redirectUrl = redirectUrl || '/account';
-              $location.path(redirectUrl);
-              return $q.reject();
-            });
+          .catch(function(){
+            redirectUrl = redirectUrl || '/account';
+            $location.path(redirectUrl);
+            return $q.reject();
+          });
           return promise;
         }],
         viewCount: ['$q', '$location', '$log', 'securityAuthorization', 'adminResource', function($q, $location, $log, securityAuthorization, adminResource){
           //get app stats only for admin-user, otherwise redirect to /account
           var redirectUrl;
           var promise = securityAuthorization.requireAdminUser()
-            .then(function(){
+          .then(function(){
               //handles url with query(search) parameter
               return adminResource.getRecentViewCount();
             }, function(reason){
@@ -34,19 +34,19 @@ angular.module('admin.activity').config(['$routeProvider', function($routeProvid
               redirectUrl = reason === 'unauthorized-client'? '/account': '/login';
               return $q.reject();
             })
-            .catch(function(){
-              redirectUrl = redirectUrl || '/account';
-              $location.search({});
-              $location.path(redirectUrl);
-              return $q.reject();
-            });
+          .catch(function(){
+            redirectUrl = redirectUrl || '/account';
+            $location.search({});
+            $location.path(redirectUrl);
+            return $q.reject();
+          });
           return promise;
         }],
         tally: ['$q', '$location', '$log', 'securityAuthorization', 'adminResource', function($q, $location, $log, securityAuthorization, adminResource){
           //get app stats only for admin-user, otherwise redirect to /account
           var redirectUrl;
           var promise = securityAuthorization.requireAdminUser()
-            .then(function(){
+          .then(function(){
               //handles url with query(search) parameter
               return adminResource.tallyPHs();
             }, function(reason){
@@ -54,19 +54,19 @@ angular.module('admin.activity').config(['$routeProvider', function($routeProvid
               redirectUrl = reason === 'unauthorized-client'? '/account': '/login';
               return $q.reject();
             })
-            .catch(function(){
-              redirectUrl = redirectUrl || '/account';
-              $location.search({});
-              $location.path(redirectUrl);
-              return $q.reject();
-            });
+          .catch(function(){
+            redirectUrl = redirectUrl || '/account';
+            $location.search({});
+            $location.path(redirectUrl);
+            return $q.reject();
+          });
           return promise;
         }],
         phList: ['$q', '$location', '$log', 'securityAuthorization', 'adminResource', function($q, $location, $log, securityAuthorization, adminResource){
           //get app stats only for admin-user, otherwise redirect to /account
           var redirectUrl;
           var promise = securityAuthorization.requireAdminUser()
-            .then(function(){
+          .then(function(){
               //handles url with query(search) parameter
               return adminResource.findAllPH($location.search());
             }, function(reason){
@@ -74,12 +74,12 @@ angular.module('admin.activity').config(['$routeProvider', function($routeProvid
               redirectUrl = reason === 'unauthorized-client'? '/account': '/login';
               return $q.reject();
             })
-            .catch(function(){
-              redirectUrl = redirectUrl || '/account';
-              $location.search({});
-              $location.path(redirectUrl);
-              return $q.reject();
-            });
+          .catch(function(){
+            redirectUrl = redirectUrl || '/account';
+            $location.search({});
+            $location.path(redirectUrl);
+            return $q.reject();
+          });
           return promise;
         }]
       }
@@ -114,32 +114,32 @@ angular.module('admin.activity').controller('ActivityCtrl', ['$scope', '$log', '
     
     var yearInfo = function(tallyYear){
 
-          $scope.tallyYear = [];
-          $scope.totalYear = []; 
+      $scope.tallyYear = [];
+      $scope.totalYear = []; 
 
-          var currentDate = new Date();
-          var currentYear = currentDate.getFullYear();
+      var currentDate = new Date();
+      var currentYear = currentDate.getFullYear();
 
-          var i;
-          var n = currentYear-2015;
+      var i;
+      var n = currentYear-2015;
 
-          for(i=0;i<n;i++){
-            $scope.tallyYear.push(0);
-            $scope.totalYear.push(0);
-          }
+      for(i=0;i<n;i++){
+        $scope.tallyYear.push(0);
+        $scope.totalYear.push(0);
+      }
 
-          for(var yr in tallyYear){
-            var year = tallyYear[yr].year;
-            var n = year - 2015;
+      for(var yr in tallyYear){
+        var year = tallyYear[yr].year;
+        var n = year - 2015;
 
-            $scope.tallyYear[n]++;
-            $scope.totalYear[n]+=tallyYear[yr].total;
+        $scope.tallyYear[n]++;
+        $scope.totalYear[n]+=tallyYear[yr].total;
 
-          }
+      }
 
-        monthInfo($scope.graphData);
-          
-        };
+      monthInfo($scope.graphData);
+      
+    };
     var monthInfo = function(tallyMonth){
 
       $scope.tallyMonth = [0,0,0,0,0,0,0,0,0,0,0,0];
@@ -188,7 +188,7 @@ angular.module('admin.activity').controller('ActivityCtrl', ['$scope', '$log', '
       for(var d in tallyDay){
 
         var currentDate = new Date(tallyDay[d].year, (tallyDay[d].month-1), tallyDay[d].day,0,0,0,0);
- 
+        
         var ts = new TimeSpan(currentDate-cutOff);
 
         var n = ts.days - 1;
@@ -203,106 +203,106 @@ angular.module('admin.activity').controller('ActivityCtrl', ['$scope', '$log', '
 
 
     var viewData = function(viewCount){
-         $scope.viewDataDates = []; 
-         $scope.homeViewCounts = []; 
-         $scope.cartViewCounts = []; 
+     $scope.viewDataDates = []; 
+     $scope.homeViewCounts = []; 
+     $scope.cartViewCounts = []; 
 
-         $scope.homeViewYear = [];
-         $scope.cartViewYear = [];
+     $scope.homeViewYear = [];
+     $scope.cartViewYear = [];
 
-         $scope.homeViewMonth = [0,0,0,0,0,0,0,0,0,0,0,0];
-         $scope.cartViewMonth = [0,0,0,0,0,0,0,0,0,0,0,0];
+     $scope.homeViewMonth = [0,0,0,0,0,0,0,0,0,0,0,0];
+     $scope.cartViewMonth = [0,0,0,0,0,0,0,0,0,0,0,0];
 
-         $scope.homeView30Day = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
-         $scope.cartView30Day = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
+     $scope.homeView30Day = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
+     $scope.cartView30Day = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
 
-         var cutOff = Date.today().add(-30).days();
+     var cutOff = Date.today().add(-30).days();
 
-         angular.forEach(viewCount, function(view, key) {
-            $scope.viewDataDates.push(view.date);
-            $scope.homeViewCounts.push(view.homePageViews);
-            $scope.cartViewCounts.push(view.cartViews);
+     angular.forEach(viewCount, function(view, key) {
+      $scope.viewDataDates.push(view.date);
+      $scope.homeViewCounts.push(view.homePageViews);
+      $scope.cartViewCounts.push(view.cartViews);
 
-            var viewDate = new Date(view.date);
+      var viewDate = new Date(view.date);
 
-            var ts = new TimeSpan(viewDate-cutOff);
-            var n = ts.days - 1;
-            if(n > 0 && n < 30){
-              var f = 30-n;
-              $scope.homeView30Day[n]+=view.homePageViews;
-              $scope.cartView30Day[n]+=view.cartViews;
-            }
-
-            var mon = viewDate.getMonth();
-            var n = mon;
-
-            if(view.homePageViews)
-            $scope.homeViewMonth[n]+=view.homePageViews;
-            
-            if(view.cartViews)
-            $scope.cartViewMonth[n]+=view.cartViews;
-
-
-         });
-
-          var currentDate = new Date();
-          var currentYear = currentDate.getFullYear();
-
-          var i;
-          var n = currentYear-2015;
-
-          for(i=0;i<n;i++){
-            $scope.homeViewYear.push(0);
-            $scope.cartViewYear.push(0);
-          }
-
-          for(var view in viewCount){
-            var viewDate = new Date(view.date);
-            var year = viewDate.getFullYear();
-            var n = year - 2015;
-
-            $scope.homeViewYear[n]+=view.homePageViews;
-            $scope.cartViewYear[n]+=view.cartViews;
-
-          }
-
-      };
-
-
-
-    var dataToVariables = function(tally){
-      var graphData = []; 
-
-      for(var tal in tally){
-        var entry = {
-          day : tally[tal]._id.day,
-          month : tally[tal]._id.month,
-          year : tally[tal]._id.year,
-          total : tally[tal].total
-        }
-
-        graphData.push(entry);
+      var ts = new TimeSpan(viewDate-cutOff);
+      var n = ts.days - 1;
+      if(n > 0 && n < 30){
+        var f = 30-n;
+        $scope.homeView30Day[n]+=view.homePageViews || 0;
+        $scope.cartView30Day[n]+=view.cartViews || 0;
       }
 
-      $scope.graphData = graphData;
-      yearInfo($scope.graphData);
+      var mon = viewDate.getMonth();
+      var n = mon;
 
-    };
+      if(view.homePageViews)
+        $scope.homeViewMonth[n]+=view.homePageViews || 0;
+      
+      if(view.cartViews)
+        $scope.cartViewMonth[n]+=view.cartViews || 0;
 
 
-    deserializeData(phData, tally, viewCount);
+    });
+
+     var currentDate = new Date();
+     var currentYear = currentDate.getFullYear();
+
+     var i;
+     var n = currentYear-2015;
+
+     for(i=0;i<n;i++){
+      $scope.homeViewYear.push(0);
+      $scope.cartViewYear.push(0);
+    }
+
+    for(var view in viewCount){
+      var viewDate = new Date(view.date);
+      var year = viewDate.getFullYear();
+      var n = year - 2015;
+
+      $scope.homeViewYear[n]+=view.homePageViews || 0;
+      $scope.cartViewYear[n]+=view.cartViews || 0;
+
+    }
+
+  };
+
+
+
+  var dataToVariables = function(tally){
+    var graphData = []; 
+
+    for(var tal in tally){
+      var entry = {
+        day : tally[tal]._id.day,
+        month : tally[tal]._id.month,
+        year : tally[tal]._id.year,
+        total : tally[tal].total
+      }
+
+      graphData.push(entry);
+    }
+
+    $scope.graphData = graphData;
+    yearInfo($scope.graphData);
+
+  };
+
+
+  deserializeData(phData, tally, viewCount);
 
 
 //GRAPH INFORMATION
 
 $scope.labels = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-    
-    $scope.yearLabels = ["2015", "2016", "2017"];
 
-    $scope.data = [
-    65, 59, 80, 81, 56, 55, 40
-    ];
-    $scope.onClick = function (points, evt) {
+$scope.yearLabels = ["2015", "2016", "2017"];
+
+$scope.data = [
+65, 59, 80, 81, 56, 55, 40
+];
+$scope.onClick = function (points, evt) {
       //console.log(points, evt);
     };
     
@@ -427,7 +427,6 @@ $scope.labels = ["January", "February", "March", "April", "May", "June", "July",
           scaleSteps : 1,
           ticks: {
             suggestedMax: 10,
-            min: 0,
             stepSize: 1
           },
           scaleLabel: {
@@ -449,7 +448,6 @@ $scope.labels = ["January", "February", "March", "April", "May", "June", "July",
           scaleSteps : 1,
           ticks: {
             suggestedMax: 1000,
-            min: 0,
             stepSize: 200
           },
           scaleLabel: {
@@ -466,8 +464,8 @@ $scope.labels = ["January", "February", "March", "April", "May", "June", "July",
 
     $scope.series = ['Series A', 'Series B'];
     $scope.sizeQuantityData = [
-      $scope.tallyMonth,
-      $scope.avgMonthSaleSize
+    $scope.tallyMonth,
+    $scope.avgMonthSaleSize
     ];
 
     $scope.datasetOverride = [{ yAxisID: 'y-axis-1' }, { yAxisID: 'y-axis-2' }];
@@ -507,12 +505,5 @@ $scope.labels = ["January", "February", "March", "April", "May", "June", "July",
         ]
       }
     }
-
-    // $scope.homePageViewData = [
-    //   $scope.thirtyDayInfo,
-    //   $scope.viewRecent.homePageViewData
-    // ];
-
-
 
   }]);

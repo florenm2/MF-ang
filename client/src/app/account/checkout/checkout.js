@@ -134,7 +134,7 @@ angular.module('account.checkout').controller('CheckoutLoggedInCtrl', [ '$scope'
     }
 
     $scope.purchaseInformation = {
-      orderNumber: 22,
+      orderNumber: new Date().valueOf(),
       product: $scope.productinfo,
       //billingAddress: $scope.billingAddress,
       //mailingAddress: $scope.mailingAddress,
