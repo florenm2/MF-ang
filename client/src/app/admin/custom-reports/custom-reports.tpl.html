@@ -1,7 +1,12 @@
-
-<h2>Basic with Table Tools</h2>
+<h2>Custom Reports</h2>
 </header>
-<div class="panel-body">
+<button ng-click="toggleData('accounts')">Accounts</button>
+<button ng-click="toggleData('purchases')">Purchases</button>
+<button>Accounts</button>
+
+
+<div >
+	<h2>Accounts</h2>
 	<table table-directive class="hover stripe dtable" mb-none"" id="user_table">
 		<thead>
 			<tr>
@@ -23,3 +28,32 @@
 		</tbody>
 	</table>
 </div>
+<!-- 
+<div ng-show="graphData=='purchases'">
+	<h2>Purchases</h2>
+	<table table-directive="purchaseTable" class="hover stripe dtable" mb-none"" id="user_table">
+		<thead>
+			<tr>
+				<th>Date</th>
+				<th>Company</th>
+				<th>Customer</th>
+				<th>Shipping State</th>
+				<th># Purchases</th>
+				<th>Purchase Amount</th>
+				<th>Transaction ID</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr ng-repeat="ph in phList" ng-click="goToPH();">
+				<td>{{ph.orderDate | date:"MM/dd/yyyy"}}</td>
+				<td ng-bind="ph.company"></td>
+				<td ng-bind="ph.user.name"></td>
+				<td ng-bind="ph.user._id"></td>
+				<td></td>
+				<td>${{ph.cost.total}}</td>
+				<td ng-bind="ph.orderNumber"></td>
+			</tr>
+		</table>
+	</div> -->
+
+

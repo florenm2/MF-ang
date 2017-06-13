@@ -2810,9 +2810,15 @@ angular.module("admin/administrators/admin-administrators.tpl.html", []).run(["$
 
 angular.module("admin/custom-reports/custom-reports.tpl.html", []).run(["$templateCache", function($templateCache) {
   $templateCache.put("admin/custom-reports/custom-reports.tpl.html",
-    "<h2>Basic with Table Tools</h2>\n" +
+    "<h2>Custom Reports</h2>\n" +
     "</header>\n" +
-    "<div class=\"panel-body\">\n" +
+    "<button ng-click=\"toggleData('accounts')\">Accounts</button>\n" +
+    "<button ng-click=\"toggleData('purchases')\">Purchases</button>\n" +
+    "<button>Accounts</button>\n" +
+    "\n" +
+    "\n" +
+    "<div >\n" +
+    "	<h2>Accounts</h2>\n" +
     "	<table table-directive class=\"hover stripe dtable\" mb-none\"\" id=\"user_table\">\n" +
     "		<thead>\n" +
     "			<tr>\n" +
@@ -2834,6 +2840,35 @@ angular.module("admin/custom-reports/custom-reports.tpl.html", []).run(["$templa
     "		</tbody>\n" +
     "	</table>\n" +
     "</div>\n" +
+    "<!-- \n" +
+    "<div ng-show=\"graphData=='purchases'\">\n" +
+    "	<h2>Purchases</h2>\n" +
+    "	<table table-directive=\"purchaseTable\" class=\"hover stripe dtable\" mb-none\"\" id=\"user_table\">\n" +
+    "		<thead>\n" +
+    "			<tr>\n" +
+    "				<th>Date</th>\n" +
+    "				<th>Company</th>\n" +
+    "				<th>Customer</th>\n" +
+    "				<th>Shipping State</th>\n" +
+    "				<th># Purchases</th>\n" +
+    "				<th>Purchase Amount</th>\n" +
+    "				<th>Transaction ID</th>\n" +
+    "			</tr>\n" +
+    "		</thead>\n" +
+    "		<tbody>\n" +
+    "			<tr ng-repeat=\"ph in phList\" ng-click=\"goToPH();\">\n" +
+    "				<td>{{ph.orderDate | date:\"MM/dd/yyyy\"}}</td>\n" +
+    "				<td ng-bind=\"ph.company\"></td>\n" +
+    "				<td ng-bind=\"ph.user.name\"></td>\n" +
+    "				<td ng-bind=\"ph.user._id\"></td>\n" +
+    "				<td></td>\n" +
+    "				<td>${{ph.cost.total}}</td>\n" +
+    "				<td ng-bind=\"ph.orderNumber\"></td>\n" +
+    "			</tr>\n" +
+    "		</table>\n" +
+    "	</div> -->\n" +
+    "\n" +
+    "\n" +
     "");
 }]);
 

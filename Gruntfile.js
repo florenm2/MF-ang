@@ -235,8 +235,8 @@ module.exports = function(grunt) {
             src: ['jquery.dataTables.js'], dest: '<%= distdir %>/vendor/'
           },
           {
-            expand: true, cwd: 'client/bower_components/datatables.net/js/',
-            src: ['dataTables.buttons.js'], dest: '<%= distdir %>/vendor/'
+            expand: true, cwd: 'client/bower_components/datatables.net-buttons/js/',
+            src: ['dataTables.buttons.min.js'], dest: '<%= distdir %>/vendor/'
           },
           {
             expand: true, cwd: 'client/src/vendor/DataTables/',

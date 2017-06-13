@@ -4820,25 +4820,54 @@ angular.module('admin.custom-reports').config(['$routeProvider', function($route
             return $q.reject();
           });
           return promise;
+        }],
+        phList: ['$q', '$location', '$log', 'securityAuthorization', 'adminResource', function($q, $location, $log, securityAuthorization, adminResource){
+          //get app stats only for admin-user, otherwise redirect to /account
+          var redirectUrl;
+          var promise = securityAuthorization.requireAdminUser()
+          .then(function(){
+              //handles url with query(search) parameter
+              return adminResource.findAllPH($location.search());
+            }, function(reason){
+              //rejected either user is un-authorized or un-authenticated
+              redirectUrl = reason === 'unauthorized-client'? '/account': '/login';
+              return $q.reject();
+            })
+          .catch(function(){
+            redirectUrl = redirectUrl || '/account';
+            $location.search({});
+            $location.path(redirectUrl);
+            return $q.reject();
+          });
+          return promise;
         }]
       }
     })
 }]);
-angular.module('admin.custom-reports').controller('CustomReportCtrl', ['$scope', '$log', 'stats', 'viewCount', 'adminResource', 'accounts', '$http', '$q', '$timeout',
-  function($scope, $log, stats, viewCount, adminResource, data, $http, $q, $timeout){
+angular.module('admin.custom-reports').controller('CustomReportCtrl', ['$scope', '$log', 'stats', 'viewCount', 'adminResource', 'accounts', '$http', '$q', '$timeout', 'phList',
+  function($scope, $log, stats, viewCount, adminResource, accountData, $http, $q, $timeout, phList){
+
+    $scope.graphData = 'purchases';
 
 
+    //$scope.graphData = [];
+
+    console.log(phList)
      // local var
-     console.log(data);
-     var deserializeData = function(data){
+     var deserializeData = function(data, ph){
       var results = data.results;
       $scope.statuses = data.statuses;
       $scope.items = results.items;
       $scope.pages = results.pages;
       $scope.filters = results.filters;
       $scope.accounts = results.data;
-      console.log($scope.accounts);
+      $scope.phList = ph.data;
+
     };
+
+
+
+
 
 
     var fetchAccounts = function(){
@@ -4913,7 +4942,7 @@ angular.module('admin.custom-reports').controller('CustomReportCtrl', ['$scope',
 
 
     //initialize $scope variables
-    deserializeData(data);
+    deserializeData(accountData, phList);
     // $('#datatable-tabletools').DataTable( {
     //   dom: 'Bfrtip',
     //   buttons: [
@@ -4938,7 +4967,7 @@ angular.module('admin.custom-reports').controller('CustomReportCtrl', ['$scope',
    //   dTable.DataTable();
    // });
 
-    
+
 
 
     // angular.element(document).ready( function () {
@@ -5022,22 +5051,125 @@ angular.module('admin.custom-reports').controller('CustomReportCtrl', ['$scope',
   };
 
 
-
-
 }])
+
+
+
+
+// .directive('tableDirective', function () {
+//   return {
+//     restrict: 'E, A, C',
+//     link: function (scope, element, attrs, controller) {
+//       var dataTable = element.dataTable({
+//         bJQueryUI: true,
+//         //bDestroy: true,
+//         bRetrieve: true,
+//         dom: 'Bfrtip',
+//         buttons:true
+//       });
+
+//       scope.$watch('graphData', handleModelUpdates, true);
+
+//       function handleModelUpdates(newData) {
+//         var data = newData || null;
+//         if (data) {
+//           dataTable.fnClearTable();
+//           dataTable.fnAddData(data);
+//           dataTable.fnAdjustColumnSizing();
+//           dataTable.fnResizeButtons();
+//         }
+//       }
+//     },
+//     scope: {
+//       options: "="
+//     }
+//   };
+// });
+
+
 
 .directive('tableDirective', function() {
   return {
     // angular passes the element reference to you
     compile: function(element) {
       $(element).DataTable({
-      dom: 'Bfrtip',
-      buttons: true
-    });
-      
+        dom: 'Bfrtip',
+        buttons: ['columnsToggle',
+        'colvis',
+        'pdf',
+        'print',
+        'excel'],
+        bRetrieve:true
+      });
+
     }
   }
-});
+})
+
+
+
+
+
+// .directive('tableDirective', function() {
+//   return function(scope, element, attrs) {
+
+//             // apply DataTable options, use defaults if none specified by user
+//             var options = {};
+//             if (attrs.tableDirective.length > 0) {
+//               options = scope.$eval(attrs.tableDirective);
+//             } else {
+//               options = {
+//                 "bStateSave": true,
+//                 "iCookieDuration": 2419200, /* 1 month */
+//                 "bJQueryUI": true,
+//                 "bPaginate": false,
+//                 "bLengthChange": false,
+//                 "bFilter": false,
+//                 "bInfo": false,
+//                 "bDestroy": true
+//               };
+//             }
+
+//             // Tell the dataTables plugin what columns to use
+//             // We can either derive them from the dom, or use setup from the controller           
+//             var explicitColumns = [];
+//             element.find('th').each(function(index, elem) {
+//               explicitColumns.push($(elem).text());
+//             });
+//             if (explicitColumns.length > 0) {
+//               options["aoColumns"] = explicitColumns;
+//             } else if (attrs.aoColumns) {
+//               options["aoColumns"] = scope.$eval(attrs.aoColumns);
+//             }
+
+//             // aoColumnDefs is dataTables way of providing fine control over column config
+//             if (attrs.aoColumnDefs) {
+//               options["aoColumnDefs"] = scope.$eval(attrs.aoColumnDefs);
+//             }
+
+//             if (attrs.fnRowCallback) {
+//               options["fnRowCallback"] = scope.$eval(attrs.fnRowCallback);
+//             }
+
+//             // apply the plugin
+//             var dataTable = element.dataTable(options);
+
+
+
+//             // watch for any changes to our data, rebuild the DataTable
+//             scope.$watch(attrs.aaData, function(value) {
+//               var val = value || null;
+//               if (val) {
+//                 dataTable.fnClearTable();
+//                 dataTable.fnAddData(scope.$eval(attrs.aaData));
+//               }
+//             });
+//           };
+//         });
+
+
+
+
 angular.module('admin.developers', ['ngRoute', 'security.authorization', 'services.adminResource', 'angular.morris', 'chart.js']);
 angular.module('admin.developers').config(['$routeProvider', function($routeProvider){
   $routeProvider
@@ -11402,9 +11534,15 @@ angular.module("admin/administrators/admin-administrators.tpl.html", []).run(["$
 
 angular.module("admin/custom-reports/custom-reports.tpl.html", []).run(["$templateCache", function($templateCache) {
   $templateCache.put("admin/custom-reports/custom-reports.tpl.html",
-    "<h2>Basic with Table Tools</h2>\n" +
+    "<h2>Custom Reports</h2>\n" +
     "</header>\n" +
-    "<div class=\"panel-body\">\n" +
+    "<button ng-click=\"toggleData('accounts')\">Accounts</button>\n" +
+    "<button ng-click=\"toggleData('purchases')\">Purchases</button>\n" +
+    "<button>Accounts</button>\n" +
+    "\n" +
+    "\n" +
+    "<div >\n" +
+    "	<h2>Accounts</h2>\n" +
     "	<table table-directive class=\"hover stripe dtable\" mb-none\"\" id=\"user_table\">\n" +
     "		<thead>\n" +
     "			<tr>\n" +
@@ -11426,6 +11564,35 @@ angular.module("admin/custom-reports/custom-reports.tpl.html", []).run(["$templa
     "		</tbody>\n" +
     "	</table>\n" +
     "</div>\n" +
+    "<!-- \n" +
+    "<div ng-show=\"graphData=='purchases'\">\n" +
+    "	<h2>Purchases</h2>\n" +
+    "	<table table-directive=\"purchaseTable\" class=\"hover stripe dtable\" mb-none\"\" id=\"user_table\">\n" +
+    "		<thead>\n" +
+    "			<tr>\n" +
+    "				<th>Date</th>\n" +
+    "				<th>Company</th>\n" +
+    "				<th>Customer</th>\n" +
+    "				<th>Shipping State</th>\n" +
+    "				<th># Purchases</th>\n" +
+    "				<th>Purchase Amount</th>\n" +
+    "				<th>Transaction ID</th>\n" +
+    "			</tr>\n" +
+    "		</thead>\n" +
+    "		<tbody>\n" +
+    "			<tr ng-repeat=\"ph in phList\" ng-click=\"goToPH();\">\n" +
+    "				<td>{{ph.orderDate | date:\"MM/dd/yyyy\"}}</td>\n" +
+    "				<td ng-bind=\"ph.company\"></td>\n" +
+    "				<td ng-bind=\"ph.user.name\"></td>\n" +
+    "				<td ng-bind=\"ph.user._id\"></td>\n" +
+    "				<td></td>\n" +
+    "				<td>${{ph.cost.total}}</td>\n" +
+    "				<td ng-bind=\"ph.orderNumber\"></td>\n" +
+    "			</tr>\n" +
+    "		</table>\n" +
+    "	</div> -->\n" +
+    "\n" +
+    "\n" +
     "");
 }]);
 
