@@ -6783,6 +6783,14 @@ angular.module('base').controller('SidebarCtrl', ['$scope', '$location', 'securi
     $scope.toggleSidenav = function(menuId) {
       $mdSidenav(menuId).toggle();
     };
+    $scope.openNav = function(){
+      document.getElementById("mySidenav").style.width = "250px";
+      // document.getElementById("mySidenav").style.marginLeft = "250px";
+    };
+    $scope.closeNav = function(){
+      document.getElementById("mySidenav").style.width = "0";
+      // document.getElementById("mySidenav").style.marginLeft= "0";
+    };
   }
 ]);
 angular.module('base').controller('AdminHeaderCtrl' ,['$scope', 'adminResource', 'accountResource', 'accountInfo', 'security',
@@ -14213,7 +14221,7 @@ angular.module("sidebar.tpl.html", []).run(["$templateCache", function($template
     "</md-content>\n" +
     "</aside> -->\n" +
     "\n" +
-    "\n" +
+    "<!-- \n" +
     "<aside ng-controller=\"SidebarCtrl\" flex layout=\"row\">\n" +
     "    <md-sidenav hl-sticky=\"\" flex=\"15\" md-is-locked-open=\"true\" class=\"md-whiteframe-4dp\">\n" +
     "        <md-content flex layout=\"column\">\n" +
@@ -14251,8 +14259,129 @@ angular.module("sidebar.tpl.html", []).run(["$templateCache", function($template
     "            </div>\n" +
     "        </md-content>\n" +
     "    </md-sidenav>\n" +
-    "</aside>\n" +
-    "");
+    "</aside> -->\n" +
+    "\n" +
+    "\n" +
+    "\n" +
+    "<div ng-controller=\"SidebarCtrl\">\n" +
+    "    <head>\n" +
+    "        <style>\n" +
+    "            body {\n" +
+    "                font-family: \"Lato\", sans-serif;\n" +
+    "            }\n" +
+    "\n" +
+    "            .sidenav {\n" +
+    "                height: 100%;\n" +
+    "                position: fixed;\n" +
+    "                z-index: 1;\n" +
+    "                top: 0;\n" +
+    "                left: 0;\n" +
+    "                background-color: #ffffff;\n" +
+    "                overflow-x: hidden;\n" +
+    "                transition: 0.5s;\n" +
+    "                padding-top: 60px;\n" +
+    "            }\n" +
+    "\n" +
+    "            .sidenav a {\n" +
+    "                padding: 8px 8px 8px 32px;\n" +
+    "                text-decoration: none;\n" +
+    "                font-size: 25px;\n" +
+    "                color: #9776;\n" +
+    "                display: block;\n" +
+    "                transition: 0.3s;\n" +
+    "            }\n" +
+    "\n" +
+    "            .sidenav a:hover, .offcanvas a:focus{\n" +
+    "                background-color: lightgrey;\n" +
+    "            }\n" +
+    "\n" +
+    "            .sidenavbig {\n" +
+    "                height: 100%;\n" +
+    "                position: fixed;\n" +
+    "                z-index: 1;\n" +
+    "                top: 0;\n" +
+    "                left: 0;\n" +
+    "                background-color: #ffffff;\n" +
+    "                overflow-x: hidden;\n" +
+    "                transition: 0.5s;\n" +
+    "                padding-top: 60px;\n" +
+    "            }\n" +
+    "\n" +
+    "            .sidenavbig a {\n" +
+    "                padding: 8px 8px 8px 32px;\n" +
+    "                text-decoration: none;\n" +
+    "                font-size: 25px;\n" +
+    "                color: #9776;\n" +
+    "                display: block;\n" +
+    "                transition: 0.3s;\n" +
+    "            }\n" +
+    "\n" +
+    "            .sidenavbig a:hover, .offcanvas a:focus{\n" +
+    "                background-color: lightgrey;\n" +
+    "            }\n" +
+    "\n" +
+    "            .sidenav .closebtn {\n" +
+    "                text-align: right;\n" +
+    "                font-size: 36px;\n" +
+    "                padding: 0px 0px 0px 0px;\n" +
+    "                cursor: pointer;\n" +
+    "            }\n" +
+    "\n" +
+    "            @media screen and (max-height: 450px) {\n" +
+    "                .sidenav {padding-top: 15px;}\n" +
+    "                .sidenav a {font-size: 18px;}\n" +
+    "                .sidenavbig {padding-top: 15px;}\n" +
+    "                .sidenavbig a {font-size: 18px;}\n" +
+    "            }\n" +
+    "\n" +
+    "            @media screen and (min-width: 1650px) {\n" +
+    "                .sidenavbig {width: 250px;}\n" +
+    "                .sidenav {width: 0;}\n" +
+    "                .sidenav .closebtn {display: none;}\n" +
+    "            }\n" +
+    "\n" +
+    "            @media screen and (max-width: 1650px) {\n" +
+    "                .sidenavbig {width: 0;}\n" +
+    "                .sidenav {width: 0;}\n" +
+    "            }\n" +
+    "\n" +
+    "            @media screen and (max-width: 768px) {\n" +
+    "                .sidenav {padding-top: 100px;}\n" +
+    "            }\n" +
+    "        </style>\n" +
+    "    </head>\n" +
+    "\n" +
+    "    <body>\n" +
+    "\n" +
+    "        <div ng-if=\"isAdmin()\">\n" +
+    "            <!-- What shows when it is full screen (Needed so that it reappears even when mobile sidenav is closed) -->\n" +
+    "            <div id=\"mySidenavbig\" class=\"sidenavbig\">\n" +
+    "                <a href=\"/admin\">Dashboard</a>\n" +
+    "                <a href=\"/admin/activity\">Activity</a>\n" +
+    "                <a href=\"/admin/sales\">Sales</a>\n" +
+    "                <a href=\"/admin/purchase-history\">Purchase History</a>\n" +
+    "                <a href=\"/admin/users\">User Info</a>\n" +
+    "                <a href=\"/admin/developers\">Developers</a>\n" +
+    "                <a href=\"/admin/pricing\">Pricing</a>\n" +
+    "                <a href=\"\" ng-click=\"logout()\">Sign Out</a>\n" +
+    "            </div>\n" +
+    "            <!-- What shows when screen becomes too small -->\n" +
+    "            <div id=\"mySidenav\" class=\"sidenav\">\n" +
+    "                <a href=\"javascript:void(0)\" class=\"closebtn\" ng-click=\"closeNav()\">&times;</a>\n" +
+    "                <a href=\"/admin\">Dashboard</a>\n" +
+    "                <a href=\"/admin/activity\">Activity</a>\n" +
+    "                <a href=\"/admin/sales\">Sales</a>\n" +
+    "                <a href=\"/admin/purchase-history\">Purchase History</a>\n" +
+    "                <a href=\"/admin/users\">User Info</a>\n" +
+    "                <a href=\"/admin/developers\">Developers</a>\n" +
+    "                <a href=\"/admin/pricing\">Pricing</a>\n" +
+    "                <a href=\"\" ng-click=\"logout()\">Sign Out</a>\n" +
+    "            </div>\n" +
+    "\n" +
+    "            <span style=\"font-size:30px;cursor:pointer\" ng-click=\"openNav()\">&#9776; Menu</span>\n" +
+    "        </div>\n" +
+    "    </body>\n" +
+    "</div>");
 }]);
 
 angular.module("signup/signup.tpl.html", []).run(["$templateCache", function($templateCache) {
