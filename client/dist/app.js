@@ -352,6 +352,10 @@ angular.module('security.authorization', ['security.service', 'config'])
     return securityAuthorization.requireAdminUser();
   }],
 
+  requireDeveloper: ['securityAuthorization', function(securityAuthorization) {
+    return securityAuthorization.requireDeveloper();
+  }],
+
   requireAuthenticatedUser: ['securityAuthorization', function(securityAuthorization) {
     return securityAuthorization.requireAuthenticatedUser();
   }],
@@ -398,6 +402,17 @@ angular.module('security.authorization', ['security.service', 'config'])
           if ( !security.isAuthenticated() ) {
             return queue.pushRetryFn('unauthenticated-client', service.requireAdminUser);
           }else if( !security.isAdmin() ){
+            return $q.reject('unauthorized-client');
+          }
+        });
+        return promise;
+      },
+
+      requireDeveloper: function() {
+        var promise = security.requestCurrentUser().then(function(userInfo) {
+          if ( !security.isAuthenticated() ) {
+            return queue.pushRetryFn('unauthenticated-client', service.requireDeveloper);
+          }else if( !security.isDeveloper() ){
             return $q.reject('unauthorized-client');
           }
         });
@@ -731,6 +746,10 @@ angular.module('security.service', [
       //openLoginDialog();
     },
 
+    showDeveloperLogin: function() {
+      redirect('/developer/login');
+    },
+
     socialDisconnect: function(provider){
       var url = '/api/account/settings/' + provider.toLowerCase() + '/disconnect';
       return $http.get(url).then(function(res){ return res.data; });
@@ -834,15 +853,18 @@ angular.module('security.service', [
     // Information about the current user
     currentUser: null,
 
-    // Is the current user authenticated?
     isAuthenticated: function(){
       return !!service.currentUser;
     },
     
-    // Is the current user an administrator?
     isAdmin: function() {
       return !!(service.currentUser && service.currentUser.admin);
+    },
+
+    isDeveloper: function() {
+      return !!(service.currentUser && service.currentUser.developer);
     }
+
   };
 
   return service;
@@ -917,6 +939,9 @@ angular.module('services.accountResource', ['security.service']).factory('accoun
     return $http.get(baseUrl + '/account/verification').then(processResponse, processError);
   };
 
+  resource.addDeveloper = function(data){
+    return $http.post(baseUrl + '/account/developerAccount', data).then(processResponse, processError);
+  };
   
   resource.verifyAccount = function(token){
     return $http.get(baseUrl + '/account/verification/' + token)
@@ -1014,6 +1039,12 @@ angular.module('services.adminResource', []).factory('adminResource', ['$http', 
     }
     return $http.get(accountUrl, { params: filters }).then(processResponse, processError);
   };
+  resource.findAccountsEverything = function(filters){
+    if(angular.equals({}, filters)){
+      filters = undefined;
+    }
+    return $http.get(accountUrl + "/everything", { params: filters }).then(processResponse, processError);
+  };
   resource.addAccount = function(fullname){
     return $http.post(accountUrl, { 'name.full': fullname }).then(processResponse, processResponse);
   };
@@ -1061,6 +1092,12 @@ angular.module('services.adminResource', []).factory('adminResource', ['$http', 
       filters = undefined;
     }
     return $http.get(phUrl, { params: filters }).then(processResponse, processError);
+  };
+  resource.findPHEverything = function(filters){
+    if(angular.equals({}, filters)){
+      filters = undefined;
+    }
+    return $http.get(phUrl + "/findEverything", { params: filters }).then(processResponse, processError);
   };
 
   resource.addPH = function(orderNumber){
@@ -1313,6 +1350,322 @@ angular.module('services.cart').factory('cartService', ['$http', '$q', function(
 
   return cart;
 }]);
+// angular.module('services.adminResource', []).factory('adminResource', ['$http', '$q', function ($http, $q) {
+//   // local variable
+//   var baseUrl = '/api';
+//   var userUrl = baseUrl + '/admin/users';
+//   var accountUrl = baseUrl + '/admin/accounts';
+//   var administratorUrl = baseUrl + '/admin/administrators';
+//   var adminGroupUrl = baseUrl + '/admin/admin-groups';
+//   var adminStatusesUrl = baseUrl + '/admin/statuses';
+//   var adminCategoriesUrl = baseUrl + '/admin/categories';
+//   var phUrl = baseUrl + '/admin/purchase-history';
+//   var pricingUrl = baseUrl + '/admin/pricing';
+
+//   var processResponse = function(res){
+//     return res.data;
+//   };
+//   var processError = function(e){
+//     var msg = [];
+//     if(e.status)         { msg.push(e.status); }
+//     if(e.statusText)     { msg.push(e.statusText); }
+//     if(msg.length === 0) { msg.push('Unknown Server Error'); }
+//     return $q.reject(msg.join(' '));
+//   };
+//   // public api
+//   var resource = {};
+//   resource.getStats = function(){
+//     return $http.get(baseUrl + '/admin').then(processResponse, processError);
+//   };
+//   resource.search = function(query){
+//     return $http.get(baseUrl + '/admin/search', { params: { q: query }} ).then(processResponse, processError);
+//   };
+
+//   // ----- users api -----
+//   resource.findUsers = function(filters){
+//     if(angular.equals({}, filters)){
+//       filters = undefined;
+//     }
+//     return $http.get(userUrl, { params: filters }).then(processResponse, processError);
+//   };
+//   resource.addUser = function(username){
+//     return $http.post(userUrl, { username: username }).then(processResponse, processResponse);
+//   };
+//   resource.findUser = function(_id){
+//     var url = userUrl + '/' + _id;
+//     return $http.get(url).then(processResponse, processError);
+//   };
+//   resource.updateUser = function(_id, data){
+//     var url = userUrl + '/' + _id;
+//     return $http.put(url, data).then(processResponse, processError);
+//   };
+//   resource.setPassword = function(_id, data){
+//     var url = userUrl + '/' + _id + '/password';
+//     return $http.put(url, data).then(processResponse, processError);
+//   };
+//   resource.linkAdmin = function(_id, data){
+//     var url = userUrl + '/' + _id + '/role-admin';
+//     return $http.put(url, data).then(processResponse, processError);
+//   };
+//   resource.unlinkAdmin = function(_id){
+//     var url = userUrl + '/' + _id + '/role-admin';
+//     return $http.delete(url).then(processResponse, processError);
+//   };
+//   resource.linkAccount = function(_id, data){
+//     var url = userUrl + '/' + _id + '/role-account';
+//     return $http.put(url, data).then(processResponse, processError);
+//   };
+//   resource.unlinkAccount = function(_id){
+//     var url = userUrl + '/' + _id + '/role-account';
+//     return $http.delete(url).then(processResponse, processError);
+//   };
+//   resource.deleteUser = function(_id){
+//     var url = userUrl + '/' + _id;
+//     return $http.delete(url).then(processResponse, processError);
+//   };
+
+//   // ----- accounts api -----
+//   resource.findAccounts = function(filters){
+//     if(angular.equals({}, filters)){
+//       filters = undefined;
+//     }
+//     return $http.get(accountUrl, { params: filters }).then(processResponse, processError);
+//   };
+//   resource.findAccountsEverything = function(filters){
+//     if(angular.equals({}, filters)){
+//       filters = undefined;
+//     }
+//     return $http.get(accountUrl + "/everything", { params: filters }).then(processResponse, processError);
+//   };
+//   resource.addAccount = function(fullname){
+//     return $http.post(accountUrl, { 'name.full': fullname }).then(processResponse, processResponse);
+//   };
+//   resource.findAccount = function(_id){
+//     var url = accountUrl + '/' + _id;
+//     return $http.get(url).then(processResponse, processError);
+//   };
+//   resource.findAllAccountInfo = function(_id){
+//     var url = accountUrl + '/info/' + _id;
+//     return $http.get(url).then(processResponse, processError);
+//   };
+//   resource.updateAccount = function(_id, data){
+//     var url = accountUrl + '/' + _id;
+//     return $http.put(url, data).then(processResponse, processError);
+//   };
+//   resource.linkUser = function(_id, data){
+//     var url = accountUrl + '/' + _id + '/user';
+//     return $http.put(url, data).then(processResponse, processError);
+//   };
+//   resource.unlinkUser = function(_id){
+//     var url = accountUrl + '/' + _id + '/user';
+//     return $http.delete(url).then(processResponse, processError);
+//   };
+//   resource.accountPurchaseHistory = function(_id){
+//     var url = accountUrl + '/' + _id + '/purchases';
+//     return $http.get(url).then(processResponse, processError);
+//   };
+//   resource.newAccountNote = function(_id, data){
+//     var url = accountUrl + '/' + _id + '/notes';
+//     return $http.post(url, data).then(processResponse, processError);
+//   };
+//   resource.newAccountStatus = function(_id, data){
+//     var url = accountUrl + '/' + _id + '/status';
+//     return $http.post(url, data).then(processResponse, processError);
+//   };
+//   resource.deleteAccount = function(_id){
+//     var url = accountUrl + '/' + _id;
+//     return $http.delete(url).then(processResponse, processError);
+//   };
+
+
+//   // ----- purchase history api -----
+//   resource.findAllPH = function(filters){
+//     if(angular.equals({}, filters)){
+//       filters = undefined;
+//     }
+//     return $http.get(phUrl, { params: filters }).then(processResponse, processError);
+//   };
+//   resource.findPHEverything = function(filters){
+//     if(angular.equals({}, filters)){
+//       filters = undefined;
+//     }
+//     return $http.get(phUrl + "/findEverything", { params: filters }).then(processResponse, processError);
+//   };
+
+//   resource.addPH = function(orderNumber){
+//     return $http.post(phUrl, { orderNumber: orderNumber }).then(processResponse, processResponse);
+//   };
+  
+//   resource.findPHs = function(filters){
+//     if(angular.equals({}, filters)){
+//       filters = undefined;
+//     }
+//     return $http.get(phUrl, { params: filters }).then(processResponse, processError);
+//   };
+//   resource.tallyPHs = function(){
+//     return $http.get(phUrl + '/tally').then(processResponse, processError);
+//   };
+//   resource.tallyMonthPHs = function(){
+//     return $http.get(phUrl + '/tallyMonth').then(processResponse, processError);
+//   };
+//   resource.tallyYearPHs = function(){
+//     return $http.get(phUrl + '/tallyYear').then(processResponse, processError);
+//   };
+
+//   resource.findPH = function(_id){
+//     var url = phUrl + '/' + _id;
+//     return $http.get(url).then(processResponse, processError);
+//   };
+//   resource.updatePH = function(_id, data){
+//     var url = phUrl + '/' + _id;
+//     return $http.put(url, data).then(processResponse, processError);
+//   };
+
+
+
+// // ----- product api -----
+//   resource.getAllProducts = function(filters){
+//     if(angular.equals({}, filters)){
+//       filters = undefined;
+//     }
+//     return $http.get(pricingUrl, { params: filters }).then(processResponse, processError);
+//   };
+
+//   resource.addProduct = function(title){
+//       return $http.post(pricingUrl, { title: title }).then(processResponse, processResponse);
+//     };
+
+//   resource.updateProduct = function(_id, data){
+//       var url = pricingUrl + '/' + _id;
+//       return $http.put(url, data).then(processResponse, processError);
+//     };
+
+//   resource.deletePH = function(_id){
+//     var url = phUrl + '/' + _id;
+//     return $http.delete(url).then(processResponse, processError);
+//   };
+
+
+//   // ----- administrators api -----
+//   resource.findAdministrators = function(filters){
+//     if(angular.equals({}, filters)){
+//       filters = undefined;
+//     }
+//     return $http.get(administratorUrl, { params: filters }).then(processResponse, processError);
+//   };
+//   resource.addAdministrator = function(fullname){
+//     return $http.post(administratorUrl, { 'name.full': fullname }).then(processResponse, processResponse);
+//   };
+//   resource.findAdministrator = function(_id){
+//     var url = administratorUrl + '/' + _id;
+//     return $http.get(url).then(processResponse, processError);
+//   };
+//   resource.updateAdministrator = function(_id, data){
+//     var url = administratorUrl + '/' + _id;
+//     return $http.put(url, data).then(processResponse, processError);
+//   };
+//   resource.adminLinkUser = function(_id, data){
+//     var url = administratorUrl + '/' + _id + '/user';
+//     return $http.put(url, data).then(processResponse, processError);
+//   };
+//   resource.adminUnlinkUser = function(_id){
+//     var url = administratorUrl + '/' + _id + '/user';
+//     return $http.delete(url).then(processResponse, processError);
+//   };
+//   resource.saveAdminGroups = function(_id, data){
+//     var url = administratorUrl + '/' + _id + '/groups';
+//     return $http.put(url, data).then(processResponse, processError);
+//   };
+//   resource.saveAdminPermissions = function(_id, data){
+//     var url = administratorUrl + '/' + _id + '/permissions';
+//     return $http.put(url, data).then(processResponse, processError);
+//   };
+//   resource.deleteAdministrator = function(_id){
+//     var url = administratorUrl + '/' + _id;
+//     return $http.delete(url).then(processResponse, processError);
+//   };
+
+//   // ----- admin-groups api -----
+//   resource.findAdminGroups = function(filters){
+//     if(angular.equals({}, filters)){
+//       filters = undefined;
+//     }
+//     return $http.get(adminGroupUrl, { params: filters }).then(processResponse, processError);
+//   };
+//   resource.addAdminGroup = function(name){
+//     return $http.post(adminGroupUrl, { name: name }).then(processResponse, processResponse);
+//   };
+//   resource.findAdminGroup = function(_id){
+//     var url = adminGroupUrl + '/' + _id;
+//     return $http.get(url).then(processResponse, processError);
+//   };
+//   resource.updateAdminGroup = function(_id, data){
+//     var url = adminGroupUrl + '/' + _id;
+//     return $http.put(url, data).then(processResponse, processError);
+//   };
+//   resource.saveAdminGroupPermissions = function(_id, data){
+//     var url = adminGroupUrl + '/' + _id + '/permissions';
+//     return $http.put(url, data).then(processResponse, processError);
+//   };
+//   resource.deleteAdminGroup = function(_id){
+//     var url = adminGroupUrl + '/' + _id;
+//     return $http.delete(url).then(processResponse, processError);
+//   };
+
+//   // ----- statuses api -----
+//   resource.findStatuses = function(filters){
+//     if(angular.equals({}, filters)){
+//       filters = undefined;
+//     }
+//     return $http.get(adminStatusesUrl, { params: filters }).then(processResponse, processError);
+//   };
+//   resource.addStatus = function(data){
+//     return $http.post(adminStatusesUrl, data).then(processResponse, processResponse);
+//   };
+//   resource.findStatus = function(_id){
+//     var url = adminStatusesUrl + '/' + _id;
+//     return $http.get(url).then(processResponse, processError);
+//   };
+//   resource.updateStatus = function(_id, data){
+//     var url = adminStatusesUrl + '/' + _id;
+//     return $http.put(url, data).then(processResponse, processError);
+//   };
+//   resource.deleteStatus = function(_id){
+//     var url = adminStatusesUrl + '/' + _id;
+//     return $http.delete(url).then(processResponse, processError);
+//   };
+
+//   // ----- categories api -----
+//   resource.findCategories = function(filters){
+//     if(angular.equals({}, filters)){
+//       filters = undefined;
+//     }
+//     return $http.get(adminCategoriesUrl, { params: filters }).then(processResponse, processError);
+//   };
+//   resource.addCategory = function(data){
+//     return $http.post(adminCategoriesUrl, data).then(processResponse, processResponse);
+//   };
+//   resource.findCategory = function(_id){
+//     var url = adminCategoriesUrl + '/' + _id;
+//     return $http.get(url).then(processResponse, processError);
+//   };
+//   resource.updateCategory = function(_id, data){
+//     var url = adminCategoriesUrl + '/' + _id;
+//     return $http.put(url, data).then(processResponse, processError);
+//   };
+//   resource.deleteCategory = function(_id){
+//     var url = adminCategoriesUrl + '/' + _id;
+//     return $http.delete(url).then(processResponse, processError);
+//   };
+//   // ----- views api -----
+//   resource.getRecentViewCount = function() {
+//     var url = baseUrl + '/getRecentViewCount';
+//     return $http.get(url).then(processResponse, processError);
+//   };
+
+//   return resource;
+// }]);
+
 angular.module('services.httpRequestTracker', []);
 angular.module('services.httpRequestTracker').factory('httpRequestTracker', ['$http', function($http){
 
@@ -1982,6 +2335,10 @@ angular.module('account.settings').controller('AccountSettingsCtrl', [ '$scope',
     var account = accountDetails.account;
     var user = accountDetails.user;
 
+    // $scope.developer = 
+    // {
+    //   name: $scope.userDetail.first;
+    // };
     $scope.identityEditorEnabled = $scope.contactEditorEnabled = $scope.passwordEditorEnabled = false;
     $scope.addressEditorEnabled = $scope.billingAddressEditorEnabled = false;
 
@@ -2130,6 +2487,21 @@ angular.module('account.settings').controller('AccountSettingsCtrl', [ '$scope',
       });
     };
 
+    $scope.developer = function(){
+      restResource.addDeveloper().then(function(data){
+        if(data.success){
+          console.log(data);
+          $location.url('/developer');
+        }else if (data.errors && data.errors.length > 0){
+          alert(data.errors[0]);
+        }else {
+          alert('unknown error.');
+        }
+      }, function(e){
+        $log.error(e);
+      });
+    }
+
     //model def
     $scope.errfor = {}; //for identity server-side validation
     $scope.alerts = {
@@ -2208,8 +2580,7 @@ angular.module('account.settings').controller('AccountSettingsCtrl', [ '$scope',
       }
     };
     $scope.usstates = ["AK","AL","AR","AZ","CA","CO","CT","DC","DE","FL","GA","GU","HI","IA","ID", "IL","IN","KS","KY","LA","MA","MD","ME","MH","MI","MN","MO","MS","MT","NC","ND","NE","NH","NJ","NM","NV","NY", "OH","OK","OR","PA","PR","PW","RI","SC","SD","TN","TX","UT","VA","VI","VT","WA","WI","WV","WY"];
-  }
-  ]);
+  }]);
 
 angular.module('account.settings.social.facebook', ['security']);
 angular.module('account.settings.social.facebook').config(['$routeProvider', function($routeProvider){
@@ -4757,7 +5128,7 @@ angular.module('admin.administrators', [
   'admin.administrators.index',
   'admin.administrators.detail'
 ]);
-angular.module('admin.custom-reports', ['ngRoute', 'security.authorization', 'services.adminResource', 'angular.morris', 'chart.js']);
+angular.module('admin.custom-reports', ['ngRoute', 'security.authorization', 'services.adminResource', 'angular.morris', 'chart.js', 'ngSanitize', 'ngCsv']);
 angular.module('admin.custom-reports').config(['$routeProvider', function($routeProvider){
   $routeProvider
   .when('/admin/custom-reports', {
@@ -4788,6 +5159,26 @@ angular.module('admin.custom-reports').config(['$routeProvider', function($route
           .then(function(){
               //handles url with query(search) parameter
               return adminResource.findAccounts($location.search());
+            }, function(reason){
+              //rejected either user is un-authorized or un-authenticated
+              redirectUrl = reason === 'unauthorized-client'? '/account': '/login';
+              return $q.reject();
+            })
+          .catch(function(){
+            redirectUrl = redirectUrl || '/account';
+            $location.search({});
+            $location.path(redirectUrl);
+            return $q.reject();
+          });
+          return promise;
+        }],
+        accountsEverything: ['$q', '$location', '$log', 'securityAuthorization', 'adminResource', function($q, $location, $log, securityAuthorization, adminResource){
+          //get app stats only for admin-user, otherwise redirect to /account
+          var redirectUrl;
+          var promise = securityAuthorization.requireAdminUser()
+          .then(function(){
+              //handles url with query(search) parameter
+              return adminResource.findAccountsEverything($location.search());
             }, function(reason){
               //rejected either user is un-authorized or un-authenticated
               redirectUrl = reason === 'unauthorized-client'? '/account': '/login';
@@ -4840,84 +5231,123 @@ angular.module('admin.custom-reports').config(['$routeProvider', function($route
             return $q.reject();
           });
           return promise;
+        }],
+        phbigList: ['$q', '$location', '$log', 'securityAuthorization', 'adminResource', function($q, $location, $log, securityAuthorization, adminResource){
+          //get app stats only for admin-user, otherwise redirect to /account
+          var redirectUrl;
+          var promise = securityAuthorization.requireAdminUser()
+          .then(function(){
+              //handles url with query(search) parameter
+              return adminResource.findPHEverything($location.search());
+            }, function(reason){
+              //rejected either user is un-authorized or un-authenticated
+              redirectUrl = reason === 'unauthorized-client'? '/account': '/login';
+              return $q.reject();
+            })
+          .catch(function(){
+            redirectUrl = redirectUrl || '/account';
+            $location.search({});
+            $location.path(redirectUrl);
+            return $q.reject();
+          });
+          return promise;
+        }],
+        tally: ['$q', '$location', '$log', 'securityAuthorization', 'adminResource', function($q, $location, $log, securityAuthorization, adminResource){
+          //get app stats only for admin-user, otherwise redirect to /account
+          var redirectUrl;
+          var promise = securityAuthorization.requireAdminUser()
+          .then(function(){
+              //handles url with query(search) parameter
+              return adminResource.tallyPHs();
+            }, function(reason){
+              //rejected either user is un-authorized or un-authenticated
+              redirectUrl = reason === 'unauthorized-client'? '/account': '/login';
+              return $q.reject();
+            })
+          .catch(function(){
+            redirectUrl = redirectUrl || '/account';
+            $location.search({});
+            $location.path(redirectUrl);
+            return $q.reject();
+          });
+          return promise;
         }]
       }
     })
 }]);
-angular.module('admin.custom-reports').controller('CustomReportCtrl', ['$scope', '$log', 'stats', 'viewCount', 'adminResource', 'accounts', '$http', '$q', '$timeout', 'phList',
-  function($scope, $log, stats, viewCount, adminResource, accountData, $http, $q, $timeout, phList){
+angular.module('admin.custom-reports').controller('CustomReportCtrl', ['$scope', '$log', 'stats', 'viewCount', 'adminResource', 'accounts', '$http', '$q', '$timeout', 'phList', 'tally', 'accountsEverything', 'phbigList',
+  function($scope, $log, stats, viewCount, adminResource, accountData, $http, $q, $timeout, phList, sales, accountsEverything, phbigList){
 
-    $scope.graphData = 'purchases';
+    //console.log(accountData);
+    //console.log(accountsEverything);
+    console.log(phbigList)
 
+    $scope.graphChoice = "";
+    $scope.salesGraph = "";
+    $scope.viewGraph= "";
 
-    //$scope.graphData = [];
+    $scope.graphChoices = ["Accounts", "Purchases", "Sales", "Page Views"];
+    $scope.salesGraphs = ["Monthly", "Yearly", "Average"];
+    $scope.viewGraphs= ["Home Page", "Shopping Cart"];
 
-    console.log(phList)
-     // local var
-     var deserializeData = function(data, ph){
-      var results = data.results;
-      $scope.statuses = data.statuses;
-      $scope.items = results.items;
-      $scope.pages = results.pages;
-      $scope.filters = results.filters;
-      $scope.accounts = results.data;
-      $scope.phList = ph.data;
+    $scope.accountStartDate = new Date();
+    $scope.accountEndDate = new Date();
 
-    };
+    $scope.phStartDate = new Date();
+    $scope.phEndDate = new Date();
 
+    $scope.phHeaders = "";
 
+    //console.log(phList);
 
-
-
-
-    var fetchAccounts = function(){
-      adminResource.findAccounts($scope.filters).then(function(data){
-        deserializeData(data);
-
-        // update url in browser addr bar
-        $location.search($scope.filters);
-      }, function(e){
-        $log.error(e);
+    $scope.generatePDF = function(graph){
+      var element = '';
+      if(graph=='home'){
+        element="#home";
+      }
+      if(graph=='cart'){
+        element="#cart";
+      }
+      if(graph=='avgSales'){
+        element="#avgSales";
+      }
+      if(graph=='yearSales'){
+        element="#yearSales";
+      }
+      if(graph=='monthSales'){
+        element="#monthSales";
+      }
+      html2canvas($(element), {
+        onrendered: function(canvas) {         
+          var imgData = canvas.toDataURL(
+            'image/png');              
+          var doc = new jsPDF('p', 'mm');
+          doc.addImage(imgData, 'PNG', 10, 10);
+          doc.save(graph + '.pdf');
+        }
       });
-    };
+    }
 
     $scope.formatTime = function(timestamp, replace){
       var res = moment(timestamp).from();
       return replace? res.replace('ago', replace): res;
     };
-    $scope.filtersUpdated = function(){
-      //reset pagination after filter(s) is updated
-      $scope.filters.page = undefined;
+    $scope.accountFiltersUpdated = function(){
+      $scope.accountFilters.page = undefined;
+      $scope.accountFilters.datespan1 = $scope.accountStartDate.toISOString();
+      $scope.accountFilters.datespan2 = $scope.accountEndDate.toISOString();
       fetchAccounts();
     };
-    $scope.prev = function(){
-      $scope.filters.page = $scope.pages.prev;
+    $scope.accountPrev = function(){
+      $scope.accountFilters.page = $scope.accountPages.prev;
       fetchAccounts();
     };
-    $scope.next = function(){
-      $scope.filters.page = $scope.pages.next;
+    $scope.accountNext = function(){
+      $scope.accountFilters.page = $scope.accountPages.next;
       fetchAccounts();
-    };
-    $scope.addAccount = function(){
-      adminResource.addAccount($scope.fullname).then(function(data){
-        $scope.fullname = '';
-        if(data.success){
-          $route.reload();
-        }else if (data.errors && data.errors.length > 0){
-          alert(data.errors[0]);
-        }else {
-          alert('unknown error.');
-        }
-      }, function(e){
-        $scope.fullname = '';
-        $log.error(e);
-      });
     };
 
-    // $scope vars
-    //select elements and their associating options
-    $scope.statuses = [];
-    $scope.sorts = [
+    $scope.accountSorts = [
     {label: "id \u25B2", value: "_id"},
     {label: "id \u25BC", value: "-_id"},
     {label: "name \u25B2", value: "name"},
@@ -4925,247 +5355,511 @@ angular.module('admin.custom-reports').controller('CustomReportCtrl', ['$scope',
     {label: "company \u25B2", value: "company"},
     {label: "company \u25BC", value: "-company"}
     ];
-    $scope.limits = [
+    $scope.accountLimits = [
     {label: "10 items", value: 10},
     {label: "20 items", value: 20},
     {label: "50 items", value: 50},
     {label: "100 items", value: 100}
     ];
 
-    $scope.goToAccount = function() {
-      $scope.selected = this.account;
-      $location.path('/admin/accounts/' + $scope.selected._id);
-        //ng-href="/admin/accounts/{{account._id}}"
-      };
+//PURCHASES
+$scope.phFiltersUpdated = function(){
+  $scope.phFilters.page = undefined;
+  $scope.phFilters.datespan1 = $scope.phStartDate.toISOString();
+  $scope.phFilters.datespan2 = $scope.phEndDate.toISOString();
+  fetchPH();
+};
+$scope.phPrev = function(){
+  $scope.phFilters.page = $scope.phPages.prev;
+  fetchPH();
+};
+$scope.phNext = function(){
+  $scope.phFilters.page = $scope.phPages.next;
+  fetchPH();
+};
 
 
+$scope.phSorts = [
+{label: "id \u25B2", value: "_id"},
+{label: "id \u25BC", value: "-_id"},
+{label: "name \u25B2", value: "name"},
+{label: "name \u25BC", value: "-name"},
+{label: "company \u25B2", value: "company"},
+{label: "company \u25BC", value: "-company"}
+];
+$scope.phLimits = [
+{label: "10 items", value: 10},
+{label: "20 items", value: 20},
+{label: "50 items", value: 50},
+{label: "100 items", value: 100}
+];
 
 
-    //initialize $scope variables
-    deserializeData(accountData, phList);
-    // $('#datatable-tabletools').DataTable( {
-    //   dom: 'Bfrtip',
-    //   buttons: [
-    //   'colvis',
-    //   'excel',
-    //   'csv',
-    //   'pdf',
-    //   'print'
-    //   ]
-    // } );
+//SALES
+var yearInfo = function(tallyYear){
 
-    // $('#datatable-tabletools').DataTable( {
-    //   dom: 'Bfrtip',
-    //   buttons: true
-    // } );
+  $scope.tallyYear = [];
+  $scope.totalYear = []; 
 
+  var currentDate = new Date();
+  var currentYear = currentDate.getFullYear();
 
-    // $('#datatable-tabletools').buttons().container()
-    // .appendTo( 'body' );
-   //  angular.element(document).ready( function () {
-   //   dTable = $('#datatable-tabletools')
-   //   dTable.DataTable();
-   // });
+  var i;
+  var n = currentYear-2015;
 
+  for(i=0;i<n;i++){
+    $scope.tallyYear.push(0);
+    $scope.totalYear.push(0);
+  }
 
+  for(var yr in tallyYear){
+    var year = tallyYear[yr].year;
+    var n = year - 2015;
 
+    $scope.tallyYear[n]++;
+    $scope.totalYear[n]+=tallyYear[yr].total;
+  }
 
-    // angular.element(document).ready( function () {
-    //      dTable = $('#user_table');
-    //      serverSide: true,
-    // initComplete : function () {
-    //   table.buttons().container()
-    //   .appendTo( $('#example_wrapper .col-sm-6:eq(0)'));
-    // },
-    //      dTable.DataTable();
-    //  });
+  monthInfo($scope.graphData);
+};
+var monthInfo = function(tallyMonth){
+  $scope.tallyMonth = [];
+  $scope.totalMonth = []; 
 
-    var viewData = function(viewCount){
-     $scope.viewDataDates = []; 
-     $scope.homeViewCounts = []; 
-     $scope.cartViewCounts = []; 
-     $scope.labelDay = [];
+  $scope.tallyMonth = [0,0,0,0,0,0,0,0,0,0,0,0];
+  $scope.totalMonth = [0,0,0,0,0,0,0,0,0,0,0,0];
+  $scope.avgMonthSaleSize = [0,0,0,0,0,0,0,0,0,0,0,0];
 
-     $scope.homeView30Day = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
-     $scope.cartView30Day = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
+  for(var mo in tallyMonth){
+    var mon = tallyMonth[mo].month;
+    var n = mon - 1;
 
-     var cutOff = Date.today().add(-30).days();
+    $scope.tallyMonth[n]++;
+    $scope.totalMonth[n]+=tallyMonth[mo].total;
 
-     for(var i = 29; i>=0; i--){
-      if(((i-4)%5)==0){
-        var dlabel = Date.today().add(-i).days().toString('MMM dS');
+  }
+  for(var mo in $scope.avgMonthSaleSize){
 
-        $scope.labelDay.push(dlabel);
-      } else {
-        $scope.labelDay.push('');
-      }
+    if($scope.tallyMonth[mo] > 0){
+      $scope.avgMonthSaleSize[mo] = ($scope.totalMonth[mo]/$scope.tallyMonth[mo]);
     }
 
-
-    angular.forEach(viewCount, function(view, key) {
-      $scope.viewDataDates.push(view.date);
-
-      if(typeof view.homePageViews == 'undefined' || view.homePageViews==null){
-        $scope.homeViewCounts.push(0);
-      } else {
-        $scope.homeViewCounts.push(view.homePageViews);
-      }
-
-      if(typeof view.cartViews == 'undefined' || view.cartViews == null){
-        $scope.cartViewCounts.push(0);
-      } else {
-        $scope.cartViewCounts.push(view.cartViews);
-      }
-
-      var currentDate = new Date(view.date);
-
-      var ts = new TimeSpan(currentDate-cutOff);
-      var n = ts.days - 1;
-      if(n > 0 && n < 30){
-        var f = 30-n;
-        $scope.homeView30Day[n]+=view.homePageViews || 0;
-        $scope.cartView30Day[n]+=view.cartViews || 0;
-      }
-
-    });
-
-  };
-  viewData(viewCount);    
+  }
+  thirtyDayInfo($scope.graphData);
+};
 
 
-  $scope.optionsViewsDayTotal = {
-    scales: {
-      yAxes: [
-      {
-        id: 'y-axis-1',
-        type: 'linear',
-        scaleLabel: {
-          display: true,
-          labelString: 'Total Views'
-        },
+
+var thirtyDayInfo = function(tallyDay){
+
+  $scope.tallyDay = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
+  $scope.totalDay = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
+  $scope.labelDay = [];
+
+  var cutOff = Date.today().add(-30).days();
+
+  for(var i = 29; i>=0; i--){
+    if(((i-4)%5)==0){
+      var dlabel = Date.today().add(-i).days().toString('MMM dS');
+
+      $scope.labelDay.push(dlabel);
+    } else {
+      $scope.labelDay.push('');
+    }
+
+  }
+
+  for(var d in tallyDay){
+
+    var currentDate = new Date(tallyDay[d].year, (tallyDay[d].month-1), tallyDay[d].day,0,0,0,0);
+
+    var ts = new TimeSpan(currentDate-cutOff);
+
+    var n = ts.days - 1;
+
+    if(n > 0 && n < 30){
+      var f = 30-n;
+      $scope.tallyDay[n]++;
+      $scope.totalDay[n]+=tallyDay[d].total;
+    }
+  }
+
+  $scope.tally30Days = $scope.tallyDay.reduce(function(sum, num){ return sum + num }, 0);
+  $scope.total30Days = $scope.totalDay.reduce(function(sum, num){ return sum + num }, 0);
+
+  $scope.average30Days = $scope.total30Days/$scope.tally30Days;
+
+  $scope.sizeQuantityData = [
+  $scope.tallyMonth,
+  $scope.avgMonthSaleSize
+  ];
+};
+
+
+var dataToVariables = function(tally){
+  //console.log(tally);
+  var graphData = []; 
+  $scope.totalOverall = 0;
+  $scope.tallyOverall = 0;
+  $scope.averageOverall = 0;
+
+
+  for(var tal in tally){
+    var entry = {
+      day : tally[tal]._id.day,
+      month : tally[tal]._id.month,
+      year : tally[tal]._id.year,
+      total : tally[tal].total
+    }
+
+    $scope.totalOverall += entry.total;
+    $scope.tallyOverall += 1;
+    graphData.push(entry);
+  }
+
+  $scope.averageOverall = $scope.totalOverall/$scope.tallyOverall;
+  $scope.graphData = graphData;
+  yearInfo($scope.graphData);
+
+};
+
+$scope.labels = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+
+$scope.colors2 = ['#45b7cd'];
+
+$scope.yearLabels = ["2015", "2016", "2017"];
+
+$scope.data = [
+65, 59, 80, 81, 56, 55, 40
+];
+$scope.onClick = function (points, evt) {
+  console.log(points, evt);
+};
+
+$scope.options = {
+  scales: {
+    yAxes: [
+    {
+      id: 'y-axis-1',
+      type: 'linear',
+      display: true,
+      position: 'left'
+    }
+    ]
+  }
+};
+
+$scope.optionsDayTotal = {
+  scales: {
+    yAxes: [
+    {
+      id: 'y-axis-1',
+      type: 'linear',
+      scaleLabel: {
         display: true,
-        position: 'left'
-      }
-      ]
+        labelString: 'Total Sales'
+      },
+      display: true,
+      position: 'left'
     }
-  };
+    ]
+  }
+};
+
+$scope.optionsYearTally = {
+  scales: {
+    yAxes: [
+    {
+      id: 'y-axis-1',
+      scaleSteps : 1,
+      ticks: {
+        suggestedMax: 10,
+        min: 0,
+        stepSize: 1
+      },
+      barShowStroke : false,
+      scaleLabel: {
+        display: true,
+        labelString: 'Number of Sales'
+      },
+      display: true,
+      position: 'left'
+    }
+    ]
+  },
+  chartColors: ['#803690','#803690']
+};
+
+$scope.optionsYearTotal = {
+  scales: {
+    yAxes: [
+    {
+      id: 'y-axis-1',
+      scaleSteps : 1,
+      ticks: {
+        suggestedMax: 5000,
+        min: 0,
+        stepSize: 1000
+      },
+      barStrokeWidth:0,
+      scaleLabel: {
+        display: true,
+        labelString: 'Total Sales'
+      },
+      display: true,
+      position: 'left'
+    }
+    ]
+  },
+  chartColors: ['#803690','#803690']
+};
+
+$scope.optionsMonthTally = {
+  scales: {
+    yAxes: [
+    {
+      id: 'y-axis-1',
+      scaleSteps : 1,
+      ticks: {
+        suggestedMax: 10,
+        min: 0,
+        stepSize: 1,
+        beginAtZero: false
+      },
+      barStrokeWidth:0,
+      barShowStroke : false,
+      scaleLabel: {
+        display: true,
+        labelString: 'Number of Sales'
+      },
+      display: true,
+      position: 'left'
+    }
+    ]
+  }
+};
+
+$scope.optionsMonthTotal = {
+
+  scales: {
+    yAxes: [
+    {
+      id: 'y-axis-1',
+      scaleSteps : 1,
+      ticks: {
+        suggestedMax: 1000,
+        min: 5,
+        stepSize: 200,
+        beginAtZero: false
+      },
+      barStrokeWidth:0,
+      barShowStroke : false,
+      scaleLabel: {
+        display: true,
+        labelString: 'Total Sales',
+        left: 30
+      },
+      display: true,
+      position: 'left'
+    }
+    ]
+  }
+};
+
+
+$scope.series = ['Number of Sales', 'Average Sale Size'];
+
+
+$scope.datasetOverride = [{ yAxisID: 'y-axis-1' }, { yAxisID: 'y-axis-2' }];
+$scope.sizeQuantityOptions = {
+  scales: {
+    yAxes: [
+    {
+      id: 'y-axis-1',
+      scaleSteps : 1,
+      ticks: {
+        suggestedMax: 10,
+        min: 0,
+        stepSize: 1
+      },
+      scaleLabel: {
+        display: true,
+        labelString: 'Number of Sales'
+      },
+      display: true,
+      position: 'left'
+    },
+    {
+      id: 'y-axis-2',
+      scaleSteps : 1,
+      ticks: {
+        suggestedMax: 1000,
+        min: 0,
+        stepSize: 200
+      },
+      scaleLabel: {
+        display: true,
+        labelString: 'Average Sale Size'
+      },
+      display: true,
+      position: 'right'
+    }
+    ]
+  },
+  legend: { display: true }
+}
+
+$scope.xcolors = ['#97BBCD', '#97BBCD', '#97BBCD', '#97BBCD', '#97BBCD', '#97BBCD', '#97BBCD', '#97BBCD', '#97BBCD', '#97BBCD', '#97BBCD', '#97BBCD'];
+
+$scope.xlabels1 = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+$scope.xdata1 = [
+[65, -59, 80, 81, -56, 55, -40]
+];
+$scope.xdatasetOverride1 = [
+{
+  label: 'Override Series A',
+  borderWidth: 1,
+  type: 'bar'
+}
+];
+$scope.xdatasetOverrideBar = [
+{
+  label: 'Override Series A',
+  borderWidth: 1,
+  type: 'bar'
+}
+];
+
+
+
+//VIEWS
+var viewData = function(viewCount){
+ $scope.viewDataDates = []; 
+ $scope.homeViewCounts = []; 
+ $scope.cartViewCounts = []; 
+ $scope.labelDay = [];
+
+ $scope.homeView30Day = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
+ $scope.cartView30Day = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
+
+ var cutOff = Date.today().add(-30).days();
+
+ for(var i = 29; i>=0; i--){
+  if(((i-4)%5)==0){
+    var dlabel = Date.today().add(-i).days().toString('MMM dS');
+
+    $scope.labelDay.push(dlabel);
+  } else {
+    $scope.labelDay.push('');
+  }
+}
+
+angular.forEach(viewCount, function(view, key) {
+  $scope.viewDataDates.push(view.date);
+
+  if(typeof view.homePageViews == 'undefined' || view.homePageViews==null){
+    $scope.homeViewCounts.push(0);
+  } else {
+    $scope.homeViewCounts.push(view.homePageViews);
+  }
+
+  if(typeof view.cartViews == 'undefined' || view.cartViews == null){
+    $scope.cartViewCounts.push(0);
+  } else {
+    $scope.cartViewCounts.push(view.cartViews);
+  }
+
+  var currentDate = new Date(view.date);
+
+  var ts = new TimeSpan(currentDate-cutOff);
+  var n = ts.days - 1;
+  if(n > 0 && n < 30){
+    var f = 30-n;
+    $scope.homeView30Day[n]+=view.homePageViews || 0;
+    $scope.cartView30Day[n]+=view.cartViews || 0;
+  }
+
+});
+
+};
+
+$scope.optionsViewsDayTotal = {
+  scales: {
+    yAxes: [
+    {
+      id: 'y-axis-1',
+      type: 'linear',
+      scaleLabel: {
+        display: true,
+        labelString: 'Total Views'
+      },
+      display: true,
+      position: 'left'
+    }
+    ]
+  }
+};
+
+
+
+var accountAfterFilter = function(data){
+  var results = data.results;
+  $scope.accountItems = results.items;
+  $scope.accountPages = results.pages;
+  $scope.accountFilters = results.filters;
+  $scope.accounts = results.data;
+};
+
+var fetchAccounts = function(){
+  adminResource.findAccounts($scope.accountFilters).then(function(data){
+    accountAfterFilter(data);
+  }, function(e){
+    $log.error(e);
+  });
+};
+
+var phAfterFilter = function(data){
+  $scope.phItems = data.items;
+  $scope.phPages = data.pages;
+  $scope.phFilters = data.filters;
+  $scope.phList = data.data;
+};
+
+var fetchPH = function(){
+  adminResource.findPHs($scope.phFilters).then(function(phdata){
+    console.log(phdata)
+    phAfterFilter(phdata);
+  }, function(e){
+    $log.error(e);
+  });
+};
+
+var deserializeData = function(data, ph, sales, viewCount){
+  var results = data.results;
+  $scope.accountItems = results.items;
+  $scope.accountPages = results.pages;
+  $scope.accountFilters = results.filters;
+  $scope.accounts = results.data;
+
+  $scope.phList = ph.data;
+  $scope.phItems = ph.items;
+  $scope.phPages = ph.pages;
+  $scope.phFilters = ph.filters;
+
+  $scope.tally = sales;
+
+  dataToVariables($scope.tally);
+  viewData(viewCount); 
+
+};
+
+deserializeData(accountData, phList, sales, viewCount);
 
 
 }])
 
 
 
-
-// .directive('tableDirective', function () {
-//   return {
-//     restrict: 'E, A, C',
-//     link: function (scope, element, attrs, controller) {
-//       var dataTable = element.dataTable({
-//         bJQueryUI: true,
-//         //bDestroy: true,
-//         bRetrieve: true,
-//         dom: 'Bfrtip',
-//         buttons:true
-//       });
-
-//       scope.$watch('graphData', handleModelUpdates, true);
-
-//       function handleModelUpdates(newData) {
-//         var data = newData || null;
-//         if (data) {
-//           dataTable.fnClearTable();
-//           dataTable.fnAddData(data);
-//           dataTable.fnAdjustColumnSizing();
-//           dataTable.fnResizeButtons();
-//         }
-//       }
-//     },
-//     scope: {
-//       options: "="
-//     }
-//   };
-// });
-
-
-
-.directive('tableDirective', function() {
-  return {
-    // angular passes the element reference to you
-    compile: function(element) {
-      $(element).DataTable({
-        dom: 'Bfrtip',
-        buttons: ['columnsToggle',
-        'colvis',
-        'pdf',
-        'print',
-        'excel'],
-        bRetrieve:true
-      });
-
-    }
-  }
-})
-
-
-
-
-
-// .directive('tableDirective', function() {
-//   return function(scope, element, attrs) {
-
-//             // apply DataTable options, use defaults if none specified by user
-//             var options = {};
-//             if (attrs.tableDirective.length > 0) {
-//               options = scope.$eval(attrs.tableDirective);
-//             } else {
-//               options = {
-//                 "bStateSave": true,
-//                 "iCookieDuration": 2419200, /* 1 month */
-//                 "bJQueryUI": true,
-//                 "bPaginate": false,
-//                 "bLengthChange": false,
-//                 "bFilter": false,
-//                 "bInfo": false,
-//                 "bDestroy": true
-//               };
-//             }
-
-//             // Tell the dataTables plugin what columns to use
-//             // We can either derive them from the dom, or use setup from the controller           
-//             var explicitColumns = [];
-//             element.find('th').each(function(index, elem) {
-//               explicitColumns.push($(elem).text());
-//             });
-//             if (explicitColumns.length > 0) {
-//               options["aoColumns"] = explicitColumns;
-//             } else if (attrs.aoColumns) {
-//               options["aoColumns"] = scope.$eval(attrs.aoColumns);
-//             }
-
-//             // aoColumnDefs is dataTables way of providing fine control over column config
-//             if (attrs.aoColumnDefs) {
-//               options["aoColumnDefs"] = scope.$eval(attrs.aoColumnDefs);
-//             }
-
-//             if (attrs.fnRowCallback) {
-//               options["fnRowCallback"] = scope.$eval(attrs.fnRowCallback);
-//             }
-
-//             // apply the plugin
-//             var dataTable = element.dataTable(options);
-
-
-
-//             // watch for any changes to our data, rebuild the DataTable
-//             scope.$watch(attrs.aaData, function(value) {
-//               var val = value || null;
-//               if (val) {
-//                 dataTable.fnClearTable();
-//                 dataTable.fnAddData(scope.$eval(attrs.aaData));
-//               }
-//             });
-//           };
-//         });
 
 
 
@@ -6565,6 +7259,8 @@ angular.module('app', [
   'signup',
   'login',
   'adminlogin',
+  'devlogin',
+  'developer',
   'account',
   'admin',
   'services.i18nNotifications',
@@ -6782,14 +7478,6 @@ angular.module('base').controller('SidebarCtrl', ['$scope', '$location', 'securi
     };
     $scope.toggleSidenav = function(menuId) {
       $mdSidenav(menuId).toggle();
-    };
-    $scope.openNav = function(){
-      document.getElementById("mySidenav").style.width = "250px";
-      // document.getElementById("mySidenav").style.marginLeft = "250px";
-    };
-    $scope.closeNav = function(){
-      document.getElementById("mySidenav").style.width = "0";
-      // document.getElementById("mySidenav").style.marginLeft= "0";
     };
   }
 ]);
@@ -7009,6 +7697,242 @@ angular.module('config').config(['$provide', 'ENABLE_SOCIAL', function($provide,
   // programmatically set constant, 'SOCIAL', in config module
   $provide.constant('SOCIAL', social);
 }]);
+angular.module('developer', ['ngRoute', 'security.authorization']);
+angular.module('developer').config(['$routeProvider', 'securityAuthorizationProvider', function($routeProvider, securityAuthorizationProvider){
+  $routeProvider
+    .when('/developer', {
+      templateUrl: 'developer/developer.tpl.html',
+      controller: 'DevCtrl',
+      title: 'Developer Area',
+      resolve: {
+        authenticatedUser: securityAuthorizationProvider.requireDeveloper
+
+        // viewCount: ['$q', '$location', '$log', 'securityAuthorization', 'adminResource', function($q, $location, $log, securityAuthorization, adminResource){
+        //   //get app stats only for admin-user, otherwise redirect to /account
+        //   var redirectUrl;
+        //   var promise = securityAuthorization.requireAdminUser()
+        //     .then(function(){
+        //       //handles url with query(search) parameter
+        //       return adminResource.getRecentViewCount();
+        //     }, function(reason){
+        //       //rejected either user is un-authorized or un-authenticated
+        //       redirectUrl = reason === 'unauthorized-client'? '/account': '/login';
+        //       return $q.reject();
+        //     })
+        //     .catch(function(){
+        //       redirectUrl = redirectUrl || '/account';
+        //       $location.search({});
+        //       $location.path(redirectUrl);
+        //       return $q.reject();
+        //     });
+        //   return promise;
+        // }]
+      }
+    });
+}]);
+angular.module('developer').controller('DevCtrl', [ '$scope',
+  function($scope){
+
+    
+  }]);
+
+angular.module('devlogin.index', ['ngRoute', 'config', 'security.service', 'directives.serverError', 'services.utility', 'ui.bootstrap']);
+angular.module('devlogin.index').config(['$routeProvider', function($routeProvider){
+  $routeProvider
+    .when('/developer/login', {
+      templateUrl: 'devlogin/devlogin.tpl.html',
+      controller: 'DevLoginCtrl',
+      title: 'Developer Login',
+      resolve: {
+        UnauthenticatedUser: ['$q', '$location', 'securityAuthorization', function($q, $location, securityAuthorization){
+          var promise = securityAuthorization.requireUnauthenticatedUser()
+            .catch(function(){
+              if(securityAuthorization.requireAdminUser())
+                $location.path('/admin');
+                else
+                $location.path('/account');
+              return $q.reject();
+            });
+          return promise;
+        }]
+      }
+    });
+}]);
+angular.module('devlogin.index').controller('DevLoginCtrl', [ '$scope', '$location', '$log', 'security', 'utility', 'SOCIAL',
+  function($scope, $location, $log, security, utility, SOCIAL){
+    // local variable
+    var loginSuccess = function(data){
+      if(data.success){
+        //account/user created, redirect...
+        var url = data.defaultReturnUrl || '/developer';
+        return $location.path(url);
+      }else{
+        //error due to server side validation
+        $scope.errfor = data.errfor;
+        angular.forEach(data.errfor, function(err, field){
+          $scope.loginForm[field].$setValidity('server', false);
+        });
+        angular.forEach(data.errors, function(err, index){
+          $scope.alerts.push({
+            type: 'danger',
+            msg: err
+          });
+        });
+      }
+    };
+    var loginError = function(){
+      $scope.alerts.push({
+        type: 'danger',
+        msg: 'Error logging you in, Please try again'
+      });
+    };
+    // model def
+    $scope.user = {};
+    $scope.alerts = [];
+    $scope.errfor = {};
+    $scope.social = angular.equals({}, SOCIAL)? null: SOCIAL;
+
+    // method def
+    $scope.hasError = utility.hasError;
+    $scope.showError = utility.showError;
+    $scope.canSave = utility.canSave;
+    $scope.closeAlert = function(ind){
+      $scope.alerts.splice(ind, 1);
+    };
+    $scope.submit = function(){
+      $scope.alerts = [];
+      security.login($scope.user.username, $scope.user.password).then(loginSuccess, loginError);
+    };
+    $scope.signUp = function(){
+      $location.path('/signup');
+    }
+  }]);
+
+angular.module('devlogin.forgot', ['security.service', 'services.utility', 'ui.bootstrap']);
+angular.module('devlogin.forgot').config(['$routeProvider', function($routeProvider){
+  $routeProvider
+    .when('/developer/login/forgot', {
+      templateUrl: 'devlogin/forgot/devlogin-forgot.tpl.html',
+      controller: 'DevLoginForgotCtrl',
+      title: 'Forgot Your Password?'
+    });
+}]);
+angular.module('devlogin.forgot').controller('DevLoginForgotCtrl', [ '$scope', '$location', '$log', 'security', 'utility',
+  function($scope, $location, $log, security, utility){
+    // local variable
+    var resetSuccess = function(data){
+      $scope.loginForgotForm.$setPristine();
+      $scope.user = {};
+      if(data.success){
+        $scope.alerts.push({
+          type: 'info',
+          msg: 'An email will be sent to you with instructions on how to reset your password.'
+        });
+      }else{
+        angular.forEach(data.errors, function(err, index){
+          $scope.alerts.push({
+            type: 'danger',
+            msg: err
+          });
+        });
+      }
+    };
+    var resetError = function(){
+      $scope.alerts.push({
+        type: 'danger',
+        msg: 'Error resetting your account. Please try again.'
+      });
+    };
+    // model def
+    $scope.user = {};
+    $scope.alerts = [];
+
+    // method def
+    $scope.hasError = utility.hasError;
+    $scope.showError = utility.showError;
+    $scope.canSave = utility.canSave;
+    $scope.closeAlert = function(ind){
+      $scope.alerts.splice(ind, 1);
+    };
+    $scope.submit = function(){
+      security.loginForgot($scope.user).then(resetSuccess, resetError);
+    };
+  }]);
+
+angular.module('devlogin', [
+  'devlogin.index',
+  'devlogin.forgot',
+  'devlogin.reset'
+]);
+angular.module('devlogin.reset', ['security.service', 'services.utility', 'ui.bootstrap']);
+angular.module('devlogin.reset').config(['$routeProvider', function($routeProvider){
+  $routeProvider
+    .when('/developer/login/reset', {
+      templateUrl: 'devlogin/reset/devlogin-reset.tpl.html',
+      controller: 'DevLoginResetCtrl',
+      title: 'Reset Your Password'
+    })
+    .when('/developer/login/reset/:email/:token', {
+      templateUrl: 'adminlogin/reset/devlogin-reset.tpl.html',
+      controller: 'AdminLoginResetCtrl'
+    });
+}]);
+angular.module('devlogin.reset').controller('DevLoginResetCtrl', [ '$scope', '$location', '$routeParams', '$log', 'security', 'utility',
+  function($scope, $location, $routeParams, $log, security, utility){
+    // local variable
+    var warningAlert = {
+      type: 'warning',
+      msg:  'You do not have a valid reset request.'
+    };
+    var successAlert = {
+      type: 'info',
+      msg:  'Your password has been reset. Please login to confirm.'
+    };
+    var resetSuccess = function(data){
+      $scope.resetForm.$setPristine();
+      $scope.user = {};
+      if(data.success){
+        $scope.success = true;
+        $scope.alerts.push(successAlert);
+      }else{
+        angular.forEach(data.errors, function(err, index){
+          $scope.alerts.push({
+            type: 'danger',
+            msg: err
+          });
+        });
+      }
+    };
+    var resetError = function(){
+      $scope.alerts.push({
+        type: 'danger',
+        msg: 'Error resetting your password. Please try again.'
+      });
+    };
+    // model def
+    $scope.user = {};
+    $scope.alerts = [];
+    $scope.email = $routeParams.email;
+    $scope.id = $routeParams.token;
+    $scope.success = false;
+
+    //initial behavior
+    if(!($scope.email && $scope.id)){
+      $scope.alerts.push(warningAlert);
+    }
+
+    // method def
+    $scope.hasError = utility.hasError;
+    $scope.showError = utility.showError;
+    $scope.canSave = utility.canSave;
+    $scope.closeAlert = function(ind){
+      $scope.alerts.splice(ind, 1);
+    };
+    $scope.submit = function(){
+      security.loginReset($scope.id, $scope.email, $scope.user).then(resetSuccess, resetError);
+    };
+  }]);
+
 angular.module('login.forgot', ['security.service', 'services.utility', 'ui.bootstrap']);
 angular.module('login.forgot').config(['$routeProvider', function($routeProvider){
   $routeProvider
@@ -8730,7 +9654,7 @@ angular.module('signup').controller('SignupCtrl', [ '$scope', '$location', '$log
       security.signup($scope.user).then(signupSuccess, signupError);
     };
   }]);
-angular.module('templates.app', ['404.tpl.html', 'about.tpl.html', 'account/account.tpl.html', 'account/checkout/checkout.tpl.html', 'account/checkout/order-summary.tpl.html', 'account/purchaseHistory/purchaseHistory.tpl.html', 'account/purchaseHistory/purchaseHistoryOne.tpl.html', 'account/settings/account-settings.tpl.html', 'account/verification/account-verification.tpl.html', 'admin/Pricing/admin-pricing-modal.tpl.html', 'admin/Pricing/admin-pricing.tpl.html', 'admin/Sales/admin-sales.tpl.html', 'admin/accounts/admin-account.tpl.html', 'admin/accounts/admin-accounts.tpl.html', 'admin/activity/activity.tpl.html', 'admin/admin-account-settings/admin-account-settings.tpl.html', 'admin/admin-groups/admin-group.tpl.html', 'admin/admin-groups/admin-groups.tpl.html', 'admin/admin.tpl.html', 'admin/administrators/admin-administrator.tpl.html', 'admin/administrators/admin-administrators.tpl.html', 'admin/custom-reports/custom-reports.tpl.html', 'admin/developers/developers.tpl.html', 'admin/purchase-history/admin-purchase-histories.tpl.html', 'admin/purchase-history/admin-purchase-histories2.tpl.html', 'admin/purchase-history/admin-purchase-history.tpl.html', 'admin/statuses/admin-status.tpl.html', 'admin/statuses/admin-statuses.tpl.html', 'admin/users/admin-user.tpl.html', 'admin/users/admin-users.tpl.html', 'adminlogin/adminlogin.tpl.html', 'adminlogin/forgot/adminlogin-forgot.tpl.html', 'adminlogin/reset/adminlogin-reset.tpl.html', 'contact.tpl.html', 'footer.tpl.html', 'header.tpl.html', 'login/forgot/login-forgot.tpl.html', 'login/login.tpl.html', 'login/reset/login-reset.tpl.html', 'main.tpl.html', 'pricing/checkout/checkout.tpl.html', 'pricing/information-modal.tpl.html', 'pricing/information/information.tpl.html', 'pricing/login-modal.tpl.html', 'pricing/login-modal2.tpl.html', 'pricing/panel-modal.tpl.html', 'pricing/pricing.tpl.html', 'sidebar.tpl.html', 'signup/signup.tpl.html', 'specs.tpl.html']);
+angular.module('templates.app', ['404.tpl.html', 'about.tpl.html', 'account/account.tpl.html', 'account/checkout/checkout.tpl.html', 'account/checkout/order-summary.tpl.html', 'account/purchaseHistory/purchaseHistory.tpl.html', 'account/purchaseHistory/purchaseHistoryOne.tpl.html', 'account/settings/account-settings.tpl.html', 'account/verification/account-verification.tpl.html', 'admin/Pricing/admin-pricing-modal.tpl.html', 'admin/Pricing/admin-pricing.tpl.html', 'admin/Sales/admin-sales.tpl.html', 'admin/accounts/admin-account.tpl.html', 'admin/accounts/admin-accounts.tpl.html', 'admin/activity/activity.tpl.html', 'admin/admin-account-settings/admin-account-settings.tpl.html', 'admin/admin-groups/admin-group.tpl.html', 'admin/admin-groups/admin-groups.tpl.html', 'admin/admin.tpl.html', 'admin/administrators/admin-administrator.tpl.html', 'admin/administrators/admin-administrators.tpl.html', 'admin/custom-reports/custom-reports.tpl.html', 'admin/developers/developers.tpl.html', 'admin/purchase-history/admin-purchase-histories.tpl.html', 'admin/purchase-history/admin-purchase-histories2.tpl.html', 'admin/purchase-history/admin-purchase-history.tpl.html', 'admin/statuses/admin-status.tpl.html', 'admin/statuses/admin-statuses.tpl.html', 'admin/users/admin-user.tpl.html', 'admin/users/admin-users.tpl.html', 'adminlogin/adminlogin.tpl.html', 'adminlogin/forgot/adminlogin-forgot.tpl.html', 'adminlogin/reset/adminlogin-reset.tpl.html', 'contact.tpl.html', 'developer/developer.tpl.html', 'developerlogin/devlogin.tpl.html', 'developerlogin/forgot/devlogin-forgot.tpl.html', 'developerlogin/reset/devlogin-reset.tpl.html', 'footer.tpl.html', 'header.tpl.html', 'login/forgot/login-forgot.tpl.html', 'login/login.tpl.html', 'login/reset/login-reset.tpl.html', 'main.tpl.html', 'pricing/checkout/checkout.tpl.html', 'pricing/information-modal.tpl.html', 'pricing/information/information.tpl.html', 'pricing/login-modal.tpl.html', 'pricing/login-modal2.tpl.html', 'pricing/panel-modal.tpl.html', 'pricing/pricing.tpl.html', 'sidebar.tpl.html', 'signup/signup.tpl.html', 'specs.tpl.html']);
 
 angular.module("404.tpl.html", []).run(["$templateCache", function($templateCache) {
   $templateCache.put("404.tpl.html",
@@ -9939,6 +10863,12 @@ angular.module("account/settings/account-settings.tpl.html", []).run(["$template
     "                        <span><a id=\"panel_view\" href ng-click=\"panelModal()\">Add Another Address</a></span>\n" +
     "                    </div>\n" +
     "                </div>\n" +
+    "            </form>\n" +
+    "\n" +
+    "            <form  name=\"myform\">\n" +
+    "                    <!-- <button class=\"btn btn-primary spacing-top-lg\" ng-click=\"developer()\">Create Developer Account</button>\n" +
+    "                    <p>Already have a developer account? <span>Click here to sign in</span></p> -->\n" +
+    "                    <p>Want to use our API? Log out and go to www.sc-mp.herokuapp.com/developer to log in to your developer account or create a new developer account.</p>\n" +
     "            </form>\n" +
     "        </div>\n" +
     "    </div>");
@@ -11273,70 +12203,70 @@ angular.module("admin/admin.tpl.html", []).run(["$templateCache", function($temp
     "            <div>\n" +
     "                <h4 class=\"spacing-top-lg spacing-bot-md\" style=\"padding-left:15px\">Home Page Views</h4>\n" +
     "                <br>\n" +
-    "                <canvas id=\"line\" class=\"chart chart-line\" chart-data=\"homeView30Day\" chart-labels=\"labelDay\" chart-options=\"optionsViewsDayTotal\" chart-click=\"onClick\">\n" +
-    "                </div>\n" +
+    "                <canvas id=\"line\" class=\"chart chart-line\" chart-data=\"homeView30Day\" chart-labels=\"labelDay\" chart-options=\"optionsViewsDayTotal\" chart-click=\"onClick\"></canvas>\n" +
+    "            </div>\n" +
+    "            <br>\n" +
+    "            <div>\n" +
+    "                <h4 class=\"spacing-top-lg spacing-bot-md\" style=\"padding-left:15px\">Shopping Cart Views</h4>\n" +
     "                <br>\n" +
-    "                <div>\n" +
-    "                    <h4 class=\"spacing-top-lg spacing-bot-md\" style=\"padding-left:15px\">Shopping Cart Views</h4>\n" +
-    "                    <br>\n" +
-    "                    <canvas id=\"line\" class=\"chart chart-line\" chart-data=\"cartView30Day\" chart-labels=\"labelDay\" chart-options=\"optionsViewsDayTotal\" chart-click=\"onClick\">\n" +
-    "                    </canvas>\n" +
-    "                </div>\n" +
+    "                <canvas id=\"line\" class=\"chart chart-line\" chart-data=\"cartView30Day\" chart-labels=\"labelDay\" chart-options=\"optionsViewsDayTotal\" chart-click=\"onClick\">\n" +
+    "                </canvas>\n" +
+    "            </div>\n" +
+    "            <br>\n" +
+    "            <div>\n" +
+    "                <h4 class=\"spacing-top-lg spacing-bot-md\" style=\"padding-left:10px\">Recent Purchases</h4>\n" +
     "                <br>\n" +
-    "                <div>\n" +
-    "                    <h4 class=\"spacing-top-lg spacing-bot-md\" style=\"padding-left:10px\">Recent Purchases</h4>\n" +
-    "                    <br>\n" +
-    "                    <div class=\"table table-striped\">\n" +
-    "                        <a href=\"#\" class=\"list-group-item\">\n" +
-    "                            <i class=\"fa fa-shopping-cart fa-fw\"></i> New Order Placed\n" +
-    "                            <span class=\"pull-right text-muted small\"><em>4 minutes ago</em>\n" +
-    "                            </span>\n" +
-    "                        </a>\n" +
-    "                        <a href=\"#\" class=\"list-group-item\">\n" +
-    "                            <i class=\"fa fa-shopping-cart fa-fw\"></i> New Order Placed\n" +
-    "                            <span class=\"pull-right text-muted small\"><em>12 minutes ago</em>\n" +
-    "                            </span>\n" +
-    "                        </a>\n" +
-    "                        <a href=\"#\" class=\"list-group-item\">\n" +
-    "                            <i class=\"fa fa-money fa-fw\"></i> Payment Received\n" +
-    "                            <span class=\"pull-right text-muted small\"><em>27 minutes ago</em>\n" +
-    "                            </span>\n" +
-    "                        </a>\n" +
-    "                        <a href=\"#\" class=\"list-group-item\">\n" +
-    "                            <i class=\"fa fa-shopping-cart fa-fw\"></i> New Order Placed\n" +
-    "                            <span class=\"pull-right text-muted small\"><em>43 minutes ago</em>\n" +
-    "                            </span>\n" +
-    "                        </a>\n" +
-    "                        <a href=\"#\" class=\"list-group-item\">\n" +
-    "                            <i class=\"fa fa-money fa-fw\"></i> Payment Received\n" +
-    "                            <span class=\"pull-right text-muted small\"><em>11:32 AM</em>\n" +
-    "                            </span>\n" +
-    "                        </a>\n" +
-    "                        <a href=\"#\" class=\"list-group-item\">\n" +
-    "                            <i class=\"fa fa-shopping-cart fa-fw\"></i> New Order Placed\n" +
-    "                            <span class=\"pull-right text-muted small\"><em>11:13 AM</em>\n" +
-    "                            </span>\n" +
-    "                        </a>\n" +
-    "                        <a href=\"#\" class=\"list-group-item\">\n" +
-    "                            <i class=\"fa fa-shopping-cart fa-fw\"></i> New Order Placed\n" +
-    "                            <span class=\"pull-right text-muted small\"><em>10:57 AM</em>\n" +
-    "                            </span>\n" +
-    "                        </a>\n" +
-    "                        <a href=\"#\" class=\"list-group-item\">\n" +
-    "                            <i class=\"fa fa-shopping-cart fa-fw\"></i> New Order Placed\n" +
-    "                            <span class=\"pull-right text-muted small\"><em>9:49 AM</em>\n" +
-    "                            </span>\n" +
-    "                        </a>\n" +
-    "                        <a href=\"#\" class=\"list-group-item\">\n" +
-    "                            <i class=\"fa fa-money fa-fw\"></i> Payment Received\n" +
-    "                            <span class=\"pull-right text-muted small\"><em>Yesterday</em>\n" +
-    "                            </span>\n" +
-    "                        </a>\n" +
-    "                    </div>\n" +
+    "                <div class=\"table table-striped\">\n" +
+    "                    <a href=\"#\" class=\"list-group-item\">\n" +
+    "                        <i class=\"fa fa-shopping-cart fa-fw\"></i> New Order Placed\n" +
+    "                        <span class=\"pull-right text-muted small\"><em>4 minutes ago</em>\n" +
+    "                        </span>\n" +
+    "                    </a>\n" +
+    "                    <a href=\"#\" class=\"list-group-item\">\n" +
+    "                        <i class=\"fa fa-shopping-cart fa-fw\"></i> New Order Placed\n" +
+    "                        <span class=\"pull-right text-muted small\"><em>12 minutes ago</em>\n" +
+    "                        </span>\n" +
+    "                    </a>\n" +
+    "                    <a href=\"#\" class=\"list-group-item\">\n" +
+    "                        <i class=\"fa fa-money fa-fw\"></i> Payment Received\n" +
+    "                        <span class=\"pull-right text-muted small\"><em>27 minutes ago</em>\n" +
+    "                        </span>\n" +
+    "                    </a>\n" +
+    "                    <a href=\"#\" class=\"list-group-item\">\n" +
+    "                        <i class=\"fa fa-shopping-cart fa-fw\"></i> New Order Placed\n" +
+    "                        <span class=\"pull-right text-muted small\"><em>43 minutes ago</em>\n" +
+    "                        </span>\n" +
+    "                    </a>\n" +
+    "                    <a href=\"#\" class=\"list-group-item\">\n" +
+    "                        <i class=\"fa fa-money fa-fw\"></i> Payment Received\n" +
+    "                        <span class=\"pull-right text-muted small\"><em>11:32 AM</em>\n" +
+    "                        </span>\n" +
+    "                    </a>\n" +
+    "                    <a href=\"#\" class=\"list-group-item\">\n" +
+    "                        <i class=\"fa fa-shopping-cart fa-fw\"></i> New Order Placed\n" +
+    "                        <span class=\"pull-right text-muted small\"><em>11:13 AM</em>\n" +
+    "                        </span>\n" +
+    "                    </a>\n" +
+    "                    <a href=\"#\" class=\"list-group-item\">\n" +
+    "                        <i class=\"fa fa-shopping-cart fa-fw\"></i> New Order Placed\n" +
+    "                        <span class=\"pull-right text-muted small\"><em>10:57 AM</em>\n" +
+    "                        </span>\n" +
+    "                    </a>\n" +
+    "                    <a href=\"#\" class=\"list-group-item\">\n" +
+    "                        <i class=\"fa fa-shopping-cart fa-fw\"></i> New Order Placed\n" +
+    "                        <span class=\"pull-right text-muted small\"><em>9:49 AM</em>\n" +
+    "                        </span>\n" +
+    "                    </a>\n" +
+    "                    <a href=\"#\" class=\"list-group-item\">\n" +
+    "                        <i class=\"fa fa-money fa-fw\"></i> Payment Received\n" +
+    "                        <span class=\"pull-right text-muted small\"><em>Yesterday</em>\n" +
+    "                        </span>\n" +
+    "                    </a>\n" +
     "                </div>\n" +
     "            </div>\n" +
     "        </div>\n" +
     "    </div>\n" +
+    "</div>\n" +
     "");
 }]);
 
@@ -11469,60 +12399,26 @@ angular.module("admin/administrators/admin-administrator.tpl.html", []).run(["$t
 
 angular.module("admin/administrators/admin-administrators.tpl.html", []).run(["$templateCache", function($templateCache) {
   $templateCache.put("admin/administrators/admin-administrators.tpl.html",
+    "<h1 class=\"mb-none\">Administrators</h1>\n" +
+    "<hr class=\"tall\">\n" +
+    "\n" +
+    "\n" +
+    "\n" +
+    "\n" +
     "<div class=\"row\" id=\"admin-administrators-index\">\n" +
     "    <div class=\"col-xs-12\">\n" +
-    "        <div class=\"page-header\">\n" +
-    "            <form class=\"form-inline pull-right\" name=\"addAdminForm\">\n" +
-    "                <div class=\"input-group\">\n" +
-    "                    <input name=\"name\" type=\"text\" placeholder=\"enter a name\" class=\"form-control\" ng-model=\"fullname\" required>\n" +
-    "                    <button type=\"button\" class=\"btn btn-primary\" ng-disabled=\"!canSave(addAdminForm)\" ng-click=\"addAdmin()\">Add New</button>\n" +
-    "                </div>\n" +
-    "            </form>\n" +
-    "            <h1>Administrators</h1>\n" +
-    "        </div>\n" +
-    "        <form class=\"filters\">\n" +
-    "            <div class=\"row\">\n" +
-    "                <div class=\"col-sm-4\">\n" +
-    "                    <label>Name Search</label>\n" +
-    "                    <input name=\"search\" type=\"text\" class=\"form-control\" ng-model=\"filters.search\" ng-model-options=\"{ debounce: 500 }\" ng-change=\"filtersUpdated()\">\n" +
-    "                </div>\n" +
-    "                <div class=\"col-sm-4\">\n" +
-    "                    <label>Sort By</label>\n" +
-    "                    <select name=\"sort\" class=\"form-control\" ng-model=\"filters.sort\" ng-model-options=\"{ debounce: 500 }\" ng-options=\"sort.value as sort.label for sort in sorts\" ng-change=\"filtersUpdated()\">\n" +
-    "                        <!--<option value=\"_id\">id &#9650;</option>-->\n" +
-    "                        <!--<option value=\"-_id\">id &#9660;</option>-->\n" +
-    "                        <!--<option value=\"name\">name &#9650;</option>-->\n" +
-    "                        <!--<option value=\"-name\">name &#9660;</option>-->\n" +
-    "                    </select>\n" +
-    "                </div>\n" +
-    "                <div class=\"col-sm-4\">\n" +
-    "                    <label>Limit</label>\n" +
-    "                    <select name=\"limit\" class=\"form-control\" ng-model=\"filters.limit\" ng-model-options=\"{ debounce: 500 }\" ng-options=\"limit.value as limit.label for limit in limits\" ng-change=\"filtersUpdated()\">\n" +
-    "                        <!--<option value=\"10\">10 items</option>-->\n" +
-    "                        <!--<option value=\"20\" selected=\"selected\">20 items</option>-->\n" +
-    "                        <!--<option value=\"50\">50 items</option>-->\n" +
-    "                        <!--<option value=\"100\">100 items</option>-->\n" +
-    "                    </select>\n" +
-    "                </div>\n" +
-    "            </div>\n" +
-    "        </form>\n" +
     "        <table class=\"table table-striped\">\n" +
     "            <thead>\n" +
-    "            <tr>\n" +
-    "                <th></th>\n" +
-    "                <th class=\"stretch\">name</th>\n" +
-    "                <th>id</th>\n" +
-    "            </tr>\n" +
+    "                <tr>\n" +
+    "                    <th class=\"stretch\">name</th>\n" +
+    "                    <th>id</th>\n" +
+    "                </tr>\n" +
     "            </thead>\n" +
     "            <tbody>\n" +
-    "            <tr ng-repeat=\"administrator in administrators\">\n" +
-    "                <td><a class=\"btn btn-default btn-sm\" ng-href=\"/admin/administrators/{{administrator._id}}\">Edit</a></td>\n" +
-    "                <td class=\"nowrap\" ng-bind=\"administrator.name.full\"></td>\n" +
-    "                <td ng-bind=\"administrator._id\"></td>\n" +
-    "            </tr>\n" +
-    "            <tr ng-show=\"administrators.length === 0\">\n" +
-    "                <td colspan=\"3\">no documents matched</td>\n" +
-    "            </tr>\n" +
+    "                <tr ng-repeat=\"administrator in administrators\" ng-href=\"/admin/administrators/{{administrator._id}}\">\n" +
+    "                    <td class=\"nowrap\" ng-bind=\"administrator.name.full\"></td>\n" +
+    "                    <td ng-bind=\"administrator._id\"></td>\n" +
+    "                </tr>\n" +
     "            </tbody>\n" +
     "        </table>\n" +
     "        <div class=\"well\" ng-if=\"pages.total > 1\">\n" +
@@ -11536,22 +12432,150 @@ angular.module("admin/administrators/admin-administrators.tpl.html", []).run(["$
     "            </div>\n" +
     "            <div class=\"clearfix\"></div>\n" +
     "        </div>\n" +
+    "        \n" +
+    "        <br>\n" +
+    "\n" +
+    "        <form name=\"addAdminForm\">\n" +
+    "            <legend class=\"mb-none\">Add New Admin Account</legend>\n" +
+    "            <br>\n" +
+    "            <div class=\"row\">\n" +
+    "                <div class=\"col-md-4\">\n" +
+    "                    <label class=\"control-label\" for=\"username\">First Name:</label>\n" +
+    "                    <input type=\"text\" id=\"username\" class=\"form-control\" ng-model=\"firstname\">\n" +
+    "                </div>\n" +
+    "            </div>\n" +
+    "            <div class=\"row\">\n" +
+    "                <div class=\"col-md-4\">\n" +
+    "                    <label class=\"control-label\" for=\"username\">Last Name:</label>\n" +
+    "                    <input type=\"text\" id=\"username\" class=\"form-control\" ng-model=\"lastname\">\n" +
+    "                </div>\n" +
+    "            </div>\n" +
+    "\n" +
+    "            <div ng-show=\"identityEditorEnabled\" class=\"form-group col-md-6\" style=\"float: right; width: 45%;\">\n" +
+    "                <button type=\"button\" class=\"btn btn-primary btn-update\"  ng-click=\"addAdmin()\">Add New</button>\n" +
+    "            </div>\n" +
+    "        </form>\n" +
+    "\n" +
+    "\n" +
     "    </div>\n" +
     "</div>");
 }]);
 
 angular.module("admin/custom-reports/custom-reports.tpl.html", []).run(["$templateCache", function($templateCache) {
   $templateCache.put("admin/custom-reports/custom-reports.tpl.html",
-    "<h2>Custom Reports</h2>\n" +
-    "</header>\n" +
-    "<button ng-click=\"toggleData('accounts')\">Accounts</button>\n" +
-    "<button ng-click=\"toggleData('purchases')\">Purchases</button>\n" +
-    "<button>Accounts</button>\n" +
+    "<h2 class=\"mb-none\">Custom Reports</h2>\n" +
+    "<hr class=\"tall\">\n" +
     "\n" +
     "\n" +
-    "<div >\n" +
+    "<div class=\"row\">\n" +
+    "	<div class=\"col-xs-12\">\n" +
+    "		<form class=\"form-horizontal form-bordered\" action=\"#\">\n" +
+    "			<div class=\"form-group\">\n" +
+    "				<label class=\"col-md-3 control-label\">Graph Data</label>\n" +
+    "				<div class=\"col-md-6\">\n" +
+    "					<select class=\"form-control populate\" ng-model=\"graphChoice\" ng-model-options=\"{ debounce: 500 }\" ng-options=\"graph as graph for graph in graphChoices\" ng-change=\"filtersUpdated()\">\n" +
+    "					</select>\n" +
+    "				</div>\n" +
+    "			</div>\n" +
+    "			<div ng-show=\"graphChoice=='Accounts'\" class=\"form-group\">\n" +
+    "				<label class=\"col-md-3 control-label\">Sort By</label>\n" +
+    "				<div class=\"col-md-6\">\n" +
+    "					<select name=\"sort\" class=\"form-control populate\" ng-model=\"accountFilters.sort\" ng-model-options=\"{ debounce: 500 }\" ng-options=\"sort.value as sort.label for sort in accountSorts\" ng-change=\"accountFiltersUpdated()\">\n" +
+    "					</select>\n" +
+    "				</div>\n" +
+    "			</div>\n" +
+    "			<div ng-show=\"graphChoice=='Purchases'\" class=\"form-group\">\n" +
+    "				<label class=\"col-md-3 control-label\">Sort By</label>\n" +
+    "				<div class=\"col-md-6\">\n" +
+    "					<select class=\"form-control populate\" ng-model=\"phFilters.sort\" ng-model-options=\"{ debounce: 500 }\" ng-options=\"sort.value as sort.label for sort in phSorts\" ng-change=\"phFiltersUpdated()\">\n" +
+    "					</select>\n" +
+    "				</div>\n" +
+    "			</div>\n" +
+    "			<div ng-show=\"graphChoice=='Sales'\" class=\"form-group\">\n" +
+    "				<label class=\"col-md-3 control-label\">Graph Type</label>\n" +
+    "				<div class=\"col-md-6\">\n" +
+    "					<select class=\"form-control populate\" ng-model=\"salesGraph\" ng-model-options=\"{ debounce: 500 }\" ng-options=\"graph as graph for graph in salesGraphs\">\n" +
+    "					</select>\n" +
+    "				</div>\n" +
+    "			</div>\n" +
+    "			<div ng-show=\"graphChoice=='Page Views'\" class=\"form-group\">\n" +
+    "				<label class=\"col-md-3 control-label\">Graph Type</label>\n" +
+    "				<div class=\"col-md-6\">\n" +
+    "					<select class=\"form-control populate\" ng-model=\"viewGraph\" ng-model-options=\"{ debounce: 500 }\" ng-options=\"graph as graph for graph in viewGraphs\">\n" +
+    "					</select>\n" +
+    "				</div>\n" +
+    "			</div>\n" +
+    "			<div ng-show=\"graphChoice=='Accounts'\" class=\"form-group\">\n" +
+    "				<label class=\"col-md-3 control-label\">From:</label>\n" +
+    "				<div class=\"col-md-6\">\n" +
+    "					<div class=\"input-group\">\n" +
+    "						<span class=\"input-group-addon\">\n" +
+    "							<i class=\"fa fa-calendar\"></i>\n" +
+    "						</span>\n" +
+    "						<input type=\"date\" ng-model=\"accountStartDate\" class=\"form-control\" ng-change=\"accountFiltersUpdated()\">\n" +
+    "					</div>\n" +
+    "				</div>\n" +
+    "			</div>\n" +
+    "			<div ng-show=\"graphChoice=='Accounts'\" class=\"form-group\">\n" +
+    "				<label class=\"col-md-3 control-label\">To:</label>\n" +
+    "				<div class=\"col-md-6\">\n" +
+    "					<div class=\"input-group\">\n" +
+    "						<span class=\"input-group-addon\">\n" +
+    "							<i class=\"fa fa-calendar\"></i>\n" +
+    "						</span>\n" +
+    "						<input type=\"date\" ng-model=\"accountEndDate\" class=\"form-control\" ng-change=\"accountFiltersUpdated()\">\n" +
+    "					</div>\n" +
+    "				</div>\n" +
+    "			</div>\n" +
+    "			<div ng-show=\"graphChoice=='Purchases'\" class=\"form-group\">\n" +
+    "				<label class=\"col-md-3 control-label\">From:</label>\n" +
+    "				<div class=\"col-md-6\">\n" +
+    "					<div class=\"input-group\">\n" +
+    "						<span class=\"input-group-addon\">\n" +
+    "							<i class=\"fa fa-calendar\"></i>\n" +
+    "						</span>\n" +
+    "						<input type=\"date\" ng-model=\"phStartDate\" class=\"form-control\" ng-change=\"phFiltersUpdated()\">\n" +
+    "					</div>\n" +
+    "				</div>\n" +
+    "			</div>\n" +
+    "			<div ng-show=\"graphChoice=='Purchases'\" class=\"form-group\">\n" +
+    "				<label class=\"col-md-3 control-label\">To:</label>\n" +
+    "				<div class=\"col-md-6\">\n" +
+    "					<div class=\"input-group\">\n" +
+    "						<span class=\"input-group-addon\">\n" +
+    "							<i class=\"fa fa-calendar\"></i>\n" +
+    "						</span>\n" +
+    "						<input type=\"date\" ng-model=\"phEndDate\" class=\"form-control\" ng-change=\"phFiltersUpdated()\">\n" +
+    "					</div>\n" +
+    "				</div>\n" +
+    "			</div>\n" +
+    "		</form>\n" +
+    "		\n" +
+    "	</div>\n" +
+    "</div>\n" +
+    "\n" +
+    "\n" +
+    "<hr class=\"tall\">\n" +
+    "\n" +
+    "<div ng-show=\"graphChoice=='Accounts'\">\n" +
     "	<h2>Accounts</h2>\n" +
-    "	<table table-directive class=\"hover stripe dtable\" mb-none\"\" id=\"user_table\">\n" +
+    "\n" +
+    "	<form>\n" +
+    "		<div class=\"sidebar-search\" style=\"width: 30%;float:right;padding-bottom:15px;\">\n" +
+    "			<div class=\"input-group custom-search-form\">\n" +
+    "				<input name=\"search\" type=\"text\" class=\"form-control\" ng-model=\"accountFilters.search\" ng-model-options=\"{ debounce: 500 }\" ng-change=\"accountFiltersUpdated()\" placeholder=\"Search...\">\n" +
+    "				<div class=\"input-group-btn\">\n" +
+    "					<button class=\"btn btn-default\" type=\"button\">\n" +
+    "						<i class=\"fa fa-search\"></i>\n" +
+    "					</button>\n" +
+    "				</div>\n" +
+    "			</div>\n" +
+    "		</div>\n" +
+    "	</form>\n" +
+    "\n" +
+    "\n" +
+    "\n" +
+    "	<table class=\"table table-stripe table-hover\">\n" +
     "		<thead>\n" +
     "			<tr>\n" +
     "				<th>Username</th>\n" +
@@ -11571,35 +12595,138 @@ angular.module("admin/custom-reports/custom-reports.tpl.html", []).run(["$templa
     "			</tr>\n" +
     "		</tbody>\n" +
     "	</table>\n" +
-    "</div>\n" +
-    "<!-- \n" +
-    "<div ng-show=\"graphData=='purchases'\">\n" +
-    "	<h2>Purchases</h2>\n" +
-    "	<table table-directive=\"purchaseTable\" class=\"hover stripe dtable\" mb-none\"\" id=\"user_table\">\n" +
-    "		<thead>\n" +
-    "			<tr>\n" +
-    "				<th>Date</th>\n" +
-    "				<th>Company</th>\n" +
-    "				<th>Customer</th>\n" +
-    "				<th>Shipping State</th>\n" +
-    "				<th># Purchases</th>\n" +
-    "				<th>Purchase Amount</th>\n" +
-    "				<th>Transaction ID</th>\n" +
-    "			</tr>\n" +
-    "		</thead>\n" +
-    "		<tbody>\n" +
-    "			<tr ng-repeat=\"ph in phList\" ng-click=\"goToPH();\">\n" +
-    "				<td>{{ph.orderDate | date:\"MM/dd/yyyy\"}}</td>\n" +
-    "				<td ng-bind=\"ph.company\"></td>\n" +
-    "				<td ng-bind=\"ph.user.name\"></td>\n" +
-    "				<td ng-bind=\"ph.user._id\"></td>\n" +
-    "				<td></td>\n" +
-    "				<td>${{ph.cost.total}}</td>\n" +
-    "				<td ng-bind=\"ph.orderNumber\"></td>\n" +
-    "			</tr>\n" +
-    "		</table>\n" +
-    "	</div> -->\n" +
     "\n" +
+    "	<div class=\"well\" ng-if=\"pages.total > 1\">\n" +
+    "		<div class=\"btn-group pull-left\">\n" +
+    "			<button disabled class=\"btn btn-default\">Page {{accountPages.current}} of {{accountPages.total}}</button>\n" +
+    "			<button disabled class=\"btn btn-default\">Rows {{accountItems.begin}} - {{accountItems.end}} of {{accountItems.total}}</button>\n" +
+    "		</div>\n" +
+    "		<div class=\"btn-group pull-right\">\n" +
+    "			<button class=\"btn btn-default\" ng-class=\"{disabled: !accountPages.hasPrev}\" ng-click=\"accountPrev()\">Prev</button>\n" +
+    "			<button class=\"btn btn-default\" ng-class=\"{disabled: !accountPages.hasNext}\" ng-click=\"accountNext()\"> Next</button>\n" +
+    "		</div>\n" +
+    "		<div class=\"clearfix\"></div>\n" +
+    "	</div>\n" +
+    "\n" +
+    "\n" +
+    "</div>\n" +
+    "\n" +
+    "\n" +
+    "\n" +
+    "\n" +
+    "<div ng-show=\"graphChoice=='Purchases'\" id=\"page-wrapper\">\n" +
+    "	<div class=\"row\">\n" +
+    "		<div id=\"purchases\" class=\"col-lg-12\">\n" +
+    "			<h1 class=\"spacing-bot-lg\">Purchase History</h1>\n" +
+    "			<br>\n" +
+    "			<div class=\"sidebar-search spacing-bot-lg\" style=\"width: 30%; float:right;\">\n" +
+    "				<div class=\"input-group custom-search-form\">\n" +
+    "					<input type=\"text\" class=\"form-control\" ng-model=\"phFilters.search\" ng-model-options=\"{ debounce: 500 }\" ng-change=\"phFiltersUpdated()\" placeholder=\"Search\">\n" +
+    "					<div class=\"input-group-btn\">\n" +
+    "						<button class=\"btn btn-default\" type=\"button\">\n" +
+    "							<i class=\"fa fa-search\"></i>\n" +
+    "						</button>\n" +
+    "					</div>\n" +
+    "				</div>\n" +
+    "			</div>\n" +
+    "			<br>\n" +
+    "			<div>\n" +
+    "				<br>\n" +
+    "				<table class=\"table table-striped\">\n" +
+    "					<thead>\n" +
+    "						<tr>\n" +
+    "							<th>Date</th>\n" +
+    "							<th>Company</th>\n" +
+    "							<th>Customer</th>\n" +
+    "							<th>Shipping State</th>\n" +
+    "							<th># Purchases</th>\n" +
+    "							<th>Purchase Amount</th>\n" +
+    "							<th>Transaction ID</th>\n" +
+    "						</tr>\n" +
+    "					</thead>\n" +
+    "					<tbody>\n" +
+    "						<tr ng-repeat=\"ph in phList\">\n" +
+    "							<td>{{ph.orderDate | date:\"MM/dd/yyyy\"}}</td>\n" +
+    "							<td ng-bind=\"ph.company\"></td>\n" +
+    "							<td ng-bind=\"ph.user.name\"></td>\n" +
+    "							<td ng-bind=\"ph.user._id\"></td>\n" +
+    "							<td></td>\n" +
+    "							<td>${{ph.cost.total}}</td>\n" +
+    "							<td ng-bind=\"ph.orderNumber\"></td>\n" +
+    "						</tr>\n" +
+    "						<tr ng-show=\"phList.length === 0\">\n" +
+    "							<td colspan=\"5\">no documents matched</td>\n" +
+    "						</tr>\n" +
+    "					</tbody>\n" +
+    "				</table>\n" +
+    "				<div class=\"well\" ng-if=\"pages.total > 1\">\n" +
+    "					<div class=\"btn-group pull-left\">\n" +
+    "						<button disabled class=\"btn btn-default\">Page {{phPages.current}} of {{phPages.total}}</button>\n" +
+    "						<button disabled class=\"btn btn-default\">Rows {{phItems.begin}} - {{phItems.end}} of {{phItems.total}}</button>\n" +
+    "					</div>\n" +
+    "					<div class=\"btn-group pull-right\">\n" +
+    "						<button class=\"btn btn-default\" ng-class=\"{disabled: !phPages.hasPrev}\" ng-click=\"phPrev()\">Prev</button>\n" +
+    "						<button class=\"btn btn-default\" ng-class=\"{disabled: !phPages.hasNext}\" ng-click=\"phNext()\"> Next</button>\n" +
+    "					</div>\n" +
+    "					<div class=\"clearfix\"></div>\n" +
+    "				</div>\n" +
+    "			</div>\n" +
+    "			<button class=\"btn btn-primary\" ng-csv=\"phList\" csv-header=\"phHeaders\" filename=\"Purchases.csv\">Export to CSV</button>\n" +
+    "		</div>\n" +
+    "\n" +
+    "	</div>\n" +
+    "</div>\n" +
+    "\n" +
+    "\n" +
+    "<div ng-show=\"graphChoice=='Sales'\">\n" +
+    "	<div ng-show=\"salesGraph=='Monthly'\">\n" +
+    "		<div id=\"monthSales\">\n" +
+    "			<h4 class=\"spacing-top-lg spacing-bot-md\" style=\"padding-left:15px\">Sales This Month</h4>\n" +
+    "			<canvas class=\"chart chart-line\" chart-data=\"totalDay\" chart-labels=\"labelDay\" chart-legend=\"true\" chart-options=\"optionsDayTotal\"\n" +
+    "			chart-click=\"onClick\">></canvas>\n" +
+    "		</div>\n" +
+    "		<button ng-click=\"generatePDF('monthSales')\" class=\"btn btn-primary\">PDF</button>\n" +
+    "	</div>\n" +
+    "	<div ng-show=\"salesGraph=='Yearly'\">\n" +
+    "		<div id=\"yearSales\">\n" +
+    "			<h4 class=\"spacing-top-lg spacing-bot-md\" style=\"padding-left:15px\">Sales This Year</h4>\n" +
+    "			<canvas class=\"chart chart-bar\" chart-options=\"optionsMonthTotal\" chart-data=\"totalMonth\" chart-labels=\"labels\" chart-colors=\"xcolors\" chart-legend=\"true\" chart-click=\"onClick\" chart-dataset-override=\"datasetOverride1\"></canvas>\n" +
+    "		</div>\n" +
+    "		<button ng-click=\"generatePDF('yearSales')\" class=\"btn btn-primary\">PDF</button>\n" +
+    "	</div>\n" +
+    "	<div ng-show=\"salesGraph=='Average'\">\n" +
+    "		<div id=\"avgSales\">\n" +
+    "			<h4 class=\"spacing-top-lg spacing-bot-md\" style=\"padding-left:15px\">Sales Size and Quantity</h4>\n" +
+    "			<canvas class=\"chart chart-line\" chart-legend=\"true\" chart-data=\"sizeQuantityData\"\n" +
+    "			chart-labels=\"labels\" chart-series=\"series\" chart-options=\"sizeQuantityOptions\"\n" +
+    "			chart-dataset-override=\"datasetOverride\" chart-click=\"onClick\"></canvas>\n" +
+    "		</div>\n" +
+    "		<button ng-click=\"generatePDF('avgSales')\" class=\"btn btn-primary\">PDF</button>\n" +
+    "	</div>\n" +
+    "\n" +
+    "</div>\n" +
+    "\n" +
+    "\n" +
+    "<div ng-show=\"graphChoice=='Page Views'\">\n" +
+    "	<div ng-show=\"viewGraph=='Home Page'\">\n" +
+    "		<div id=\"home\">\n" +
+    "			<h4 class=\"spacing-top-lg spacing-bot-md\" style=\"padding-left:15px\">Home Page Views</h4>\n" +
+    "			<br>\n" +
+    "			<canvas class=\"chart chart-line\" chart-data=\"homeView30Day\" chart-labels=\"labelDay\" chart-options=\"optionsViewsDayTotal\"></canvas>\n" +
+    "		</div>\n" +
+    "		<button ng-click=\"generatePDF('home')\" class=\"btn btn-primary\">PDF</button>\n" +
+    "	</div>\n" +
+    "	<div ng-show=\"viewGraph=='Shopping Cart'\">\n" +
+    "		<div id=\"cart\">\n" +
+    "			<h4 class=\"spacing-top-lg spacing-bot-md\" style=\"padding-left:15px\">Shopping Cart Views</h4>\n" +
+    "			<canvas class=\"chart chart-line\" chart-data=\"cartView30Day\" chart-labels=\"labelDay\" chart-options=\"optionsViewsDayTotal\" chart-click=\"onClick\">\n" +
+    "			</canvas>\n" +
+    "		</div>\n" +
+    "		<button ng-click=\"generatePDF('cart')\" class=\"btn btn-primary\">PDF</button>\n" +
+    "	</div>\n" +
+    "\n" +
+    "	\n" +
+    "</div>\n" +
     "\n" +
     "");
 }]);
@@ -12784,6 +13911,90 @@ angular.module("contact.tpl.html", []).run(["$templateCache", function($template
     "");
 }]);
 
+angular.module("developer/developer.tpl.html", []).run(["$templateCache", function($templateCache) {
+  $templateCache.put("developer/developer.tpl.html",
+    "<h2> Hello Developer! </h2>");
+}]);
+
+angular.module("developerlogin/devlogin.tpl.html", []).run(["$templateCache", function($templateCache) {
+  $templateCache.put("developerlogin/devlogin.tpl.html",
+    "<div class=\"row\">\n" +
+    "    <div class=\"col-sm-6\">\n" +
+    "        <div class=\"header\"><h1><strong>Developer Sign In</strong></h1></div>\n" +
+    "        <br>\n" +
+    "        <form name=\"loginForm\">\n" +
+    "            <alert ng-repeat=\"alert in alerts\" type=\"{{alert.type}}\" close=\"closeAlert($index)\">{{alert.msg}}</alert>\n" +
+    "            <div class=\"form-group\" ng-class=\"{'has-error': hasError(loginForm.username)}\">\n" +
+    "                <label class=\"control-label\" for=\"username\">Username or Email:</label>\n" +
+    "                <input type=\"text\" name=\"username\" id=\"username\" class=\"form-control\" ng-model=\"user.username\" required server-error onkeydown = \"if (event.keyCode == 13)\n" +
+    "                        document.getElementById('Submit').click()\">\n" +
+    "                <span class=\"help-block\" ng-show=\"showError(loginForm.username, 'required')\">This field is required</span>\n" +
+    "                <span class=\"help-block\" ng-show=\"showError(loginForm.username, 'server')\">{{errfor.username}}</span>\n" +
+    "            </div>\n" +
+    "            <div class=\"form-group\" ng-class=\"{'has-error': hasError(loginForm.password)}\">\n" +
+    "                <label class=\"control-label\" for=\"password\">Password:</label>\n" +
+    "                <input type=\"password\" name=\"password\" id=\"password\" class=\"form-control\" ng-model=\"user.password\" required server-error onkeydown = \"if (event.keyCode == 13)\n" +
+    "                        document.getElementById('Submit').click()\">\n" +
+    "                <span class=\"help-block\" ng-show=\"showError(loginForm.password, 'required')\">This field is required</span>\n" +
+    "                <span class=\"help-block\" ng-show=\"showError(loginForm.password, 'server')\">{{errfor.password}}</span>\n" +
+    "            </div>\n" +
+    "            <div class=\"form-group\">\n" +
+    "                <button type=\"button\" id=\"Submit\" class=\"btn btn-primary btn-login\" ng-disabled=\"!canSave(loginForm)\" style=\"float:right;\" ng-click=\"submit()\">Sign In</button>\n" +
+    "                <!--<button type=\"button\" class=\"btn btn-primary btn-login\">Sign In</button>-->\n" +
+    "            </div>\n" +
+    "        </form>\n" +
+    "    </div>\n" +
+    "</div>");
+}]);
+
+angular.module("developerlogin/forgot/devlogin-forgot.tpl.html", []).run(["$templateCache", function($templateCache) {
+  $templateCache.put("developerlogin/forgot/devlogin-forgot.tpl.html",
+    "<div class=\"row\">\n" +
+    "    <div class=\"col-sm-6\">\n" +
+    "        <div><h1>Forgot Your Password?</h1></div>\n" +
+    "        <form name=\"loginForgotForm\">\n" +
+    "            <alert ng-repeat=\"alert in alerts\" type=\"{{alert.type}}\" close=\"closeAlert($index)\">{{alert.msg}}</alert>\n" +
+    "            <div class=\"form-group\" ng-class=\"{'has-error': hasError(loginForgotForm.email)}\">\n" +
+    "                <label class=\"control-label\" for=\"email\">Enter Your Email:</label>\n" +
+    "                <input type=\"email\" name=\"email\" id=\"email\" class=\"form-control\" ng-model=\"user.email\" required>\n" +
+    "                <span class=\"help-block\" ng-show=\"showError(loginForgotForm.email, 'required')\">This field is required</span>\n" +
+    "                <span class=\"help-block\" ng-show=\"showError(loginForgotForm.email, 'email')\">Please enter a valid email</span>\n" +
+    "            </div>\n" +
+    "            <div class=\"form-group\">\n" +
+    "                <button type=\"button\" class=\"btn btn-primary btn-forgot\" ng-disabled=\"!canSave(loginForgotForm)\" ng-click=\"submit()\">Send Reset</button>\n" +
+    "                &nbsp;<a href=\"/login\" class=\"btn btn-link\">Back to Login</a>\n" +
+    "            </div>\n" +
+    "        </form>\n" +
+    "    </div>\n" +
+    "</div>");
+}]);
+
+angular.module("developerlogin/reset/devlogin-reset.tpl.html", []).run(["$templateCache", function($templateCache) {
+  $templateCache.put("developerlogin/reset/devlogin-reset.tpl.html",
+    "<div class=\"row\">\n" +
+    "    <div class=\"col-sm-6\">\n" +
+    "        <div><h1>Reset Your Password</h1></div>\n" +
+    "        <form name=\"resetForm\">\n" +
+    "            <alert ng-repeat=\"alert in alerts\" type=\"{{alert.type}}\" close=\"closeAlert($index)\">{{alert.msg}}</alert>\n" +
+    "            <div class=\"form-group\" ng-class=\"{'has-error': hasError(resetForm.password)}\" ng-show=\"(id && email && !success)\">\n" +
+    "                <label class=\"control-label\" for=\"password\">New Password:</label>\n" +
+    "                <input type=\"password\" name=\"password\" id=\"password\" class=\"form-control\" ng-model=\"user.password\" required>\n" +
+    "                <span class=\"help-block\" ng-show=\"showError(resetForm.password, 'required')\">This field is required</span>\n" +
+    "            </div>\n" +
+    "            <div class=\"form-group\" ng-class=\"{'has-error': hasError(resetForm.confirm)}\" ng-show=\"(id && email && !success)\">\n" +
+    "                <label class=\"control-label\" for=\"confirm\">Confirm Password:</label>\n" +
+    "                <input type=\"password\" name=\"confirm\" id=\"confirm\" class=\"form-control\" ng-model=\"user.confirm\" required>\n" +
+    "                <span class=\"help-block\" ng-show=\"showError(resetForm.confirm, 'required')\">This field is required</span>\n" +
+    "            </div>\n" +
+    "            <div class=\"form-group\">\n" +
+    "                <button type=\"button\" class=\"btn btn-primary btn-reset\" ng-show=\"(id && email && !success)\" ng-disabled=\"!canSave(resetForm)\" ng-click=\"submit()\">Set Password</button>\n" +
+    "                &nbsp;<a href=\"/login\" class=\"btn btn-link\">Back to Login</a>\n" +
+    "            </div>\n" +
+    "        </form>\n" +
+    "    </div>\n" +
+    "</div>");
+}]);
+
 angular.module("footer.tpl.html", []).run(["$templateCache", function($templateCache) {
   $templateCache.put("footer.tpl.html",
     "<div ng-controller=\"FooterCtrl\">\n" +
@@ -12845,7 +14056,7 @@ angular.module("header.tpl.html", []).run(["$templateCache", function($templateC
     "                                                <li ng-class=\"{active: isActive('/contact')}\"><a href=\"/contact\">Contact</a></li>\n" +
     "                                                <li ng-if=\"isAuthenticated()\" class=\"dropdown\">\n" +
     "                                                    <a href=\"/account/settings\" class=\"dropdown-toggle\">My Account</a>\n" +
-    "                                                    <ul href=\"/account/purchaseHistory\" ng-if=\"isAuthenticated()\" class=\"dropdown-menu\">\n" +
+    "                                                    <ul href=\"/account/settings\" ng-if=\"isAuthenticated()\" class=\"dropdown-menu\">\n" +
     "                                                        <li ng-if=\"isAuthenticated()\" ><a href=\"/account/purchaseHistory\">Purchase History</a></li>\n" +
     "                                                        <li ng-if=\"isAuthenticated()\" ><a href=\"/account/settings\">Settings</a></li>\n" +
     "                                                        <li ng-if=\"isAuthenticated()\"><a href=\"\" ng-click=\"logout()\">Sign Out</a></li>\n" +
@@ -12887,7 +14098,7 @@ angular.module("header.tpl.html", []).run(["$templateCache", function($templateC
     "                        <li class=\"dropdown\" dropdown is-open=\"status.isopen\">\n" +
     "                            <a href=\"#\" class=\"dropdown-toggle navbar-dropdown-admin\" ng-bind=\"name\" dropdown-toggle><span class=\"caret\"></span></a>\n" +
     "                            <ul class=\"dropdown-menu\">\n" +
-    "                                <li><a href=\"/admin\" ng-click=\"closeAdminMenu()\">Add New Admin</a></li>\n" +
+    "                                <li><a href=\"/admin/administrators\" ng-click=\"closeAdminMenu()\">Add New Admin</a></li>\n" +
     "                                <li><a href=\"/admin/admin-account-settings/\" ng-click=\"closeAdminMenu()\">Settings</a></li>\n" +
     "                                <li><a href=\"\" ng-click=\"logout()\">Sign Out</a></li>\n" +
     "                            </ul>\n" +
@@ -14221,7 +15432,7 @@ angular.module("sidebar.tpl.html", []).run(["$templateCache", function($template
     "</md-content>\n" +
     "</aside> -->\n" +
     "\n" +
-    "<!-- \n" +
+    "\n" +
     "<aside ng-controller=\"SidebarCtrl\" flex layout=\"row\">\n" +
     "    <md-sidenav hl-sticky=\"\" flex=\"15\" md-is-locked-open=\"true\" class=\"md-whiteframe-4dp\">\n" +
     "        <md-content flex layout=\"column\">\n" +
@@ -14259,129 +15470,8 @@ angular.module("sidebar.tpl.html", []).run(["$templateCache", function($template
     "            </div>\n" +
     "        </md-content>\n" +
     "    </md-sidenav>\n" +
-    "</aside> -->\n" +
-    "\n" +
-    "\n" +
-    "\n" +
-    "<div ng-controller=\"SidebarCtrl\">\n" +
-    "    <head>\n" +
-    "        <style>\n" +
-    "            body {\n" +
-    "                font-family: \"Lato\", sans-serif;\n" +
-    "            }\n" +
-    "\n" +
-    "            .sidenav {\n" +
-    "                height: 100%;\n" +
-    "                position: fixed;\n" +
-    "                z-index: 1;\n" +
-    "                top: 0;\n" +
-    "                left: 0;\n" +
-    "                background-color: #ffffff;\n" +
-    "                overflow-x: hidden;\n" +
-    "                transition: 0.5s;\n" +
-    "                padding-top: 60px;\n" +
-    "            }\n" +
-    "\n" +
-    "            .sidenav a {\n" +
-    "                padding: 8px 8px 8px 32px;\n" +
-    "                text-decoration: none;\n" +
-    "                font-size: 25px;\n" +
-    "                color: #9776;\n" +
-    "                display: block;\n" +
-    "                transition: 0.3s;\n" +
-    "            }\n" +
-    "\n" +
-    "            .sidenav a:hover, .offcanvas a:focus{\n" +
-    "                background-color: lightgrey;\n" +
-    "            }\n" +
-    "\n" +
-    "            .sidenavbig {\n" +
-    "                height: 100%;\n" +
-    "                position: fixed;\n" +
-    "                z-index: 1;\n" +
-    "                top: 0;\n" +
-    "                left: 0;\n" +
-    "                background-color: #ffffff;\n" +
-    "                overflow-x: hidden;\n" +
-    "                transition: 0.5s;\n" +
-    "                padding-top: 60px;\n" +
-    "            }\n" +
-    "\n" +
-    "            .sidenavbig a {\n" +
-    "                padding: 8px 8px 8px 32px;\n" +
-    "                text-decoration: none;\n" +
-    "                font-size: 25px;\n" +
-    "                color: #9776;\n" +
-    "                display: block;\n" +
-    "                transition: 0.3s;\n" +
-    "            }\n" +
-    "\n" +
-    "            .sidenavbig a:hover, .offcanvas a:focus{\n" +
-    "                background-color: lightgrey;\n" +
-    "            }\n" +
-    "\n" +
-    "            .sidenav .closebtn {\n" +
-    "                text-align: right;\n" +
-    "                font-size: 36px;\n" +
-    "                padding: 0px 0px 0px 0px;\n" +
-    "                cursor: pointer;\n" +
-    "            }\n" +
-    "\n" +
-    "            @media screen and (max-height: 450px) {\n" +
-    "                .sidenav {padding-top: 15px;}\n" +
-    "                .sidenav a {font-size: 18px;}\n" +
-    "                .sidenavbig {padding-top: 15px;}\n" +
-    "                .sidenavbig a {font-size: 18px;}\n" +
-    "            }\n" +
-    "\n" +
-    "            @media screen and (min-width: 1650px) {\n" +
-    "                .sidenavbig {width: 250px;}\n" +
-    "                .sidenav {width: 0;}\n" +
-    "                .sidenav .closebtn {display: none;}\n" +
-    "            }\n" +
-    "\n" +
-    "            @media screen and (max-width: 1650px) {\n" +
-    "                .sidenavbig {width: 0;}\n" +
-    "                .sidenav {width: 0;}\n" +
-    "            }\n" +
-    "\n" +
-    "            @media screen and (max-width: 768px) {\n" +
-    "                .sidenav {padding-top: 100px;}\n" +
-    "            }\n" +
-    "        </style>\n" +
-    "    </head>\n" +
-    "\n" +
-    "    <body>\n" +
-    "\n" +
-    "        <div ng-if=\"isAdmin()\">\n" +
-    "            <!-- What shows when it is full screen (Needed so that it reappears even when mobile sidenav is closed) -->\n" +
-    "            <div id=\"mySidenavbig\" class=\"sidenavbig\">\n" +
-    "                <a href=\"/admin\">Dashboard</a>\n" +
-    "                <a href=\"/admin/activity\">Activity</a>\n" +
-    "                <a href=\"/admin/sales\">Sales</a>\n" +
-    "                <a href=\"/admin/purchase-history\">Purchase History</a>\n" +
-    "                <a href=\"/admin/users\">User Info</a>\n" +
-    "                <a href=\"/admin/developers\">Developers</a>\n" +
-    "                <a href=\"/admin/pricing\">Pricing</a>\n" +
-    "                <a href=\"\" ng-click=\"logout()\">Sign Out</a>\n" +
-    "            </div>\n" +
-    "            <!-- What shows when screen becomes too small -->\n" +
-    "            <div id=\"mySidenav\" class=\"sidenav\">\n" +
-    "                <a href=\"javascript:void(0)\" class=\"closebtn\" ng-click=\"closeNav()\">&times;</a>\n" +
-    "                <a href=\"/admin\">Dashboard</a>\n" +
-    "                <a href=\"/admin/activity\">Activity</a>\n" +
-    "                <a href=\"/admin/sales\">Sales</a>\n" +
-    "                <a href=\"/admin/purchase-history\">Purchase History</a>\n" +
-    "                <a href=\"/admin/users\">User Info</a>\n" +
-    "                <a href=\"/admin/developers\">Developers</a>\n" +
-    "                <a href=\"/admin/pricing\">Pricing</a>\n" +
-    "                <a href=\"\" ng-click=\"logout()\">Sign Out</a>\n" +
-    "            </div>\n" +
-    "\n" +
-    "            <span style=\"font-size:30px;cursor:pointer\" ng-click=\"openNav()\">&#9776; Menu</span>\n" +
-    "        </div>\n" +
-    "    </body>\n" +
-    "</div>");
+    "</aside>\n" +
+    "");
 }]);
 
 angular.module("signup/signup.tpl.html", []).run(["$templateCache", function($templateCache) {

@@ -7,6 +7,7 @@ var filterUser = function (user) {
       //firstName: user.firstName,
       //lastName: user.lastName,
       admin: !!(user.roles && user.roles.admin),
+      developer: !!(user.roles && user.roles.developer),
       isVerified: !!(user.roles && user.roles.account && user.roles.account.isVerified && user.roles.account.isVerified === 'yes')
     };
   }

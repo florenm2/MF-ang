@@ -3,7 +3,6 @@
 // public api
 var purchaseHistory = {
   find: function (req, res, next) {
-    //req.query.name = req.query.account.name ? req.query.account.name : '';
     req.query.limit = req.query.limit ? parseInt(req.query.limit, null) : 20;
     req.query.page = req.query.page ? parseInt(req.query.page, null) : 1;
     req.query.sort = req.query.sort ? req.query.sort : '_id';
@@ -11,7 +10,8 @@ var purchaseHistory = {
     req.query.orderDate = req.query.orderDate ? req.query.orderDate : '';
     req.query.search = req.query.search ? req.query.search : '';
     req.query.orderNumber = req.query.orderNumber ? req.query.orderNumber : '';
-    // req.query.account = req.query.account ? req.query.account : '';
+    req.query.datespan1 = req.query.datespan1 ? req.query.datespan1 : '';
+    req.query.datespan2 = req.query.datespan2 ? req.query.datespan2 : '';
 
     var filters = {};
     if (req.query.orderNumber) {
@@ -24,6 +24,10 @@ var purchaseHistory = {
 
     if (req.query.search) {
       filters.search = new RegExp('^.*?'+ req.query.search +'.*$', 'i');
+    }
+
+    if (req.query.datespan1 && req.query.datespan2) {
+      filters.orderDate = {"$gte": req.query.datespan1, "$lte": req.query.datespan2};
     }
 
     req.app.db.models.PurchaseHistory.pagedFind({
@@ -42,27 +46,53 @@ var purchaseHistory = {
   },
   tally: function (req, res, next) {
     req.app.db.models.PurchaseHistory.aggregate([
-       {$group:
+     {$group:
+       {
+         _id: 
          {
-           _id: 
-             {
-               day: {$dayOfMonth: "$orderDate"},
-               month: {$month: "$orderDate"}, 
-               year: {$year: "$orderDate"}
-             }, 
-             total: {$sum: "$cost.raw"},
-             count: {$sum: 1}
-          }
-        },
-        {$sort: {count: 1}}
-        ],
-        function(err, results){
-            if(err){
-                return res.json({error: err.message})
-            }
-            else{
-                return res.json(results)
-            }
+           day: {$dayOfMonth: "$orderDate"},
+           month: {$month: "$orderDate"}, 
+           year: {$year: "$orderDate"}
+         }, 
+         total: {$sum: "$cost.raw"},
+         count: {$sum: 1}
+       }
+     },
+     {$sort: {count: 1}}
+     ],
+     function(err, results){
+      if(err){
+        return res.json({error: err.message})
+      }
+      else{
+        return res.json(results)
+      }
+    })
+  },
+
+  findEverything: function (req, res, next) {
+    req.app.db.models.PurchaseHistory.aggregate([
+      {$group:
+       {
+         _id: "$user.id", purchases: { $push: "$$ROOT" } }
+      },
+     {$lookup:
+       {
+        from: "accounts",
+        localField: "account.id",
+        foreignField: "_id",
+        as: "Accounts"
+       }
+     }
+     
+     ],
+     function(err, results){
+      if(err){
+        return res.json({error: err.message})
+      }
+      else{
+        return res.json(results)
+      }
     })
   },
 
@@ -103,7 +133,7 @@ var purchaseHistory = {
         //account.name: req.body.account,
         orderNumber: req.body.orderNumber,
         search: [
-          req.body.orderNumber
+        req.body.orderNumber
         ]
       };
       req.app.db.models.User.create(fieldsToSet, function (err, ph) {
@@ -194,8 +224,8 @@ var purchaseHistory = {
         orderDate: req.body.orderDate,
         //email: req.body.email.toLowerCase(),
         search: [
-          req.body.orderNumber,
-          req.body.orderDate
+        req.body.orderNumber,
+        req.body.orderDate
         ]
       };
       var options = { new: true }; //so the user returned is the updated not original doc
@@ -230,15 +260,15 @@ var purchaseHistory = {
     // });
 
     workflow.on('patchAccount', function(ph) {
-        var fieldsToSet = {
-          purchaseHistoryLog: req.params.id
-        };
-        var options = { new: true };
+      var fieldsToSet = {
+        purchaseHistoryLog: req.params.id
+      };
+      var options = { new: true };
 
-        req.app.db.models.Account.findByIdAndUpdate(req.user.roles.account.id, {$addToSet: fieldsToSet}, options, function(err, account) {
-          if (err) {
-            return workflow.emit('exception', err);
-          }
+      req.app.db.models.Account.findByIdAndUpdate(req.user.roles.account.id, {$addToSet: fieldsToSet}, options, function(err, account) {
+        if (err) {
+          return workflow.emit('exception', err);
+        }
 
           //workflow.emit('populateRoles', user);
           workflow.emit('response');

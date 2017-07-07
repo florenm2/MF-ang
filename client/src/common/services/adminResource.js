@@ -79,6 +79,12 @@ angular.module('services.adminResource', []).factory('adminResource', ['$http', 
     }
     return $http.get(accountUrl, { params: filters }).then(processResponse, processError);
   };
+  resource.findAccountsEverything = function(filters){
+    if(angular.equals({}, filters)){
+      filters = undefined;
+    }
+    return $http.get(accountUrl + "/everything", { params: filters }).then(processResponse, processError);
+  };
   resource.addAccount = function(fullname){
     return $http.post(accountUrl, { 'name.full': fullname }).then(processResponse, processResponse);
   };
@@ -126,6 +132,12 @@ angular.module('services.adminResource', []).factory('adminResource', ['$http', 
       filters = undefined;
     }
     return $http.get(phUrl, { params: filters }).then(processResponse, processError);
+  };
+  resource.findPHEverything = function(filters){
+    if(angular.equals({}, filters)){
+      filters = undefined;
+    }
+    return $http.get(phUrl + "/findEverything", { params: filters }).then(processResponse, processError);
   };
 
   resource.addPH = function(orderNumber){

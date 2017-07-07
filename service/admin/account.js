@@ -21,6 +21,10 @@ var account = {
       req.query.limit = req.query.limit ? parseInt(req.query.limit, null) : 20;
       req.query.page = req.query.page ? parseInt(req.query.page, null) : 1;
       req.query.sort = req.query.sort ? req.query.sort : '_id';
+      req.query.datespan1 = req.query.datespan1 ? req.query.datespan1 : '';
+      req.query.datespan2 = req.query.datespan2 ? req.query.datespan2 : '';
+      req.query.userCreated = req.query.userCreated ? req.query.userCreated : '';
+
 
       var filters = {};
       if (req.query.search) {
@@ -29,6 +33,10 @@ var account = {
 
       if (req.query.status) {
         filters['status.id'] = req.query.status;
+      }
+
+      if (req.query.datespan1 && req.query.datespan2) {
+        filters.userCreated = {'time': {$gte: req.query.datespan1, $lte: req.query.datespan2}};
       }
 
       req.app.db.models.Account.pagedFind({
@@ -57,6 +65,31 @@ var account = {
     };
 
     require('async').parallel([getStatusOptions, getResults], asyncFinally);
+  },
+  findEverything: function (req, res, next) {
+    req.app.db.models.Account.aggregate([
+     {$unwind: "$purchaseHistoryLog"},
+     {$lookup:
+       {
+        from: "purchasehistories",
+        localField: "purchaseHistoryLog",
+        foreignField: "_id",
+        as: "purchases"
+       }
+     },
+     {$group:
+       {
+         _id: "$user.id" , purchases: { $push: "$$ROOT" } }
+     }
+     ],
+     function(err, results){
+      if(err){
+        return res.json({error: err.message})
+      }
+      else{
+        return res.json(results)
+      }
+    })
   },
 
   create: function(req, res, next){
@@ -87,9 +120,9 @@ var account = {
       };
       fieldsToSet.name.full = fieldsToSet.name.first + (fieldsToSet.name.last ? ' '+ fieldsToSet.name.last : '');
       fieldsToSet.search = [
-        fieldsToSet.name.first,
-        fieldsToSet.name.middle,
-        fieldsToSet.name.last
+      fieldsToSet.name.first,
+      fieldsToSet.name.middle,
+      fieldsToSet.name.last
       ];
 
       req.app.db.models.Account.create(fieldsToSet, function(err, account) {
@@ -104,7 +137,7 @@ var account = {
 
     workflow.emit('validate');
   },
-
+  
   read: function(req, res, next){
     var outcome = {};
 
@@ -219,12 +252,12 @@ var account = {
         phone: req.body.phone,
         zip: req.body.zip,
         search: [
-          req.body.first,
-          req.body.middle,
-          req.body.last,
-          req.body.company,
-          req.body.phone,
-          req.body.zip
+        req.body.first,
+        req.body.middle,
+        req.body.last,
+        req.body.company,
+        req.body.phone,
+        req.body.zip
         ]
       };
       var options = { new: true };

@@ -46,14 +46,6 @@ angular.module('base').controller('SidebarCtrl', ['$scope', '$location', 'securi
     $scope.toggleSidenav = function(menuId) {
       $mdSidenav(menuId).toggle();
     };
-    $scope.openNav = function(){
-      document.getElementById("mySidenav").style.width = "250px";
-      // document.getElementById("mySidenav").style.marginLeft = "250px";
-    };
-    $scope.closeNav = function(){
-      document.getElementById("mySidenav").style.width = "0";
-      // document.getElementById("mySidenav").style.marginLeft= "0";
-    };
   }
 ]);
 angular.module('base').controller('AdminHeaderCtrl' ,['$scope', 'adminResource', 'accountResource', 'accountInfo', 'security',

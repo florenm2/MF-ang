@@ -231,16 +231,8 @@ module.exports = function(grunt) {
             src: ['jspdf.plugin.autotable.js'], dest: '<%= distdir %>/vendor/'
           },
           {
-            expand: true, cwd: 'client/bower_components/datatables.net/js/',
-            src: ['jquery.dataTables.js'], dest: '<%= distdir %>/vendor/'
-          },
-          {
-            expand: true, cwd: 'client/bower_components/datatables.net-buttons/js/',
-            src: ['dataTables.buttons.min.js'], dest: '<%= distdir %>/vendor/'
-          },
-          {
-            expand: true, cwd: 'client/src/vendor/DataTables/',
-            src: ['datatables.min.js'], dest: '<%= distdir %>/vendor/'
+            expand: true, cwd: 'client/bower_components/ng-csv/build/',
+            src: ['ng-csv.min.js'], dest: '<%= distdir %>/vendor/'
           }
         ]
       },
@@ -345,22 +337,6 @@ module.exports = function(grunt) {
           {
             expand: true, cwd: 'client/bower_components/angular-material/',
             src: ['angular-material.min.css'], dest: '<%= distdir %>/css/'
-          },
-          {
-            expand: true, cwd: 'client/src/assets/js/tables/',
-            src: ['examples.datatables.tabletools.js'], dest: '<%= distdir %>/js/'
-          },
-          {
-            expand: true, cwd: 'client/bower_components/datatables.net-buttons-dt/css/',
-            src: ['jquery.dataTables.js'], dest: '<%= distdir %>/css/'
-          },
-          {
-            expand: true, cwd: 'client/bower_components/datatables.net-dt/css/',
-            src: ['jquery.dataTables.css'], dest: '<%= distdir %>/css/'
-          },
-          {
-            expand: true, cwd: 'client/src/vendor/DataTables/',
-            src: ['datatables.min.css'], dest: '<%= distdir %>/css/'
           }
         ]
       },

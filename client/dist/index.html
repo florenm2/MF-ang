@@ -33,30 +33,29 @@
 	<link rel="stylesheet" href="/vendor/metisMenu.css">
 	<link rel="stylesheet" href="/vendor/angular-material.min.css">
 
-	<link rel="stylesheet" type="text/css" href="/css/datatables.min.css"/>
-
-
-
 	<link rel="stylesheet" href="/vendor/morris.css">
 
 	
-	<link rel="stylesheet" href="/css/theme-elements.css">
-	<link rel="stylesheet" href="/css/theme-blog.css">
-	<link rel="stylesheet" href="/css/theme-shop.css">
-	<link rel="stylesheet" href="/css/theme-animate.css">
+	
 	<link href="/css/nivo-slider.css">
 
 	<link rel="stylesheet" href="/css/settings.css">
 	<link href="/css/component.css">
 	<link rel="stylesheet" href="/css/default.css">
-	<link rel="stylesheet" href="/css/theme.css">
 
 	<!-- endbower -->
 
 	<!-- build:css /css/style.min.css -->
 
+	<link rel="stylesheet" href="/css/theme-elements.css">
+	<link rel="stylesheet" href="/css/theme-blog.css">
+	<link rel="stylesheet" href="/css/theme-shop.css">
+	<link rel="stylesheet" href="/css/theme-animate.css">
+	
 	<link rel="stylesheet" href="/css/style.css">
 	<link rel="stylesheet" href="/css/custom.css">
+	<link rel="stylesheet" href="/css/theme.css">
+
 	<!-- endbuild -->
 	
 	<!-- build:js /app.min.js -->
@@ -108,14 +107,10 @@
 	<script type="text/javascript" src="/vendor/vfs_fonts.js"></script>
 	<script type="text/javascript" src="/vendor/jspdf.min.js"></script>
 	<script type="text/javascript" src="/vendor/jspdf.debug.js"></script>
-	<script type="text/javascript" src="/vendor/jspdf.plugin.autotable.js"></script>
-	
+	<script type="text/javascript" src="/vendor/ng-csv.min.js"></script>
+
 	<script type="text/javascript" src="/vendor/jquery.themepunch.plugins.min.js"></script>
 	<script type="text/javascript" src="/vendor/jquery.themepunch.revolution.min.js"></script>
-
-	<script type="text/javascript" src="/vendor/dataTables.buttons.min.js"></script>
-
-	<script type="text/javascript" src="/vendor/datatables.min.js"></script>
 
 	<script type="text/javascript" src="/js/view.home.js"></script>
 
@@ -136,7 +131,7 @@
 
 <body ng-controller="AppCtrl" class="body" ng-cloak layout="column">
 	<div ng-include="'header.tpl.html'"></div>
-	<div ng-include="'sidebar.tpl.html'"></div>
+	<!-- <div ng-include="'sidebar.html'"></div>		 -->
 	<div class="page" flex layout="row">
 		<div ng-view class="container"></div>
 	</div>

@@ -7,6 +7,7 @@ var account = require('./service/account');
 var purchaseHistory = require('./service/purchaseHistory');
 var products = require('./service/products');
 var address = require('./service/address');
+//var developer = require('./service/developer');
 var admin = require('./service/admin/admin');
 var adminUser = require('./service/admin/user');
 var adminAccount = require('./service/admin/account');
@@ -104,8 +105,10 @@ exports = module.exports = function(app, passport) {
   app.post('/api/account/address/', address.add);
   app.get('/api/account/address/', address.get);
   
+  app.post('/api/account/developerAccount', account.addDeveloperAccount);
 
-  //-----athorization required api-----
+
+  //-----authorization required api-----
   app.all('/api/admin*', apiEnsureAuthenticated);
   app.all('/api/admin*', apiEnsureAdmin);
   app.get('/api/admin', admin.getStats);
@@ -143,6 +146,7 @@ exports = module.exports = function(app, passport) {
 
   //admin > accounts
   app.get('/api/admin/accounts', adminAccount.find);
+  app.get('/api/admin/accounts/everything', adminAccount.findEverything);
   app.post('/api/admin/accounts', adminAccount.create);
   app.get('/api/admin/accounts/:id', adminAccount.read);
   app.get('/api/admin/accounts/info/:id', adminAccount.readAllCollections);
@@ -156,6 +160,7 @@ exports = module.exports = function(app, passport) {
 
   //admin > purchase history
   app.get('/api/admin/purchase-history', adminPH.find);
+   app.get('/api/admin/purchase-history/findEverything', adminPH.findEverything);
   app.get('/api/admin/purchase-history/tally', adminPH.tally);
   app.post('/api/admin/purchase-history/', adminPH.create);
   app.get('/api/admin/purchase-history/:id', adminPH.read);
@@ -227,6 +232,12 @@ exports = module.exports = function(app, passport) {
   app.get('/pricing/checkout', useAngular);
   app.get('/pricing/information', useAngular);
   
+  //developer
+  app.get('/developer', useAngular);
+  app.get('/developer/login', useAngular);
+  app.get('/developer/login/reset', useAngular);
+  app.get('/developer/login/forgot', useAngular);
+
   //admin
   app.get('/admin', useAngular);
   app.get('/admin/login', useAngular);

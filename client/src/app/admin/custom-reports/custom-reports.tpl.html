@@ -1,13 +1,116 @@
-<h2>Custom Reports</h2>
-</header>
-<button ng-click="toggleData('accounts')">Accounts</button>
-<button ng-click="toggleData('purchases')">Purchases</button>
-<button>Accounts</button>
+<h2 class="mb-none">Custom Reports</h2>
+<hr class="tall">
 
 
-<div >
+<div class="row">
+	<div class="col-xs-12">
+		<form class="form-horizontal form-bordered" action="#">
+			<div class="form-group">
+				<label class="col-md-3 control-label">Graph Data</label>
+				<div class="col-md-6">
+					<select class="form-control populate" ng-model="graphChoice" ng-model-options="{ debounce: 500 }" ng-options="graph as graph for graph in graphChoices" ng-change="filtersUpdated()">
+					</select>
+				</div>
+			</div>
+			<div ng-show="graphChoice=='Accounts'" class="form-group">
+				<label class="col-md-3 control-label">Sort By</label>
+				<div class="col-md-6">
+					<select name="sort" class="form-control populate" ng-model="accountFilters.sort" ng-model-options="{ debounce: 500 }" ng-options="sort.value as sort.label for sort in accountSorts" ng-change="accountFiltersUpdated()">
+					</select>
+				</div>
+			</div>
+			<div ng-show="graphChoice=='Purchases'" class="form-group">
+				<label class="col-md-3 control-label">Sort By</label>
+				<div class="col-md-6">
+					<select class="form-control populate" ng-model="phFilters.sort" ng-model-options="{ debounce: 500 }" ng-options="sort.value as sort.label for sort in phSorts" ng-change="phFiltersUpdated()">
+					</select>
+				</div>
+			</div>
+			<div ng-show="graphChoice=='Sales'" class="form-group">
+				<label class="col-md-3 control-label">Graph Type</label>
+				<div class="col-md-6">
+					<select class="form-control populate" ng-model="salesGraph" ng-model-options="{ debounce: 500 }" ng-options="graph as graph for graph in salesGraphs">
+					</select>
+				</div>
+			</div>
+			<div ng-show="graphChoice=='Page Views'" class="form-group">
+				<label class="col-md-3 control-label">Graph Type</label>
+				<div class="col-md-6">
+					<select class="form-control populate" ng-model="viewGraph" ng-model-options="{ debounce: 500 }" ng-options="graph as graph for graph in viewGraphs">
+					</select>
+				</div>
+			</div>
+			<div ng-show="graphChoice=='Accounts'" class="form-group">
+				<label class="col-md-3 control-label">From:</label>
+				<div class="col-md-6">
+					<div class="input-group">
+						<span class="input-group-addon">
+							<i class="fa fa-calendar"></i>
+						</span>
+						<input type="date" ng-model="accountStartDate" class="form-control" ng-change="accountFiltersUpdated()">
+					</div>
+				</div>
+			</div>
+			<div ng-show="graphChoice=='Accounts'" class="form-group">
+				<label class="col-md-3 control-label">To:</label>
+				<div class="col-md-6">
+					<div class="input-group">
+						<span class="input-group-addon">
+							<i class="fa fa-calendar"></i>
+						</span>
+						<input type="date" ng-model="accountEndDate" class="form-control" ng-change="accountFiltersUpdated()">
+					</div>
+				</div>
+			</div>
+			<div ng-show="graphChoice=='Purchases'" class="form-group">
+				<label class="col-md-3 control-label">From:</label>
+				<div class="col-md-6">
+					<div class="input-group">
+						<span class="input-group-addon">
+							<i class="fa fa-calendar"></i>
+						</span>
+						<input type="date" ng-model="phStartDate" class="form-control" ng-change="phFiltersUpdated()">
+					</div>
+				</div>
+			</div>
+			<div ng-show="graphChoice=='Purchases'" class="form-group">
+				<label class="col-md-3 control-label">To:</label>
+				<div class="col-md-6">
+					<div class="input-group">
+						<span class="input-group-addon">
+							<i class="fa fa-calendar"></i>
+						</span>
+						<input type="date" ng-model="phEndDate" class="form-control" ng-change="phFiltersUpdated()">
+					</div>
+				</div>
+			</div>
+		</form>
+		
+	</div>
+</div>
+
+
+<hr class="tall">
+
+<div ng-show="graphChoice=='Accounts'">
 	<h2>Accounts</h2>
-	<table table-directive class="hover stripe dtable" mb-none"" id="user_table">
+
+	<form>
+		<div class="sidebar-search" style="width: 30%;float:right;padding-bottom:15px;">
+			<div class="input-group custom-search-form">
+				<input name="search" type="text" class="form-control" ng-model="accountFilters.search" ng-model-options="{ debounce: 500 }" ng-change="accountFiltersUpdated()" placeholder="Search...">
+				<div class="input-group-btn">
+					<button class="btn btn-default" type="button">
+						<i class="fa fa-search"></i>
+					</button>
+				</div>
+			</div>
+		</div>
+	</form>
+
+
+
+	<table class="table table-stripe table-hover">
 		<thead>
 			<tr>
 				<th>Username</th>
@@ -27,33 +130,136 @@
 			</tr>
 		</tbody>
 	</table>
-</div>
-<!-- 
-<div ng-show="graphData=='purchases'">
-	<h2>Purchases</h2>
-	<table table-directive="purchaseTable" class="hover stripe dtable" mb-none"" id="user_table">
-		<thead>
-			<tr>
-				<th>Date</th>
-				<th>Company</th>
-				<th>Customer</th>
-				<th>Shipping State</th>
-				<th># Purchases</th>
-				<th>Purchase Amount</th>
-				<th>Transaction ID</th>
-			</tr>
-		</thead>
-		<tbody>
-			<tr ng-repeat="ph in phList" ng-click="goToPH();">
-				<td>{{ph.orderDate | date:"MM/dd/yyyy"}}</td>
-				<td ng-bind="ph.company"></td>
-				<td ng-bind="ph.user.name"></td>
-				<td ng-bind="ph.user._id"></td>
-				<td></td>
-				<td>${{ph.cost.total}}</td>
-				<td ng-bind="ph.orderNumber"></td>
-			</tr>
-		</table>
-	</div> -->
 
+	<div class="well" ng-if="pages.total > 1">
+		<div class="btn-group pull-left">
+			<button disabled class="btn btn-default">Page {{accountPages.current}} of {{accountPages.total}}</button>
+			<button disabled class="btn btn-default">Rows {{accountItems.begin}} - {{accountItems.end}} of {{accountItems.total}}</button>
+		</div>
+		<div class="btn-group pull-right">
+			<button class="btn btn-default" ng-class="{disabled: !accountPages.hasPrev}" ng-click="accountPrev()">Prev</button>
+			<button class="btn btn-default" ng-class="{disabled: !accountPages.hasNext}" ng-click="accountNext()"> Next</button>
+		</div>
+		<div class="clearfix"></div>
+	</div>
+
+
+</div>
+
+
+
+
+<div ng-show="graphChoice=='Purchases'" id="page-wrapper">
+	<div class="row">
+		<div id="purchases" class="col-lg-12">
+			<h1 class="spacing-bot-lg">Purchase History</h1>
+			<br>
+			<div class="sidebar-search spacing-bot-lg" style="width: 30%; float:right;">
+				<div class="input-group custom-search-form">
+					<input type="text" class="form-control" ng-model="phFilters.search" ng-model-options="{ debounce: 500 }" ng-change="phFiltersUpdated()" placeholder="Search">
+					<div class="input-group-btn">
+						<button class="btn btn-default" type="button">
+							<i class="fa fa-search"></i>
+						</button>
+					</div>
+				</div>
+			</div>
+			<br>
+			<div>
+				<br>
+				<table class="table table-striped">
+					<thead>
+						<tr>
+							<th>Date</th>
+							<th>Company</th>
+							<th>Customer</th>
+							<th>Shipping State</th>
+							<th># Purchases</th>
+							<th>Purchase Amount</th>
+							<th>Transaction ID</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr ng-repeat="ph in phList">
+							<td>{{ph.orderDate | date:"MM/dd/yyyy"}}</td>
+							<td ng-bind="ph.company"></td>
+							<td ng-bind="ph.user.name"></td>
+							<td ng-bind="ph.user._id"></td>
+							<td></td>
+							<td>${{ph.cost.total}}</td>
+							<td ng-bind="ph.orderNumber"></td>
+						</tr>
+						<tr ng-show="phList.length === 0">
+							<td colspan="5">no documents matched</td>
+						</tr>
+					</tbody>
+				</table>
+				<div class="well" ng-if="pages.total > 1">
+					<div class="btn-group pull-left">
+						<button disabled class="btn btn-default">Page {{phPages.current}} of {{phPages.total}}</button>
+						<button disabled class="btn btn-default">Rows {{phItems.begin}} - {{phItems.end}} of {{phItems.total}}</button>
+					</div>
+					<div class="btn-group pull-right">
+						<button class="btn btn-default" ng-class="{disabled: !phPages.hasPrev}" ng-click="phPrev()">Prev</button>
+						<button class="btn btn-default" ng-class="{disabled: !phPages.hasNext}" ng-click="phNext()"> Next</button>
+					</div>
+					<div class="clearfix"></div>
+				</div>
+			</div>
+			<button class="btn btn-primary" ng-csv="phList" csv-header="phHeaders" filename="Purchases.csv">Export to CSV</button>
+		</div>
+
+	</div>
+</div>
+
+
+<div ng-show="graphChoice=='Sales'">
+	<div ng-show="salesGraph=='Monthly'">
+		<div id="monthSales">
+			<h4 class="spacing-top-lg spacing-bot-md" style="padding-left:15px">Sales This Month</h4>
+			<canvas class="chart chart-line" chart-data="totalDay" chart-labels="labelDay" chart-legend="true" chart-options="optionsDayTotal"
+			chart-click="onClick">></canvas>
+		</div>
+		<button ng-click="generatePDF('monthSales')" class="btn btn-primary">PDF</button>
+	</div>
+	<div ng-show="salesGraph=='Yearly'">
+		<div id="yearSales">
+			<h4 class="spacing-top-lg spacing-bot-md" style="padding-left:15px">Sales This Year</h4>
+			<canvas class="chart chart-bar" chart-options="optionsMonthTotal" chart-data="totalMonth" chart-labels="labels" chart-colors="xcolors" chart-legend="true" chart-click="onClick" chart-dataset-override="datasetOverride1"></canvas>
+		</div>
+		<button ng-click="generatePDF('yearSales')" class="btn btn-primary">PDF</button>
+	</div>
+	<div ng-show="salesGraph=='Average'">
+		<div id="avgSales">
+			<h4 class="spacing-top-lg spacing-bot-md" style="padding-left:15px">Sales Size and Quantity</h4>
+			<canvas class="chart chart-line" chart-legend="true" chart-data="sizeQuantityData"
+			chart-labels="labels" chart-series="series" chart-options="sizeQuantityOptions"
+			chart-dataset-override="datasetOverride" chart-click="onClick"></canvas>
+		</div>
+		<button ng-click="generatePDF('avgSales')" class="btn btn-primary">PDF</button>
+	</div>
+
+</div>
+
+
+<div ng-show="graphChoice=='Page Views'">
+	<div ng-show="viewGraph=='Home Page'">
+		<div id="home">
+			<h4 class="spacing-top-lg spacing-bot-md" style="padding-left:15px">Home Page Views</h4>
+			<br>
+			<canvas class="chart chart-line" chart-data="homeView30Day" chart-labels="labelDay" chart-options="optionsViewsDayTotal"></canvas>
+		</div>
+		<button ng-click="generatePDF('home')" class="btn btn-primary">PDF</button>
+	</div>
+	<div ng-show="viewGraph=='Shopping Cart'">
+		<div id="cart">
+			<h4 class="spacing-top-lg spacing-bot-md" style="padding-left:15px">Shopping Cart Views</h4>
+			<canvas class="chart chart-line" chart-data="cartView30Day" chart-labels="labelDay" chart-options="optionsViewsDayTotal" chart-click="onClick">
+			</canvas>
+		</div>
+		<button ng-click="generatePDF('cart')" class="btn btn-primary">PDF</button>
+	</div>
+
+	
+</div>
 

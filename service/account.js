@@ -122,7 +122,7 @@ var account = {
     };
 
     var getPHData = function(callback) {
-      
+
       req.app.db.models.PurchaseHistory.find({"account.id": req.user.roles.account.id }, 'orderDate orderNumber account.name cost').exec(function(err, purchasehistory) {
         if (err) {
           callback(err, null);
@@ -153,6 +153,83 @@ var account = {
 
     require('async').parallel([getAccountData, getUserData, getPHData, getMailAddressData], asyncFinally);
   },
+
+  addDeveloperAccount: function(req, res, next){
+    var workflow = req.app.utility.workflow(req, res);
+
+    // workflow.on('verifyUser', function(callback) {
+    //   req.app.db.models.User.findOne(req.user.roles.account.id).exec(function(err, user) {
+    //     if (err) {
+    //       return workflow.emit('exception', err);
+    //     }
+
+    //     if (!user) {
+    //       workflow.outcome.errors.push('User not found.');
+    //       return workflow.emit('response');
+    //     }
+    //     else if (user.roles && user.roles.developer && user.roles.developer !== req.params.id) {
+    //       workflow.outcome.errors.push('User is already linked to a different admin.');
+    //       return workflow.emit('response');
+    //     }
+
+    //     workflow.user = user;
+    //     workflow.emit('duplicateLinkCheck');
+    //   });
+    // });
+
+    workflow.on('duplicateLinkCheck', function(callback) {
+      req.app.db.models.Developer.findOne({ 'user.id': req.user._id}).exec(function(err, dev) {
+        if (err) {
+          return workflow.emit('exception', err);
+        }
+
+        if (dev) {
+          workflow.outcome.errors.push('A developer account is already linked to this user.');
+          return workflow.emit('response');
+        }
+
+        workflow.emit('createDeveloper');
+      });
+    });
+
+    workflow.on('createDeveloper', function() {
+      var fieldsToSet = {
+        user: { 
+          id: req.user._id, 
+          name: req.user.username 
+        }
+      };
+      // fieldsToSet.search = [
+      // workflow.user.username,
+      // fieldsToSet.name.first,
+      // fieldsToSet.name.middle,
+      // fieldsToSet.name.last
+      // ];
+
+      req.app.db.models.Developer.create(fieldsToSet, function(err, dev) {
+        if (err) {
+          return workflow.emit('exception', err);
+        }
+
+        workflow.outcome.developer = dev;
+        workflow.emit('patchUser');
+      });
+    });
+
+    workflow.on('patchUser', function() {
+      req.app.db.models.User.findByIdAndUpdate(req.user._id, { 'roles.developer': workflow.outcome.developer._id }).exec(function(err, user) {
+        if (err) {
+          return workflow.emit('exception', err);
+        }
+
+        workflow.user = user;
+        return workflow.emit('response');
+      });
+    });
+
+    workflow.emit('duplicateLinkCheck');
+  },
+
   update: function(req, res, next){
     var workflow = req.app.utility.workflow(req, res);
 

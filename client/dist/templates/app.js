@@ -1,4 +1,4 @@
-angular.module('templates.app', ['404.tpl.html', 'about.tpl.html', 'account/account.tpl.html', 'account/checkout/checkout.tpl.html', 'account/checkout/order-summary.tpl.html', 'account/purchaseHistory/purchaseHistory.tpl.html', 'account/purchaseHistory/purchaseHistoryOne.tpl.html', 'account/settings/account-settings.tpl.html', 'account/verification/account-verification.tpl.html', 'admin/Pricing/admin-pricing-modal.tpl.html', 'admin/Pricing/admin-pricing.tpl.html', 'admin/Sales/admin-sales.tpl.html', 'admin/accounts/admin-account.tpl.html', 'admin/accounts/admin-accounts.tpl.html', 'admin/activity/activity.tpl.html', 'admin/admin-account-settings/admin-account-settings.tpl.html', 'admin/admin-groups/admin-group.tpl.html', 'admin/admin-groups/admin-groups.tpl.html', 'admin/admin.tpl.html', 'admin/administrators/admin-administrator.tpl.html', 'admin/administrators/admin-administrators.tpl.html', 'admin/custom-reports/custom-reports.tpl.html', 'admin/developers/developers.tpl.html', 'admin/purchase-history/admin-purchase-histories.tpl.html', 'admin/purchase-history/admin-purchase-histories2.tpl.html', 'admin/purchase-history/admin-purchase-history.tpl.html', 'admin/statuses/admin-status.tpl.html', 'admin/statuses/admin-statuses.tpl.html', 'admin/users/admin-user.tpl.html', 'admin/users/admin-users.tpl.html', 'adminlogin/adminlogin.tpl.html', 'adminlogin/forgot/adminlogin-forgot.tpl.html', 'adminlogin/reset/adminlogin-reset.tpl.html', 'contact.tpl.html', 'footer.tpl.html', 'header.tpl.html', 'login/forgot/login-forgot.tpl.html', 'login/login.tpl.html', 'login/reset/login-reset.tpl.html', 'main.tpl.html', 'pricing/checkout/checkout.tpl.html', 'pricing/information-modal.tpl.html', 'pricing/information/information.tpl.html', 'pricing/login-modal.tpl.html', 'pricing/login-modal2.tpl.html', 'pricing/panel-modal.tpl.html', 'pricing/pricing.tpl.html', 'sidebar.tpl.html', 'signup/signup.tpl.html', 'specs.tpl.html']);
+angular.module('templates.app', ['404.tpl.html', 'about.tpl.html', 'account/account.tpl.html', 'account/checkout/checkout.tpl.html', 'account/checkout/order-summary.tpl.html', 'account/purchaseHistory/purchaseHistory.tpl.html', 'account/purchaseHistory/purchaseHistoryOne.tpl.html', 'account/settings/account-settings.tpl.html', 'account/verification/account-verification.tpl.html', 'admin/Pricing/admin-pricing-modal.tpl.html', 'admin/Pricing/admin-pricing.tpl.html', 'admin/Sales/admin-sales.tpl.html', 'admin/accounts/admin-account.tpl.html', 'admin/accounts/admin-accounts.tpl.html', 'admin/activity/activity.tpl.html', 'admin/admin-account-settings/admin-account-settings.tpl.html', 'admin/admin-groups/admin-group.tpl.html', 'admin/admin-groups/admin-groups.tpl.html', 'admin/admin.tpl.html', 'admin/administrators/admin-administrator.tpl.html', 'admin/administrators/admin-administrators.tpl.html', 'admin/custom-reports/custom-reports.tpl.html', 'admin/developers/developers.tpl.html', 'admin/purchase-history/admin-purchase-histories.tpl.html', 'admin/purchase-history/admin-purchase-histories2.tpl.html', 'admin/purchase-history/admin-purchase-history.tpl.html', 'admin/statuses/admin-status.tpl.html', 'admin/statuses/admin-statuses.tpl.html', 'admin/users/admin-user.tpl.html', 'admin/users/admin-users.tpl.html', 'adminlogin/adminlogin.tpl.html', 'adminlogin/forgot/adminlogin-forgot.tpl.html', 'adminlogin/reset/adminlogin-reset.tpl.html', 'contact.tpl.html', 'developer/developer.tpl.html', 'developerlogin/devlogin.tpl.html', 'developerlogin/forgot/devlogin-forgot.tpl.html', 'developerlogin/reset/devlogin-reset.tpl.html', 'footer.tpl.html', 'header.tpl.html', 'login/forgot/login-forgot.tpl.html', 'login/login.tpl.html', 'login/reset/login-reset.tpl.html', 'main.tpl.html', 'pricing/checkout/checkout.tpl.html', 'pricing/information-modal.tpl.html', 'pricing/information/information.tpl.html', 'pricing/login-modal.tpl.html', 'pricing/login-modal2.tpl.html', 'pricing/panel-modal.tpl.html', 'pricing/pricing.tpl.html', 'sidebar.tpl.html', 'signup/signup.tpl.html', 'specs.tpl.html']);
 
 angular.module("404.tpl.html", []).run(["$templateCache", function($templateCache) {
   $templateCache.put("404.tpl.html",
@@ -1207,6 +1207,12 @@ angular.module("account/settings/account-settings.tpl.html", []).run(["$template
     "                        <span><a id=\"panel_view\" href ng-click=\"panelModal()\">Add Another Address</a></span>\n" +
     "                    </div>\n" +
     "                </div>\n" +
+    "            </form>\n" +
+    "\n" +
+    "            <form  name=\"myform\">\n" +
+    "                    <!-- <button class=\"btn btn-primary spacing-top-lg\" ng-click=\"developer()\">Create Developer Account</button>\n" +
+    "                    <p>Already have a developer account? <span>Click here to sign in</span></p> -->\n" +
+    "                    <p>Want to use our API? Log out and go to www.sc-mp.herokuapp.com/developer to log in to your developer account or create a new developer account.</p>\n" +
     "            </form>\n" +
     "        </div>\n" +
     "    </div>");
@@ -2541,70 +2547,70 @@ angular.module("admin/admin.tpl.html", []).run(["$templateCache", function($temp
     "            <div>\n" +
     "                <h4 class=\"spacing-top-lg spacing-bot-md\" style=\"padding-left:15px\">Home Page Views</h4>\n" +
     "                <br>\n" +
-    "                <canvas id=\"line\" class=\"chart chart-line\" chart-data=\"homeView30Day\" chart-labels=\"labelDay\" chart-options=\"optionsViewsDayTotal\" chart-click=\"onClick\">\n" +
-    "                </div>\n" +
+    "                <canvas id=\"line\" class=\"chart chart-line\" chart-data=\"homeView30Day\" chart-labels=\"labelDay\" chart-options=\"optionsViewsDayTotal\" chart-click=\"onClick\"></canvas>\n" +
+    "            </div>\n" +
+    "            <br>\n" +
+    "            <div>\n" +
+    "                <h4 class=\"spacing-top-lg spacing-bot-md\" style=\"padding-left:15px\">Shopping Cart Views</h4>\n" +
     "                <br>\n" +
-    "                <div>\n" +
-    "                    <h4 class=\"spacing-top-lg spacing-bot-md\" style=\"padding-left:15px\">Shopping Cart Views</h4>\n" +
-    "                    <br>\n" +
-    "                    <canvas id=\"line\" class=\"chart chart-line\" chart-data=\"cartView30Day\" chart-labels=\"labelDay\" chart-options=\"optionsViewsDayTotal\" chart-click=\"onClick\">\n" +
-    "                    </canvas>\n" +
-    "                </div>\n" +
+    "                <canvas id=\"line\" class=\"chart chart-line\" chart-data=\"cartView30Day\" chart-labels=\"labelDay\" chart-options=\"optionsViewsDayTotal\" chart-click=\"onClick\">\n" +
+    "                </canvas>\n" +
+    "            </div>\n" +
+    "            <br>\n" +
+    "            <div>\n" +
+    "                <h4 class=\"spacing-top-lg spacing-bot-md\" style=\"padding-left:10px\">Recent Purchases</h4>\n" +
     "                <br>\n" +
-    "                <div>\n" +
-    "                    <h4 class=\"spacing-top-lg spacing-bot-md\" style=\"padding-left:10px\">Recent Purchases</h4>\n" +
-    "                    <br>\n" +
-    "                    <div class=\"table table-striped\">\n" +
-    "                        <a href=\"#\" class=\"list-group-item\">\n" +
-    "                            <i class=\"fa fa-shopping-cart fa-fw\"></i> New Order Placed\n" +
-    "                            <span class=\"pull-right text-muted small\"><em>4 minutes ago</em>\n" +
-    "                            </span>\n" +
-    "                        </a>\n" +
-    "                        <a href=\"#\" class=\"list-group-item\">\n" +
-    "                            <i class=\"fa fa-shopping-cart fa-fw\"></i> New Order Placed\n" +
-    "                            <span class=\"pull-right text-muted small\"><em>12 minutes ago</em>\n" +
-    "                            </span>\n" +
-    "                        </a>\n" +
-    "                        <a href=\"#\" class=\"list-group-item\">\n" +
-    "                            <i class=\"fa fa-money fa-fw\"></i> Payment Received\n" +
-    "                            <span class=\"pull-right text-muted small\"><em>27 minutes ago</em>\n" +
-    "                            </span>\n" +
-    "                        </a>\n" +
-    "                        <a href=\"#\" class=\"list-group-item\">\n" +
-    "                            <i class=\"fa fa-shopping-cart fa-fw\"></i> New Order Placed\n" +
-    "                            <span class=\"pull-right text-muted small\"><em>43 minutes ago</em>\n" +
-    "                            </span>\n" +
-    "                        </a>\n" +
-    "                        <a href=\"#\" class=\"list-group-item\">\n" +
-    "                            <i class=\"fa fa-money fa-fw\"></i> Payment Received\n" +
-    "                            <span class=\"pull-right text-muted small\"><em>11:32 AM</em>\n" +
-    "                            </span>\n" +
-    "                        </a>\n" +
-    "                        <a href=\"#\" class=\"list-group-item\">\n" +
-    "                            <i class=\"fa fa-shopping-cart fa-fw\"></i> New Order Placed\n" +
-    "                            <span class=\"pull-right text-muted small\"><em>11:13 AM</em>\n" +
-    "                            </span>\n" +
-    "                        </a>\n" +
-    "                        <a href=\"#\" class=\"list-group-item\">\n" +
-    "                            <i class=\"fa fa-shopping-cart fa-fw\"></i> New Order Placed\n" +
-    "                            <span class=\"pull-right text-muted small\"><em>10:57 AM</em>\n" +
-    "                            </span>\n" +
-    "                        </a>\n" +
-    "                        <a href=\"#\" class=\"list-group-item\">\n" +
-    "                            <i class=\"fa fa-shopping-cart fa-fw\"></i> New Order Placed\n" +
-    "                            <span class=\"pull-right text-muted small\"><em>9:49 AM</em>\n" +
-    "                            </span>\n" +
-    "                        </a>\n" +
-    "                        <a href=\"#\" class=\"list-group-item\">\n" +
-    "                            <i class=\"fa fa-money fa-fw\"></i> Payment Received\n" +
-    "                            <span class=\"pull-right text-muted small\"><em>Yesterday</em>\n" +
-    "                            </span>\n" +
-    "                        </a>\n" +
-    "                    </div>\n" +
+    "                <div class=\"table table-striped\">\n" +
+    "                    <a href=\"#\" class=\"list-group-item\">\n" +
+    "                        <i class=\"fa fa-shopping-cart fa-fw\"></i> New Order Placed\n" +
+    "                        <span class=\"pull-right text-muted small\"><em>4 minutes ago</em>\n" +
+    "                        </span>\n" +
+    "                    </a>\n" +
+    "                    <a href=\"#\" class=\"list-group-item\">\n" +
+    "                        <i class=\"fa fa-shopping-cart fa-fw\"></i> New Order Placed\n" +
+    "                        <span class=\"pull-right text-muted small\"><em>12 minutes ago</em>\n" +
+    "                        </span>\n" +
+    "                    </a>\n" +
+    "                    <a href=\"#\" class=\"list-group-item\">\n" +
+    "                        <i class=\"fa fa-money fa-fw\"></i> Payment Received\n" +
+    "                        <span class=\"pull-right text-muted small\"><em>27 minutes ago</em>\n" +
+    "                        </span>\n" +
+    "                    </a>\n" +
+    "                    <a href=\"#\" class=\"list-group-item\">\n" +
+    "                        <i class=\"fa fa-shopping-cart fa-fw\"></i> New Order Placed\n" +
+    "                        <span class=\"pull-right text-muted small\"><em>43 minutes ago</em>\n" +
+    "                        </span>\n" +
+    "                    </a>\n" +
+    "                    <a href=\"#\" class=\"list-group-item\">\n" +
+    "                        <i class=\"fa fa-money fa-fw\"></i> Payment Received\n" +
+    "                        <span class=\"pull-right text-muted small\"><em>11:32 AM</em>\n" +
+    "                        </span>\n" +
+    "                    </a>\n" +
+    "                    <a href=\"#\" class=\"list-group-item\">\n" +
+    "                        <i class=\"fa fa-shopping-cart fa-fw\"></i> New Order Placed\n" +
+    "                        <span class=\"pull-right text-muted small\"><em>11:13 AM</em>\n" +
+    "                        </span>\n" +
+    "                    </a>\n" +
+    "                    <a href=\"#\" class=\"list-group-item\">\n" +
+    "                        <i class=\"fa fa-shopping-cart fa-fw\"></i> New Order Placed\n" +
+    "                        <span class=\"pull-right text-muted small\"><em>10:57 AM</em>\n" +
+    "                        </span>\n" +
+    "                    </a>\n" +
+    "                    <a href=\"#\" class=\"list-group-item\">\n" +
+    "                        <i class=\"fa fa-shopping-cart fa-fw\"></i> New Order Placed\n" +
+    "                        <span class=\"pull-right text-muted small\"><em>9:49 AM</em>\n" +
+    "                        </span>\n" +
+    "                    </a>\n" +
+    "                    <a href=\"#\" class=\"list-group-item\">\n" +
+    "                        <i class=\"fa fa-money fa-fw\"></i> Payment Received\n" +
+    "                        <span class=\"pull-right text-muted small\"><em>Yesterday</em>\n" +
+    "                        </span>\n" +
+    "                    </a>\n" +
     "                </div>\n" +
     "            </div>\n" +
     "        </div>\n" +
     "    </div>\n" +
+    "</div>\n" +
     "");
 }]);
 
@@ -2737,60 +2743,26 @@ angular.module("admin/administrators/admin-administrator.tpl.html", []).run(["$t
 
 angular.module("admin/administrators/admin-administrators.tpl.html", []).run(["$templateCache", function($templateCache) {
   $templateCache.put("admin/administrators/admin-administrators.tpl.html",
+    "<h1 class=\"mb-none\">Administrators</h1>\n" +
+    "<hr class=\"tall\">\n" +
+    "\n" +
+    "\n" +
+    "\n" +
+    "\n" +
     "<div class=\"row\" id=\"admin-administrators-index\">\n" +
     "    <div class=\"col-xs-12\">\n" +
-    "        <div class=\"page-header\">\n" +
-    "            <form class=\"form-inline pull-right\" name=\"addAdminForm\">\n" +
-    "                <div class=\"input-group\">\n" +
-    "                    <input name=\"name\" type=\"text\" placeholder=\"enter a name\" class=\"form-control\" ng-model=\"fullname\" required>\n" +
-    "                    <button type=\"button\" class=\"btn btn-primary\" ng-disabled=\"!canSave(addAdminForm)\" ng-click=\"addAdmin()\">Add New</button>\n" +
-    "                </div>\n" +
-    "            </form>\n" +
-    "            <h1>Administrators</h1>\n" +
-    "        </div>\n" +
-    "        <form class=\"filters\">\n" +
-    "            <div class=\"row\">\n" +
-    "                <div class=\"col-sm-4\">\n" +
-    "                    <label>Name Search</label>\n" +
-    "                    <input name=\"search\" type=\"text\" class=\"form-control\" ng-model=\"filters.search\" ng-model-options=\"{ debounce: 500 }\" ng-change=\"filtersUpdated()\">\n" +
-    "                </div>\n" +
-    "                <div class=\"col-sm-4\">\n" +
-    "                    <label>Sort By</label>\n" +
-    "                    <select name=\"sort\" class=\"form-control\" ng-model=\"filters.sort\" ng-model-options=\"{ debounce: 500 }\" ng-options=\"sort.value as sort.label for sort in sorts\" ng-change=\"filtersUpdated()\">\n" +
-    "                        <!--<option value=\"_id\">id &#9650;</option>-->\n" +
-    "                        <!--<option value=\"-_id\">id &#9660;</option>-->\n" +
-    "                        <!--<option value=\"name\">name &#9650;</option>-->\n" +
-    "                        <!--<option value=\"-name\">name &#9660;</option>-->\n" +
-    "                    </select>\n" +
-    "                </div>\n" +
-    "                <div class=\"col-sm-4\">\n" +
-    "                    <label>Limit</label>\n" +
-    "                    <select name=\"limit\" class=\"form-control\" ng-model=\"filters.limit\" ng-model-options=\"{ debounce: 500 }\" ng-options=\"limit.value as limit.label for limit in limits\" ng-change=\"filtersUpdated()\">\n" +
-    "                        <!--<option value=\"10\">10 items</option>-->\n" +
-    "                        <!--<option value=\"20\" selected=\"selected\">20 items</option>-->\n" +
-    "                        <!--<option value=\"50\">50 items</option>-->\n" +
-    "                        <!--<option value=\"100\">100 items</option>-->\n" +
-    "                    </select>\n" +
-    "                </div>\n" +
-    "            </div>\n" +
-    "        </form>\n" +
     "        <table class=\"table table-striped\">\n" +
     "            <thead>\n" +
-    "            <tr>\n" +
-    "                <th></th>\n" +
-    "                <th class=\"stretch\">name</th>\n" +
-    "                <th>id</th>\n" +
-    "            </tr>\n" +
+    "                <tr>\n" +
+    "                    <th class=\"stretch\">name</th>\n" +
+    "                    <th>id</th>\n" +
+    "                </tr>\n" +
     "            </thead>\n" +
     "            <tbody>\n" +
-    "            <tr ng-repeat=\"administrator in administrators\">\n" +
-    "                <td><a class=\"btn btn-default btn-sm\" ng-href=\"/admin/administrators/{{administrator._id}}\">Edit</a></td>\n" +
-    "                <td class=\"nowrap\" ng-bind=\"administrator.name.full\"></td>\n" +
-    "                <td ng-bind=\"administrator._id\"></td>\n" +
-    "            </tr>\n" +
-    "            <tr ng-show=\"administrators.length === 0\">\n" +
-    "                <td colspan=\"3\">no documents matched</td>\n" +
-    "            </tr>\n" +
+    "                <tr ng-repeat=\"administrator in administrators\" ng-href=\"/admin/administrators/{{administrator._id}}\">\n" +
+    "                    <td class=\"nowrap\" ng-bind=\"administrator.name.full\"></td>\n" +
+    "                    <td ng-bind=\"administrator._id\"></td>\n" +
+    "                </tr>\n" +
     "            </tbody>\n" +
     "        </table>\n" +
     "        <div class=\"well\" ng-if=\"pages.total > 1\">\n" +
@@ -2804,22 +2776,150 @@ angular.module("admin/administrators/admin-administrators.tpl.html", []).run(["$
     "            </div>\n" +
     "            <div class=\"clearfix\"></div>\n" +
     "        </div>\n" +
+    "        \n" +
+    "        <br>\n" +
+    "\n" +
+    "        <form name=\"addAdminForm\">\n" +
+    "            <legend class=\"mb-none\">Add New Admin Account</legend>\n" +
+    "            <br>\n" +
+    "            <div class=\"row\">\n" +
+    "                <div class=\"col-md-4\">\n" +
+    "                    <label class=\"control-label\" for=\"username\">First Name:</label>\n" +
+    "                    <input type=\"text\" id=\"username\" class=\"form-control\" ng-model=\"firstname\">\n" +
+    "                </div>\n" +
+    "            </div>\n" +
+    "            <div class=\"row\">\n" +
+    "                <div class=\"col-md-4\">\n" +
+    "                    <label class=\"control-label\" for=\"username\">Last Name:</label>\n" +
+    "                    <input type=\"text\" id=\"username\" class=\"form-control\" ng-model=\"lastname\">\n" +
+    "                </div>\n" +
+    "            </div>\n" +
+    "\n" +
+    "            <div ng-show=\"identityEditorEnabled\" class=\"form-group col-md-6\" style=\"float: right; width: 45%;\">\n" +
+    "                <button type=\"button\" class=\"btn btn-primary btn-update\"  ng-click=\"addAdmin()\">Add New</button>\n" +
+    "            </div>\n" +
+    "        </form>\n" +
+    "\n" +
+    "\n" +
     "    </div>\n" +
     "</div>");
 }]);
 
 angular.module("admin/custom-reports/custom-reports.tpl.html", []).run(["$templateCache", function($templateCache) {
   $templateCache.put("admin/custom-reports/custom-reports.tpl.html",
-    "<h2>Custom Reports</h2>\n" +
-    "</header>\n" +
-    "<button ng-click=\"toggleData('accounts')\">Accounts</button>\n" +
-    "<button ng-click=\"toggleData('purchases')\">Purchases</button>\n" +
-    "<button>Accounts</button>\n" +
+    "<h2 class=\"mb-none\">Custom Reports</h2>\n" +
+    "<hr class=\"tall\">\n" +
     "\n" +
     "\n" +
-    "<div >\n" +
+    "<div class=\"row\">\n" +
+    "	<div class=\"col-xs-12\">\n" +
+    "		<form class=\"form-horizontal form-bordered\" action=\"#\">\n" +
+    "			<div class=\"form-group\">\n" +
+    "				<label class=\"col-md-3 control-label\">Graph Data</label>\n" +
+    "				<div class=\"col-md-6\">\n" +
+    "					<select class=\"form-control populate\" ng-model=\"graphChoice\" ng-model-options=\"{ debounce: 500 }\" ng-options=\"graph as graph for graph in graphChoices\" ng-change=\"filtersUpdated()\">\n" +
+    "					</select>\n" +
+    "				</div>\n" +
+    "			</div>\n" +
+    "			<div ng-show=\"graphChoice=='Accounts'\" class=\"form-group\">\n" +
+    "				<label class=\"col-md-3 control-label\">Sort By</label>\n" +
+    "				<div class=\"col-md-6\">\n" +
+    "					<select name=\"sort\" class=\"form-control populate\" ng-model=\"accountFilters.sort\" ng-model-options=\"{ debounce: 500 }\" ng-options=\"sort.value as sort.label for sort in accountSorts\" ng-change=\"accountFiltersUpdated()\">\n" +
+    "					</select>\n" +
+    "				</div>\n" +
+    "			</div>\n" +
+    "			<div ng-show=\"graphChoice=='Purchases'\" class=\"form-group\">\n" +
+    "				<label class=\"col-md-3 control-label\">Sort By</label>\n" +
+    "				<div class=\"col-md-6\">\n" +
+    "					<select class=\"form-control populate\" ng-model=\"phFilters.sort\" ng-model-options=\"{ debounce: 500 }\" ng-options=\"sort.value as sort.label for sort in phSorts\" ng-change=\"phFiltersUpdated()\">\n" +
+    "					</select>\n" +
+    "				</div>\n" +
+    "			</div>\n" +
+    "			<div ng-show=\"graphChoice=='Sales'\" class=\"form-group\">\n" +
+    "				<label class=\"col-md-3 control-label\">Graph Type</label>\n" +
+    "				<div class=\"col-md-6\">\n" +
+    "					<select class=\"form-control populate\" ng-model=\"salesGraph\" ng-model-options=\"{ debounce: 500 }\" ng-options=\"graph as graph for graph in salesGraphs\">\n" +
+    "					</select>\n" +
+    "				</div>\n" +
+    "			</div>\n" +
+    "			<div ng-show=\"graphChoice=='Page Views'\" class=\"form-group\">\n" +
+    "				<label class=\"col-md-3 control-label\">Graph Type</label>\n" +
+    "				<div class=\"col-md-6\">\n" +
+    "					<select class=\"form-control populate\" ng-model=\"viewGraph\" ng-model-options=\"{ debounce: 500 }\" ng-options=\"graph as graph for graph in viewGraphs\">\n" +
+    "					</select>\n" +
+    "				</div>\n" +
+    "			</div>\n" +
+    "			<div ng-show=\"graphChoice=='Accounts'\" class=\"form-group\">\n" +
+    "				<label class=\"col-md-3 control-label\">From:</label>\n" +
+    "				<div class=\"col-md-6\">\n" +
+    "					<div class=\"input-group\">\n" +
+    "						<span class=\"input-group-addon\">\n" +
+    "							<i class=\"fa fa-calendar\"></i>\n" +
+    "						</span>\n" +
+    "						<input type=\"date\" ng-model=\"accountStartDate\" class=\"form-control\" ng-change=\"accountFiltersUpdated()\">\n" +
+    "					</div>\n" +
+    "				</div>\n" +
+    "			</div>\n" +
+    "			<div ng-show=\"graphChoice=='Accounts'\" class=\"form-group\">\n" +
+    "				<label class=\"col-md-3 control-label\">To:</label>\n" +
+    "				<div class=\"col-md-6\">\n" +
+    "					<div class=\"input-group\">\n" +
+    "						<span class=\"input-group-addon\">\n" +
+    "							<i class=\"fa fa-calendar\"></i>\n" +
+    "						</span>\n" +
+    "						<input type=\"date\" ng-model=\"accountEndDate\" class=\"form-control\" ng-change=\"accountFiltersUpdated()\">\n" +
+    "					</div>\n" +
+    "				</div>\n" +
+    "			</div>\n" +
+    "			<div ng-show=\"graphChoice=='Purchases'\" class=\"form-group\">\n" +
+    "				<label class=\"col-md-3 control-label\">From:</label>\n" +
+    "				<div class=\"col-md-6\">\n" +
+    "					<div class=\"input-group\">\n" +
+    "						<span class=\"input-group-addon\">\n" +
+    "							<i class=\"fa fa-calendar\"></i>\n" +
+    "						</span>\n" +
+    "						<input type=\"date\" ng-model=\"phStartDate\" class=\"form-control\" ng-change=\"phFiltersUpdated()\">\n" +
+    "					</div>\n" +
+    "				</div>\n" +
+    "			</div>\n" +
+    "			<div ng-show=\"graphChoice=='Purchases'\" class=\"form-group\">\n" +
+    "				<label class=\"col-md-3 control-label\">To:</label>\n" +
+    "				<div class=\"col-md-6\">\n" +
+    "					<div class=\"input-group\">\n" +
+    "						<span class=\"input-group-addon\">\n" +
+    "							<i class=\"fa fa-calendar\"></i>\n" +
+    "						</span>\n" +
+    "						<input type=\"date\" ng-model=\"phEndDate\" class=\"form-control\" ng-change=\"phFiltersUpdated()\">\n" +
+    "					</div>\n" +
+    "				</div>\n" +
+    "			</div>\n" +
+    "		</form>\n" +
+    "		\n" +
+    "	</div>\n" +
+    "</div>\n" +
+    "\n" +
+    "\n" +
+    "<hr class=\"tall\">\n" +
+    "\n" +
+    "<div ng-show=\"graphChoice=='Accounts'\">\n" +
     "	<h2>Accounts</h2>\n" +
-    "	<table table-directive class=\"hover stripe dtable\" mb-none\"\" id=\"user_table\">\n" +
+    "\n" +
+    "	<form>\n" +
+    "		<div class=\"sidebar-search\" style=\"width: 30%;float:right;padding-bottom:15px;\">\n" +
+    "			<div class=\"input-group custom-search-form\">\n" +
+    "				<input name=\"search\" type=\"text\" class=\"form-control\" ng-model=\"accountFilters.search\" ng-model-options=\"{ debounce: 500 }\" ng-change=\"accountFiltersUpdated()\" placeholder=\"Search...\">\n" +
+    "				<div class=\"input-group-btn\">\n" +
+    "					<button class=\"btn btn-default\" type=\"button\">\n" +
+    "						<i class=\"fa fa-search\"></i>\n" +
+    "					</button>\n" +
+    "				</div>\n" +
+    "			</div>\n" +
+    "		</div>\n" +
+    "	</form>\n" +
+    "\n" +
+    "\n" +
+    "\n" +
+    "	<table class=\"table table-stripe table-hover\">\n" +
     "		<thead>\n" +
     "			<tr>\n" +
     "				<th>Username</th>\n" +
@@ -2839,35 +2939,138 @@ angular.module("admin/custom-reports/custom-reports.tpl.html", []).run(["$templa
     "			</tr>\n" +
     "		</tbody>\n" +
     "	</table>\n" +
-    "</div>\n" +
-    "<!-- \n" +
-    "<div ng-show=\"graphData=='purchases'\">\n" +
-    "	<h2>Purchases</h2>\n" +
-    "	<table table-directive=\"purchaseTable\" class=\"hover stripe dtable\" mb-none\"\" id=\"user_table\">\n" +
-    "		<thead>\n" +
-    "			<tr>\n" +
-    "				<th>Date</th>\n" +
-    "				<th>Company</th>\n" +
-    "				<th>Customer</th>\n" +
-    "				<th>Shipping State</th>\n" +
-    "				<th># Purchases</th>\n" +
-    "				<th>Purchase Amount</th>\n" +
-    "				<th>Transaction ID</th>\n" +
-    "			</tr>\n" +
-    "		</thead>\n" +
-    "		<tbody>\n" +
-    "			<tr ng-repeat=\"ph in phList\" ng-click=\"goToPH();\">\n" +
-    "				<td>{{ph.orderDate | date:\"MM/dd/yyyy\"}}</td>\n" +
-    "				<td ng-bind=\"ph.company\"></td>\n" +
-    "				<td ng-bind=\"ph.user.name\"></td>\n" +
-    "				<td ng-bind=\"ph.user._id\"></td>\n" +
-    "				<td></td>\n" +
-    "				<td>${{ph.cost.total}}</td>\n" +
-    "				<td ng-bind=\"ph.orderNumber\"></td>\n" +
-    "			</tr>\n" +
-    "		</table>\n" +
-    "	</div> -->\n" +
     "\n" +
+    "	<div class=\"well\" ng-if=\"pages.total > 1\">\n" +
+    "		<div class=\"btn-group pull-left\">\n" +
+    "			<button disabled class=\"btn btn-default\">Page {{accountPages.current}} of {{accountPages.total}}</button>\n" +
+    "			<button disabled class=\"btn btn-default\">Rows {{accountItems.begin}} - {{accountItems.end}} of {{accountItems.total}}</button>\n" +
+    "		</div>\n" +
+    "		<div class=\"btn-group pull-right\">\n" +
+    "			<button class=\"btn btn-default\" ng-class=\"{disabled: !accountPages.hasPrev}\" ng-click=\"accountPrev()\">Prev</button>\n" +
+    "			<button class=\"btn btn-default\" ng-class=\"{disabled: !accountPages.hasNext}\" ng-click=\"accountNext()\"> Next</button>\n" +
+    "		</div>\n" +
+    "		<div class=\"clearfix\"></div>\n" +
+    "	</div>\n" +
+    "\n" +
+    "\n" +
+    "</div>\n" +
+    "\n" +
+    "\n" +
+    "\n" +
+    "\n" +
+    "<div ng-show=\"graphChoice=='Purchases'\" id=\"page-wrapper\">\n" +
+    "	<div class=\"row\">\n" +
+    "		<div id=\"purchases\" class=\"col-lg-12\">\n" +
+    "			<h1 class=\"spacing-bot-lg\">Purchase History</h1>\n" +
+    "			<br>\n" +
+    "			<div class=\"sidebar-search spacing-bot-lg\" style=\"width: 30%; float:right;\">\n" +
+    "				<div class=\"input-group custom-search-form\">\n" +
+    "					<input type=\"text\" class=\"form-control\" ng-model=\"phFilters.search\" ng-model-options=\"{ debounce: 500 }\" ng-change=\"phFiltersUpdated()\" placeholder=\"Search\">\n" +
+    "					<div class=\"input-group-btn\">\n" +
+    "						<button class=\"btn btn-default\" type=\"button\">\n" +
+    "							<i class=\"fa fa-search\"></i>\n" +
+    "						</button>\n" +
+    "					</div>\n" +
+    "				</div>\n" +
+    "			</div>\n" +
+    "			<br>\n" +
+    "			<div>\n" +
+    "				<br>\n" +
+    "				<table class=\"table table-striped\">\n" +
+    "					<thead>\n" +
+    "						<tr>\n" +
+    "							<th>Date</th>\n" +
+    "							<th>Company</th>\n" +
+    "							<th>Customer</th>\n" +
+    "							<th>Shipping State</th>\n" +
+    "							<th># Purchases</th>\n" +
+    "							<th>Purchase Amount</th>\n" +
+    "							<th>Transaction ID</th>\n" +
+    "						</tr>\n" +
+    "					</thead>\n" +
+    "					<tbody>\n" +
+    "						<tr ng-repeat=\"ph in phList\">\n" +
+    "							<td>{{ph.orderDate | date:\"MM/dd/yyyy\"}}</td>\n" +
+    "							<td ng-bind=\"ph.company\"></td>\n" +
+    "							<td ng-bind=\"ph.user.name\"></td>\n" +
+    "							<td ng-bind=\"ph.user._id\"></td>\n" +
+    "							<td></td>\n" +
+    "							<td>${{ph.cost.total}}</td>\n" +
+    "							<td ng-bind=\"ph.orderNumber\"></td>\n" +
+    "						</tr>\n" +
+    "						<tr ng-show=\"phList.length === 0\">\n" +
+    "							<td colspan=\"5\">no documents matched</td>\n" +
+    "						</tr>\n" +
+    "					</tbody>\n" +
+    "				</table>\n" +
+    "				<div class=\"well\" ng-if=\"pages.total > 1\">\n" +
+    "					<div class=\"btn-group pull-left\">\n" +
+    "						<button disabled class=\"btn btn-default\">Page {{phPages.current}} of {{phPages.total}}</button>\n" +
+    "						<button disabled class=\"btn btn-default\">Rows {{phItems.begin}} - {{phItems.end}} of {{phItems.total}}</button>\n" +
+    "					</div>\n" +
+    "					<div class=\"btn-group pull-right\">\n" +
+    "						<button class=\"btn btn-default\" ng-class=\"{disabled: !phPages.hasPrev}\" ng-click=\"phPrev()\">Prev</button>\n" +
+    "						<button class=\"btn btn-default\" ng-class=\"{disabled: !phPages.hasNext}\" ng-click=\"phNext()\"> Next</button>\n" +
+    "					</div>\n" +
+    "					<div class=\"clearfix\"></div>\n" +
+    "				</div>\n" +
+    "			</div>\n" +
+    "			<button class=\"btn btn-primary\" ng-csv=\"phList\" csv-header=\"phHeaders\" filename=\"Purchases.csv\">Export to CSV</button>\n" +
+    "		</div>\n" +
+    "\n" +
+    "	</div>\n" +
+    "</div>\n" +
+    "\n" +
+    "\n" +
+    "<div ng-show=\"graphChoice=='Sales'\">\n" +
+    "	<div ng-show=\"salesGraph=='Monthly'\">\n" +
+    "		<div id=\"monthSales\">\n" +
+    "			<h4 class=\"spacing-top-lg spacing-bot-md\" style=\"padding-left:15px\">Sales This Month</h4>\n" +
+    "			<canvas class=\"chart chart-line\" chart-data=\"totalDay\" chart-labels=\"labelDay\" chart-legend=\"true\" chart-options=\"optionsDayTotal\"\n" +
+    "			chart-click=\"onClick\">></canvas>\n" +
+    "		</div>\n" +
+    "		<button ng-click=\"generatePDF('monthSales')\" class=\"btn btn-primary\">PDF</button>\n" +
+    "	</div>\n" +
+    "	<div ng-show=\"salesGraph=='Yearly'\">\n" +
+    "		<div id=\"yearSales\">\n" +
+    "			<h4 class=\"spacing-top-lg spacing-bot-md\" style=\"padding-left:15px\">Sales This Year</h4>\n" +
+    "			<canvas class=\"chart chart-bar\" chart-options=\"optionsMonthTotal\" chart-data=\"totalMonth\" chart-labels=\"labels\" chart-colors=\"xcolors\" chart-legend=\"true\" chart-click=\"onClick\" chart-dataset-override=\"datasetOverride1\"></canvas>\n" +
+    "		</div>\n" +
+    "		<button ng-click=\"generatePDF('yearSales')\" class=\"btn btn-primary\">PDF</button>\n" +
+    "	</div>\n" +
+    "	<div ng-show=\"salesGraph=='Average'\">\n" +
+    "		<div id=\"avgSales\">\n" +
+    "			<h4 class=\"spacing-top-lg spacing-bot-md\" style=\"padding-left:15px\">Sales Size and Quantity</h4>\n" +
+    "			<canvas class=\"chart chart-line\" chart-legend=\"true\" chart-data=\"sizeQuantityData\"\n" +
+    "			chart-labels=\"labels\" chart-series=\"series\" chart-options=\"sizeQuantityOptions\"\n" +
+    "			chart-dataset-override=\"datasetOverride\" chart-click=\"onClick\"></canvas>\n" +
+    "		</div>\n" +
+    "		<button ng-click=\"generatePDF('avgSales')\" class=\"btn btn-primary\">PDF</button>\n" +
+    "	</div>\n" +
+    "\n" +
+    "</div>\n" +
+    "\n" +
+    "\n" +
+    "<div ng-show=\"graphChoice=='Page Views'\">\n" +
+    "	<div ng-show=\"viewGraph=='Home Page'\">\n" +
+    "		<div id=\"home\">\n" +
+    "			<h4 class=\"spacing-top-lg spacing-bot-md\" style=\"padding-left:15px\">Home Page Views</h4>\n" +
+    "			<br>\n" +
+    "			<canvas class=\"chart chart-line\" chart-data=\"homeView30Day\" chart-labels=\"labelDay\" chart-options=\"optionsViewsDayTotal\"></canvas>\n" +
+    "		</div>\n" +
+    "		<button ng-click=\"generatePDF('home')\" class=\"btn btn-primary\">PDF</button>\n" +
+    "	</div>\n" +
+    "	<div ng-show=\"viewGraph=='Shopping Cart'\">\n" +
+    "		<div id=\"cart\">\n" +
+    "			<h4 class=\"spacing-top-lg spacing-bot-md\" style=\"padding-left:15px\">Shopping Cart Views</h4>\n" +
+    "			<canvas class=\"chart chart-line\" chart-data=\"cartView30Day\" chart-labels=\"labelDay\" chart-options=\"optionsViewsDayTotal\" chart-click=\"onClick\">\n" +
+    "			</canvas>\n" +
+    "		</div>\n" +
+    "		<button ng-click=\"generatePDF('cart')\" class=\"btn btn-primary\">PDF</button>\n" +
+    "	</div>\n" +
+    "\n" +
+    "	\n" +
+    "</div>\n" +
     "\n" +
     "");
 }]);
@@ -4052,6 +4255,90 @@ angular.module("contact.tpl.html", []).run(["$templateCache", function($template
     "");
 }]);
 
+angular.module("developer/developer.tpl.html", []).run(["$templateCache", function($templateCache) {
+  $templateCache.put("developer/developer.tpl.html",
+    "<h2> Hello Developer! </h2>");
+}]);
+
+angular.module("developerlogin/devlogin.tpl.html", []).run(["$templateCache", function($templateCache) {
+  $templateCache.put("developerlogin/devlogin.tpl.html",
+    "<div class=\"row\">\n" +
+    "    <div class=\"col-sm-6\">\n" +
+    "        <div class=\"header\"><h1><strong>Developer Sign In</strong></h1></div>\n" +
+    "        <br>\n" +
+    "        <form name=\"loginForm\">\n" +
+    "            <alert ng-repeat=\"alert in alerts\" type=\"{{alert.type}}\" close=\"closeAlert($index)\">{{alert.msg}}</alert>\n" +
+    "            <div class=\"form-group\" ng-class=\"{'has-error': hasError(loginForm.username)}\">\n" +
+    "                <label class=\"control-label\" for=\"username\">Username or Email:</label>\n" +
+    "                <input type=\"text\" name=\"username\" id=\"username\" class=\"form-control\" ng-model=\"user.username\" required server-error onkeydown = \"if (event.keyCode == 13)\n" +
+    "                        document.getElementById('Submit').click()\">\n" +
+    "                <span class=\"help-block\" ng-show=\"showError(loginForm.username, 'required')\">This field is required</span>\n" +
+    "                <span class=\"help-block\" ng-show=\"showError(loginForm.username, 'server')\">{{errfor.username}}</span>\n" +
+    "            </div>\n" +
+    "            <div class=\"form-group\" ng-class=\"{'has-error': hasError(loginForm.password)}\">\n" +
+    "                <label class=\"control-label\" for=\"password\">Password:</label>\n" +
+    "                <input type=\"password\" name=\"password\" id=\"password\" class=\"form-control\" ng-model=\"user.password\" required server-error onkeydown = \"if (event.keyCode == 13)\n" +
+    "                        document.getElementById('Submit').click()\">\n" +
+    "                <span class=\"help-block\" ng-show=\"showError(loginForm.password, 'required')\">This field is required</span>\n" +
+    "                <span class=\"help-block\" ng-show=\"showError(loginForm.password, 'server')\">{{errfor.password}}</span>\n" +
+    "            </div>\n" +
+    "            <div class=\"form-group\">\n" +
+    "                <button type=\"button\" id=\"Submit\" class=\"btn btn-primary btn-login\" ng-disabled=\"!canSave(loginForm)\" style=\"float:right;\" ng-click=\"submit()\">Sign In</button>\n" +
+    "                <!--<button type=\"button\" class=\"btn btn-primary btn-login\">Sign In</button>-->\n" +
+    "            </div>\n" +
+    "        </form>\n" +
+    "    </div>\n" +
+    "</div>");
+}]);
+
+angular.module("developerlogin/forgot/devlogin-forgot.tpl.html", []).run(["$templateCache", function($templateCache) {
+  $templateCache.put("developerlogin/forgot/devlogin-forgot.tpl.html",
+    "<div class=\"row\">\n" +
+    "    <div class=\"col-sm-6\">\n" +
+    "        <div><h1>Forgot Your Password?</h1></div>\n" +
+    "        <form name=\"loginForgotForm\">\n" +
+    "            <alert ng-repeat=\"alert in alerts\" type=\"{{alert.type}}\" close=\"closeAlert($index)\">{{alert.msg}}</alert>\n" +
+    "            <div class=\"form-group\" ng-class=\"{'has-error': hasError(loginForgotForm.email)}\">\n" +
+    "                <label class=\"control-label\" for=\"email\">Enter Your Email:</label>\n" +
+    "                <input type=\"email\" name=\"email\" id=\"email\" class=\"form-control\" ng-model=\"user.email\" required>\n" +
+    "                <span class=\"help-block\" ng-show=\"showError(loginForgotForm.email, 'required')\">This field is required</span>\n" +
+    "                <span class=\"help-block\" ng-show=\"showError(loginForgotForm.email, 'email')\">Please enter a valid email</span>\n" +
+    "            </div>\n" +
+    "            <div class=\"form-group\">\n" +
+    "                <button type=\"button\" class=\"btn btn-primary btn-forgot\" ng-disabled=\"!canSave(loginForgotForm)\" ng-click=\"submit()\">Send Reset</button>\n" +
+    "                &nbsp;<a href=\"/login\" class=\"btn btn-link\">Back to Login</a>\n" +
+    "            </div>\n" +
+    "        </form>\n" +
+    "    </div>\n" +
+    "</div>");
+}]);
+
+angular.module("developerlogin/reset/devlogin-reset.tpl.html", []).run(["$templateCache", function($templateCache) {
+  $templateCache.put("developerlogin/reset/devlogin-reset.tpl.html",
+    "<div class=\"row\">\n" +
+    "    <div class=\"col-sm-6\">\n" +
+    "        <div><h1>Reset Your Password</h1></div>\n" +
+    "        <form name=\"resetForm\">\n" +
+    "            <alert ng-repeat=\"alert in alerts\" type=\"{{alert.type}}\" close=\"closeAlert($index)\">{{alert.msg}}</alert>\n" +
+    "            <div class=\"form-group\" ng-class=\"{'has-error': hasError(resetForm.password)}\" ng-show=\"(id && email && !success)\">\n" +
+    "                <label class=\"control-label\" for=\"password\">New Password:</label>\n" +
+    "                <input type=\"password\" name=\"password\" id=\"password\" class=\"form-control\" ng-model=\"user.password\" required>\n" +
+    "                <span class=\"help-block\" ng-show=\"showError(resetForm.password, 'required')\">This field is required</span>\n" +
+    "            </div>\n" +
+    "            <div class=\"form-group\" ng-class=\"{'has-error': hasError(resetForm.confirm)}\" ng-show=\"(id && email && !success)\">\n" +
+    "                <label class=\"control-label\" for=\"confirm\">Confirm Password:</label>\n" +
+    "                <input type=\"password\" name=\"confirm\" id=\"confirm\" class=\"form-control\" ng-model=\"user.confirm\" required>\n" +
+    "                <span class=\"help-block\" ng-show=\"showError(resetForm.confirm, 'required')\">This field is required</span>\n" +
+    "            </div>\n" +
+    "            <div class=\"form-group\">\n" +
+    "                <button type=\"button\" class=\"btn btn-primary btn-reset\" ng-show=\"(id && email && !success)\" ng-disabled=\"!canSave(resetForm)\" ng-click=\"submit()\">Set Password</button>\n" +
+    "                &nbsp;<a href=\"/login\" class=\"btn btn-link\">Back to Login</a>\n" +
+    "            </div>\n" +
+    "        </form>\n" +
+    "    </div>\n" +
+    "</div>");
+}]);
+
 angular.module("footer.tpl.html", []).run(["$templateCache", function($templateCache) {
   $templateCache.put("footer.tpl.html",
     "<div ng-controller=\"FooterCtrl\">\n" +
@@ -4113,7 +4400,7 @@ angular.module("header.tpl.html", []).run(["$templateCache", function($templateC
     "                                                <li ng-class=\"{active: isActive('/contact')}\"><a href=\"/contact\">Contact</a></li>\n" +
     "                                                <li ng-if=\"isAuthenticated()\" class=\"dropdown\">\n" +
     "                                                    <a href=\"/account/settings\" class=\"dropdown-toggle\">My Account</a>\n" +
-    "                                                    <ul href=\"/account/purchaseHistory\" ng-if=\"isAuthenticated()\" class=\"dropdown-menu\">\n" +
+    "                                                    <ul href=\"/account/settings\" ng-if=\"isAuthenticated()\" class=\"dropdown-menu\">\n" +
     "                                                        <li ng-if=\"isAuthenticated()\" ><a href=\"/account/purchaseHistory\">Purchase History</a></li>\n" +
     "                                                        <li ng-if=\"isAuthenticated()\" ><a href=\"/account/settings\">Settings</a></li>\n" +
     "                                                        <li ng-if=\"isAuthenticated()\"><a href=\"\" ng-click=\"logout()\">Sign Out</a></li>\n" +
@@ -4155,7 +4442,7 @@ angular.module("header.tpl.html", []).run(["$templateCache", function($templateC
     "                        <li class=\"dropdown\" dropdown is-open=\"status.isopen\">\n" +
     "                            <a href=\"#\" class=\"dropdown-toggle navbar-dropdown-admin\" ng-bind=\"name\" dropdown-toggle><span class=\"caret\"></span></a>\n" +
     "                            <ul class=\"dropdown-menu\">\n" +
-    "                                <li><a href=\"/admin\" ng-click=\"closeAdminMenu()\">Add New Admin</a></li>\n" +
+    "                                <li><a href=\"/admin/administrators\" ng-click=\"closeAdminMenu()\">Add New Admin</a></li>\n" +
     "                                <li><a href=\"/admin/admin-account-settings/\" ng-click=\"closeAdminMenu()\">Settings</a></li>\n" +
     "                                <li><a href=\"\" ng-click=\"logout()\">Sign Out</a></li>\n" +
     "                            </ul>\n" +
@@ -5489,7 +5776,7 @@ angular.module("sidebar.tpl.html", []).run(["$templateCache", function($template
     "</md-content>\n" +
     "</aside> -->\n" +
     "\n" +
-    "<!-- \n" +
+    "\n" +
     "<aside ng-controller=\"SidebarCtrl\" flex layout=\"row\">\n" +
     "    <md-sidenav hl-sticky=\"\" flex=\"15\" md-is-locked-open=\"true\" class=\"md-whiteframe-4dp\">\n" +
     "        <md-content flex layout=\"column\">\n" +
@@ -5527,129 +5814,8 @@ angular.module("sidebar.tpl.html", []).run(["$templateCache", function($template
     "            </div>\n" +
     "        </md-content>\n" +
     "    </md-sidenav>\n" +
-    "</aside> -->\n" +
-    "\n" +
-    "\n" +
-    "\n" +
-    "<div ng-controller=\"SidebarCtrl\">\n" +
-    "    <head>\n" +
-    "        <style>\n" +
-    "            body {\n" +
-    "                font-family: \"Lato\", sans-serif;\n" +
-    "            }\n" +
-    "\n" +
-    "            .sidenav {\n" +
-    "                height: 100%;\n" +
-    "                position: fixed;\n" +
-    "                z-index: 1;\n" +
-    "                top: 0;\n" +
-    "                left: 0;\n" +
-    "                background-color: #ffffff;\n" +
-    "                overflow-x: hidden;\n" +
-    "                transition: 0.5s;\n" +
-    "                padding-top: 60px;\n" +
-    "            }\n" +
-    "\n" +
-    "            .sidenav a {\n" +
-    "                padding: 8px 8px 8px 32px;\n" +
-    "                text-decoration: none;\n" +
-    "                font-size: 25px;\n" +
-    "                color: #9776;\n" +
-    "                display: block;\n" +
-    "                transition: 0.3s;\n" +
-    "            }\n" +
-    "\n" +
-    "            .sidenav a:hover, .offcanvas a:focus{\n" +
-    "                background-color: lightgrey;\n" +
-    "            }\n" +
-    "\n" +
-    "            .sidenavbig {\n" +
-    "                height: 100%;\n" +
-    "                position: fixed;\n" +
-    "                z-index: 1;\n" +
-    "                top: 0;\n" +
-    "                left: 0;\n" +
-    "                background-color: #ffffff;\n" +
-    "                overflow-x: hidden;\n" +
-    "                transition: 0.5s;\n" +
-    "                padding-top: 60px;\n" +
-    "            }\n" +
-    "\n" +
-    "            .sidenavbig a {\n" +
-    "                padding: 8px 8px 8px 32px;\n" +
-    "                text-decoration: none;\n" +
-    "                font-size: 25px;\n" +
-    "                color: #9776;\n" +
-    "                display: block;\n" +
-    "                transition: 0.3s;\n" +
-    "            }\n" +
-    "\n" +
-    "            .sidenavbig a:hover, .offcanvas a:focus{\n" +
-    "                background-color: lightgrey;\n" +
-    "            }\n" +
-    "\n" +
-    "            .sidenav .closebtn {\n" +
-    "                text-align: right;\n" +
-    "                font-size: 36px;\n" +
-    "                padding: 0px 0px 0px 0px;\n" +
-    "                cursor: pointer;\n" +
-    "            }\n" +
-    "\n" +
-    "            @media screen and (max-height: 450px) {\n" +
-    "                .sidenav {padding-top: 15px;}\n" +
-    "                .sidenav a {font-size: 18px;}\n" +
-    "                .sidenavbig {padding-top: 15px;}\n" +
-    "                .sidenavbig a {font-size: 18px;}\n" +
-    "            }\n" +
-    "\n" +
-    "            @media screen and (min-width: 1650px) {\n" +
-    "                .sidenavbig {width: 250px;}\n" +
-    "                .sidenav {width: 0;}\n" +
-    "                .sidenav .closebtn {display: none;}\n" +
-    "            }\n" +
-    "\n" +
-    "            @media screen and (max-width: 1650px) {\n" +
-    "                .sidenavbig {width: 0;}\n" +
-    "                .sidenav {width: 0;}\n" +
-    "            }\n" +
-    "\n" +
-    "            @media screen and (max-width: 768px) {\n" +
-    "                .sidenav {padding-top: 100px;}\n" +
-    "            }\n" +
-    "        </style>\n" +
-    "    </head>\n" +
-    "\n" +
-    "    <body>\n" +
-    "\n" +
-    "        <div ng-if=\"isAdmin()\">\n" +
-    "            <!-- What shows when it is full screen (Needed so that it reappears even when mobile sidenav is closed) -->\n" +
-    "            <div id=\"mySidenavbig\" class=\"sidenavbig\">\n" +
-    "                <a href=\"/admin\">Dashboard</a>\n" +
-    "                <a href=\"/admin/activity\">Activity</a>\n" +
-    "                <a href=\"/admin/sales\">Sales</a>\n" +
-    "                <a href=\"/admin/purchase-history\">Purchase History</a>\n" +
-    "                <a href=\"/admin/users\">User Info</a>\n" +
-    "                <a href=\"/admin/developers\">Developers</a>\n" +
-    "                <a href=\"/admin/pricing\">Pricing</a>\n" +
-    "                <a href=\"\" ng-click=\"logout()\">Sign Out</a>\n" +
-    "            </div>\n" +
-    "            <!-- What shows when screen becomes too small -->\n" +
-    "            <div id=\"mySidenav\" class=\"sidenav\">\n" +
-    "                <a href=\"javascript:void(0)\" class=\"closebtn\" ng-click=\"closeNav()\">&times;</a>\n" +
-    "                <a href=\"/admin\">Dashboard</a>\n" +
-    "                <a href=\"/admin/activity\">Activity</a>\n" +
-    "                <a href=\"/admin/sales\">Sales</a>\n" +
-    "                <a href=\"/admin/purchase-history\">Purchase History</a>\n" +
-    "                <a href=\"/admin/users\">User Info</a>\n" +
-    "                <a href=\"/admin/developers\">Developers</a>\n" +
-    "                <a href=\"/admin/pricing\">Pricing</a>\n" +
-    "                <a href=\"\" ng-click=\"logout()\">Sign Out</a>\n" +
-    "            </div>\n" +
-    "\n" +
-    "            <span style=\"font-size:30px;cursor:pointer\" ng-click=\"openNav()\">&#9776; Menu</span>\n" +
-    "        </div>\n" +
-    "    </body>\n" +
-    "</div>");
+    "</aside>\n" +
+    "");
 }]);
 
 angular.module("signup/signup.tpl.html", []).run(["$templateCache", function($templateCache) {

@@ -31,6 +31,10 @@ angular.module('account.settings').controller('AccountSettingsCtrl', [ '$scope',
     var account = accountDetails.account;
     var user = accountDetails.user;
 
+    // $scope.developer = 
+    // {
+    //   name: $scope.userDetail.first;
+    // };
     $scope.identityEditorEnabled = $scope.contactEditorEnabled = $scope.passwordEditorEnabled = false;
     $scope.addressEditorEnabled = $scope.billingAddressEditorEnabled = false;
 
@@ -179,6 +183,21 @@ angular.module('account.settings').controller('AccountSettingsCtrl', [ '$scope',
       });
     };
 
+    $scope.developer = function(){
+      restResource.addDeveloper().then(function(data){
+        if(data.success){
+          console.log(data);
+          $location.url('/developer');
+        }else if (data.errors && data.errors.length > 0){
+          alert(data.errors[0]);
+        }else {
+          alert('unknown error.');
+        }
+      }, function(e){
+        $log.error(e);
+      });
+    }
+
     //model def
     $scope.errfor = {}; //for identity server-side validation
     $scope.alerts = {
@@ -257,5 +276,4 @@ angular.module('account.settings').controller('AccountSettingsCtrl', [ '$scope',
       }
     };
     $scope.usstates = ["AK","AL","AR","AZ","CA","CO","CT","DC","DE","FL","GA","GU","HI","IA","ID", "IL","IN","KS","KY","LA","MA","MD","ME","MH","MI","MN","MO","MS","MT","NC","ND","NE","NH","NJ","NM","NV","NY", "OH","OK","OR","PA","PR","PW","RI","SC","SD","TN","TX","UT","VA","VI","VT","WA","WI","WV","WY"];
-  }
-  ]);
+  }]);

@@ -100,6 +100,10 @@ angular.module('security.service', [
       //openLoginDialog();
     },
 
+    showDeveloperLogin: function() {
+      redirect('/developer/login');
+    },
+
     socialDisconnect: function(provider){
       var url = '/api/account/settings/' + provider.toLowerCase() + '/disconnect';
       return $http.get(url).then(function(res){ return res.data; });
@@ -203,15 +207,18 @@ angular.module('security.service', [
     // Information about the current user
     currentUser: null,
 
-    // Is the current user authenticated?
     isAuthenticated: function(){
       return !!service.currentUser;
     },
     
-    // Is the current user an administrator?
     isAdmin: function() {
       return !!(service.currentUser && service.currentUser.admin);
+    },
+
+    isDeveloper: function() {
+      return !!(service.currentUser && service.currentUser.developer);
     }
+
   };
 
   return service;

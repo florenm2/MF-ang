@@ -5,6 +5,8 @@ angular.module('app', [
   'signup',
   'login',
   'adminlogin',
+  'devlogin',
+  'developer',
   'account',
   'admin',
   'services.i18nNotifications',

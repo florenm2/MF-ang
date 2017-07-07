@@ -67,6 +67,9 @@ angular.module('services.accountResource', ['security.service']).factory('accoun
     return $http.get(baseUrl + '/account/verification').then(processResponse, processError);
   };
 
+  resource.addDeveloper = function(data){
+    return $http.post(baseUrl + '/account/developerAccount', data).then(processResponse, processError);
+  };
   
   resource.verifyAccount = function(token){
     return $http.get(baseUrl + '/account/verification/' + token)

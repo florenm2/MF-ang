@@ -9,6 +9,10 @@ angular.module('security.authorization', ['security.service', 'config'])
     return securityAuthorization.requireAdminUser();
   }],
 
+  requireDeveloper: ['securityAuthorization', function(securityAuthorization) {
+    return securityAuthorization.requireDeveloper();
+  }],
+
   requireAuthenticatedUser: ['securityAuthorization', function(securityAuthorization) {
     return securityAuthorization.requireAuthenticatedUser();
   }],
@@ -55,6 +59,17 @@ angular.module('security.authorization', ['security.service', 'config'])
           if ( !security.isAuthenticated() ) {
             return queue.pushRetryFn('unauthenticated-client', service.requireAdminUser);
           }else if( !security.isAdmin() ){
+            return $q.reject('unauthorized-client');
+          }
+        });
+        return promise;
+      },
+
+      requireDeveloper: function() {
+        var promise = security.requestCurrentUser().then(function(userInfo) {
+          if ( !security.isAuthenticated() ) {
+            return queue.pushRetryFn('unauthenticated-client', service.requireDeveloper);
+          }else if( !security.isDeveloper() ){
             return $q.reject('unauthorized-client');
           }
         });
